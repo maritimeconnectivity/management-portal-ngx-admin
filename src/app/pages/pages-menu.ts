@@ -2,19 +2,149 @@ import { NbMenuItem } from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
-    title: 'E-commerce',
-    icon: 'shopping-cart-outline',
+    title: 'Administration',
+    icon: 'lock-outline',
+    children: [
+      {
+        title: 'Approve',
+        link: '/pages/tables/smart-table',
+      },
+    ],
+  },
+  {
+    title: 'My organization',
+    icon: 'home-outline',
     link: '/pages/dashboard',
     home: true,
+  },
+  {
+    title: 'Organizations',
+    icon: 'grid-outline',
+    link: '/pages/dashboard',
+  },
+  {
+    title: 'Identity Registry',
+    icon: 'lock-outline',
+    children: [
+      {
+        title: 'Devices',
+        link: '/pages/tables/smart-table',
+      },
+      {
+        title: 'ID Services',
+        link: '/pages/tables/smart-table',
+      },
+      {
+        title: 'Users',
+        link: '/pages/tables/smart-table',
+      },
+      {
+        title: 'Vessels',
+        link: '/pages/tables/smart-table',
+      },
+      {
+        title: 'Roles',
+        link: '/pages/tables/smart-table',
+      },
+      {
+        title: 'Agents',
+        link: '/pages/tables/smart-table',
+      },
+      {
+        title: 'Acting For',
+        link: '/pages/tables/smart-table',
+      },
+    ],
+  },
+  {
+    title: 'Service Registry',
+    icon: 'layers-outline',
+    children: [
+      {
+        title: 'How To?',
+        link: '/pages/tables/smart-table',
+      },
+      {
+        title: 'Specifications',
+        link: '/pages/layout/stepper',
+      },
+      {
+        title: 'Designs',
+        link: '/pages/tables/smart-table',
+      },
+      {
+        title: 'Instances',
+        link: '/pages/layout/stepper',
+      },
+    ],
+  },
+  {
+    title: 'Service Registry - 2.0',
+    icon: 'layers-outline',
+    children: [
+      {
+        title: 'My services in MSR',
+        link: '/pages/tables/smart-table',
+      },
+      {
+        title: 'Add service to MSR',
+        link: '/pages/layout/stepper',
+      },
+      {
+        title: 'My services in ledger',
+        link: '/pages/tables/smart-table',
+      },
+      {
+        title: 'Add service to ledger',
+        link: '/pages/layout/stepper',
+      },
+      {
+        title: 'Service Management',
+        link: '/pages/tables/smart-table',
+      },
+      {
+        title: 'Approve MSR registration',
+        link: '/pages/tables/smart-table',
+      },
+      {
+        title: 'Approve ledger registration',
+        link: '/pages/tables/smart-table',
+      },
+    ],
+  },
+  {
+    title: 'MSR Ledger',
+    icon: 'cube-outline',
+    children: [
+      {
+        title: 'Search',
+        link: '/pages/tables/smart-table',
+      },
+    ],
+  },
+  {
+    title: 'Report bug',
+    icon: 'alert-circle-outline',
+    link: '/pages/guide',
+  },
+  {
+    title: 'User guide',
+    icon: 'question-mark-circle-outline',
+    link: '/pages/guide',
+  },
+  {
+    title: 'About',
+    icon: 'bulb-outline',
+    link: '/pages/about',
+  },
+  {
+    title: 'Backup',
+    group: true,
   },
   {
     title: 'IoT Dashboard',
     icon: 'home-outline',
     link: '/pages/iot-dashboard',
-  },
-  {
-    title: 'FEATURES',
-    group: true,
   },
   {
     title: 'Layout',
