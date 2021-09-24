@@ -1,0 +1,17 @@
+export * from './docResource.service';
+import { DocResourceService } from './docResource.service';
+export * from './elasticsearchIndexResource.service';
+import { ElasticsearchIndexResourceService } from './elasticsearchIndexResource.service';
+export * from './serviceInstanceResource.service';
+import { ServiceInstanceResourceService } from './serviceInstanceResource.service';
+export * from './serviceSpecificationResource.service';
+import { ServiceSpecificationResourceService } from './serviceSpecificationResource.service';
+export * from './specificationTemplateResource.service';
+import { SpecificationTemplateResourceService } from './specificationTemplateResource.service';
+export * from './technicalDesignResource.service';
+import { TechnicalDesignResourceService } from './technicalDesignResource.service';
+export * from './xmlResource.service';
+import { XmlResourceService } from './xmlResource.service';
+export * from './xsdResource.service';
+import { XsdResourceService } from './xsdResource.service';
+export const APIS = [DocResourceService, ElasticsearchIndexResourceService, ServiceInstanceResourceService, ServiceSpecificationResourceService, SpecificationTemplateResourceService, TechnicalDesignResourceService, XmlResourceService, XsdResourceService];
