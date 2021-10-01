@@ -7,7 +7,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Approve',
-        link: '/pages/tables/smart-table',
+        link: '/pages/approve-org',
       },
     ],
   },
