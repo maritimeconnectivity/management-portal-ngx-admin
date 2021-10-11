@@ -32,18 +32,18 @@ import { VesselImageControllerService } from './api/vesselImageController.servic
     VesselControllerService,
     VesselImageControllerService ]
 })
-export class IdentityRegistryApiModule {
-    public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders {
+export class ApiModule {
+    public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {
         return {
-            ngModule: IdentityRegistryApiModule,
+            ngModule: ApiModule,
             providers: [ { provide: Configuration, useFactory: configurationFactory } ]
         };
     }
 
-    constructor( @Optional() @SkipSelf() parentModule: IdentityRegistryApiModule,
+    constructor( @Optional() @SkipSelf() parentModule: ApiModule,
                  @Optional() http: HttpClient) {
         if (parentModule) {
-            throw new Error('IdentityRegistryApiModule is already loaded. Import in your base AppModule only.');
+            throw new Error('ApiModule is already loaded. Import in your base AppModule only.');
         }
         if (!http) {
             throw new Error('You need to import the HttpClientModule in your AppModule! \n' +

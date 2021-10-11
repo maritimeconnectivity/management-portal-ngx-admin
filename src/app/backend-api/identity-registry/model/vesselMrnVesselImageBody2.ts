@@ -9,34 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { AllowedAgentRole } from './allowedAgentRole';
 
-/**
- * Model object representing an agent
- */
-export interface Agent { 
-    /**
-     * The ID of the entity in the form of a sequential integer
-     */
-    readonly id?: number;
-    /**
-     * The time that the entity was created
-     */
-    readonly createdAt?: Date;
-    /**
-     * The time that the entity was last updated
-     */
-    readonly updatedAt?: Date;
-    /**
-     * The id of the organization that should be given agent permissions
-     */
-    idActingOrganization: number;
-    /**
-     * The id of the organization that is giving agent permissions
-     */
-    idOnBehalfOfOrganization?: number;
-    /**
-     * The set of roles that this agent is allowed to have
-     */
-    allowedRoles?: Array<AllowedAgentRole>;
+export interface VesselMrnVesselImageBody2 { 
+    image: Blob;
 }

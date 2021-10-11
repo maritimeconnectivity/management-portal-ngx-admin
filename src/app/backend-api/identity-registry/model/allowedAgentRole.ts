@@ -11,13 +11,9 @@
  */
 
 /**
- * Model object representing a certificate
+ * Model object for representing a role that an agent is allowed to have
  */
-export interface Certificate { 
-    /**
-     * The ID of the entity in the form of a sequential integer
-     */
-    readonly id?: number;
+export interface AllowedAgentRole { 
     /**
      * The time that the entity was created
      */
@@ -27,31 +23,20 @@ export interface Certificate {
      */
     readonly updatedAt?: Date;
     /**
-     * The certificate in PEM format
+     * The role that you want the agent to be allowed to have
      */
-    readonly certificate?: string;
-    /**
-     * When the certificate is valid from
-     */
-    readonly start?: Date;
-    /**
-     * When the certificate is valid until
-     */
-    readonly end?: Date;
-    /**
-     * The serial number of the certificate
-     */
-    readonly serialNumber?: number;
-    /**
-     * Whether the certificate has been revoked
-     */
-    readonly revoked?: boolean;
-    /**
-     * The time of revocation of the certificate
-     */
-    readonly revokedAt?: Date;
-    /**
-     * The revocation reason
-     */
-    readonly revokeReason?: string;
+    roleName: AllowedAgentRole.RoleNameEnum;
+}
+export namespace AllowedAgentRole {
+    export type RoleNameEnum = 'ROLE_ORG_ADMIN' | 'ROLE_ENTITY_ADMIN' | 'ROLE_USER_ADMIN' | 'ROLE_VESSEL_ADMIN' | 'ROLE_SERVICE_ADMIN' | 'ROLE_DEVICE_ADMIN' | 'ROLE_MMS_ADMIN' | 'ROLE_USER';
+    export const RoleNameEnum = {
+        ORGADMIN: 'ROLE_ORG_ADMIN' as RoleNameEnum,
+        ENTITYADMIN: 'ROLE_ENTITY_ADMIN' as RoleNameEnum,
+        USERADMIN: 'ROLE_USER_ADMIN' as RoleNameEnum,
+        VESSELADMIN: 'ROLE_VESSEL_ADMIN' as RoleNameEnum,
+        SERVICEADMIN: 'ROLE_SERVICE_ADMIN' as RoleNameEnum,
+        DEVICEADMIN: 'ROLE_DEVICE_ADMIN' as RoleNameEnum,
+        MMSADMIN: 'ROLE_MMS_ADMIN' as RoleNameEnum,
+        USER: 'ROLE_USER' as RoleNameEnum
+    };
 }
