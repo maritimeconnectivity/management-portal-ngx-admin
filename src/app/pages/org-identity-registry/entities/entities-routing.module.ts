@@ -11,20 +11,20 @@ const routes: Routes = [{
   component: EntitiesComponent,
   children: [
     {
+      path: 'register',
+      component: EditComponent,
+    },
+    {
+      path: 'update/:id',
+      component: EditComponent,
+    },
+    {
       path: '',
       component: ListComponent,
     },
     {
       path: ':id',
       component: DetailComponent,
-    },
-    {
-      path: 'new',
-      component: EditComponent,
-    },
-    {
-      path: 'update',
-      component: EditComponent,
     },
     {
       path: '**',
