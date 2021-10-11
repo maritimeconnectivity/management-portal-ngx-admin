@@ -3,12 +3,16 @@ export const CertificatesColumn = {
         title: 'ID',
         type: 'number',
       },
-      firstName: {
+      validFrom: {
         title: 'Valid from',
         type: 'string',
       },
-      lastName: {
+      validUntil: {
         title: 'Valid until',
+        type: 'string',
+      },
+      status: {
+        title: 'Status',
         type: 'string',
       },
 }
