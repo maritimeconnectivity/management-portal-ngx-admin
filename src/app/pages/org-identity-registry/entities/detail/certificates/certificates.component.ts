@@ -1,23 +1,14 @@
+import { CertificatesColumn } from './certificates-column';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
-import { SmartTableData } from '../../../../@core/data/smart-table';
-import { ListTableColumn } from './list-column';
-
-const capitalize = (s): string => {
-  if (typeof s !== 'string') return ''
-  return s.charAt(0).toUpperCase() + s.slice(1)
-}
+import { SmartTableData } from '../../../../../@core/data/smart-table';
 
 @Component({
-  selector: 'ngx-list',
-  templateUrl: './list.component.html',
-  styleUrls: ['./list.component.scss']
+  selector: 'ngx-certificates',
+  templateUrl: './certificates.component.html',
+  styleUrls: ['./certificates.component.scss']
 })
-
-export class ListComponent implements OnInit {
-
-  title = ' for ';
+export class CertificatesComponent implements OnInit {
 
   ngOnInit(): void {
   }
@@ -37,13 +28,12 @@ export class ListComponent implements OnInit {
       deleteButtonContent: '<i class="nb-trash"></i>',
       confirmDelete: true,
     },
-    columns: ListTableColumn,
+    columns: CertificatesColumn,
   };
 
   source: LocalDataSource = new LocalDataSource();
 
-  constructor(private service: SmartTableData, private router: Router) {
-    this.title = capitalize(this.router.url.split("/").pop()) + " for " + "Organization";
+  constructor(private service: SmartTableData) {
     const data = this.service.getData();
     this.source.load(data);
   }
@@ -55,10 +45,4 @@ export class ListComponent implements OnInit {
       event.confirm.reject();
     }
   }
-
-  onSelect(event): void {
-    this.router.navigate([this.router.url, event.data.id]);
-    console.log(event.data.id);
-  }
-
 }

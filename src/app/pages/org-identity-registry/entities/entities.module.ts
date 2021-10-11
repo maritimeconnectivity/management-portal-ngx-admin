@@ -8,6 +8,7 @@ import { EntitiesRoutingModule } from './entities-routing.module';
 import { ListComponent } from './list/list.component';
 import { NbCardModule, NbInputModule, NbTreeGridModule } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { CertificatesComponent } from './detail/certificates/certificates.component';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
     ListComponent,
     EditComponent,
     DetailComponent,
+    CertificatesComponent,
   ],
   imports: [
     CommonModule,
