@@ -28,31 +28,31 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Devices',
-        link: '/pages/tables/smart-table',
+        link: '/pages/ir/devices',
       },
       {
         title: 'ID Services',
-        link: '/pages/tables/smart-table',
+        link: '/pages/ir/services',
       },
       {
         title: 'Users',
-        link: '/pages/tables/smart-table',
+        link: '/pages/ir/users',
       },
       {
         title: 'Vessels',
-        link: '/pages/tables/smart-table',
+        link: '/pages/ir/vessels',
       },
       {
         title: 'Roles',
-        link: '/pages/tables/smart-table',
+        link: '/pages/ir/roles',
       },
       {
         title: 'Agents',
-        link: '/pages/tables/smart-table',
+        link: '/pages/ir/agents',
       },
       {
         title: 'Acting For',
-        link: '/pages/tables/smart-table',
+        link: '/pages/ir/acting',
       },
     ],
   },

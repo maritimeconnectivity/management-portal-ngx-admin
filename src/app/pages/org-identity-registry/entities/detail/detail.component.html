@@ -1,0 +1,23 @@
+<nb-card>
+    <nb-card-header>
+      {{title}}
+    </nb-card-header>
+  
+    <nb-card-body>
+        <form>
+          <div class="form-group row">
+            <label for="inputMRN" class="label col-sm-3 col-form-label">MRN</label>
+            <div class="col-sm-9">
+              <input type="text" nbInput fullWidth id="inputText" placeholder="MRN">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="certificateList" class="label col-sm-3 col-form-label">Certificates</label>
+            <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)">
+            </ng2-smart-table>
+          </div>
+        </form>
+        
+    </nb-card-body>
+  </nb-card>
+  

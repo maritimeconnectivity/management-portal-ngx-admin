@@ -1,3 +1,4 @@
+import { OrgIdentityRegistryModule } from './org-identity-registry/org-identity-registry.module';
 import { ApplyOrgComponent } from './apply-org/apply-org.component';
 import { UserGuideComponent } from './user-guide/user-guide.component';
 import { RouterModule, Routes } from '@angular/router';
@@ -45,6 +46,11 @@ const routes: Routes = [
       path: 'organizations',
       loadChildren: () => import('./organizations/organizations.module')
         .then(m => m.OrganizationsModule),
+    },
+    {
+      path: 'ir',
+      loadChildren: () => import('./org-identity-registry/org-identity-registry.module')
+        .then(m => m.OrgIdentityRegistryModule),
     },
     {
       path: 'layout',
