@@ -20,7 +20,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Organizations',
     icon: 'grid-outline',
-    link: '/pages/dashboard',
+    link: '/pages/organizations',
   },
   {
     title: 'Identity Registry',

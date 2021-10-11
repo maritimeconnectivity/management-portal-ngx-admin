@@ -9,9 +9,11 @@ import { ECommerceComponent } from './e-commerce/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import {AboutComponent} from './about/about.component';
 import {ContactComponent} from './contact/contact.component';
-import { ApproveOrgComponent } from './approve-org/approve-org.component';
+import { AdministrationComponent } from './administration/administration.component';
+import { ApproveOrgComponent } from './administration/approve-org/approve-org.component';
 
-const routes: Routes = [{
+const routes: Routes = [
+  {
   path: '',
   component: PagesComponent,
   children: [
@@ -28,10 +30,6 @@ const routes: Routes = [{
       component: ApplyOrgComponent,
     },
     {
-      path: 'approve-org',
-      component: ApproveOrgComponent,
-    },
-    {
       path: 'contact',
       component: ContactComponent,
     },
@@ -42,6 +40,11 @@ const routes: Routes = [{
     {
       path: 'iot-dashboard',
       component: DashboardComponent,
+    },
+    {
+      path: 'organizations',
+      loadChildren: () => import('./organizations/organizations.module')
+        .then(m => m.OrganizationsModule),
     },
     {
       path: 'layout',
@@ -111,3 +114,11 @@ const routes: Routes = [{
 })
 export class PagesRoutingModule {
 }
+export const pagesRoutingComponents = [
+  AboutComponent,
+  ContactComponent,
+  UserGuideComponent,
+  ApplyOrgComponent,
+  AdministrationComponent,
+  ApproveOrgComponent,
+];

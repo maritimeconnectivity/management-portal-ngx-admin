@@ -5,14 +5,10 @@ import { ThemeModule } from '../@theme/theme.module';
 import { PagesComponent } from './pages.component';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { ECommerceModule } from './e-commerce/e-commerce.module';
-import { PagesRoutingModule } from './pages-routing.module';
+import { pagesRoutingComponents, PagesRoutingModule } from './pages-routing.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
-import { AboutComponent } from './about/about.component';
-import { ContactComponent } from './contact/contact.component';
-import { UserGuideComponent } from './user-guide/user-guide.component';
-import { ApplyOrgComponent } from './apply-org/apply-org.component';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-import { ApproveOrgComponent } from './approve-org/approve-org.component';
+import { OrgIdentityRegistryComponent } from './org-identity-registry/org-identity-registry.component';
 
 @NgModule({
   imports: [
@@ -27,11 +23,8 @@ import { ApproveOrgComponent } from './approve-org/approve-org.component';
   ],
   declarations: [
     PagesComponent,
-    AboutComponent,
-    ContactComponent,
-    UserGuideComponent,
-    ApplyOrgComponent,
-    ApproveOrgComponent,
+    pagesRoutingComponents,
+    OrgIdentityRegistryComponent,
   ],
 })
 export class PagesModule {

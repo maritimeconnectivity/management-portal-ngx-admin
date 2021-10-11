@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
-import { SmartTableData } from '../../@core/data/smart-table';
+import { SmartTableData } from '../../../@core/data/smart-table';
 
 @Component({
   selector: 'ngx-approve-org',
@@ -8,6 +8,10 @@ import { SmartTableData } from '../../@core/data/smart-table';
   styleUrls: ['./approve-org.component.scss']
 })
 export class ApproveOrgComponent implements OnInit {
+
+  ngOnInit(): void {
+  }
+
   settings = {
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
@@ -56,9 +60,6 @@ export class ApproveOrgComponent implements OnInit {
   constructor(private service: SmartTableData) {
     const data = this.service.getData();
     this.source.load(data);
-  }
-  ngOnInit(): void {
-    
   }
 
   onDeleteConfirm(event): void {
