@@ -31,6 +31,11 @@ const routes: Routes = [{
         .then(m => m.EntitiesModule),
     },
     {
+      path: 'organizations',
+      loadChildren: () => import('./entities/entities.module')
+        .then(m => m.EntitiesModule),
+    },
+    {
       path: 'acting',
       component: ActingComponent,
     },

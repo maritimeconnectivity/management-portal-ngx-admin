@@ -1,22 +1,33 @@
-<nb-card>
-    <nb-card-header>
-      {{title}}
-    </nb-card-header>
-  
-    <nb-card-body>
-        <form>
-          <div class="form-group row">
-            <label for="inputMRN" class="label col-sm-3 col-form-label">MRN</label>
-            <div class="col-sm-9">
-              <input type="text" nbInput fullWidth id="inputText" placeholder="MRN">
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="certificateList" class="label col-sm-3 col-form-label">Certificates</label>
-            <ngx-certificates></ngx-certificates>
-          </div>
-        </form>
-        
-    </nb-card-body>
-  </nb-card>
-  
+<div class="row">
+  <div class="col-lg-12">
+    <nb-card>
+      <nb-card-body>
+        <button nbButton status="info" ghost (click)="cancel()">
+          <nb-icon icon="arrow-ios-back" pack="eva"></nb-icon> 
+          Back to list
+        </button>
+      </nb-card-body>
+    </nb-card>
+    <nb-card>
+        <nb-card-header>
+          {{title}}
+        </nb-card-header>
+      
+        <nb-card-body>
+            <form>
+              <div class="form-group row" *ngFor="let attribute of columnForEntity | keyvalue">
+                <label for="input{{attribute.key}}" class="label col-sm-3 col-form-label">{{attribute.key}}</label>
+                <div class="col-sm-9">
+                  <input type="text" nbInput fullWidth id="inputText" value="{{attribute.key}}" readonly>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="certificateList" class="label col-sm-3 col-form-label">Certificates</label>
+                <ngx-certificates></ngx-certificates>
+              </div>
+            </form>
+            
+        </nb-card-body>
+      </nb-card>
+  </div>
+</div>

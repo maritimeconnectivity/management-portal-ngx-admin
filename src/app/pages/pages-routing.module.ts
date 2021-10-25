@@ -31,6 +31,10 @@ const routes: Routes = [
       component: ApplyOrgComponent,
     },
     {
+      path: 'approve-org',
+      component: ApproveOrgComponent,
+    },
+    {
       path: 'contact',
       component: ContactComponent,
     },
@@ -41,11 +45,6 @@ const routes: Routes = [
     {
       path: 'iot-dashboard',
       component: DashboardComponent,
-    },
-    {
-      path: 'organizations',
-      loadChildren: () => import('./organizations/organizations.module')
-        .then(m => m.OrganizationsModule),
     },
     {
       path: 'ir',

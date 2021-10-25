@@ -1,8 +1,8 @@
+import { ColumnForEntity } from './../../../models/columnForEntities';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
 import { SmartTableData } from '../../../../@core/data/smart-table';
-import { ListTableColumn } from './list-column';
 
 const capitalize = (s): string => {
   if (typeof s !== 'string') return ''
@@ -17,12 +17,13 @@ const capitalize = (s): string => {
 
 export class ListComponent implements OnInit {
 
+  entityType: string = 'device';
   title = ' for ';
 
   ngOnInit(): void {
   }
-
-  settings = {
+  settings;
+  mySettings = {
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
@@ -37,13 +38,19 @@ export class ListComponent implements OnInit {
       deleteButtonContent: '<i class="nb-trash"></i>',
       confirmDelete: true,
     },
-    columns: ListTableColumn,
+    columns: ColumnForEntity[this.entityType],
   };
-
+  showTables = true;
   source: LocalDataSource = new LocalDataSource();
 
   constructor(private service: SmartTableData, private router: Router) {
-    this.title = capitalize(this.router.url.split("/").pop()) + " for " + "Organization";
+    this.entityType = this.router.url.split("/").pop();
+    this.entityType = this.entityType.substr(0,this.entityType.length-1);
+    this.mySettings.columns = ColumnForEntity[this.entityType];
+    this.settings = Object.assign({}, this.mySettings);
+    this.title = this.entityType === 'organization' ?
+            capitalize(this.entityType) + " list" 
+            : capitalize(this.entityType) + " list for " + "Organization";
     const data = this.service.getData();
     this.source.load(data);
   }
@@ -58,7 +65,5 @@ export class ListComponent implements OnInit {
 
   onSelect(event): void {
     this.router.navigate([this.router.url, event.data.id]);
-    console.log(event.data.id);
   }
-
 }

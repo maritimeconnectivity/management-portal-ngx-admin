@@ -20,7 +20,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Organizations',
     icon: 'grid-outline',
-    link: '/pages/organizations',
+    link: '/pages/ir/organizations',
   },
   {
     title: 'Identity Registry',
@@ -62,7 +62,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'How To?',
-        link: '/pages/tables/smart-table',
+        link: '/pages/sr/smart-table',
       },
       {
         title: 'Specifications',
