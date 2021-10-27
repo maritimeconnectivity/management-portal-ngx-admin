@@ -9,6 +9,7 @@ import { pagesRoutingComponents, PagesRoutingModule } from './pages-routing.modu
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { OrgIdentityRegistryComponent } from './org-identity-registry/org-identity-registry.component';
+import { OrgServiceRegistryComponent } from './org-service-registry/org-service-registry.component';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { OrgIdentityRegistryComponent } from './org-identity-registry/org-identi
     PagesComponent,
     pagesRoutingComponents,
     OrgIdentityRegistryComponent,
+    OrgServiceRegistryComponent,
   ],
 })
 export class PagesModule {

@@ -1,15 +1,13 @@
 <div class="row">
   <div class="col-lg-12">
     <nb-card>
-      <nb-card-body>
-        <button nbButton status="info" ghost (click)="cancel()">
-          <nb-icon icon="arrow-ios-back" pack="eva"></nb-icon> 
-          Back to list
-        </button>
-      </nb-card-body>
-    </nb-card>
-    <nb-card>
         <nb-card-header>
+          <div>
+            <button nbButton status="info" ghost (click)="cancel()">
+              <nb-icon icon="arrow-ios-back" pack="eva"></nb-icon> 
+              Back to list
+            </button>
+          </div>
           {{title}}
         </nb-card-header>
       

@@ -13,6 +13,7 @@ export class DetailComponent implements OnInit {
   title = "";
   entityType = "device";
   columnForEntity = ColumnForEntity[this.entityType];
+  contextForAttributes = 'detail';
 
   ngOnInit(): void {
   }
@@ -22,7 +23,10 @@ export class DetailComponent implements OnInit {
     let arrays = this.router.url.split("/");
     this.entityType = arrays[arrays.length-2];
     this.entityType = this.entityType.substr(0, this.entityType.length-1);
-    this.columnForEntity = ColumnForEntity[this.entityType];
+    // filtered with context
+    this.columnForEntity = Object.assign({}, ...
+      Object.entries(ColumnForEntity[this.entityType]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes)).map(([k,v]) => ({[k]:v}))
+    );
   }
 
   cancel() {

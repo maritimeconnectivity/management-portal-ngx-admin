@@ -14,7 +14,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'My organization',
     icon: 'home-outline',
-    link: '/pages/dashboard',
+    link: '/pages/ir/organizations/1',
     home: true,
   },
   {
