@@ -1,0 +1,1 @@
+export const EntityType = ['device', 'vessel', 'user', 'service', 'organization'];
