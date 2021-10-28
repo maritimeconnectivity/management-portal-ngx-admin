@@ -1,3 +1,5 @@
+import { convertTime } from "../../util/timeConverter";
+
 export const ColumnForEntity = {
     device: {
         id: {
@@ -18,11 +20,19 @@ export const ColumnForEntity = {
           createdAt: {
             title: 'Created at',
             type: 'string',
+            filter: false,
+            valuePrepareFunction: (timestamp: any) => {
+              return convertTime(timestamp);
+            },
             visibleFrom: ['detail'],
           },
           updatedAt: {
             title: 'Updated at',
             type: 'string',
+            filter: false,
+            valuePrepareFunction: (timestamp: any) => {
+              return convertTime(timestamp);
+            },
             visibleFrom: ['detail', 'list'],
           },
           permissions: {
@@ -60,11 +70,19 @@ export const ColumnForEntity = {
           createdAt: {
             title: 'Created at',
             type: 'string',
+            filter: false,
+            valuePrepareFunction: (timestamp: any) => {
+              return convertTime(timestamp);
+            },
             visibleFrom: ['detail'],
           },
           updatedAt: {
             title: 'Updated at',
             type: 'string',
+            filter: false,
+            valuePrepareFunction: (timestamp: any) => {
+              return convertTime(timestamp);
+            },
             visibleFrom: ['detail', 'list'],
           },
           mrnSubsidiary: {
@@ -122,11 +140,19 @@ export const ColumnForEntity = {
           createdAt: {
             title: 'Created at',
             type: 'string',
+            filter: false,
+            valuePrepareFunction: (timestamp: any) => {
+              return convertTime(timestamp);
+            },
             visibleFrom: ['detail'],
           },
           updatedAt: {
             title: 'Updated at',
             type: 'string',
+            filter: false,
+            valuePrepareFunction: (timestamp: any) => {
+              return convertTime(timestamp);
+            },
             visibleFrom: ['detail', 'list'],
           },
           permissions: {
@@ -194,11 +220,19 @@ export const ColumnForEntity = {
           createdAt: {
             title: 'Created at',
             type: 'string',
+            filter: false,
+            valuePrepareFunction: (timestamp: any) => {
+              return convertTime(timestamp);
+            },
             visibleFrom: ['detail'],
           },
           updatedAt: {
             title: 'Updated at',
             type: 'string',
+            filter: false,
+            valuePrepareFunction: (timestamp: any) => {
+              return convertTime(timestamp);
+            },
             visibleFrom: ['detail', 'list'],
           },
           permissions: {
@@ -236,11 +270,19 @@ export const ColumnForEntity = {
           createdAt: {
             title: 'Created at',
             type: 'string',
+            filter: false,
+            valuePrepareFunction: (timestamp: any) => {
+              return convertTime(timestamp);
+            },
             visibleFrom: ['detail'],
           },
           updatedAt: {
             title: 'Updated at',
             type: 'string',
+            filter: false,
+            valuePrepareFunction: (timestamp: any) => {
+              return convertTime(timestamp);
+            },
             visibleFrom: ['detail', 'list'],
           },
           permissions: {

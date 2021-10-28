@@ -7,7 +7,7 @@
       <div>
         <input #search class="search" type="text" placeholder="Search..." (keydown.enter)="onSearch(search.value)">
       </div>
-      <ng2-smart-table *ngIf="showTables" [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)" (userRowSelect)="onSelect($event)">
+      <ng2-smart-table *ngIf="showTables" [settings]="settings" [source]="source" (edit)="onEdit($event)" (delete)="onDelete($event)">
       </ng2-smart-table>
     </nb-card-body>
   </nb-card>

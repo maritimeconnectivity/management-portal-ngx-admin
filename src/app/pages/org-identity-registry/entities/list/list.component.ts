@@ -1,3 +1,4 @@
+import { convertTime } from './../../../../util/timeConverter';
 import { OrganizationDataService } from './../../../../@core/mock/organization-data.service';
 import { UserDataService } from './../../../../@core/mock/user-data.service';
 import { DeviceDataService } from './../../../../@core/mock/device-data.service';
@@ -43,7 +44,7 @@ export class ListComponent implements OnInit {
       Object.entries(ColumnForEntity[this.entityType]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes)).map(([k,v]) => ({[k]:v}))
     );
     this.settings = Object.assign({}, this.mySettings);
-    this.title = `${capitalize(this.entityType)} list ${this.entityType === 'organization' ? '' : ' for ' + this.organizationName }`;
+    this.title = `${capitalize(this.entityType)} list${this.entityType === 'organization' ? '' : ' for ' + this.organizationName }`;
 
     if (EntityType.includes(this.entityType) && dataServiceMap.hasOwnProperty(`${this.entityType}DataService`)) {
       this.service = this.injector.get<any>(dataServiceMap[`${this.entityType}DataService`]);
@@ -53,13 +54,10 @@ export class ListComponent implements OnInit {
         throw new Error(`There's no such thing as '${this.entityType}DataService'`);
     }
   }
+
   settings;
   mySettings = {
-    add: {
-      addButtonContent: '<i class="nb-plus"></i>',
-      createButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>',
-    },
+    mode: 'external',
     edit: {
       editButtonContent: '<i class="nb-edit"></i>',
       saveButtonContent: '<i class="nb-checkmark"></i>',
@@ -70,16 +68,18 @@ export class ListComponent implements OnInit {
       confirmDelete: true,
     },
     columns: ColumnForEntity[this.entityType],
+    hideSubHeader: true,
   };
   showTables = true;
   source: LocalDataSource = new LocalDataSource();
 
-  constructor(private service: EntityDataService, private injector: Injector, private router: Router) {
+  constructor(private service: EntityDataService, private injector: Injector, private router: Router,
+    private orgService: OrganizationDataService ) {
     this.entityType = this.router.url.split("/").pop();
     this.entityType = this.entityType.substr(0,this.entityType.length-1);
   }
 
-  onDeleteConfirm(event): void {
+  onDelete(event): void {
     if (window.confirm('Are you sure you want to delete?')) {
       event.confirm.resolve();
     } else {
@@ -87,7 +87,7 @@ export class ListComponent implements OnInit {
     }
   }
 
-  onSelect(event): void {
+  onEdit(event): void {
     this.router.navigate([this.router.url, event.data.id]);
   }
 
@@ -108,4 +108,17 @@ export class ListComponent implements OnInit {
       },
     ], false);
   }
+
+  loadMyOrganization() {
+    /*
+		this.orgService.getMyOrganization().subscribe(
+			organization => {
+				this.organization = organization;
+			},
+			err => {
+				this.notifications.generateNotification('Error', 'Error when trying to get organization', MCNotificationType.Error, err);
+			}
+		);
+    */
+	}
 }
