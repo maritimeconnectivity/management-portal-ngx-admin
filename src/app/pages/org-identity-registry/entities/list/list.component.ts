@@ -9,8 +9,9 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { SmartTableData } from '../../../../@core/data/smart-table';
 import { EntityDataService } from '../../../../@core/mock/entity-data.service';
 import { ServiceDataService } from '../../../../@core/mock/service-data.service';
-import { EntityType } from '../../../models/entityType';
+import { EntityType, EntityTypeIconNames } from '../../../models/entityType';
 import { VesselDataService } from '../../../../@core/mock/vessel-data.service';
+import { NbIconLibraries } from '@nebular/theme';
 
 const capitalize = (s): string => {
   if (typeof s !== 'string') return ''
@@ -37,6 +38,7 @@ export class ListComponent implements OnInit {
   title = ' for ';
   contextForAttributes = 'list';
   organizationName = 'MCC';
+  iconName = 'circle';
 
   ngOnInit(): void {
     // filtered with context
@@ -59,7 +61,7 @@ export class ListComponent implements OnInit {
   mySettings = {
     mode: 'external',
     edit: {
-      editButtonContent: '<i class="nb-edit"></i>',
+      editButtonContent: '<i class="nb-menu"></i>',
       saveButtonContent: '<i class="nb-checkmark"></i>',
       cancelButtonContent: '<i class="nb-close"></i>',
     },
@@ -74,9 +76,12 @@ export class ListComponent implements OnInit {
   source: LocalDataSource = new LocalDataSource();
 
   constructor(private service: EntityDataService, private injector: Injector, private router: Router,
-    private orgService: OrganizationDataService ) {
+    private orgService: OrganizationDataService, iconsLibrary: NbIconLibraries) {
     this.entityType = this.router.url.split("/").pop();
     this.entityType = this.entityType.substr(0,this.entityType.length-1);
+    this.iconName = EntityTypeIconNames[this.entityType];
+
+    iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
   }
 
   onDelete(event): void {
