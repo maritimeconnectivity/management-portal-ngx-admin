@@ -1,6 +1,5 @@
-import { OrgIdentityRegistryModule } from './org-identity-registry/org-identity-registry.module';
-import { ApplyOrgComponent } from './apply-org/apply-org.component';
-import { UserGuideComponent } from './user-guide/user-guide.component';
+import { BugReportComponent } from './bug-report/bug-report.component';
+import { OrgIdentityRegistryModule } from './identity-registry/org-identity-registry.module';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 
@@ -10,8 +9,6 @@ import { ECommerceComponent } from './e-commerce/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import {AboutComponent} from './about/about.component';
 import {ContactComponent} from './contact/contact.component';
-import { AdministrationComponent } from './administration/administration.component';
-import { ApproveOrgComponent } from './administration/approve-org/approve-org.component';
 
 const routes: Routes = [
   {
@@ -19,24 +16,16 @@ const routes: Routes = [
   component: PagesComponent,
   children: [
     {
-      path: 'guide',
-      component: UserGuideComponent,
-    },
-    {
       path: 'about',
       component: AboutComponent,
     },
     {
-      path: 'apply-org',
-      component: ApplyOrgComponent,
-    },
-    {
-      path: 'approve-org',
-      component: ApproveOrgComponent,
-    },
-    {
       path: 'contact',
       component: ContactComponent,
+    },
+    {
+      path: 'bug-report',
+      component: BugReportComponent,
     },
     {
       path: 'dashboard',
@@ -48,7 +37,7 @@ const routes: Routes = [
     },
     {
       path: 'ir',
-      loadChildren: () => import('./org-identity-registry/org-identity-registry.module')
+      loadChildren: () => import('./identity-registry/org-identity-registry.module')
         .then(m => m.OrgIdentityRegistryModule),
     },
     {
@@ -122,8 +111,4 @@ export class PagesRoutingModule {
 export const pagesRoutingComponents = [
   AboutComponent,
   ContactComponent,
-  UserGuideComponent,
-  ApplyOrgComponent,
-  AdministrationComponent,
-  ApproveOrgComponent,
 ];

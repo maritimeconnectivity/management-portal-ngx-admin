@@ -10,7 +10,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
         children: [
           {
             title: 'Approve',
-            link: '/pages/approve-org',
+            link: '/pages/ir/approve-org',
           },
           {
             title: 'Organizations',
@@ -50,11 +50,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
       {
         title: 'Report bug',
-        link: '/pages/guide',
+        link: '/pages/ir/guide',
       },
       {
         title: 'User Guide',
-        link: '/pages/guide',
+        link: '/pages/ir/guide',
       },
     ],
   },
@@ -93,10 +93,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
         ],
       },
       {
-        title: 'Report bug',
-        link: '/pages/guide',
-      },
-      {
         title: 'User Guide',
         link: '/pages/guide',
       },
@@ -111,6 +107,16 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/pages/tables/smart-table',
       },
     ],
+  },
+  {
+    title: 'Contact',
+    icon: 'email',
+    link: '/pages/contact',
+  },
+  {
+    title: 'Report bug',
+    icon: 'alert-circle-outline',
+    link: '/pages/bug-report',
   },
   {
     title: 'About',

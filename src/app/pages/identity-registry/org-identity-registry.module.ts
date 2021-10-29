@@ -7,6 +7,9 @@ import { NbCardModule, NbIconModule } from '@nebular/theme';
 import { AgentsComponent } from './agents/agents.component';
 import { ActingComponent } from './acting/acting.component';
 import { RoleComponent } from './role/role.component';
+import { ApproveOrgComponent } from './approve-org/approve-org.component';
+import { ApplyOrgComponent } from './apply-org/apply-org.component';
+import { IrGuideComponent } from './ir-guide/ir-guide.component';
 
 
 @NgModule({
@@ -14,6 +17,9 @@ import { RoleComponent } from './role/role.component';
     AgentsComponent,
     ActingComponent,
     RoleComponent,
+    ApproveOrgComponent,
+    ApplyOrgComponent,
+    IrGuideComponent,
   ],
   imports: [
     CommonModule,

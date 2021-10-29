@@ -1,4 +1,4 @@
-import { ColumnForEntity } from './../../../models/columnForEntities';
+import { ColumnForEntity } from '../../../models/columnForEntities';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SmartTableData } from '../../../../@core/data/smart-table';

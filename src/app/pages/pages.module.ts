@@ -8,8 +8,9 @@ import { ECommerceModule } from './e-commerce/e-commerce.module';
 import { pagesRoutingComponents, PagesRoutingModule } from './pages-routing.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-import { OrgIdentityRegistryComponent } from './org-identity-registry/org-identity-registry.component';
-import { OrgServiceRegistryComponent } from './org-service-registry/org-service-registry.component';
+import { OrgIdentityRegistryComponent } from './identity-registry/org-identity-registry.component';
+import { OrgServiceRegistryComponent } from './service-registry/org-service-registry.component';
+import { BugReportComponent } from './bug-report/bug-report.component';
 
 @NgModule({
   imports: [
@@ -27,6 +28,7 @@ import { OrgServiceRegistryComponent } from './org-service-registry/org-service-
     pagesRoutingComponents,
     OrgIdentityRegistryComponent,
     OrgServiceRegistryComponent,
+    BugReportComponent,
   ],
 })
 export class PagesModule {

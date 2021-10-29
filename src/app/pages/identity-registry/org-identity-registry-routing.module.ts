@@ -1,3 +1,5 @@
+import { IrGuideComponent } from './ir-guide/ir-guide.component';
+
 import { RoleComponent } from './role/role.component';
 import { AgentsComponent } from './agents/agents.component';
 import { ActingComponent } from './acting/acting.component';
@@ -5,6 +7,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { OrgIdentityRegistryComponent } from './org-identity-registry.component';
 import { NotFoundComponent } from '../miscellaneous/not-found/not-found.component';
+import { ApplyOrgComponent } from './apply-org/apply-org.component';
+import { ApproveOrgComponent } from './approve-org/approve-org.component';
 
 const routes: Routes = [{
   path: '',
@@ -36,6 +40,14 @@ const routes: Routes = [{
         .then(m => m.EntitiesModule),
     },
     {
+      path: 'apply-org',
+      component: ApplyOrgComponent,
+    },
+    {
+      path: 'approve-org',
+      component: ApproveOrgComponent,
+    },
+    {
       path: 'acting',
       component: ActingComponent,
     },
@@ -46,6 +58,10 @@ const routes: Routes = [{
     {
       path: 'agents',
       component: AgentsComponent,
+    },
+    {
+      path: 'guide',
+      component: IrGuideComponent,
     },
     {
       path: '**',
