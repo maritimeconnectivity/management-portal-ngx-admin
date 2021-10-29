@@ -16,6 +16,16 @@ const routes: Routes = [
   component: PagesComponent,
   children: [
     {
+      path: 'ir',
+      loadChildren: () => import('./identity-registry/org-identity-registry.module')
+        .then(m => m.OrgIdentityRegistryModule),
+    },
+    {
+      path: 'sr',
+      loadChildren: () => import('./service-registry/org-service-registry.module')
+        .then(m => m.OrgServiceRegistryModule),
+    },
+    {
       path: 'about',
       component: AboutComponent,
     },
@@ -34,11 +44,6 @@ const routes: Routes = [
     {
       path: 'iot-dashboard',
       component: DashboardComponent,
-    },
-    {
-      path: 'ir',
-      loadChildren: () => import('./identity-registry/org-identity-registry.module')
-        .then(m => m.OrgIdentityRegistryModule),
     },
     {
       path: 'layout',

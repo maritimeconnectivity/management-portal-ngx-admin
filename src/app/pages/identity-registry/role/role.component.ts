@@ -1,8 +1,8 @@
-import { convertTime } from './../../../util/timeConverter';
-import { OrganizationDataService } from './../../../@core/mock/organization-data.service';
-import { UserDataService } from './../../../@core/mock/user-data.service';
-import { DeviceDataService } from './../../../@core/mock/device-data.service';
-import { ColumnForEntity } from './../../models/columnForEntities';
+import { convertTime } from '../../../util/timeConverter';
+import { OrganizationDataService } from '../../../@core/mock/organization-data.service';
+import { UserDataService } from '../../../@core/mock/user-data.service';
+import { DeviceDataService } from '../../../@core/mock/device-data.service';
+import { ColumnForEntity } from '../../models/columnForEntities';
 import { Component, Injector, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';

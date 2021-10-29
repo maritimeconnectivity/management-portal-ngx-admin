@@ -60,18 +60,18 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Search',
-        link: '/pages/sr/smart-table',
+        link: '/pages/sr/instances/search',
       },
       {
         title: 'Administration',
         children: [
           {
             title: 'Approve',
-            link: '/pages/approve-org',
+            link: '/pages/sr/approve-svc',
           },
           {
             title: 'Services',
-            link: '/pages/ir/organizations',
+            link: '/pages/sr/instances',
           },
         ],
       },
@@ -79,18 +79,18 @@ export const MENU_ITEMS: NbMenuItem[] = [
         title: 'My Organization',
         children: [
           {
-            title: 'Register',
-            link: '/pages/layout/stepper',
+            title: 'Register service',
+            link: '/pages/sr/apply-svc',
           },
           {
             title: 'Services',
-            link: '/pages/ir/organizations',
+            link: '/pages/sr/instances',
           },
         ],
       },
       {
         title: 'User Guide',
-        link: '/pages/guide',
+        link: '/pages/sr/guide',
       },
     ],
   },
