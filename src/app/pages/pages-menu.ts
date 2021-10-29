@@ -2,49 +2,59 @@ import { NbMenuItem } from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
-    title: 'Administration',
-    icon: 'lock-outline',
-    children: [
-      {
-        title: 'Approve',
-        link: '/pages/approve-org',
-      },
-    ],
-  },
-  {
-    title: 'My organization',
-    icon: 'home-outline',
-    link: '/pages/ir/organizations/1',
-    home: true,
-  },
-  {
-    title: 'Organizations',
-    icon: 'grid-outline',
-    link: '/pages/ir/organizations',
-  },
-  {
     title: 'Identity Registry',
     icon: 'lock-outline',
     children: [
       {
-        title: 'Devices',
-        link: '/pages/ir/devices',
+        title: 'Administration',
+        children: [
+          {
+            title: 'Approve',
+            link: '/pages/approve-org',
+          },
+          {
+            title: 'Organizations',
+            link: '/pages/ir/organizations',
+          },
+        ],
       },
       {
-        title: 'ID Services',
-        link: '/pages/ir/services',
+        title: 'My Organization',
+        home: true,
+        children: [
+          {
+            title: 'Organization',
+            link: '/pages/ir/organizations/1',
+          },
+          {
+            title: 'Devices',
+            link: '/pages/ir/devices',
+          },
+          {
+            title: 'ID Services',
+            link: '/pages/ir/services',
+          },
+          {
+            title: 'Users',
+            link: '/pages/ir/users',
+          },
+          {
+            title: 'Vessels',
+            link: '/pages/ir/vessels',
+          },
+          {
+            title: 'Roles',
+            link: '/pages/ir/roles',
+          },
+        ],
       },
       {
-        title: 'Users',
-        link: '/pages/ir/users',
+        title: 'Report bug',
+        link: '/pages/guide',
       },
       {
-        title: 'Vessels',
-        link: '/pages/ir/vessels',
-      },
-      {
-        title: 'Roles',
-        link: '/pages/ir/roles',
+        title: 'User Guide',
+        link: '/pages/guide',
       },
     ],
   },
@@ -57,20 +67,38 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/pages/sr/smart-table',
       },
       {
-        title: 'Register',
-        link: '/pages/layout/stepper',
+        title: 'Administration',
+        children: [
+          {
+            title: 'Approve',
+            link: '/pages/approve-org',
+          },
+          {
+            title: 'Services',
+            link: '/pages/ir/organizations',
+          },
+        ],
       },
       {
-        title: 'MSR admin - approve',
-        link: '/pages/tables/smart-table',
+        title: 'My Organization',
+        children: [
+          {
+            title: 'Register',
+            link: '/pages/layout/stepper',
+          },
+          {
+            title: 'Services',
+            link: '/pages/ir/organizations',
+          },
+        ],
       },
       {
-        title: 'MSR admin - management',
-        link: '/pages/tables/smart-table',
+        title: 'Report bug',
+        link: '/pages/guide',
       },
       {
-        title: 'SP - management',
-        link: '/pages/layout/stepper',
+        title: 'User Guide',
+        link: '/pages/guide',
       },
     ],
   },
@@ -83,16 +111,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/pages/tables/smart-table',
       },
     ],
-  },
-  {
-    title: 'Report bug',
-    icon: 'alert-circle-outline',
-    link: '/pages/guide',
-  },
-  {
-    title: 'User guide',
-    icon: 'question-mark-circle-outline',
-    link: '/pages/guide',
   },
   {
     title: 'About',
