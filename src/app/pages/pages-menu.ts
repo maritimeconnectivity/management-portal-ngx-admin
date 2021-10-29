@@ -46,14 +46,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
         title: 'Roles',
         link: '/pages/ir/roles',
       },
-      {
-        title: 'Agents',
-        link: '/pages/ir/agents',
-      },
-      {
-        title: 'Acting For',
-        link: '/pages/ir/acting',
-      },
     ],
   },
   {
@@ -61,54 +53,24 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'layers-outline',
     children: [
       {
-        title: 'How To?',
+        title: 'Search',
         link: '/pages/sr/smart-table',
       },
       {
-        title: 'Specifications',
+        title: 'Register',
         link: '/pages/layout/stepper',
       },
       {
-        title: 'Designs',
+        title: 'MSR admin - approve',
         link: '/pages/tables/smart-table',
       },
       {
-        title: 'Instances',
+        title: 'MSR admin - management',
+        link: '/pages/tables/smart-table',
+      },
+      {
+        title: 'SP - management',
         link: '/pages/layout/stepper',
-      },
-    ],
-  },
-  {
-    title: 'Service Registry - 2.0',
-    icon: 'layers-outline',
-    children: [
-      {
-        title: 'My services in MSR',
-        link: '/pages/tables/smart-table',
-      },
-      {
-        title: 'Add service to MSR',
-        link: '/pages/layout/stepper',
-      },
-      {
-        title: 'My services in ledger',
-        link: '/pages/tables/smart-table',
-      },
-      {
-        title: 'Add service to ledger',
-        link: '/pages/layout/stepper',
-      },
-      {
-        title: 'Service Management',
-        link: '/pages/tables/smart-table',
-      },
-      {
-        title: 'Approve MSR registration',
-        link: '/pages/tables/smart-table',
-      },
-      {
-        title: 'Approve ledger registration',
-        link: '/pages/tables/smart-table',
       },
     ],
   },

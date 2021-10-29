@@ -1,5 +1,5 @@
+import { RoleComponent } from './role/role.component';
 import { AgentsComponent } from './agents/agents.component';
-import { RolesComponent } from './roles/roles.component';
 import { ActingComponent } from './acting/acting.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -41,7 +41,7 @@ const routes: Routes = [{
     },
     {
       path: 'roles',
-      component: RolesComponent,
+      component: RoleComponent,
     },
     {
       path: 'agents',
