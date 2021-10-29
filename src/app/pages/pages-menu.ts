@@ -49,10 +49,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
         ],
       },
       {
-        title: 'Report bug',
-        link: '/pages/ir/guide',
-      },
-      {
         title: 'User Guide',
         link: '/pages/ir/guide',
       },
@@ -114,7 +110,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/pages/contact',
   },
   {
-    title: 'Report bug',
+    title: 'Report Bug',
     icon: 'alert-circle-outline',
     link: '/pages/bug-report',
   },

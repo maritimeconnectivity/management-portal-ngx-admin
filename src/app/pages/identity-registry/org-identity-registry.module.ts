@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { OrgIdentityRegistryRoutingModule } from './org-identity-registry-routing.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-import { NbCardModule, NbIconModule } from '@nebular/theme';
+import { NbCardModule, NbIconModule, NbStepperModule, NbButtonModule, NbTabsetModule } from '@nebular/theme';
 import { AgentsComponent } from './agents/agents.component';
 import { ActingComponent } from './acting/acting.component';
 import { RoleComponent } from './role/role.component';
@@ -25,6 +25,9 @@ import { IrGuideComponent } from './ir-guide/ir-guide.component';
     CommonModule,
     NbCardModule,
     NbIconModule,
+    NbButtonModule,
+    NbTabsetModule,
+    NbStepperModule,
     Ng2SmartTableModule,
     OrgIdentityRegistryRoutingModule,
   ]

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NbMenuModule, NbCardModule } from '@nebular/theme';
+import { NbMenuModule, NbCardModule, NbButtonModule } from '@nebular/theme';
 
 import { ThemeModule } from '../@theme/theme.module';
 import { PagesComponent } from './pages.component';
@@ -18,6 +18,7 @@ import { BugReportComponent } from './bug-report/bug-report.component';
     ThemeModule,
     NbMenuModule,
     NbCardModule,
+    NbButtonModule,
     DashboardModule,
     ECommerceModule,
     MiscellaneousModule,
