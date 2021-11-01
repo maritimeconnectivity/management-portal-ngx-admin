@@ -6,15 +6,15 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'lock-outline',
     children: [
       {
+        title: 'Organizations',
+        link: '/pages/ir/organizations',
+      },
+      {
         title: 'Administration',
         children: [
           {
             title: 'Approve',
             link: '/pages/ir/approve-org',
-          },
-          {
-            title: 'Organizations',
-            link: '/pages/ir/organizations',
           },
         ],
       },
@@ -66,7 +66,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
         title: 'Administration',
         children: [
           {
-            title: 'Approve',
+            title: 'Approve ledger registration',
             link: '/pages/sr/approve-svc',
           },
           {

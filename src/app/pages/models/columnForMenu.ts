@@ -7,7 +7,7 @@ export const ColumnForMenu = {
             type: 'number',
           },
           mrn: {
-            title: 'MRN',
+            title: 'Maritime Resource Name (MRN)',
             type: 'string',
             visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
@@ -56,7 +56,7 @@ export const ColumnForMenu = {
             type: 'number',
           },
           mrn: {
-            title: 'MRN',
+            title: 'Maritime Resource Name (MRN)',
             type: 'string',
             visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
@@ -125,7 +125,7 @@ export const ColumnForMenu = {
             type: 'number',
           },
           mrn: {
-            title: 'MRN',
+            title: 'Maritime Resource Name (MRN)',
             type: 'string',
             visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
@@ -194,7 +194,7 @@ export const ColumnForMenu = {
             type: 'number',
           },
           mrn: {
-            title: 'MRN',
+            title: 'Maritime Resource Name (MRN)',
             type: 'string',
             visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
@@ -253,7 +253,7 @@ export const ColumnForMenu = {
             type: 'number',
           },
           mrn: {
-            title: 'MRN',
+            title: 'Maritime Resource Name (MRN)',
             type: 'string',
             visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
@@ -367,7 +367,7 @@ export const ColumnForMenu = {
         type: 'number',
       },
       mrn: {
-        title: 'MRN',
+        title: 'Maritime Resource Name (MRN)',
         type: 'string',
         visibleFrom: ['create', 'edit', 'detail', 'list'],
       },
@@ -436,7 +436,7 @@ export const ColumnForMenu = {
         type: 'number',
       },
       mrn: {
-        title: 'MRN',
+        title: 'Maritime Resource Name (MRN)',
         type: 'string',
         visibleFrom: ['create', 'edit', 'detail', 'list'],
       },
@@ -480,6 +480,11 @@ export const ColumnForMenu = {
         type: 'string',
         visibleFrom: ['create', 'edit', 'detail'],
       },
+      registerToLedger: {
+        title: 'Register to ledger',
+        type: 'boolean',
+        visibleFrom: ['create', 'edit'],
+      },
       createdAt: {
         title: 'Created at',
         type: 'string',
@@ -505,7 +510,7 @@ export const ColumnForMenu = {
         type: 'number',
       },
       mrn: {
-        title: 'MRN',
+        title: 'Maritime Resource Name (MRN)',
         type: 'string',
         visibleFrom: ['create', 'edit', 'detail', 'list'],
       },

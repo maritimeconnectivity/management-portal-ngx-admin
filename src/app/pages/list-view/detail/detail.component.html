@@ -15,7 +15,7 @@
         <nb-card-body>
             <form>
               <div class="form-group row" *ngFor="let attribute of columnForMenu | keyvalue">
-                <label for="input{{attribute.key}}" class="label col-sm-3 col-form-label">{{attribute.key}}</label>
+                <label for="input{{attribute.key}}" class="label col-sm-3 col-form-label">{{columnForMenu[attribute.key].title}}</label>
                 <div class="col-sm-9">
                   <input type="text" nbInput fullWidth id="inputText" placeholder="{{attribute.key}}">
                 </div>
