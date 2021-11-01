@@ -11,6 +11,7 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { OrgIdentityRegistryComponent } from './identity-registry/org-identity-registry.component';
 import { OrgServiceRegistryComponent } from './service-registry/org-service-registry.component';
 import { BugReportComponent } from './bug-report/bug-report.component';
+import { ListViewComponent } from './list-view/list-view.component';
 
 @NgModule({
   imports: [
@@ -31,6 +32,7 @@ import { BugReportComponent } from './bug-report/bug-report.component';
     OrgIdentityRegistryComponent,
     OrgServiceRegistryComponent,
     BugReportComponent,
+    ListViewComponent,
   ],
 })
 export class PagesModule {

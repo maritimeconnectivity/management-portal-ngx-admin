@@ -1,21 +1,19 @@
-import { DetailComponent } from './detail/detail.component';
-import { EditComponent } from './edit/edit.component';
-import { EntitiesComponent } from './entities.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { EntitiesRoutingModule } from './entities-routing.module';
+import { ListViewRoutingModule } from './list-view-routing.module';
+import { EditComponent } from './edit/edit.component';
 import { ListComponent } from './list/list.component';
-import { NbButtonModule, NbCardModule, NbIconModule, NbInputModule, NbTreeGridModule } from '@nebular/theme';
+import { DetailComponent } from './detail/detail.component';
+import { NbButtonModule, NbCardModule, NbIconModule } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { CertificatesComponent } from './detail/certificates/certificates.component';
 
 
 @NgModule({
   declarations: [
-    EntitiesComponent,
-    ListComponent,
     EditComponent,
+    ListComponent,
     DetailComponent,
     CertificatesComponent,
   ],
@@ -25,7 +23,7 @@ import { CertificatesComponent } from './detail/certificates/certificates.compon
     NbIconModule,
     NbButtonModule,
     Ng2SmartTableModule,
-    EntitiesRoutingModule,
+    ListViewRoutingModule,
   ]
 })
-export class EntitiesModule { }
+export class ListViewModule { }

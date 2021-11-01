@@ -60,7 +60,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Search',
-        link: '/pages/sr/instances/search',
+        link: '/pages/sr/search',
       },
       {
         title: 'Administration',

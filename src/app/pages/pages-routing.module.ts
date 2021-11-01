@@ -15,10 +15,62 @@ const routes: Routes = [
   path: '',
   component: PagesComponent,
   children: [
+    // identity registry
     {
-      path: 'ir',
-      loadChildren: () => import('./identity-registry/org-identity-registry.module')
-        .then(m => m.OrgIdentityRegistryModule),
+      path: 'ir/devices',
+      loadChildren: () => import('./list-view/list-view.module')
+        .then(m => m.ListViewModule),
+    },
+
+    {
+      path: 'ir/services',
+      loadChildren: () => import('./list-view/list-view.module')
+        .then(m => m.ListViewModule),
+    },
+    {
+      path: 'ir/users',
+      loadChildren: () => import('./list-view/list-view.module')
+        .then(m => m.ListViewModule),
+    },
+    {
+      path: 'ir/vessels',
+      loadChildren: () => import('./list-view/list-view.module')
+        .then(m => m.ListViewModule),
+    },
+    {
+      path: 'ir/organizations',
+      loadChildren: () => import('./list-view/list-view.module')
+        .then(m => m.ListViewModule),
+    },
+    {
+      path: 'ir/apply-org',
+      loadChildren: () => import('./list-view/list-view.module')
+        .then(m => m.ListViewModule),
+    },
+    {
+      path: 'ir/approve-org',
+      loadChildren: () => import('./list-view/list-view.module')
+        .then(m => m.ListViewModule),
+    },
+    {
+      path: 'ir/acting',
+      loadChildren: () => import('./list-view/list-view.module')
+        .then(m => m.ListViewModule),
+    },
+    {
+      path: 'ir/roles',
+      loadChildren: () => import('./list-view/list-view.module')
+        .then(m => m.ListViewModule),
+    },
+    {
+      path: 'ir/agents',
+      loadChildren: () => import('./list-view/list-view.module')
+        .then(m => m.ListViewModule),
+    },
+    {
+      path: 'sr/instances',
+      loadChildren: () => import('./list-view/list-view.module')
+        .then(m => m.ListViewModule),
     },
     {
       path: 'sr',

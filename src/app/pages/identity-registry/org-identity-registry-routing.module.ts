@@ -1,6 +1,6 @@
+import { ListViewModule } from './../list-view/list-view.module';
 import { IrGuideComponent } from './ir-guide/ir-guide.component';
 
-import { RoleComponent } from './role/role.component';
 import { AgentsComponent } from './agents/agents.component';
 import { ActingComponent } from './acting/acting.component';
 import { NgModule } from '@angular/core';
@@ -15,49 +15,8 @@ const routes: Routes = [{
   component: OrgIdentityRegistryComponent,
   children: [
     {
-      path: 'devices',
-      loadChildren: () => import('./entities/entities.module')
-        .then(m => m.EntitiesModule),
-    },
-    {
-      path: 'services',
-      loadChildren: () => import('./entities/entities.module')
-        .then(m => m.EntitiesModule),
-    },
-    {
-      path: 'users',
-      loadChildren: () => import('./entities/entities.module')
-        .then(m => m.EntitiesModule),
-    },
-    {
-      path: 'vessels',
-      loadChildren: () => import('./entities/entities.module')
-        .then(m => m.EntitiesModule),
-    },
-    {
-      path: 'organizations',
-      loadChildren: () => import('./entities/entities.module')
-        .then(m => m.EntitiesModule),
-    },
-    {
       path: 'apply-org',
       component: ApplyOrgComponent,
-    },
-    {
-      path: 'approve-org',
-      component: ApproveOrgComponent,
-    },
-    {
-      path: 'acting',
-      component: ActingComponent,
-    },
-    {
-      path: 'roles',
-      component: RoleComponent,
-    },
-    {
-      path: 'agents',
-      component: AgentsComponent,
     },
     {
       path: 'guide',

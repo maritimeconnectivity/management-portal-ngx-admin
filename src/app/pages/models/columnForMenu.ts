@@ -1,6 +1,6 @@
 import { convertTime } from "../../util/timeConverter";
 
-export const ColumnForEntity = {
+export const ColumnForMenu = {
     device: {
         id: {
             title: 'ID',
@@ -15,24 +15,6 @@ export const ColumnForEntity = {
           name: {
             title: 'Name',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
-          },
-          createdAt: {
-            title: 'Created at',
-            type: 'string',
-            filter: false,
-            valuePrepareFunction: (timestamp: any) => {
-              return convertTime(timestamp);
-            },
-            visibleFrom: ['detail'],
-          },
-          updatedAt: {
-            title: 'Updated at',
-            type: 'string',
-            filter: false,
-            valuePrepareFunction: (timestamp: any) => {
-              return convertTime(timestamp);
-            },
             visibleFrom: ['detail', 'list'],
           },
           permissions: {
@@ -50,23 +32,6 @@ export const ColumnForEntity = {
             type: 'string',
             visibleFrom: ['detail'],
           },
-    },
-    organization: {
-        id: {
-            title: 'ID',
-            type: 'number',
-            visibleFrom: ['detail'],
-          },
-          mrn: {
-            title: 'MRN',
-            type: 'string',
-            visibleFrom: ['detail', 'list'],
-          },
-          name: {
-            title: 'Name',
-            type: 'string',
-            visibleFrom: ['detail', 'list'],
-          },
           createdAt: {
             title: 'Created at',
             type: 'string',
@@ -83,6 +48,23 @@ export const ColumnForEntity = {
             valuePrepareFunction: (timestamp: any) => {
               return convertTime(timestamp);
             },
+            visibleFrom: ['detail', 'list'],
+          },
+    },
+    organization: {
+        id: {
+            title: 'ID',
+            type: 'number',
+            visibleFrom: ['detail'],
+          },
+          mrn: {
+            title: 'MRN',
+            type: 'string',
+            visibleFrom: ['detail', 'list'],
+          },
+          name: {
+            title: 'Name',
+            type: 'string',
             visibleFrom: ['detail', 'list'],
           },
           mrnSubsidiary: {
@@ -120,23 +102,6 @@ export const ColumnForEntity = {
             type: 'string',
             visibleFrom: ['detail'],
           },
-    },
-    service: {
-        id: {
-            title: 'ID',
-            type: 'number',
-            visibleFrom: ['detail'],
-          },
-          mrn: {
-            title: 'MRN',
-            type: 'string',
-            visibleFrom: ['detail', 'list'],
-          },
-          name: {
-            title: 'Name',
-            type: 'string',
-            visibleFrom: ['detail', 'list'],
-          },
           createdAt: {
             title: 'Created at',
             type: 'string',
@@ -153,6 +118,23 @@ export const ColumnForEntity = {
             valuePrepareFunction: (timestamp: any) => {
               return convertTime(timestamp);
             },
+            visibleFrom: ['detail', 'list'],
+          },
+    },
+    service: {
+        id: {
+            title: 'ID',
+            type: 'number',
+            visibleFrom: ['detail'],
+          },
+          mrn: {
+            title: 'MRN',
+            type: 'string',
+            visibleFrom: ['detail', 'list'],
+          },
+          name: {
+            title: 'Name',
+            type: 'string',
             visibleFrom: ['detail', 'list'],
           },
           permissions: {
@@ -190,6 +172,24 @@ export const ColumnForEntity = {
             type: 'string',
             visibleFrom: ['detail'],
           },
+          createdAt: {
+            title: 'Created at',
+            type: 'string',
+            filter: false,
+            valuePrepareFunction: (timestamp: any) => {
+              return convertTime(timestamp);
+            },
+            visibleFrom: ['detail'],
+          },
+          updatedAt: {
+            title: 'Updated at',
+            type: 'string',
+            filter: false,
+            valuePrepareFunction: (timestamp: any) => {
+              return convertTime(timestamp);
+            },
+            visibleFrom: ['detail', 'list'],
+          },
     },
     user: {
         id: {
@@ -217,6 +217,21 @@ export const ColumnForEntity = {
             type: 'string',
             visibleFrom: ['detail', 'list'],
           },
+          permissions: {
+            title: 'Permissions',
+            type: 'string',
+            visibleFrom: ['detail', 'list'],
+          },
+          mrnSubsidiary: {
+            title: 'Subsidiary MRN',
+            type: 'string',
+            visibleFrom: ['detail'],
+          },
+          homeMMSUrl: {
+            title: 'Home MMS URL',
+            type: 'string',
+            visibleFrom: ['detail'],
+          },
           createdAt: {
             title: 'Created at',
             type: 'string',
@@ -234,21 +249,6 @@ export const ColumnForEntity = {
               return convertTime(timestamp);
             },
             visibleFrom: ['detail', 'list'],
-          },
-          permissions: {
-            title: 'Permissions',
-            type: 'string',
-            visibleFrom: ['detail', 'list'],
-          },
-          mrnSubsidiary: {
-            title: 'Subsidiary MRN',
-            type: 'string',
-            visibleFrom: ['detail'],
-          },
-          homeMMSUrl: {
-            title: 'Home MMS URL',
-            type: 'string',
-            visibleFrom: ['detail'],
           },
     },
     vessel: {
@@ -265,24 +265,6 @@ export const ColumnForEntity = {
           name: {
             title: 'Name',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
-          },
-          createdAt: {
-            title: 'Created at',
-            type: 'string',
-            filter: false,
-            valuePrepareFunction: (timestamp: any) => {
-              return convertTime(timestamp);
-            },
-            visibleFrom: ['detail'],
-          },
-          updatedAt: {
-            title: 'Updated at',
-            type: 'string',
-            filter: false,
-            valuePrepareFunction: (timestamp: any) => {
-              return convertTime(timestamp);
-            },
             visibleFrom: ['detail', 'list'],
           },
           permissions: {
@@ -331,5 +313,127 @@ export const ColumnForEntity = {
             type: 'string',
             visibleFrom: ['detail', 'list'],
           },
+          createdAt: {
+            title: 'Created at',
+            type: 'string',
+            filter: false,
+            valuePrepareFunction: (timestamp: any) => {
+              return convertTime(timestamp);
+            },
+            visibleFrom: ['detail'],
+          },
+          updatedAt: {
+            title: 'Updated at',
+            type: 'string',
+            filter: false,
+            valuePrepareFunction: (timestamp: any) => {
+              return convertTime(timestamp);
+            },
+            visibleFrom: ['detail', 'list'],
+          },
     },
+    role: {
+      id: {
+        title: 'ID',
+        type: 'number',
+      },
+      permission: {
+        title: 'Permission',
+        type: 'string',
+        visibleFrom: ['detail', 'list'],
+      },
+      roleName: {
+        title: 'Role name',
+        type: 'string',
+        visibleFrom: ['detail', 'list'],
+      },
+      createdAt: {
+          title: 'Created at',
+          type: 'string',
+          filter: false,
+          valuePrepareFunction: (timestamp: any) => {
+              return convertTime(timestamp);
+          },
+          visibleFrom: ['list'],
+      },
+      updatedAt: {
+          title: 'Updated at',
+          type: 'string',
+          filter: false,
+          valuePrepareFunction: (timestamp: any) => {
+              return convertTime(timestamp);
+          },
+          visibleFrom: ['detail', 'list'],
+      },
+    },
+    instance: {
+      id: {
+          title: 'ID',
+          type: 'number',
+          visibleFrom: ['detail'],
+        },
+        mrn: {
+          title: 'MRN',
+          type: 'string',
+          visibleFrom: ['detail', 'list'],
+        },
+        name: {
+          title: 'Name',
+          type: 'string',
+          visibleFrom: ['detail', 'list'],
+        },
+        permissions: {
+          title: 'Permissions',
+          type: 'string',
+          visibleFrom: ['detail'],
+        },
+        mrnSubsidiary: {
+          title: 'Subsidiary MRN',
+          type: 'string',
+          visibleFrom: ['detail'],
+        },
+        homeMMSUrl: {
+          title: 'Home MMS URL',
+          type: 'string',
+          visibleFrom: ['detail'],
+        },
+        instanceVersion: {
+          title: 'Instance version',
+          type: 'string',
+          visibleFrom: ['detail', 'list'],
+        },
+        oidcAccessType: {
+          title: 'Access type',
+          type: 'string',
+          visibleFrom: ['detail'],
+        },
+        oidcClientId: {
+          title: 'OIDC client ID',
+          type: 'string',
+          visibleFrom: ['detail'],
+        },
+        vessel: {
+          title: 'Vessel',
+          type: 'string',
+          visibleFrom: ['detail'],
+        },
+        createdAt: {
+          title: 'Created at',
+          type: 'string',
+          filter: false,
+          valuePrepareFunction: (timestamp: any) => {
+            return convertTime(timestamp);
+          },
+          visibleFrom: ['detail'],
+        },
+        updatedAt: {
+          title: 'Updated at',
+          type: 'string',
+          filter: false,
+          valuePrepareFunction: (timestamp: any) => {
+            return convertTime(timestamp);
+          },
+          visibleFrom: ['detail', 'list'],
+        },
+  },
 }

@@ -1,16 +1,18 @@
-import { convertTime } from '../../../../util/timeConverter';
-import { OrganizationDataService } from '../../../../@core/mock/organization-data.service';
-import { UserDataService } from '../../../../@core/mock/user-data.service';
-import { DeviceDataService } from '../../../../@core/mock/device-data.service';
-import { ColumnForEntity } from '../../../models/columnForEntities';
+import { InstanceDataService } from './../../../@core/mock/instance-data.service';
+import { RoleDataService } from './../../../@core/mock/role-data.service';
+import { convertTime } from '../../../util/timeConverter';
+import { OrganizationDataService } from '../../../@core/mock/organization-data.service';
+import { UserDataService } from '../../../@core/mock/user-data.service';
+import { DeviceDataService } from '../../../@core/mock/device-data.service';
+import { ColumnForMenu } from '../../models/columnForMenu';
 import { Component, Injector, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
-import { SmartTableData } from '../../../../@core/data/smart-table';
-import { EntityDataService } from '../../../../@core/mock/entity-data.service';
-import { ServiceDataService } from '../../../../@core/mock/service-data.service';
-import { EntityType, EntityTypeIconNames } from '../../../models/entityType';
-import { VesselDataService } from '../../../../@core/mock/vessel-data.service';
+import { SmartTableData } from '../../../@core/data/smart-table';
+import { EntityDataService } from '../../../@core/mock/entity-data.service';
+import { ServiceDataService } from '../../../@core/mock/service-data.service';
+import { MenuType, MenuTypeIconNames } from '../../models/entityType';
+import { VesselDataService } from '../../../@core/mock/vessel-data.service';
 import { NbIconLibraries } from '@nebular/theme';
 
 const capitalize = (s): string => {
@@ -24,6 +26,8 @@ export const dataServiceMap = {
   deviceDataService: DeviceDataService,
   userDataService: UserDataService,
   organizationDataService: OrganizationDataService,
+  roleDataService: RoleDataService,
+  instanceDataService: InstanceDataService,
 }
 
 @Component({
@@ -34,7 +38,7 @@ export const dataServiceMap = {
 
 export class ListComponent implements OnInit {
 
-  entityType: string = 'device';
+  menuType: string = 'device';
   title = ' for ';
   contextForAttributes = 'list';
   organizationName = 'MCC';
@@ -43,17 +47,17 @@ export class ListComponent implements OnInit {
   ngOnInit(): void {
     // filtered with context
     this.mySettings.columns = Object.assign({}, ...
-      Object.entries(ColumnForEntity[this.entityType]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes)).map(([k,v]) => ({[k]:v}))
+      Object.entries(ColumnForMenu[this.menuType]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes)).map(([k,v]) => ({[k]:v}))
     );
     this.settings = Object.assign({}, this.mySettings);
-    this.title = `${capitalize(this.entityType)} list${this.entityType === 'organization' ? '' : ' for ' + this.organizationName }`;
-
-    if (EntityType.includes(this.entityType) && dataServiceMap.hasOwnProperty(`${this.entityType}DataService`)) {
-      this.service = this.injector.get<any>(dataServiceMap[`${this.entityType}DataService`]);
+    this.title = `${capitalize(this.menuType)} list${this.menuType === 'organization' ? '' : ' for ' + this.organizationName }`;
+    console.log(this.menuType);
+    if (MenuType.includes(this.menuType) && dataServiceMap.hasOwnProperty(`${this.menuType}DataService`)) {
+      this.service = this.injector.get<any>(dataServiceMap[`${this.menuType}DataService`]);
       const data = this.service.getList();
       this.source.load(data);
     } else {
-        throw new Error(`There's no such thing as '${this.entityType}DataService'`);
+        throw new Error(`There's no such thing as '${this.menuType}DataService'`);
     }
   }
 
@@ -69,7 +73,7 @@ export class ListComponent implements OnInit {
       deleteButtonContent: '<i class="nb-trash"></i>',
       confirmDelete: true,
     },
-    columns: ColumnForEntity[this.entityType],
+    columns: ColumnForMenu[this.menuType],
     hideSubHeader: true,
   };
   showTables = true;
@@ -77,9 +81,9 @@ export class ListComponent implements OnInit {
 
   constructor(private service: EntityDataService, private injector: Injector, private router: Router,
     private orgService: OrganizationDataService, iconsLibrary: NbIconLibraries) {
-    this.entityType = this.router.url.split("/").pop();
-    this.entityType = this.entityType.substr(0,this.entityType.length-1);
-    this.iconName = EntityTypeIconNames[this.entityType];
+    this.menuType = this.router.url.split("/").pop();
+    this.menuType = this.menuType.substr(0,this.menuType.length-1);
+    this.iconName = MenuTypeIconNames[this.menuType];
 
     iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
   }

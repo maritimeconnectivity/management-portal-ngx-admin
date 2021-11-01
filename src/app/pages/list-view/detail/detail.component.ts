@@ -1,10 +1,10 @@
-import { ColumnForEntity } from '../../../models/columnForEntities';
+import { ColumnForMenu } from '../../models/columnForMenu';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SmartTableData } from '../../../../@core/data/smart-table';
+import { SmartTableData } from '../../../@core/data/smart-table';
 import { Location } from '@angular/common';
 import { NbIconLibraries } from '@nebular/theme';
-import { EntityTypeIconNames } from '../../../models/entityType';
+import { MenuTypeIconNames } from '../../models/entityType';
 
 @Component({
   selector: 'ngx-detail',
@@ -14,13 +14,13 @@ import { EntityTypeIconNames } from '../../../models/entityType';
 export class DetailComponent implements OnInit {
   title = '';
   entityType = 'device';
-  columnForEntity = ColumnForEntity[this.entityType];
+  columnForEntity = ColumnForMenu[this.entityType];
   contextForAttributes = 'detail';
   iconName = 'circle';
   ngOnInit(): void {
     // filtered with context
     this.columnForEntity = Object.assign({}, ...
-      Object.entries(ColumnForEntity[this.entityType]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes)).map(([k,v]) => ({[k]:v}))
+      Object.entries(ColumnForMenu[this.entityType]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes)).map(([k,v]) => ({[k]:v}))
     );
   }
 
@@ -29,7 +29,7 @@ export class DetailComponent implements OnInit {
     let arrays = this.router.url.split("/");
     this.entityType = arrays[arrays.length-2];
     this.entityType = this.entityType.substr(0, this.entityType.length-1);
-    this.iconName = EntityTypeIconNames[this.entityType];
+    this.iconName = MenuTypeIconNames[this.entityType];
 
     iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
   }

@@ -1,7 +1,7 @@
-import { CertificatesColumn } from '../../../../models/columnForCertificate';
+import { CertificatesColumn } from '../../../models/columnForCertificate';
 import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
-import { SmartTableData } from '../../../../../@core/data/smart-table';
+import { SmartTableData } from '../../../../@core/data/smart-table';
 
 @Component({
   selector: 'ngx-certificates',
