@@ -1,5 +1,6 @@
+import { SrSearchComponent } from './service-registry/sr-search/sr-search.component';
+import { IrGuideComponent } from './identity-registry/ir-guide/ir-guide.component';
 import { BugReportComponent } from './bug-report/bug-report.component';
-import { OrgIdentityRegistryModule } from './identity-registry/org-identity-registry.module';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 
@@ -9,6 +10,7 @@ import { ECommerceComponent } from './e-commerce/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import {AboutComponent} from './about/about.component';
 import {ContactComponent} from './contact/contact.component';
+import { SrGuideComponent } from './service-registry/sr-guide/sr-guide.component';
 
 const routes: Routes = [
   {
@@ -68,14 +70,26 @@ const routes: Routes = [
         .then(m => m.ListViewModule),
     },
     {
+      path: 'ir/guide',
+      component: IrGuideComponent,
+    },
+    {
       path: 'sr/instances',
       loadChildren: () => import('./list-view/list-view.module')
         .then(m => m.ListViewModule),
     },
     {
-      path: 'sr',
-      loadChildren: () => import('./service-registry/org-service-registry.module')
-        .then(m => m.OrgServiceRegistryModule),
+      path: 'sr/approve-svc',
+      loadChildren: () => import('./list-view/list-view.module')
+        .then(m => m.ListViewModule),
+    },
+    {
+      path: 'sr/search',
+      component: SrSearchComponent,
+    },
+    {
+      path: 'sr/guide',
+      component: SrGuideComponent,
     },
     {
       path: 'about',

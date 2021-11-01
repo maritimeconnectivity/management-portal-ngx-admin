@@ -5,32 +5,31 @@ export const ColumnForMenu = {
         id: {
             title: 'ID',
             type: 'number',
-            visibleFrom: ['detail'],
           },
           mrn: {
             title: 'MRN',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
+            visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
           name: {
             title: 'Name',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
+            visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
           permissions: {
             title: 'Permissions',
             type: 'string',
-            visibleFrom: ['detail'],
+            visibleFrom: ['edit', 'detail'],
           },
           mrnSubsidiary: {
             title: 'Subsidiary MRN',
             type: 'string',
-            visibleFrom: ['detail'],
+            visibleFrom: ['create', 'edit', 'detail'],
           },
           homeMMSUrl: {
             title: 'Home MMS URL',
             type: 'string',
-            visibleFrom: ['detail'],
+            visibleFrom: ['create', 'edit', 'detail'],
           },
           createdAt: {
             title: 'Created at',
@@ -55,52 +54,51 @@ export const ColumnForMenu = {
         id: {
             title: 'ID',
             type: 'number',
-            visibleFrom: ['detail'],
           },
           mrn: {
             title: 'MRN',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
+            visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
           name: {
             title: 'Name',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
+            visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
           mrnSubsidiary: {
             title: 'Subsidiary MRN',
             type: 'string',
-            visibleFrom: ['detail'],
+            visibleFrom: ['create', 'edit', 'detail'],
           },
           homeMMSUrl: {
             title: 'Home MMS URL',
             type: 'string',
-            visibleFrom: ['detail'],
+            visibleFrom: ['create', 'edit', 'detail'],
           },
           email: {
             title: 'e-mail',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
+            visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
           url: {
             title: 'URL',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
+            visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
           address: {
             title: 'Address',
             type: 'string',
-            visibleFrom: ['detail'],
+            visibleFrom: ['create', 'edit', 'detail'],
           },
           country: {
             title: 'Country',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
+            visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
           federationType: {
             title: 'Federation type',
             type: 'string',
-            visibleFrom: ['detail'],
+            visibleFrom: ['create', 'edit', 'detail'],
           },
           createdAt: {
             title: 'Created at',
@@ -125,52 +123,51 @@ export const ColumnForMenu = {
         id: {
             title: 'ID',
             type: 'number',
-            visibleFrom: ['detail'],
           },
           mrn: {
             title: 'MRN',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
+            visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
           name: {
             title: 'Name',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
+            visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
           permissions: {
             title: 'Permissions',
             type: 'string',
-            visibleFrom: ['detail'],
+            visibleFrom: ['create', 'edit', 'detail'],
           },
           mrnSubsidiary: {
             title: 'Subsidiary MRN',
             type: 'string',
-            visibleFrom: ['detail'],
+            visibleFrom: ['create', 'edit', 'detail'],
           },
           homeMMSUrl: {
             title: 'Home MMS URL',
             type: 'string',
-            visibleFrom: ['detail'],
+            visibleFrom: ['create', 'edit', 'detail'],
           },
           instanceVersion: {
             title: 'Instance version',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
+            visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
           oidcAccessType: {
             title: 'Access type',
             type: 'string',
-            visibleFrom: ['detail'],
+            visibleFrom: ['create', 'edit', 'detail'],
           },
           oidcClientId: {
             title: 'OIDC client ID',
             type: 'string',
-            visibleFrom: ['detail'],
+            visibleFrom: ['create', 'edit', 'detail'],
           },
           vessel: {
             title: 'Vessel',
             type: 'string',
-            visibleFrom: ['detail'],
+            visibleFrom: ['create', 'edit', 'detail'],
           },
           createdAt: {
             title: 'Created at',
@@ -195,42 +192,41 @@ export const ColumnForMenu = {
         id: {
             title: 'ID',
             type: 'number',
-            visibleFrom: ['detail'],
           },
           mrn: {
             title: 'MRN',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
+            visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
           firstName: {
             title: 'First name',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
+            visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
           lastName: {
             title: 'Last name',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
+            visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
           email: {
             title: 'e-mail',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
+            visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
           permissions: {
             title: 'Permissions',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
+            visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
           mrnSubsidiary: {
             title: 'Subsidiary MRN',
             type: 'string',
-            visibleFrom: ['detail'],
+            visibleFrom: ['create', 'edit', 'detail'],
           },
           homeMMSUrl: {
             title: 'Home MMS URL',
             type: 'string',
-            visibleFrom: ['detail'],
+            visibleFrom: ['create', 'edit', 'detail'],
           },
           createdAt: {
             title: 'Created at',
@@ -255,63 +251,62 @@ export const ColumnForMenu = {
         id: {
             title: 'ID',
             type: 'number',
-            visibleFrom: ['detail'],
           },
           mrn: {
             title: 'MRN',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
+            visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
           name: {
             title: 'Name',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
+            visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
           permissions: {
             title: 'Permissions',
             type: 'string',
-            visibleFrom: ['detail'],
+            visibleFrom: ['create', 'edit', 'detail'],
           },
           mrnSubsidiary: {
             title: 'Subsidiary MRN',
             type: 'string',
-            visibleFrom: ['detail'],
+            visibleFrom: ['create', 'edit', 'detail'],
           },
           homeMMSUrl: {
             title: 'Home MMS URL',
             type: 'string',
-            visibleFrom: ['detail'],
+            visibleFrom: ['create', 'edit', 'detail'],
           },
           // vessel specific
           imoNumber: {
             title: 'IMO number',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
+            visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
           mmsiNumber: {
             title: 'MMSI number',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
+            visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
           callsign: {
             title: 'Call sign',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
+            visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
           flagstate: {
             title: 'Flag state',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
+            visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
           aisClass: {
             title: 'AIS class',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
+            visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
           portOfRegister: {
             title: 'Port of register',
             type: 'string',
-            visibleFrom: ['detail', 'list'],
+            visibleFrom: ['create', 'edit', 'detail', 'list'],
           },
           createdAt: {
             title: 'Created at',
@@ -340,12 +335,12 @@ export const ColumnForMenu = {
       permission: {
         title: 'Permission',
         type: 'string',
-        visibleFrom: ['detail', 'list'],
+        visibleFrom: ['create', 'edit', 'detail', 'list'],
       },
       roleName: {
         title: 'Role name',
         type: 'string',
-        visibleFrom: ['detail', 'list'],
+        visibleFrom: ['create', 'edit', 'detail', 'list'],
       },
       createdAt: {
           title: 'Created at',
@@ -354,7 +349,7 @@ export const ColumnForMenu = {
           valuePrepareFunction: (timestamp: any) => {
               return convertTime(timestamp);
           },
-          visibleFrom: ['list'],
+          visibleFrom: ['detail'],
       },
       updatedAt: {
           title: 'Updated at',
@@ -366,74 +361,211 @@ export const ColumnForMenu = {
           visibleFrom: ['detail', 'list'],
       },
     },
-    instance: {
-      id: {
-          title: 'ID',
-          type: 'number',
-          visibleFrom: ['detail'],
+  approveorg: {
+    id: {
+        title: 'ID',
+        type: 'number',
+      },
+      mrn: {
+        title: 'MRN',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail', 'list'],
+      },
+      name: {
+        title: 'Name',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail', 'list'],
+      },
+      mrnSubsidiary: {
+        title: 'Subsidiary MRN',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail'],
+      },
+      homeMMSUrl: {
+        title: 'Home MMS URL',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail'],
+      },
+      email: {
+        title: 'e-mail',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail', 'list'],
+      },
+      url: {
+        title: 'URL',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail', 'list'],
+      },
+      address: {
+        title: 'Address',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail'],
+      },
+      country: {
+        title: 'Country',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail', 'list'],
+      },
+      federationType: {
+        title: 'Federation type',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail'],
+      },
+      createdAt: {
+        title: 'Created at',
+        type: 'string',
+        filter: false,
+        valuePrepareFunction: (timestamp: any) => {
+          return convertTime(timestamp);
         },
-        mrn: {
-          title: 'MRN',
-          type: 'string',
-          visibleFrom: ['detail', 'list'],
+        visibleFrom: ['detail'],
+      },
+      updatedAt: {
+        title: 'Updated at',
+        type: 'string',
+        filter: false,
+        valuePrepareFunction: (timestamp: any) => {
+          return convertTime(timestamp);
         },
-        name: {
-          title: 'Name',
-          type: 'string',
-          visibleFrom: ['detail', 'list'],
+        visibleFrom: ['detail', 'list'],
+      },
+  },
+  instance: {
+    id: {
+        title: 'ID',
+        type: 'number',
+      },
+      mrn: {
+        title: 'MRN',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail', 'list'],
+      },
+      name: {
+        title: 'Name',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail', 'list'],
+      },
+      permissions: {
+        title: 'Permissions',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail'],
+      },
+      mrnSubsidiary: {
+        title: 'Subsidiary MRN',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail'],
+      },
+      homeMMSUrl: {
+        title: 'Home MMS URL',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail'],
+      },
+      instanceVersion: {
+        title: 'Instance version',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail', 'list'],
+      },
+      oidcAccessType: {
+        title: 'Access type',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail'],
+      },
+      oidcClientId: {
+        title: 'OIDC client ID',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail'],
+      },
+      vessel: {
+        title: 'Vessel',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail'],
+      },
+      createdAt: {
+        title: 'Created at',
+        type: 'string',
+        filter: false,
+        valuePrepareFunction: (timestamp: any) => {
+          return convertTime(timestamp);
         },
-        permissions: {
-          title: 'Permissions',
-          type: 'string',
-          visibleFrom: ['detail'],
+        visibleFrom: ['detail'],
+      },
+      updatedAt: {
+        title: 'Updated at',
+        type: 'string',
+        filter: false,
+        valuePrepareFunction: (timestamp: any) => {
+          return convertTime(timestamp);
         },
-        mrnSubsidiary: {
-          title: 'Subsidiary MRN',
-          type: 'string',
-          visibleFrom: ['detail'],
+        visibleFrom: ['detail', 'list'],
+      },
+  },
+  approvesvc: {
+    id: {
+        title: 'ID',
+        type: 'number',
+      },
+      mrn: {
+        title: 'MRN',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail', 'list'],
+      },
+      name: {
+        title: 'Name',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail', 'list'],
+      },
+      permissions: {
+        title: 'Permissions',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail'],
+      },
+      mrnSubsidiary: {
+        title: 'Subsidiary MRN',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail'],
+      },
+      homeMMSUrl: {
+        title: 'Home MMS URL',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail'],
+      },
+      instanceVersion: {
+        title: 'Instance version',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail', 'list'],
+      },
+      oidcAccessType: {
+        title: 'Access type',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail'],
+      },
+      oidcClientId: {
+        title: 'OIDC client ID',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail'],
+      },
+      vessel: {
+        title: 'Vessel',
+        type: 'string',
+        visibleFrom: ['create', 'edit', 'detail'],
+      },
+      createdAt: {
+        title: 'Created at',
+        type: 'string',
+        filter: false,
+        valuePrepareFunction: (timestamp: any) => {
+          return convertTime(timestamp);
         },
-        homeMMSUrl: {
-          title: 'Home MMS URL',
-          type: 'string',
-          visibleFrom: ['detail'],
+        visibleFrom: ['detail'],
+      },
+      updatedAt: {
+        title: 'Updated at',
+        type: 'string',
+        filter: false,
+        valuePrepareFunction: (timestamp: any) => {
+          return convertTime(timestamp);
         },
-        instanceVersion: {
-          title: 'Instance version',
-          type: 'string',
-          visibleFrom: ['detail', 'list'],
-        },
-        oidcAccessType: {
-          title: 'Access type',
-          type: 'string',
-          visibleFrom: ['detail'],
-        },
-        oidcClientId: {
-          title: 'OIDC client ID',
-          type: 'string',
-          visibleFrom: ['detail'],
-        },
-        vessel: {
-          title: 'Vessel',
-          type: 'string',
-          visibleFrom: ['detail'],
-        },
-        createdAt: {
-          title: 'Created at',
-          type: 'string',
-          filter: false,
-          valuePrepareFunction: (timestamp: any) => {
-            return convertTime(timestamp);
-          },
-          visibleFrom: ['detail'],
-        },
-        updatedAt: {
-          title: 'Updated at',
-          type: 'string',
-          filter: false,
-          valuePrepareFunction: (timestamp: any) => {
-            return convertTime(timestamp);
-          },
-          visibleFrom: ['detail', 'list'],
-        },
+        visibleFrom: ['detail', 'list'],
+      },
   },
 }

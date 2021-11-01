@@ -25,3 +25,15 @@ nb-card-body {
     flex: 1 0 33%;
   }
   
+  .icon_header {
+    display: inline-block;
+    width: 28px;
+  }
+  
+  .buttons-row {
+    margin: -0.5rem;
+  }
+
+  button[nbButton] {
+    margin: 0.5rem;
+  }

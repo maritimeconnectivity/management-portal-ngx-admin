@@ -11,9 +11,11 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { SmartTableData } from '../../../@core/data/smart-table';
 import { EntityDataService } from '../../../@core/mock/entity-data.service';
 import { ServiceDataService } from '../../../@core/mock/service-data.service';
-import { MenuType, MenuTypeIconNames } from '../../models/entityType';
+import { ResourceType, MenuType, MenuTypeIconNames, MenuTypeNames } from '../../models/menuType';
 import { VesselDataService } from '../../../@core/mock/vessel-data.service';
 import { NbIconLibraries } from '@nebular/theme';
+import { ApproveOrgDataService } from '../../../@core/mock/approve-org-data.service';
+import { ApproveSvcDataService } from '../../../@core/mock/approve-svc-data.service';
 
 const capitalize = (s): string => {
   if (typeof s !== 'string') return ''
@@ -28,6 +30,8 @@ export const dataServiceMap = {
   organizationDataService: OrganizationDataService,
   roleDataService: RoleDataService,
   instanceDataService: InstanceDataService,
+  approveorgDataService: ApproveOrgDataService,
+  approvesvcDataService: ApproveSvcDataService,
 }
 
 @Component({
@@ -43,21 +47,27 @@ export class ListComponent implements OnInit {
   contextForAttributes = 'list';
   organizationName = 'MCC';
   iconName = 'circle';
+  menuTypeName = '';
 
   ngOnInit(): void {
     // filtered with context
-    this.mySettings.columns = Object.assign({}, ...
-      Object.entries(ColumnForMenu[this.menuType]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes)).map(([k,v]) => ({[k]:v}))
-    );
-    this.settings = Object.assign({}, this.mySettings);
-    this.title = `${capitalize(this.menuType)} list${this.menuType === 'organization' ? '' : ' for ' + this.organizationName }`;
-    console.log(this.menuType);
-    if (MenuType.includes(this.menuType) && dataServiceMap.hasOwnProperty(`${this.menuType}DataService`)) {
-      this.service = this.injector.get<any>(dataServiceMap[`${this.menuType}DataService`]);
-      const data = this.service.getList();
-      this.source.load(data);
+    if(ColumnForMenu.hasOwnProperty(this.menuType)) {
+      this.mySettings.columns = Object.assign({}, ...
+        Object.entries(ColumnForMenu[this.menuType]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes)).map(([k,v]) => ({[k]:v}))
+      );
+      this.settings = Object.assign({}, this.mySettings);
+      // Not-approved organization list
+      this.title = `${capitalize(this.menuTypeName)} list${ResourceType.includes(this.menuType) ? ' for ' + this.organizationName : ''}`;
+
+      if (MenuType.includes(this.menuType) && dataServiceMap.hasOwnProperty(`${this.menuType}DataService`)) {
+        this.service = this.injector.get<any>(dataServiceMap[`${this.menuType}DataService`]);
+        const data = this.service.getList();
+        this.source.load(data);
+      } else {
+          throw new Error(`There's no such thing as '${this.menuType}DataService'`);
+      }
     } else {
-        throw new Error(`There's no such thing as '${this.menuType}DataService'`);
+      throw new Error(`There's no '${this.menuType}DataService' in ColumnForMenu`);
     }
   }
 
@@ -82,7 +92,8 @@ export class ListComponent implements OnInit {
   constructor(private service: EntityDataService, private injector: Injector, private router: Router,
     private orgService: OrganizationDataService, iconsLibrary: NbIconLibraries) {
     this.menuType = this.router.url.split("/").pop();
-    this.menuType = this.menuType.substr(0,this.menuType.length-1);
+    this.menuType = this.menuType.replace('-', '').substr(0,this.menuType.length-1);
+    this.menuTypeName = MenuTypeNames[this.menuType];
     this.iconName = MenuTypeIconNames[this.menuType];
 
     iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
@@ -97,7 +108,7 @@ export class ListComponent implements OnInit {
   }
 
   onEdit(event): void {
-    this.router.navigate([this.router.url, event.data.mrn]);
+    this.router.navigate([this.router.url, event.data.mrn ? event.data.mrn : event.data.id]);
   }
 
   onSearch(query: string = '') {

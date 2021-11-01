@@ -80,7 +80,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
         children: [
           {
             title: 'Register service',
-            link: '/pages/sr/apply-svc',
+            link: '/pages/sr/instances/register',
           },
           {
             title: 'Services',
@@ -100,7 +100,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Search',
-        link: '/pages/tables/smart-table',
+        link: '/pages/sr/search',
       },
     ],
   },
@@ -119,6 +119,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'bulb-outline',
     link: '/pages/about',
   },
+  /*
   {
     title: 'Backup',
     group: true,
@@ -356,4 +357,5 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
     ],
   },
+  */
 ];
