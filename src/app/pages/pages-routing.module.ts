@@ -73,6 +73,7 @@ const routes: Routes = [
       path: 'ir/guide',
       component: IrGuideComponent,
     },
+    // service registry
     {
       path: 'sr/instances',
       loadChildren: () => import('./list-view/list-view.module')
