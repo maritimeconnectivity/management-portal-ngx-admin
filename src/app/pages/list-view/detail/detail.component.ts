@@ -22,9 +22,7 @@ export class DetailComponent implements OnInit {
 
   ngOnInit(): void {
     // filtered with context
-    this.columnForMenu = Object.assign({}, ...
-      Object.entries(ColumnForMenu[this.menuType]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes)).map(([k,v]) => ({[k]:v}))
-    );
+    this.columnForMenu = Object.entries(ColumnForMenu[this.menuType]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes));
   }
 
   constructor(private route: ActivatedRoute, private router: Router, private location: Location, iconsLibrary: NbIconLibraries) {

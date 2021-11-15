@@ -14,10 +14,10 @@
       
         <nb-card-body>
             <form>
-              <div class="form-group row" *ngFor="let attribute of columnForMenu | keyvalue">
-                <label for="input{{attribute.key}}" class="label col-sm-3 col-form-label" nbPopover="{{columnForMenu[attribute.key].description}}" nbPopoverTrigger="hint" nbPopoverPlacement="top">{{columnForMenu[attribute.key].title}}</label>
+              <div class="form-group row" *ngFor="let attribute of columnForMenu">
+                <label for="input{{attribute[0]}}" class="label col-sm-3 col-form-label" nbPopover="{{attribute[1].description}}" nbPopoverTrigger="hint" nbPopoverPlacement="top">{{attribute[1].title}}</label>
                 <div class="col-sm-9">
-                  <input type="text" nbInput fullWidth id="inputText" placeholder="{{attribute.key}}">
+                  <input type="text" nbInput fullWidth id="inputText" placeholder="{{attribute[0]}}">
                 </div>
               </div>
               <div class="form-group row" *ngIf="isEntity" >

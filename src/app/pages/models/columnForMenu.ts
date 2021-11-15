@@ -591,19 +591,19 @@ export const ColumnForMenu = {
     mrn: {
       title: "Maritime Resource Name (MRN)",
       type: "string",
-      description: "Please describe something!!!!",
+      description: "Unique identifier of service instance",
       visibleFrom: ["create", "edit", "detail", "list"],
     },
     name: {
       title: "Name",
       type: "string",
-      description: "Please describe something!!!!",
+      description: "Name of service instance",
       visibleFrom: ["create", "edit", "detail", "list"],
     },
     permissions: {
       title: "Permissions",
       type: "string",
-      description: "Please describe something!!!!",
+      description: "Permission",
       visibleFrom: ["create", "edit", "detail"],
     },
     mrnSubsidiary: {
