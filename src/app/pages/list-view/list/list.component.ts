@@ -19,6 +19,7 @@ import { VesselDataService } from '../../../@core/mock/vessel-data.service';
 import { NbIconLibraries } from '@nebular/theme';
 import { ApproveOrgDataService } from '../../../@core/mock/approve-org-data.service';
 import { ApproveSvcDataService } from '../../../@core/mock/approve-svc-data.service';
+import { NotifierService } from 'angular-notifier';
 
 const capitalize = (s): string => {
   if (typeof s !== 'string') return ''
@@ -51,6 +52,7 @@ export class ListComponent implements OnInit {
   organizationName = 'MCC';
   iconName = 'circle';
   menuTypeName = '';
+  readonly notifier: NotifierService;
 
   ngOnInit(): void {
     this.loadMyOrganization();
@@ -97,12 +99,13 @@ export class ListComponent implements OnInit {
   constructor(private service: EntityDataService, private injector: Injector, private router: Router,
     private orgService: OrganizationDataService, iconsLibrary: NbIconLibraries,
     private userControllerService: UserControllerService,
-    private organizationControllerService: OrganizationControllerService) {
+    private organizationControllerService: OrganizationControllerService,
+    private notifierService: NotifierService) {
     this.menuType = this.router.url.split("/").pop();
     this.menuType = this.menuType.replace('-', '').substr(0,this.menuType.length-1);
     this.menuTypeName = MenuTypeNames[this.menuType];
     this.iconName = MenuTypeIconNames[this.menuType];
-
+    this.notifier = notifierService;
     iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
   }
 
@@ -138,6 +141,6 @@ export class ListComponent implements OnInit {
 
   async loadMyOrganization() {
     const myOrganization = await this.organizationControllerService.getOrganizationByMrn("urn:mrn:mcp:org:mcc-test:horde");
-    myOrganization.subscribe(val => console.log(val));
+    myOrganization.subscribe(val => this.notifier.notify('success', val.mrn));
 	}
 }
