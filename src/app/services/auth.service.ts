@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 import { Role } from "../backend-api/identity-registry/model/role";
 import { User } from "../backend-api/identity-registry/model/user";
 import RoleNameEnum = Role.RoleNameEnum;
+import { AppConfig } from '../app.config';
+import { RoleControllerService } from "../backend-api/identity-registry";
 
 export enum AuthPermission {
   User = 1 << 0,
@@ -99,26 +101,61 @@ class PermissionResolver {
   providedIn: "root",
 })
 export class AuthService {
-	/*
+	
   public static staticAuthInfo: StaticAuthInfo = {}; // This is needed to save some information about user, because these informations is found before this class is initiated
 
-  public rolesLoaded: EventEmitter<any> = new EventEmitter<any>();
+  //public rolesLoaded: EventEmitter<any> = new EventEmitter<any>();
 
   // We make a state-object to take advantage of Angulars build in "object-observer", so when a value in authState is changing, all views using the state-object will be updated
   public authState: AuthState;
 
   constructor(
-    private rolesService: RolesService,
-    private notificationService: MCNotificationsService
+    private rolesService: RoleControllerService,
+    //private notificationService: MCNotificationsService
   ) {
     this.authState = this.createAuthState();
     this.findPermissionRoles();
   }
 
+  private createAuthState(): AuthState {
+    return {
+      loggedIn: AuthService.staticAuthInfo.loggedIn,
+      permission: AuthPermission.User,
+      orgMrn: AuthService.staticAuthInfo.orgMrn,
+      user: AuthService.staticAuthInfo.user,
+      rolesLoaded: false,
+      acting: false,
+      hasPermission(permissionRole: AuthPermission): boolean {
+        switch (permissionRole) {
+          case AuthPermission.User:
+            return true;
+          case AuthPermission.SiteAdmin:
+            return PermissionResolver.isSiteAdmin(this.permission);
+          case AuthPermission.OrgAdmin:
+            return PermissionResolver.isOrgAdmin(this.permission);
+          case AuthPermission.ApproveOrg:
+            return PermissionResolver.canApproveOrg(this.permission);
+          case AuthPermission.EntityAdmin:
+            return PermissionResolver.isEntityAdmin(this.permission);
+          case AuthPermission.ServiceAdmin:
+            return PermissionResolver.isServiceAdmin(this.permission);
+          case AuthPermission.DeviceAdmin:
+            return PermissionResolver.isDeviceAdmin(this.permission);
+          case AuthPermission.VesselAdmin:
+            return PermissionResolver.isVesselAdmin(this.permission);
+          case AuthPermission.UserAdmin:
+            return PermissionResolver.isUserAdmin(this.permission);
+          default:
+            return false;
+        }
+      },
+    };
+  }
+  
   ngOnInit() {}
   private findPermissionRoles() {
     if (this.authState.loggedIn) {
-      this.rolesService.getMyRoles(this.authState.orgMrn).subscribe(
+      this.rolesService.getMyRole(this.authState.orgMrn).subscribe(
         (roles) => {
           for (let roleString of roles) {
             let role = RoleNameEnum[roleString];
@@ -169,59 +206,26 @@ export class AuthService {
             }
           }
           this.authState.rolesLoaded = true;
-          this.rolesLoaded.emit("");
+          //this.rolesLoaded.emit("");
         },
         (error) => {
           this.authState.permission = AuthPermission.User;
           this.notificationService.generateNotification(
             "Error",
             "Error trying to fetch user permissions",
-            MCNotificationType.Error,
+            MCPNotificationType.Error,
             error
           );
           this.authState.rolesLoaded = true;
-          this.rolesLoaded.emit("");
+          //this.rolesLoaded.emit("");
         }
       );
     }
   }
-  private createAuthState(): AuthState {
-    return {
-      loggedIn: AuthService.staticAuthInfo.loggedIn,
-      permission: AuthPermission.User,
-      orgMrn: AuthService.staticAuthInfo.orgMrn,
-      user: AuthService.staticAuthInfo.user,
-      rolesLoaded: false,
-      acting: false,
-      hasPermission(permissionRole: AuthPermission): boolean {
-        switch (permissionRole) {
-          case AuthPermission.User:
-            return true;
-          case AuthPermission.SiteAdmin:
-            return PermissionResolver.isSiteAdmin(this.permission);
-          case AuthPermission.OrgAdmin:
-            return PermissionResolver.isOrgAdmin(this.permission);
-          case AuthPermission.ApproveOrg:
-            return PermissionResolver.canApproveOrg(this.permission);
-          case AuthPermission.EntityAdmin:
-            return PermissionResolver.isEntityAdmin(this.permission);
-          case AuthPermission.ServiceAdmin:
-            return PermissionResolver.isServiceAdmin(this.permission);
-          case AuthPermission.DeviceAdmin:
-            return PermissionResolver.isDeviceAdmin(this.permission);
-          case AuthPermission.VesselAdmin:
-            return PermissionResolver.isVesselAdmin(this.permission);
-          case AuthPermission.UserAdmin:
-            return PermissionResolver.isUserAdmin(this.permission);
-          default:
-            return false;
-        }
-      },
-    };
-  }
+  /*
 
   static init(): Promise<any> {
-    let keycloakAuth: any = new Keycloak(KEYCLOAK_JSON);
+    let keycloakAuth: any = new Keycloak(AppConfig.KEYCLOAK_JSON);
     AuthService.staticAuthInfo.loggedIn = false;
 
     return new Promise((resolve, reject) => {

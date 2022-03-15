@@ -22,12 +22,13 @@ import { PageAgent } from '../model/pageAgent';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
+import { AppConfig } from '../../../app.config';
 
 
 @Injectable()
 export class AgentControllerService {
 
-    protected basePath = 'https://test-api.maritimeconnectivity.net';
+    protected basePath = AppConfig.IR_BASE_PATH;
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

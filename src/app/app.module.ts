@@ -1,3 +1,5 @@
+import { ApiModule } from './backend-api/identity-registry/api.module';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 /**
  * @license
  * Copyright Akveo. All Rights Reserved.
@@ -5,7 +7,7 @@
  */
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
@@ -20,6 +22,7 @@ import {
   NbToastrModule,
   NbWindowModule,
 } from '@nebular/theme';
+import { initializeKeycloak } from './auth/app.init';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,6 +31,8 @@ import {
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
+    ApiModule,
+    KeycloakAngularModule,
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),
     NbDatepickerModule.forRoot(),
@@ -41,6 +46,14 @@ import {
     ThemeModule.forRoot(),
   ],
   bootstrap: [AppComponent],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService],
+    },
+  ],
 })
 export class AppModule {
 }

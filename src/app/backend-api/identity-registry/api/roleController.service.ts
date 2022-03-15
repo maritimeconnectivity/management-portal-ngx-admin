@@ -21,12 +21,13 @@ import { Role } from '../model/role';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
+import { AppConfig } from '../../../app.config';
 
 
 @Injectable()
 export class RoleControllerService {
 
-    protected basePath = 'https://test-api.maritimeconnectivity.net';
+    protected basePath = AppConfig.IR_BASE_PATH;
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

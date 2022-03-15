@@ -1,3 +1,6 @@
+import { Organization } from './../../../backend-api/identity-registry/model/organization';
+import { OrganizationControllerService } from './../../../backend-api/identity-registry/api/organizationController.service';
+import { UserControllerService } from './../../../backend-api/identity-registry/api/userController.service';
 import { InstanceDataService } from './../../../@core/mock/instance-data.service';
 import { RoleDataService } from './../../../@core/mock/role-data.service';
 import { convertTime } from '../../../util/timeConverter';
@@ -50,6 +53,8 @@ export class ListComponent implements OnInit {
   menuTypeName = '';
 
   ngOnInit(): void {
+    this.loadMyOrganization();
+
     // filtered with context
     if(ColumnForMenu.hasOwnProperty(this.menuType)) {
       this.mySettings.columns = Object.assign({}, ...
@@ -90,7 +95,9 @@ export class ListComponent implements OnInit {
   source: LocalDataSource = new LocalDataSource();
 
   constructor(private service: EntityDataService, private injector: Injector, private router: Router,
-    private orgService: OrganizationDataService, iconsLibrary: NbIconLibraries) {
+    private orgService: OrganizationDataService, iconsLibrary: NbIconLibraries,
+    private userControllerService: UserControllerService,
+    private organizationControllerService: OrganizationControllerService) {
     this.menuType = this.router.url.split("/").pop();
     this.menuType = this.menuType.replace('-', '').substr(0,this.menuType.length-1);
     this.menuTypeName = MenuTypeNames[this.menuType];
@@ -129,16 +136,8 @@ export class ListComponent implements OnInit {
     ], false);
   }
 
-  loadMyOrganization() {
-    /*
-		this.orgService.getMyOrganization().subscribe(
-			organization => {
-				this.organization = organization;
-			},
-			err => {
-				this.notifications.generateNotification('Error', 'Error when trying to get organization', MCNotificationType.Error, err);
-			}
-		);
-    */
+  async loadMyOrganization() {
+    const myOrganization = await this.organizationControllerService.getOrganizationByMrn("urn:mrn:mcp:org:mcc-test:horde");
+    myOrganization.subscribe(val => console.log(val));
 	}
 }

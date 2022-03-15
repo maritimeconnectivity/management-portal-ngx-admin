@@ -11,6 +11,7 @@ import { NotFoundComponent } from './miscellaneous/not-found/not-found.component
 import {AboutComponent} from './about/about.component';
 import {ContactComponent} from './contact/contact.component';
 import { SrGuideComponent } from './service-registry/sr-guide/sr-guide.component';
+import { AuthGuard } from '../auth/app.guard';
 
 const routes: Routes = [
   {
@@ -23,7 +24,6 @@ const routes: Routes = [
       loadChildren: () => import('./list-view/list-view.module')
         .then(m => m.ListViewModule),
     },
-
     {
       path: 'ir/services',
       loadChildren: () => import('./list-view/list-view.module')

@@ -85,6 +85,22 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ]
+            },
+            "staging": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.stage.ts"
+                }
+              ]
+            },
+            "test": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.test.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": ""
@@ -97,6 +113,12 @@
           "configurations": {
             "production": {
               "browserTarget": "management-portal:build:production"
+            },
+            "staging": {
+              "browserTarget": "management-portal:build:staging"
+            },
+            "test": {
+              "browserTarget": "management-portal:build:test"
             }
           }
         },

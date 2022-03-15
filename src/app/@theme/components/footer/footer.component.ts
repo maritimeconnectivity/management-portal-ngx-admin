@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./footer.component.scss'],
   template: `
     <span class="created-by">
-      Created by <b><a href="https://maritimeconnectivity.net" target="_blank">Maritime Connectivity Platform Consortium</a></b>, 2021
+      <b><a href="https://maritimeconnectivity.net" target="_blank">Maritime Connectivity Platform Consortium</a></b>, 2022
     </span>
     <div class="socials">
       <a href="https://github.com/maritimeconnectivity" target="_blank" class="ion ion-social-github"></a>
