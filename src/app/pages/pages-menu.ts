@@ -10,15 +10,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/pages/ir/organizations',
       },
       {
-        title: 'Administration',
-        children: [
-          {
-            title: 'Approve',
-            link: '/pages/ir/approve-org',
-          },
-        ],
-      },
-      {
         title: 'My Organization',
         home: true,
         children: [
@@ -359,3 +350,13 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
   */
 ];
+
+export const MENU_FOR_ADMIN = {
+  title: 'Administration',
+  children: [
+    {
+      title: 'Approve',
+      link: '/pages/ir/approve-org',
+    },
+  ],
+};

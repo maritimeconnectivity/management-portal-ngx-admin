@@ -3,7 +3,7 @@
     <a (click)="toggleSidebar()" href="#" class="sidebar-toggle">
       <nb-icon icon="menu-2-outline"></nb-icon>
     </a>
-    <a class="logo" href="#" (click)="navigateHome()">Maritime Connectivity Platform <span class="small">Management Portal</span></a>
+    <a class="logo" href="#" (click)="navigateHome()">MCP Management Portal</a>
   </div>
 </div>
 
@@ -14,11 +14,9 @@
       <nb-search type="rotate-layout"></nb-search>
     </nb-action>
     <nb-action class="user-action" *nbIsGranted="['view', 'user']" >
-      <nb-user [nbContextMenu]="userMenu"
-               [onlyPicture]="userPictureOnly"
-               [name]="user?.name"
-               [picture]="user?.picture">
+      <nb-user [name]="userName">
       </nb-user>
     </nb-action>
   </nb-actions>
+  <a href="#" (click)="logout()">Log out</a>
 </div>
