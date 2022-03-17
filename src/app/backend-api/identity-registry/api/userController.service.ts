@@ -26,6 +26,7 @@ import { User } from '../model/user';
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 import { AppConfig } from '../../../app.config';
+import { PageEntity } from '../model/pageEntity';
 
 
 @Injectable()

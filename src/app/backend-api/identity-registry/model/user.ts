@@ -10,23 +10,12 @@
  * Do not edit the class manually.
  */
 import { Certificate } from './certificate';
+import { Entity } from './entity';
 
 /**
  * Model object representing a user
  */
-export interface User { 
-    /**
-     * The ID of the entity in the form of a sequential integer
-     */
-    readonly id?: number;
-    /**
-     * The time that the entity was created
-     */
-    readonly createdAt?: Date;
-    /**
-     * The time that the entity was last updated
-     */
-    readonly updatedAt?: Date;
+export interface User extends Entity{
     /**
      * The ID of the organization that the entity belongs to
      */

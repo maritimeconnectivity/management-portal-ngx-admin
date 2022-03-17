@@ -10,24 +10,13 @@
  * Do not edit the class manually.
  */
 import { Certificate } from './certificate';
+import { Entity } from './entity';
 import { IdentityProviderAttribute } from './identityProviderAttribute';
 
 /**
  * Model object representing an organization
  */
-export interface Organization { 
-    /**
-     * The ID of the entity in the form of a sequential integer
-     */
-    readonly id?: number;
-    /**
-     * The time that the entity was created
-     */
-    readonly createdAt?: Date;
-    /**
-     * The time that the entity was last updated
-     */
-    readonly updatedAt?: Date;
+export interface Organization extends Entity{
     /**
      * The name of the organization
      */

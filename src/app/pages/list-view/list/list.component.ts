@@ -1,3 +1,10 @@
+import { ServiceControllerService } from './../../../backend-api/identity-registry/api/serviceController.service';
+import { AgentControllerService } from './../../../backend-api/identity-registry/api/agentController.service';
+import { PageDevice } from './../../../backend-api/identity-registry/model/pageDevice';
+import { DeviceControllerService } from './../../../backend-api/identity-registry/api/deviceController.service';
+import { Observable } from 'rxjs/Observable';
+import { RoleControllerService } from './../../../backend-api/identity-registry/api/roleController.service';
+import { KeycloakService } from 'keycloak-angular';
 import { Organization } from './../../../backend-api/identity-registry/model/organization';
 import { OrganizationControllerService } from './../../../backend-api/identity-registry/api/organizationController.service';
 import { UserControllerService } from './../../../backend-api/identity-registry/api/userController.service';
@@ -20,6 +27,9 @@ import { NbIconLibraries } from '@nebular/theme';
 import { ApproveOrgDataService } from '../../../@core/mock/approve-org-data.service';
 import { ApproveSvcDataService } from '../../../@core/mock/approve-svc-data.service';
 import { NotifierService } from 'angular-notifier';
+import { AuthInfo } from '../../../auth/model/AuthInfo';
+import { MmsControllerService, PageUser, Role, VesselControllerService } from '../../../backend-api/identity-registry';
+import { PageEntity } from '../../../backend-api/identity-registry/model/pageEntity';
 
 const capitalize = (s): string => {
   if (typeof s !== 'string') return ''
@@ -36,7 +46,8 @@ export const dataServiceMap = {
   instanceDataService: InstanceDataService,
   approveorgDataService: ApproveOrgDataService,
   approvesvcDataService: ApproveSvcDataService,
-}
+  userControllerService: UserControllerService,
+};
 
 @Component({
   selector: 'ngx-list',
@@ -52,11 +63,10 @@ export class ListComponent implements OnInit {
   organizationName = 'MCC';
   iconName = 'circle';
   menuTypeName = '';
+  data = [];
   readonly notifier: NotifierService;
 
   ngOnInit(): void {
-    this.loadMyOrganization();
-
     // filtered with context
     if(ColumnForMenu.hasOwnProperty(this.menuType)) {
       this.mySettings.columns = Object.assign({}, ...
@@ -65,11 +75,31 @@ export class ListComponent implements OnInit {
       this.settings = Object.assign({}, this.mySettings);
       // Not-approved organization list
       this.title = `${capitalize(this.menuTypeName)} list${ResourceType.includes(this.menuType) ? ' for ' + this.organizationName : ''}`;
-
+      
       if (MenuType.includes(this.menuType) && dataServiceMap.hasOwnProperty(`${this.menuType}DataService`)) {
         this.service = this.injector.get<any>(dataServiceMap[`${this.menuType}DataService`]);
         const data = this.service.getList();
-        this.source.load(data);
+
+        if(this.menuType === MenuTypeNames.organization || this.menuType === MenuTypeNames.unapprovedorg){
+          this.loadDataContent(this.menuType).subscribe(
+            res => this.source.load(res.content),
+            error => this.notifier.notify('error', error.message),
+          );
+        } else if(this.menuType === MenuTypeNames.role){
+          this.loadMyOrganization().subscribe(
+            resOrg => this.loadRoles(resOrg.mrn).subscribe(
+              resData => this.source.load(resData)
+            ),
+            error => this.notifier.notify('error', error.message),
+          );
+        } else {
+          this.loadMyOrganization().subscribe(
+            resOrg => this.loadDataContent(this.menuType, resOrg.mrn).subscribe(
+              resData => this.source.load(resData.content)
+            ),
+            error => this.notifier.notify('error', error.message),
+          );
+        }
       } else {
           throw new Error(`There's no such thing as '${this.menuType}DataService'`);
       }
@@ -82,7 +112,7 @@ export class ListComponent implements OnInit {
   mySettings = {
     mode: 'external',
     edit: {
-      editButtonContent: '<i class="nb-menu"></i>',
+      editButtonContent: '<i class="nb-compose"></i>',
       saveButtonContent: '<i class="nb-checkmark"></i>',
       cancelButtonContent: '<i class="nb-close"></i>',
     },
@@ -97,10 +127,17 @@ export class ListComponent implements OnInit {
   source: LocalDataSource = new LocalDataSource();
 
   constructor(private service: EntityDataService, private injector: Injector, private router: Router,
-    private orgService: OrganizationDataService, iconsLibrary: NbIconLibraries,
+    iconsLibrary: NbIconLibraries,
     private userControllerService: UserControllerService,
+    private deviceControllerService: DeviceControllerService,
+    private roleControllerService: RoleControllerService,
+    private vesselControllerService: VesselControllerService,
+    private serviceControllerService: ServiceControllerService,
+    private mmsControllerService: MmsControllerService,
     private organizationControllerService: OrganizationControllerService,
-    private notifierService: NotifierService) {
+    private notifierService: NotifierService,
+    private keycloakService: KeycloakService,
+    ) {
     this.menuType = this.router.url.split("/").pop();
     this.menuType = this.menuType.replace('-', '').substr(0,this.menuType.length-1);
     this.menuTypeName = MenuTypeNames[this.menuType];
@@ -139,8 +176,31 @@ export class ListComponent implements OnInit {
     ], false);
   }
 
-  async loadMyOrganization() {
-    const myOrganization = await this.organizationControllerService.getOrganizationByMrn("urn:mrn:mcp:org:mcc-test:horde");
-    myOrganization.subscribe(val => this.notifier.notify('success', val.mrn));
+  loadMyOrganization = ():Observable<Organization> => {
+    // fetch organization information from it
+    return this.organizationControllerService.getOrganizationByMrn(AuthInfo.orgMrn);
 	}
+
+  loadDataContent = (context: string, orgMrn?: string):Observable<PageEntity> => {
+    if (context === MenuTypeNames.user) {
+      return this.userControllerService.getOrganizationUsers(orgMrn);
+    } else if (context === MenuTypeNames.device) {
+      return this.deviceControllerService.getOrganizationDevices(orgMrn);
+    } else if (context === MenuTypeNames.vessel) {
+      return this.vesselControllerService.getOrganizationVessels(orgMrn);
+    } else if (context === MenuTypeNames.mms) {
+      return this.mmsControllerService.getOrganizationMMSes(orgMrn);
+    } else if (context === MenuTypeNames.service) {
+      return this.serviceControllerService.getOrganizationServices(orgMrn);
+    } else if (context === MenuTypeNames.organization) {
+      return this.organizationControllerService.getOrganization();
+    } else if (context === MenuTypeNames.unapprovedorg) {
+      return this.organizationControllerService.getUnapprovedOrganizations();
+    }
+    return new Observable();
+  }
+
+  loadRoles = (orgMrn: string):Observable<Role[]> => {
+    return this.roleControllerService.getRoles(orgMrn);
+  }
 }

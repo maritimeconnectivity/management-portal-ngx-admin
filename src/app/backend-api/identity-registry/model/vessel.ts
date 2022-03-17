@@ -10,24 +10,13 @@
  * Do not edit the class manually.
  */
 import { Certificate } from './certificate';
+import { Entity } from './entity';
 import { VesselAttribute } from './vesselAttribute';
 
 /**
  * Model object representing a vessel
  */
-export interface Vessel { 
-    /**
-     * The ID of the entity in the form of a sequential integer
-     */
-    readonly id?: number;
-    /**
-     * The time that the entity was created
-     */
-    readonly createdAt?: Date;
-    /**
-     * The time that the entity was last updated
-     */
-    readonly updatedAt?: Date;
+export interface Vessel extends Entity{
     /**
      * The ID of the organization that the entity belongs to
      */

@@ -10,22 +10,12 @@
  * Do not edit the class manually.
  */
 
+import { Entity } from "./entity";
+
 /**
  * Model object representing a role
  */
-export interface Role { 
-    /**
-     * The ID of the entity in the form of a sequential integer
-     */
-    readonly id?: number;
-    /**
-     * The time that the entity was created
-     */
-    readonly createdAt?: Date;
-    /**
-     * The time that the entity was last updated
-     */
-    readonly updatedAt?: Date;
+export interface Role extends Entity{
     /**
      * The role that should be mapped to the permission
      */

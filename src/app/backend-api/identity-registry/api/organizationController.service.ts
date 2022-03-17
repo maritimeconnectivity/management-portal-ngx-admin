@@ -553,8 +553,6 @@ export class OrganizationControllerService {
         const consumes: string[] = [
         ];
 
-        console.log(`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}`);
-
         return this.httpClient.request<Organization>('get',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}`,
             {
                 withCredentials: this.configuration.withCredentials,
