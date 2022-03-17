@@ -9,7 +9,7 @@ export const initializeKeycloak = (keycloak: KeycloakService): () => Promise<boo
           clientId: 'MCP-Portal',
         },
         initOptions: {
-          onLoad: 'login-required',
+          onLoad: 'check-sso',
           flow: 'standard',
         },
         enableBearerInterceptor: true,
