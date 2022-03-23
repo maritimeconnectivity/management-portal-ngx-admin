@@ -19,13 +19,13 @@ export interface CertificateBundle {
     /**
      * JKS keystore containing certificate and private key
      */
-    readonly jksKeystore?: string;
+    jksKeystore?: string;
     /**
      * PKCS#12 keystore containing certificate and private key
      */
-    readonly pkcs12Keystore?: string;
+    pkcs12Keystore?: string;
     /**
      * The password for the keystores
      */
-    readonly keystorePassword?: string;
+    keystorePassword?: string;
 }

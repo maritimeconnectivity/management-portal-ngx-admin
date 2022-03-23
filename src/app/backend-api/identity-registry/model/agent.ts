@@ -1,4 +1,4 @@
-import { Entity } from './entity';
+import { Resource } from './resource';
 /**
  * Maritime Connectivity Platform Identity Registry API
  * The MCP Identity Registry API can be used for managing entities in the Maritime Connectivity Platform.<br>Two versions of the API are available - one that requires authentication using OpenID Connect and one that requires authentication using a X.509 client certificate.<br>The OpenAPI descriptions for the two versions are available <a href=\"https://test-api.maritimeconnectivity.net/v3/api-docs/mcp-idreg-oidc\">here</a> and <a href=\"https://test-api-x509.maritimeconnectivity.net/v3/api-docs/mcp-idreg-x509\">here</a>.
@@ -15,7 +15,7 @@ import { AllowedAgentRole } from './allowedAgentRole';
 /**
  * Model object representing an agent
  */
-export interface Agent extends Entity{ 
+export interface Agent extends Resource{ 
     /**
      * The id of the organization that should be given agent permissions
      */

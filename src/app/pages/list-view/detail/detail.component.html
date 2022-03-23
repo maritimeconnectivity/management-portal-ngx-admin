@@ -1,9 +1,11 @@
 <div class="row">
   <div class="col-lg-12">
-    <button nbButton status="info" ghost (click)="cancel()">
-      <nb-icon icon="arrow-ios-back" pack="eva"></nb-icon> 
-      Back to {{menuTypeName}} list
-    </button>
+    <div *ngIf="!isMyOrgPage">
+      <button nbButton status="info" ghost (click)="cancel()">
+        <nb-icon icon="arrow-ios-back" pack="eva"></nb-icon> 
+        Back to {{menuTypeName}} list
+      </button>
+    </div>
     <nb-card>
         <nb-card-header>
           <div>
@@ -17,12 +19,14 @@
               <div class="form-group row" *ngFor="let attribute of columnForMenu">
                 <label for="input{{attribute[0]}}" class="label col-sm-3 col-form-label" nbPopover="{{attribute[1].description}}" nbPopoverTrigger="hint" nbPopoverPlacement="top">{{attribute[1].title}}</label>
                 <div class="col-sm-9">
-                  <input type="text" nbInput fullWidth id="inputText" placeholder="{{attribute[0]}}">
+                  <input type="text" nbInput fullWidth id="input{{attribute[0]}}" placeholder="{{attribute[0]}}" value="{{attribute[1].value}}">
                 </div>
               </div>
               <div class="form-group row" *ngIf="isEntity" >
-                <label for="certificateList" class="label col-sm-3 col-form-label">Certificates</label>
-                <ngx-certificates></ngx-certificates>
+                <label for="inputCertificates" class="label col-sm-3 col-form-label">Certificates</label>
+                <div class="col-sm-9">
+                  <ngx-certificates [data]="certificates" ></ngx-certificates>
+                </div>
               </div>
             </form>
             

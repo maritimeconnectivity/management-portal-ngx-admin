@@ -17,13 +17,13 @@ export interface PemCertificate {
     /**
      * The private key of the certificate
      */
-    readonly privateKey?: string;
+    privateKey?: string;
     /**
      * The public key of the certificate
      */
-    readonly publicKey?: string;
+    publicKey?: string;
     /**
      * The certificate
      */
-    readonly certificate?: string;
+    certificate?: string;
 }

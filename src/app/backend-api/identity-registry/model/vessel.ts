@@ -45,8 +45,4 @@ export interface Vessel extends Entity{
      * The set of attributes of the vessel
      */
     attributes?: Array<VesselAttribute>;
-    /**
-     * The set of certificates of the vessel. Cannot be created/updated by editing in the model. Use the dedicated create and revoke calls.
-     */
-    readonly certificates?: Array<Certificate>;
 }

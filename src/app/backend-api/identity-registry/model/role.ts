@@ -10,12 +10,12 @@
  * Do not edit the class manually.
  */
 
-import { Entity } from "./entity";
+import { Resource } from "./resource";
 
 /**
  * Model object representing a role
  */
-export interface Role extends Entity{
+export interface Role extends Resource{
     /**
      * The role that should be mapped to the permission
      */

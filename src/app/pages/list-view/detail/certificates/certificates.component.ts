@@ -1,7 +1,9 @@
 import { CertificatesColumn } from '../../../models/columnForCertificate';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
-import { SmartTableData } from '../../../../@core/data/smart-table';
+import { Certificate, CertificateBundle, PemCertificate } from '../../../../backend-api/identity-registry';
+import { FileHelperService } from '../../../../shared/file-helper.service';
+import { NotifierService } from 'angular-notifier';
 
 @Component({
   selector: 'ngx-certificates',
@@ -14,35 +16,45 @@ export class CertificatesComponent implements OnInit {
   }
 
   settings = {
-    add: {
-      addButtonContent: '<i class="nb-plus"></i>',
-      createButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>',
-    },
+    mode: 'external',
     edit: {
-      editButtonContent: '<i class="nb-edit"></i>',
+      editButtonContent: '<small><i class="fas fa-file-download fa-xs"></i></small>',
       saveButtonContent: '<i class="nb-checkmark"></i>',
       cancelButtonContent: '<i class="nb-close"></i>',
     },
     delete: {
-      deleteButtonContent: '<i class="nb-trash"></i>',
+      deleteButtonContent: '<small><i class="fas fa-ban fa-xs"></i></small>',
       confirmDelete: true,
     },
     columns: CertificatesColumn,
+    hideSubHeader: true,
   };
 
   source: LocalDataSource = new LocalDataSource();
 
-  constructor(private service: SmartTableData) {
-    const data = this.service.getData();
-    this.source.load(data);
+  @Input() data: any;
+  // @Input() owner: string;
+  certificateTitle = "Certificate for ";
+
+  constructor(private notifierService: NotifierService, private fileHelper: FileHelperService) {
   }
 
-  onDeleteConfirm(event): void {
-    if (window.confirm('Are you sure you want to delete?')) {
+  onEdit(event): void {
+    console.log(event.data.certificate);
+    this.download(event.data.certificate);
+  }
+
+  onDelete(event): void {
+    if (window.confirm('Are you sure you want to revoke the certificate?')) {
       event.confirm.resolve();
     } else {
       event.confirm.reject();
     }
+  }
+
+  download(certificate:Certificate) {
+    let pemCertificate:PemCertificate = {certificate:certificate.certificate};
+    let certBundle:CertificateBundle = {pemCertificate:pemCertificate};
+    this.fileHelper.downloadPemCertificate(certBundle, this.certificateTitle, true, this.notifierService);
   }
 }

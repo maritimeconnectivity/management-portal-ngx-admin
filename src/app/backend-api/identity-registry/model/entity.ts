@@ -1,14 +1,9 @@
-export interface Entity { 
-    /**
-     * The ID of the entity in the form of a sequential integer
+import { Certificate } from "./certificate";
+import { Resource } from "./resource";
+
+export interface Entity extends Resource{
+     /**
+     * The set of certificates of the entity. Cannot be created/updated by editing in the model. Use the dedicated create and revoke calls.
      */
-     readonly id?: number;
-     /**
-      * The time that the entity was created
-      */
-     readonly createdAt?: Date;
-     /**
-      * The time that the entity was last updated
-      */
-     readonly updatedAt?: Date;
+    readonly certificates?: Array<Certificate>;
 }

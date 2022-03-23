@@ -27,7 +27,7 @@ import { XsdResourceService } from './api/xsdResource.service';
     XsdResourceService ]
 })
 export class ServiceRegistryApiModule {
-    public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders {
+    public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ServiceRegistryApiModule> {
         return {
             ngModule: ServiceRegistryApiModule,
             providers: [ { provide: Configuration, useFactory: configurationFactory } ]

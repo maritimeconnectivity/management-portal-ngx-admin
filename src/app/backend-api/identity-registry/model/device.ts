@@ -40,8 +40,4 @@ export interface Device extends Entity{
      * The name of the entity
      */
     name: string;
-    /**
-     * The set of certificates of the device. Cannot be created/updated by editing in the model. Use the dedicated create and revoke calls.
-     */
-    readonly certificates?: Array<Certificate>;
 }

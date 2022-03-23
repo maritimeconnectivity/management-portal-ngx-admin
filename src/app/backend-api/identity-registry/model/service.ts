@@ -65,10 +65,6 @@ export interface Service extends Entity{
      * The version of this service instance.
      */
     instanceVersion: string;
-    /**
-     * The set of certificates of the service. Cannot be created/updated by editing in the model. Use the dedicated create and revoke calls.
-     */
-    readonly certificates?: Array<Certificate>;
     vessel?: Vessel;
 }
 export namespace Service {

@@ -44,8 +44,4 @@ export interface MMS extends Entity{
      * URL of MMS instance
      */
     url: string;
-    /**
-     * The set of certificates of the MMS. Cannot be created/updated by editing in the model. Use the dedicated create and revoke calls.
-     */
-    readonly certificates?: Array<Certificate>;
 }

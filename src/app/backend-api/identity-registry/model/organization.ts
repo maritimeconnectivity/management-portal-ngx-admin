@@ -54,10 +54,6 @@ export interface Organization extends Entity{
      */
     federationType?: Organization.FederationTypeEnum;
     /**
-     * The set of certificates of the organization. Cannot be created/updated by editing in the model. Use the dedicate create and revoke calls.
-     */
-    readonly certificates?: Array<Certificate>;
-    /**
      * The identity provider attributes of the organization
      */
     identityProviderAttributes?: Array<IdentityProviderAttribute>;
