@@ -2,7 +2,7 @@ import { Organization } from './../../../backend-api/identity-registry/model/org
 import { Entity } from './../../../backend-api/identity-registry/model/entity';
 import { EntityType, MenuType, MenuTypeNames } from './../../models/menuType';
 import { ColumnForMenu } from '../../models/columnForMenu';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { formatDate, Location } from '@angular/common';
 import { NbIconLibraries } from '@nebular/theme';
@@ -19,7 +19,7 @@ import { getRevokeReasonTextFromRevocationReason } from '../../../util/certRevok
   styleUrls: ['./detail.component.scss']
 })
 export class DetailComponent implements OnInit {
-  title = '';
+  @Input() name = '';
   menuType = 'device';
   version = '';
   isMyOrgPage = false;
@@ -36,13 +36,15 @@ export class DetailComponent implements OnInit {
   ngOnInit(): void {
     // filtered with context
     this.columnForMenu = Object.entries(ColumnForMenu[this.menuType]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes));
-
-    // filtered with context
     if(ColumnForMenu.hasOwnProperty(this.menuType)) {
       if (MenuType.includes(this.menuType)) {
         if(this.menuType === MenuTypeNames.organization || this.menuType === MenuTypeNames.unapprovedorg){
-          this.loadDataContent(this.menuType, AuthInfo.user.organization, this.title).subscribe(
-            res => {for(let key in res) {console.log(res[key])}},
+          this.loadOrgContent(this.entityMrn).subscribe(
+            data => {
+              this.name = data.name;
+              this.adjustData(data);
+              this.adjustCertificates(data.certificates);
+            },
             error => this.notifierService.notify('error', error.message),
           );
         } else if(this.menuType === MenuTypeNames.role){
@@ -50,7 +52,7 @@ export class DetailComponent implements OnInit {
         } else if(this.menuType === MenuTypeNames.service){
           
         } else {
-          this.loadDataContent(this.menuType, AuthInfo.user.organization, this.title).subscribe(
+          this.loadDataContent(this.menuType, AuthInfo.user.organization, this.entityMrn).subscribe(
             data => {
               this.adjustData(data);
               this.adjustCertificates(data.certificates);
@@ -64,6 +66,7 @@ export class DetailComponent implements OnInit {
     } else {
       throw new Error(`There's no '${this.menuType}DataService' in ColumnForMenu`);
     }
+    this.route.queryParams.subscribe(e => this.name = e.name);
   }
 
   constructor(private route: ActivatedRoute, private router: Router, private location: Location, iconsLibrary: NbIconLibraries,
@@ -83,8 +86,10 @@ export class DetailComponent implements OnInit {
       this.isEntity = EntityType.includes(this.menuType);
       this.entityMrn = decodeURIComponent(this.route.snapshot.paramMap.get("id"));
       //this.version = decodeURIComponent(this.route.snapshot.paramMap.get("ver"));
-      this.title = this.entityMrn;
-      this.isMyOrgPage = this.entityMrn === AuthInfo.orgMrn;
+
+      //this is my organization page when it comes with no name
+      this.route.queryParams.subscribe(e =>
+        this.isMyOrgPage = this.entityMrn === AuthInfo.orgMrn && e.name === undefined);
 
       iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
   }
@@ -108,12 +113,8 @@ export class DetailComponent implements OnInit {
     return new Observable();
   }
 
-  loadOrgContent = (context: string, id: number): Observable<Organization> => {
-    if (context === MenuTypeNames.organization) {
-      return this.organizationControllerService.getOrganizationById(id);
-    } else if (context === MenuTypeNames.unapprovedorg) {
-      return this.organizationControllerService.getOrganizationById(id);
-    }
+  loadOrgContent = (mrn: string): Observable<Organization> => {
+    return this.organizationControllerService.getOrganizationByMrn(mrn);
   }
 
   adjustData = (data: object) => {

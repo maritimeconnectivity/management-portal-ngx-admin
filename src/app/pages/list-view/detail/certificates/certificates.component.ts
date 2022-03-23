@@ -4,6 +4,8 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { Certificate, CertificateBundle, PemCertificate } from '../../../../backend-api/identity-registry';
 import { FileHelperService } from '../../../../shared/file-helper.service';
 import { NotifierService } from 'angular-notifier';
+import { CertificateEntityType } from '../../../models/certEntityType';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'ngx-certificates',
@@ -11,15 +13,6 @@ import { NotifierService } from 'angular-notifier';
   styleUrls: ['./certificates.component.scss']
 })
 export class CertificatesComponent implements OnInit {
-
-  ngOnInit(): void {
-    if (this.forRevoked) {
-      this.settings['actions'] = undefined;
-      this.settings['columns'] = RevokedCertificatesColumn;
-    } else {
-      this.settings['columns'] = ActiveCertificatesColumn;
-    }
-  }
 
   settings = {
     mode: 'external',
@@ -42,14 +35,23 @@ export class CertificatesComponent implements OnInit {
 
   @Input() data: any[];
   @Input() forRevoked: boolean;
-  // @Input() owner: string;
+
   certificateTitle = "Certificate for ";
 
-  constructor(private notifierService: NotifierService, private fileHelper: FileHelperService) {
+  constructor(private notifierService: NotifierService, private fileHelper: FileHelperService, private route: ActivatedRoute) {
+  }
+
+  ngOnInit(): void {
+    if (this.forRevoked) {
+      this.settings['actions'] = undefined;
+      this.settings['columns'] = RevokedCertificatesColumn;
+    } else {
+      this.settings['columns'] = ActiveCertificatesColumn;
+    }
   }
 
   onEdit(event): void {
-    this.download(event.data.certificate);
+    this.download(event.data);
   }
 
   onDelete(event): void {
@@ -63,6 +65,80 @@ export class CertificatesComponent implements OnInit {
   download(certificate:Certificate) {
     let pemCertificate:PemCertificate = {certificate:certificate.certificate};
     let certBundle:CertificateBundle = {pemCertificate:pemCertificate};
-    this.fileHelper.downloadPemCertificate(certBundle, this.certificateTitle, true, this.notifierService);
+    this.route.queryParams.subscribe(e => {
+      this.fileHelper.downloadPemCertificate(certBundle, "Certificate for " + e.name, true, this.notifierService);
+    });
+    
   }
+
+  /*
+  navigateToIssueNewCertificate(entityType: CertificateEntityType, entityMrn:string, entityTitle: string) {
+    this.path = '/issuecert';
+    var pathElement = "";
+    switch (entityType) {
+        case CertificateEntityType.Device: {
+            pathElement = "devices";
+            break;
+        }
+        case CertificateEntityType.Organization: {
+            pathElement = "my-organization";
+            break;
+        }
+        case CertificateEntityType.Service: {
+            pathElement = "instances";
+            break;
+        }
+        case CertificateEntityType.User: {
+            pathElement = "users";
+            break;
+        }
+        case CertificateEntityType.Vessel: {
+            pathElement = "vessels";
+            break;
+        }
+        default: {
+            this.notificationService.generateNotification("Error", "Error when trying to navigate to issue new certificate.\n Missing: " + entityType, MCNotificationType.Error);
+            return;
+        }
+    }
+    this.generatePath(pathElement, pagesMenu[0]);
+
+    this.router.navigate([this.path], { queryParams: { entityType: entityType, entityMrn: entityMrn, entityTitle:entityTitle}});
+}
+
+navigateToRevokeCertificate(entityType: CertificateEntityType, entityMrn:string, entityTitle: string, certificateId:string) {
+    this.pathBeforeCerticates = this.router.url;
+    this.path = '/revokecert';
+    var pathElement = "";
+    switch (entityType) {
+        case CertificateEntityType.Device: {
+            pathElement = "devices";
+            break;
+        }
+        case CertificateEntityType.Organization: {
+            pathElement = "my-organization";
+            break;
+        }
+        case CertificateEntityType.Service: {
+            pathElement = "instances";
+            break;
+        }
+        case CertificateEntityType.User: {
+            pathElement = "users";
+            break;
+        }
+        case CertificateEntityType.Vessel: {
+            pathElement = "vessels";
+            break;
+        }
+        default: {
+            this.notificationService.generateNotification("Error", "Error when trying to navigate to revoke certificate.\n Missing: " + entityType, MCNotificationType.Error);
+            return;
+        }
+    }
+    this.generatePath(pathElement, pagesMenu[0]);
+
+    this.router.navigate([this.path], { queryParams: { entityType: entityType, entityMrn: entityMrn, entityTitle:entityTitle, certId:certificateId}});
+}
+*/
 }

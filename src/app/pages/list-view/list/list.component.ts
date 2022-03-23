@@ -38,45 +38,6 @@ export class ListComponent implements OnInit {
   menuTypeName = '';
   data = [];
 
-  ngOnInit(): void {
-    // filtered with context
-    if(ColumnForMenu.hasOwnProperty(this.menuType)) {
-      this.mySettings.columns = Object.assign({}, ...
-        Object.entries(ColumnForMenu[this.menuType]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes)).map(([k,v]) => ({[k]:v}))
-      );
-      this.settings = Object.assign({}, this.mySettings);
-      // Not-approved organization list
-      this.title = `${capitalize(this.menuTypeName)} list${ResourceType.includes(this.menuType) ? ' for ' + this.organizationName : ''}`;
-      
-      if (MenuType.includes(this.menuType)) {
-        if(this.menuType === MenuTypeNames.organization || this.menuType === MenuTypeNames.unapprovedorg){
-          this.loadDataContent(this.menuType).subscribe(
-            res => this.source.load(res.content),
-            error => this.notifierService.notify('error', error.message),
-          );
-        } else if(this.menuType === MenuTypeNames.role){
-          this.loadMyOrganization().subscribe(
-            resOrg => this.loadRoles(resOrg.mrn).subscribe(
-              resData => this.source.load(resData)
-            ),
-            error => this.notifierService.notify('error', error.message),
-          );
-        } else {
-          this.loadMyOrganization().subscribe(
-            resOrg => this.loadDataContent(this.menuType, resOrg.mrn).subscribe(
-              resData => this.source.load(resData.content)
-            ),
-            error => this.notifierService.notify('error', error.message),
-          );
-        }
-      } else {
-          throw new Error(`There's no such thing as '${this.menuType}DataService'`);
-      }
-    } else {
-      throw new Error(`There's no '${this.menuType}DataService' in ColumnForMenu`);
-    }
-  }
-
   settings;
   mySettings = {
     mode: 'external',
@@ -113,6 +74,45 @@ export class ListComponent implements OnInit {
     iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
   }
 
+  ngOnInit(): void {
+    // filtered with context
+    if(ColumnForMenu.hasOwnProperty(this.menuType)) {
+      this.mySettings.columns = Object.assign({}, ...
+        Object.entries(ColumnForMenu[this.menuType]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes)).map(([k,v]) => ({[k]:v}))
+      );
+      this.settings = Object.assign({}, this.mySettings);
+      // Not-approved organization list
+      this.title = `${capitalize(this.menuTypeName)} list${ResourceType.includes(this.menuType) ? ' for ' + AuthInfo.user.organization : ''}`;
+      
+      if (MenuType.includes(this.menuType)) {
+        if(this.menuType === MenuTypeNames.organization || this.menuType === MenuTypeNames.unapprovedorg){
+          this.loadDataContent(this.menuType).subscribe(
+            res => this.source.load(res.content),
+            error => this.notifierService.notify('error', error.message),
+          );
+        } else if(this.menuType === MenuTypeNames.role){
+          this.loadMyOrganization().subscribe(
+            resOrg => this.loadRoles(resOrg.mrn).subscribe(
+              resData => this.source.load(resData)
+            ),
+            error => this.notifierService.notify('error', error.message),
+          );
+        } else {
+          this.loadMyOrganization().subscribe(
+            resOrg => this.loadDataContent(this.menuType, resOrg.mrn).subscribe(
+              resData => this.source.load(resData.content)
+            ),
+            error => this.notifierService.notify('error', error.message),
+          );
+        }
+      } else {
+          throw new Error(`There's no such thing as '${this.menuType}DataService'`);
+      }
+    } else {
+      throw new Error(`There's no '${this.menuType}DataService' in ColumnForMenu`);
+    }
+  }
+
   onDelete(event): void {
     if (window.confirm('Are you sure you want to delete?')) {
       event.confirm.resolve();
@@ -123,7 +123,8 @@ export class ListComponent implements OnInit {
 
   onEdit(event): void {
     this.router.navigate([this.router.url,
-      event.data.mrn ? encodeURIComponent(event.data.mrn) : event.data.id]);
+      event.data.mrn ? encodeURIComponent(event.data.mrn) : event.data.id],
+        { queryParams: { name: event.data.name ? event.data.name : event.data.lastName + ' ' + event.data.firstName }});
   }
 
   onSearch(query: string = '') {
@@ -131,15 +132,15 @@ export class ListComponent implements OnInit {
       // fields we want to include in the search
       {
         field: 'id',
-        search: query
+        search: query,
       },
       {
         field: 'name',
-        search: query
+        search: query,
       },
       {
         field: 'mrn',
-        search: query
+        search: query,
       },
     ], false);
   }
