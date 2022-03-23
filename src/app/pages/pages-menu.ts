@@ -10,36 +10,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/pages/ir/organizations',
       },
       {
-        title: 'My Organization',
-        home: true,
-        children: [
-          {
-            title: 'Organization',
-            link: '/pages/ir/organizations/1',
-          },
-          {
-            title: 'Devices',
-            link: '/pages/ir/devices',
-          },
-          {
-            title: 'ID Services',
-            link: '/pages/ir/services',
-          },
-          {
-            title: 'Users',
-            link: '/pages/ir/users',
-          },
-          {
-            title: 'Vessels',
-            link: '/pages/ir/vessels',
-          },
-          {
-            title: 'Roles',
-            link: '/pages/ir/roles',
-          },
-        ],
-      },
-      {
         title: 'User Guide',
         link: '/pages/ir/guide',
       },
@@ -357,6 +327,33 @@ export const MENU_FOR_ADMIN = {
     {
       title: 'Approve',
       link: '/pages/ir/approve-org',
+    },
+  ],
+};
+
+export const MENU_FOR_ORG = {
+  title: 'My Organization',
+  home: true,
+  children: [
+    {
+      title: 'Devices',
+      link: '/pages/ir/devices',
+    },
+    {
+      title: 'ID Services',
+      link: '/pages/ir/services',
+    },
+    {
+      title: 'Users',
+      link: '/pages/ir/users',
+    },
+    {
+      title: 'Vessels',
+      link: '/pages/ir/vessels',
+    },
+    {
+      title: 'Roles',
+      link: '/pages/ir/roles',
     },
   ],
 };
