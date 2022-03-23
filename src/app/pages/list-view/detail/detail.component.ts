@@ -11,6 +11,7 @@ import { DeviceControllerService, MmsControllerService, OrganizationControllerSe
 import { Observable } from 'rxjs/Observable';
 import { AuthInfo } from '../../../auth/model/AuthInfo';
 import { NotifierService } from 'angular-notifier';
+import { getRevokeReasonTextFromRevocationReason } from '../../../util/certRevokeInfo';
 
 @Component({
   selector: 'ngx-detail',
@@ -29,7 +30,8 @@ export class DetailComponent implements OnInit {
   isEntity = false;
   entityMrn = '';
   values = {};
-  certificates = {};
+  activeCertificates = [];
+  revokedCertificates = [];
 
   ngOnInit(): void {
     // filtered with context
@@ -82,8 +84,6 @@ export class DetailComponent implements OnInit {
       this.entityMrn = decodeURIComponent(this.route.snapshot.paramMap.get("id"));
       //this.version = decodeURIComponent(this.route.snapshot.paramMap.get("ver"));
       this.title = this.entityMrn;
-      console.log(this.entityMrn);
-      console.log(AuthInfo.orgMrn);
       this.isMyOrgPage = this.entityMrn === AuthInfo.orgMrn;
 
       iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
@@ -127,17 +127,22 @@ export class DetailComponent implements OnInit {
   }
 
   adjustCertificates(certificates: any[]) {
+    let activeCertificates = [];
+    let revokedCertificates = [];
     for(const key_certs in certificates) {
       const cert = certificates[key_certs];
       for (const key in cert) {
         certificates[key_certs][key] = key.endsWith('At') || key === 'end' || key === 'start' ?
-        formatDate(new Date(parseInt(cert[key])),'MMM d, y, h:mm:ss a', 'en_GB') :
-          key === 'revoked' ?
-            cert[key] ? "Revoked" : "Active"
-          : cert[key];
+        formatDate(new Date(parseInt(cert[key])),'MMM d, y', 'en_GB') : cert[key];
       }
+      if (cert['revoked']) {
+        cert["revokeInfo"] = "Revoked from " + cert["revokedAt"];
+          cert["revokeReasonText"] = getRevokeReasonTextFromRevocationReason(cert["revokeReason"]);
+          revokedCertificates.push(cert);
+      } else {activeCertificates.push(cert);}
     }
-    this.certificates = certificates;
+    this.activeCertificates = activeCertificates;
+    this.revokedCertificates = revokedCertificates;
   }
 }
 

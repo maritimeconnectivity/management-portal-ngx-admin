@@ -21,20 +21,18 @@ export interface CertificateRevocation {
     /**
      * The reason the certificates has been revoked
      */
-    revokationReason: CertificateRevocation.RevokationReasonEnum;
+    revokationReason: RevokationReasonEnum;
 }
-export namespace CertificateRevocation {
-    export type RevokationReasonEnum = 'unspecified' | 'keycompromise' | 'cacompromise' | 'affiliationchanged' | 'superseded' | 'cessationofoperation' | 'certificatehold' | 'removefromcrl' | 'privilegewithdrawn' | 'aacompromise';
-    export const RevokationReasonEnum = {
-        Unspecified: 'unspecified' as RevokationReasonEnum,
-        Keycompromise: 'keycompromise' as RevokationReasonEnum,
-        Cacompromise: 'cacompromise' as RevokationReasonEnum,
-        Affiliationchanged: 'affiliationchanged' as RevokationReasonEnum,
-        Superseded: 'superseded' as RevokationReasonEnum,
-        Cessationofoperation: 'cessationofoperation' as RevokationReasonEnum,
-        Certificatehold: 'certificatehold' as RevokationReasonEnum,
-        Removefromcrl: 'removefromcrl' as RevokationReasonEnum,
-        Privilegewithdrawn: 'privilegewithdrawn' as RevokationReasonEnum,
-        Aacompromise: 'aacompromise' as RevokationReasonEnum
-    };
-}
+export type RevokationReasonEnum = 'unspecified' | 'keycompromise' | 'cacompromise' | 'affiliationchanged' | 'superseded' | 'cessationofoperation' | 'certificatehold' | 'removefromcrl' | 'privilegewithdrawn' | 'aacompromise';
+export const RevokationReasonEnum = {
+    Unspecified: 'unspecified' as RevokationReasonEnum,
+    Keycompromise: 'keycompromise' as RevokationReasonEnum,
+    Cacompromise: 'cacompromise' as RevokationReasonEnum,
+    Affiliationchanged: 'affiliationchanged' as RevokationReasonEnum,
+    Superseded: 'superseded' as RevokationReasonEnum,
+    Cessationofoperation: 'cessationofoperation' as RevokationReasonEnum,
+    Certificatehold: 'certificatehold' as RevokationReasonEnum,
+    Removefromcrl: 'removefromcrl' as RevokationReasonEnum,
+    Privilegewithdrawn: 'privilegewithdrawn' as RevokationReasonEnum,
+    Aacompromise: 'aacompromise' as RevokationReasonEnum
+};

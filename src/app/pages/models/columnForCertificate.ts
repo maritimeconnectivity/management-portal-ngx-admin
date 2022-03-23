@@ -1,4 +1,4 @@
-export const CertificatesColumn = {
+export const ActiveCertificatesColumn = {
     id: {
         title: 'ID',
         type: 'number',
@@ -11,8 +11,19 @@ export const CertificatesColumn = {
       title: 'Valid until',
       type: 'string',
     },
-    revoked: {
-      title: 'Status',
-      type: 'string',
+}
+
+export const RevokedCertificatesColumn = {
+  id: {
+      title: 'ID',
+      type: 'number',
     },
+  revokeInfo: {
+    title: 'Revoked from',
+    type: 'string',
+  },
+  revokeReasonText: {
+    title: 'Reason',
+    type: 'string',
+  },
 }

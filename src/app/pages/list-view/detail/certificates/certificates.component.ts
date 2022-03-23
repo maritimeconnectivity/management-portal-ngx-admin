@@ -1,4 +1,4 @@
-import { CertificatesColumn } from '../../../models/columnForCertificate';
+import { ActiveCertificatesColumn, RevokedCertificatesColumn } from '../../../models/columnForCertificate';
 import { Component, Input, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Certificate, CertificateBundle, PemCertificate } from '../../../../backend-api/identity-registry';
@@ -13,6 +13,12 @@ import { NotifierService } from 'angular-notifier';
 export class CertificatesComponent implements OnInit {
 
   ngOnInit(): void {
+    if (this.forRevoked) {
+      this.settings['actions'] = undefined;
+      this.settings['columns'] = RevokedCertificatesColumn;
+    } else {
+      this.settings['columns'] = ActiveCertificatesColumn;
+    }
   }
 
   settings = {
@@ -26,13 +32,16 @@ export class CertificatesComponent implements OnInit {
       deleteButtonContent: '<small><i class="fas fa-ban fa-xs"></i></small>',
       confirmDelete: true,
     },
-    columns: CertificatesColumn,
     hideSubHeader: true,
+    actions: {
+      position: 'right',
+    }
   };
 
   source: LocalDataSource = new LocalDataSource();
 
-  @Input() data: any;
+  @Input() data: any[];
+  @Input() forRevoked: boolean;
   // @Input() owner: string;
   certificateTitle = "Certificate for ";
 
@@ -40,7 +49,6 @@ export class CertificatesComponent implements OnInit {
   }
 
   onEdit(event): void {
-    console.log(event.data.certificate);
     this.download(event.data.certificate);
   }
 
