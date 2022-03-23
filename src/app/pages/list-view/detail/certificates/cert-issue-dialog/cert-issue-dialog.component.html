@@ -1,0 +1,59 @@
+<nb-card>
+    <nb-card-header>Select cert issue method</nb-card-header>
+    <nb-card-body>
+        <p>There are four ways to issue a new certificate:</p>
+        <div class="col-12">
+            <nb-card size="small">
+                <nb-tabset fullWidth>
+                <nb-tab tabTitle="Locally with manual keystore setup">
+                    <p>Many operating systems and browsers require that certificates are 
+                    imported as a password protected PKCS#12 keystore. 
+                    If you want to manually generate the keystore, which is the recommended approach, click the corresponding button below and download the resulting zip file, unzip it and then use OpenSSL 
+                    to generate the keystore using the following command:
+                    <br><pre>openssl pkcs12 -export -out keystore.p12 -in Certificate_$nameNoSpaces.pem -inkey PrivateKey_$nameNoSpaces.pem</pre>
+                    This will prompt you for a passphrase to protect the keystore. If successful the command will 
+                    result in a PKCS#12 keystore file called 'keystore.p12'.
+                    <br>If you don't want to generate a keystore at all you can just skip executing the OpenSSL command.
+                    </p>
+                </nb-tab>
+                <nb-tab tabTitle="Locally from browser">
+                    <span>
+                        Many operating systems and browsers require that certificates are 
+                        imported as a password protected PKCS#12 keystore. You can let your browser generate a keystore for you. NOTE that this action will take a little while and the resulting keystore will 
+                        NOT be compatible with most major operating systems and browsers.
+                    </span>
+                </nb-tab>
+                <nb-tab tabTitle="From server">
+                    <span>
+                        MIR API server generate it for you? NOTE that it is strongly recommended 
+        to NOT let the server generate the key pair for you as in case of a breach of the 
+        MIR API server, a malicious third party can potentially take control over your identity 
+        by stealing your private key when it is generated. Also note that the possibility of 
+        getting server generated key pairs will be removed completely in the future, and that MCP 
+        ID service providers can already choose to disable it now.
+                    </span>
+                </nb-tab>
+                <nb-tab tabTitle="Locally from scratch with OpenSSL">
+                    <span>
+                        You can generate the key pair and a CSR from scratch by yourself - an example on how to 
+                        do this can be found 
+                        <a href="https://github.com/maritimeconnectivity/IdentityRegistry#certificate-issuing-by-certificate-signing-request" target="_blank">here</a>.
+                    <br> 
+                    .. and you are free to click 'Cancel' button to proceed.
+                    </span>
+                </nb-tab>
+                </nb-tabset>
+            </nb-card>
+        </div>
+      <p>
+        We strongly recommend to read the instructions throughly as the security impact significantly differs from each other.
+      </p>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton status="success" (click)="dismiss()">Locally with manual keystore setup</button>
+      <button nbButton status="info" (click)="dismiss()">Locally from browser</button>
+      <button nbButton status="warning" (click)="dismiss()">From server</button>
+      <button nbButton status="danger" (click)="dismiss()">Cancel</button>
+    </nb-card-footer>
+  </nb-card>
+  

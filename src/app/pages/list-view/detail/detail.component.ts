@@ -1,17 +1,17 @@
+import { CertificateService } from './../../../shared/certificate.service';
 import { Organization } from './../../../backend-api/identity-registry/model/organization';
 import { Entity } from './../../../backend-api/identity-registry/model/entity';
-import { EntityType, MenuType, MenuTypeNames } from './../../models/menuType';
+import { EntityTypes, MenuType, MenuTypeNames } from './../../models/menuType';
 import { ColumnForMenu } from '../../models/columnForMenu';
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { formatDate, Location } from '@angular/common';
+import { Location } from '@angular/common';
 import { NbIconLibraries } from '@nebular/theme';
 import { MenuTypeIconNames } from '../../models/menuType';
 import { DeviceControllerService, MmsControllerService, OrganizationControllerService, RoleControllerService, ServiceControllerService, UserControllerService, VesselControllerService } from '../../../backend-api/identity-registry';
 import { Observable } from 'rxjs/Observable';
 import { AuthInfo } from '../../../auth/model/AuthInfo';
 import { NotifierService } from 'angular-notifier';
-import { getRevokeReasonTextFromRevocationReason } from '../../../util/certRevokeInfo';
 
 @Component({
   selector: 'ngx-detail',
@@ -43,7 +43,10 @@ export class DetailComponent implements OnInit {
             data => {
               this.name = data.name;
               this.adjustData(data);
-              this.adjustCertificates(data.certificates);
+              const splited = this.certificateService.splitByRevokeStatus(data.certificates);
+
+              this.activeCertificates = splited.activeCertificates;
+              this.revokedCertificates = splited.revokedCertificates;
             },
             error => this.notifierService.notify('error', error.message),
           );
@@ -55,7 +58,10 @@ export class DetailComponent implements OnInit {
           this.loadDataContent(this.menuType, AuthInfo.user.organization, this.entityMrn).subscribe(
             data => {
               this.adjustData(data);
-              this.adjustCertificates(data.certificates);
+              const splited = this.certificateService.splitByRevokeStatus(data.certificates);
+
+              this.activeCertificates = splited.activeCertificates;
+              this.revokedCertificates = splited.revokedCertificates;
             },
             error => this.notifierService.notify('error', error.message),
           );
@@ -77,13 +83,14 @@ export class DetailComponent implements OnInit {
     private serviceControllerService: ServiceControllerService,
     private mmsControllerService: MmsControllerService,
     private organizationControllerService: OrganizationControllerService,
+    private certificateService: CertificateService,
     private notifierService: NotifierService) {
       const arrays = this.router.url.split("/");
       this.menuType = arrays[arrays.length-2];
       this.menuType = this.menuType.replace('-', '').substr(0, this.menuType.length-1);
       this.menuTypeName = MenuTypeNames[this.menuType];
       this.iconName = MenuTypeIconNames[this.menuType];
-      this.isEntity = EntityType.includes(this.menuType);
+      this.isEntity = EntityTypes.includes(this.menuType);
       this.entityMrn = decodeURIComponent(this.route.snapshot.paramMap.get("id"));
       //this.version = decodeURIComponent(this.route.snapshot.paramMap.get("ver"));
 
@@ -125,25 +132,6 @@ export class DetailComponent implements OnInit {
           (new Date(parseInt(data[key]))).toUTCString() : data[key];
       }
     }
-  }
-
-  adjustCertificates(certificates: any[]) {
-    let activeCertificates = [];
-    let revokedCertificates = [];
-    for(const key_certs in certificates) {
-      const cert = certificates[key_certs];
-      for (const key in cert) {
-        certificates[key_certs][key] = key.endsWith('At') || key === 'end' || key === 'start' ?
-        formatDate(new Date(parseInt(cert[key])),'MMM d, y', 'en_GB') : cert[key];
-      }
-      if (cert['revoked']) {
-        cert["revokeInfo"] = "Revoked from " + cert["revokedAt"];
-          cert["revokeReasonText"] = getRevokeReasonTextFromRevocationReason(cert["revokeReason"]);
-          revokedCertificates.push(cert);
-      } else {activeCertificates.push(cert);}
-    }
-    this.activeCertificates = activeCertificates;
-    this.revokedCertificates = revokedCertificates;
   }
 }
 

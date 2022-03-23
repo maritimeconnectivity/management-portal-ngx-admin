@@ -1,0 +1,117 @@
+import { MmsControllerService } from './../backend-api/identity-registry/api/mmsController.service';
+import { VesselControllerService } from './../backend-api/identity-registry/api/vesselController.service';
+import { UserControllerService } from './../backend-api/identity-registry/api/userController.service';
+import { ServiceControllerService } from './../backend-api/identity-registry/api/serviceController.service';
+import { DeviceControllerService } from './../backend-api/identity-registry/api/deviceController.service';
+import { OrganizationControllerService } from './../backend-api/identity-registry/api/organizationController.service';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { CertificateBundle, CertificateRevocation } from '../backend-api/identity-registry';
+import { getRevokeReasonTextFromRevocationReason } from '../util/certRevokeInfo';
+import { formatDate } from '@angular/common';
+import { EntityType } from '../pages/models/menuType';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class CertificateService {
+  constructor(
+    private organizationsService: OrganizationControllerService,
+    private devicesService: DeviceControllerService,
+    private servicesService: ServiceControllerService,
+    private usersService: UserControllerService,
+    private vesselsService: VesselControllerService,
+    private mmsService: MmsControllerService) {
+  }
+
+  ngOnInit() {
+
+  }
+
+  public formatCerts(certificates: any[]): any[] {
+    let formatted = [];
+    for(const key_certs in certificates) {
+      const cert = certificates[key_certs];
+      for (const key in cert) {
+        certificates[key_certs][key] = key.endsWith('At') || key === 'end' || key === 'start' ?
+        formatDate(new Date(parseInt(cert[key])),'MMM d, y', 'en_GB') : cert[key];
+      }
+      if (cert['revoked']) {
+        cert["revokeInfo"] = cert["revokedAt"];
+        cert["revokeReasonText"] = getRevokeReasonTextFromRevocationReason(cert["revokeReason"]);
+      }
+      formatted.push(cert);
+    }
+    return formatted;
+  }
+
+  public splitByRevokeStatus(certificates: any[]): any {
+    let activeCertificates = [];
+    let revokedCertificates = [];
+    for(const key_certs in certificates) {
+      const cert = certificates[key_certs];
+      cert['revoked'] ? revokedCertificates.push(cert) : activeCertificates.push(cert);
+    }
+    activeCertificates.sort((a,b) => a.end - b.end);
+    revokedCertificates.sort((a,b) => a.end - b.end);
+    return {
+      activeCertificates: this.formatCerts(activeCertificates),
+      revokedCertificates: this.formatCerts(revokedCertificates),
+    };
+  }
+
+	public issueNewCertificate(csr: string, entityType: EntityType, entityMrn: string, orgMrn: string, version?: string)
+            : Observable<string | CertificateBundle> {
+		if (entityType == null || !entityMrn) { // We lost our state data somehow???
+			throw new Error('Internal state lost');
+		}
+		switch (entityType) {
+      case EntityType.Organization: {
+        return this.organizationsService.newOrgCertFromCsr(csr, entityMrn);
+      }
+      case EntityType.Device: {
+        return this.devicesService.newDeviceCertFromCsr(csr, orgMrn, entityMrn);
+      }
+      case EntityType.Service: {
+        return this.servicesService.newServiceCertFromCsr(csr, orgMrn, entityMrn, version);
+      }
+      case EntityType.User: {
+        return this.usersService.newUserCertFromCsr(csr, orgMrn, entityMrn);
+      }
+      case EntityType.Vessel: {
+        return this.vesselsService.newVesselCertFromCsr(csr, orgMrn, entityMrn);
+      }
+      case EntityType.MMS: {
+        return this.mmsService.newMMSCertFromCsr(csr, orgMrn, entityMrn);
+      }
+    }
+	}
+
+	public revokeCertificate(entityType: EntityType, entityMrn:string, orgMrn: string,
+      certificateId:number, certificateRevocation:CertificateRevocation, version?: string) : Observable<any> {
+		if (entityType == null || !entityMrn) { // We lost our state data somehow???
+			throw new Error('Internal state lost');
+		}
+
+		switch (entityType) {
+      case EntityType.Organization: {
+        return this.organizationsService.revokeOrgCert(certificateRevocation, entityMrn, certificateId);
+      }
+      case EntityType.Device: {
+        return this.devicesService.revokeDeviceCert(certificateRevocation, orgMrn, entityMrn, certificateId);
+      }
+      case EntityType.Service: {
+        return this.servicesService.revokeServiceCert(certificateRevocation, orgMrn, entityMrn, version, certificateId);
+      }
+      case EntityType.User: {
+        return this.usersService.revokeUserCert(certificateRevocation, orgMrn, entityMrn, certificateId);
+      }
+      case EntityType.Vessel: {
+        return this.vesselsService.revokeVesselCert(certificateRevocation, orgMrn, entityMrn, certificateId);
+      }
+      case EntityType.MMS: {
+        return this.mmsService.revokeMMSCert(certificateRevocation, orgMrn, entityMrn, certificateId);
+      }
+    }
+	}
+}

@@ -1,6 +1,15 @@
 export const MenuType = ['device', 'vessel', 'user', 'service', 'organization', 'role', 'agent', 'instance', 'approveorg', 'approvesvc'];
 
-export const EntityType = ['device', 'vessel', 'user', 'service', 'organization'];
+export const EntityTypes = ['device', 'vessel', 'user', 'service', 'organization', 'mms'];
+
+export enum EntityType {
+  Device = 'device',
+  Organization = 'organization',
+  Service = 'service',
+  User = 'user',
+  Vessel = 'vessel',
+  MMS = 'mms'
+}
 
 export const ResourceType = ['device', 'vessel', 'user', 'service', 'role', 'agent'];
 

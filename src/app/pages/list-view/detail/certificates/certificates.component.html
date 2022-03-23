@@ -1,3 +1,7 @@
-<div *ngIf="!forRevoked"><button>Issue new certificate</button></div>
 <ng2-smart-table [settings]="settings" [source]="data" (edit)="onEdit($event)" (delete)="onDelete($event)">
 </ng2-smart-table>
+<div *ngIf="!forRevoked">
+    <div class="container">
+        <button class="w-100" status="primary" type='button' nbButton (click)="open()">Issue new certificate</button>    
+    </div>
+</div>

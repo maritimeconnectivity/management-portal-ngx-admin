@@ -3,7 +3,7 @@
     <div *ngIf="!isMyOrgPage">
       <button nbButton status="info" ghost (click)="cancel()">
         <nb-icon icon="arrow-ios-back" pack="eva"></nb-icon> 
-        Back to {{menuTypeName}} list
+        Back to {{entityTypeName}} list
       </button>
     </div>
     <nb-card>
@@ -25,7 +25,7 @@
               <div class="form-group row" *ngIf="isEntity" >
                 <label for="inputActiveCert" class="label col-sm-3 col-form-label">Active certificates</label>
                 <div class="col-sm-9">
-                  <ngx-certificates [data]="activeCertificates" [forRevoked]="false" ></ngx-certificates>
+                  <ngx-certificates [data]="activeCertificates" [forRevoked]="false" [entityType]="menuType" [entityTitle]="name" [entityMrn]="entityMrn" [orgMrn]="orgMrn"></ngx-certificates>
                 </div>
               </div>
               <div class="form-group row" *ngIf="isEntity" >
