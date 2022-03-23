@@ -22,7 +22,7 @@ export const MenuTypeNames = {
   role: 'role',
   agent: 'agent',
   mms: 'mms',
-  instance: 'service instance',
+  instance: 'instance',
   unapprovedorg: 'approveorg',
   approveorg: 'unapproved organization',
   approvesvc: 'unapproved service',

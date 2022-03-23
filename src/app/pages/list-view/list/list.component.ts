@@ -1,3 +1,4 @@
+import { ServiceInstanceResourceService } from './../../../backend-api/service-registry/api/serviceInstanceResource.service';
 import { ServiceControllerService } from './../../../backend-api/identity-registry/api/serviceController.service';
 import { DeviceControllerService } from './../../../backend-api/identity-registry/api/deviceController.service';
 import { Observable } from 'rxjs/Observable';
@@ -16,6 +17,7 @@ import { NotifierService } from 'angular-notifier';
 import { AuthInfo } from '../../../auth/model/AuthInfo';
 import { MmsControllerService, Role, VesselControllerService } from '../../../backend-api/identity-registry';
 import { PageEntity } from '../../../backend-api/identity-registry/model/pageEntity';
+import { Instance } from '../../../backend-api/service-registry';
 
 const capitalize = (s): string => {
   if (typeof s !== 'string') return ''
@@ -63,6 +65,7 @@ export class ListComponent implements OnInit {
     private roleControllerService: RoleControllerService,
     private vesselControllerService: VesselControllerService,
     private serviceControllerService: ServiceControllerService,
+    private instanceControllerService: ServiceInstanceResourceService,
     private mmsControllerService: MmsControllerService,
     private organizationControllerService: OrganizationControllerService,
     private notifierService: NotifierService,
@@ -95,6 +98,11 @@ export class ListComponent implements OnInit {
             resOrg => this.loadRoles(resOrg.mrn).subscribe(
               resData => this.source.load(resData)
             ),
+            error => this.notifierService.notify('error', error.message),
+          );
+        } else if(this.menuType === MenuTypeNames.instance){
+          this.loadServiceInstances().subscribe(
+            resData => this.source.load(resData),
             error => this.notifierService.notify('error', error.message),
           );
         } else {
@@ -149,6 +157,11 @@ export class ListComponent implements OnInit {
     // fetch organization information from it
     return this.organizationControllerService.getOrganizationByMrn(AuthInfo.orgMrn);
 	}
+
+  loadServiceInstances = ():Observable<Instance[]> => {
+    console.log(this.instanceControllerService.configuration);
+    return this.instanceControllerService.getAllInstancesUsingGET();
+  }
 
   loadDataContent = (context: string, orgMrn?: string):Observable<PageEntity> => {
     if (context === MenuTypeNames.user) {

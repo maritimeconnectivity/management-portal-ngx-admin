@@ -80,7 +80,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'bulb-outline',
     link: '/pages/about',
   },
-  //*
+  /*
   {
     title: 'Backup',
     group: true,

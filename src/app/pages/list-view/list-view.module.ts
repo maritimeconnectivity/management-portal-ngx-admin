@@ -10,6 +10,7 @@ import { CertificatesComponent } from './detail/certificates/certificates.compon
 import { NotifierModule, NotifierService } from 'angular-notifier';
 import { customNotifierOptions } from '../../shared/customNotifierOption';
 import { CertIssueDialogComponent } from './detail/certificates/cert-issue-dialog/cert-issue-dialog.component';
+import { ServiceRegistryApiModule } from '../../backend-api/service-registry';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { CertIssueDialogComponent } from './detail/certificates/cert-issue-dialo
     NbPopoverModule,
     Ng2SmartTableModule,
     ListViewRoutingModule,
+    ServiceRegistryApiModule,
     NotifierModule.withConfig(customNotifierOptions),
   ],
   providers: [

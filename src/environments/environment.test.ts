@@ -10,8 +10,9 @@
 
 export const environment = {
   production: false,
+  staging: false,
   irBasePath: 'https://test-api.maritimeconnectivity.net',
-  srBasePath: 'https://sr.local.mcp',
+  srBasePath: 'http://gla-rrnav1.dyndns.org:8444',
   keycloakJson: 'assets/test-keycloak.json',
   environmentText: 'TEST',
   idpNamespace: 'mcc-test',

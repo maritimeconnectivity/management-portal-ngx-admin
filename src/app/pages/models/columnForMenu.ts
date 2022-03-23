@@ -478,65 +478,49 @@ export const ColumnForMenu = {
       title: 'ID',
       type: 'number',
     },
-    mrn: {
-      title: 'Maritime Resource Name (MRN)',
-      type: 'string',
-      description: 'MCP MRN as unique identifer',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
-    },
     name: {
       title: 'Name',
       type: 'string',
       description: 'Name of service instance',
       visibleFrom: ['create', 'edit', 'detail', 'list'],
     },
-    permissions: {
-      title: 'Permissions',
-      type: 'string',
-      description: 'List of permissions assigned by the organization',
-      visibleFrom: ['edit', 'detail'],
-    },
-    mrnSubsidiary: {
-      title: 'Subsidiary MRN',
-      type: 'string',
-      description: 'Additional MRN assigned to entity',
-      visibleFrom: ['create', 'edit', 'detail'],
-    },
-    homeMMSUrl: {
-      title: 'Home MMS URL',
-      type: 'string',
-      description: 'URL of home MMS',
-      visibleFrom: ['create', 'edit', 'detail'],
-    },
-    instanceVersion: {
+    version: {
       title: 'Instance version',
       type: 'string',
       description: 'Version of service instance',
       visibleFrom: ['create', 'edit', 'detail', 'list'],
     },
-    oidcAccessType: {
-      title: 'Access type',
+    serviceType: {
+      title: 'Type',
       type: 'string',
-      description: 'OpenID Connect access type',
+      description: 'Type',
+      visibleFrom: ['create', 'edit', 'detail', 'list'],
+    },
+    status: {
+      title: 'Status',
+      type: 'string',
       visibleFrom: ['create', 'edit', 'detail'],
     },
-    oidcClientId: {
-      title: 'OIDC client ID',
+    endpointUri: {
+      title: 'Endpoint URI',
       type: 'string',
-      description: 'OpenID Connect client ID',
       visibleFrom: ['create', 'edit', 'detail'],
     },
-    vessel: {
-      title: 'Vessel',
+    organizationId: {
+      title: 'Organization',
       type: 'string',
-      description: 'Correlated vessel',
       visibleFrom: ['create', 'edit', 'detail'],
     },
-    registerToLedger: {
-      title: 'Register to ledger',
-      type: 'boolean',
-      description: 'Is this registered to the MSR Ledger?',
-      visibleFrom: ['create', 'edit'],
+    keywords: {
+      title: 'Keywords',
+      type: 'string',
+      visibleFrom: ['create', 'edit', 'detail'],
+    },
+    instanceId: {
+      title: 'Instance ID',
+      type: 'string',
+      description: 'MCP MRN as unique identifer',
+      visibleFrom: ['create', 'edit', 'detail', 'list'],
     },
     createdAt: {
       title: 'Created at',
