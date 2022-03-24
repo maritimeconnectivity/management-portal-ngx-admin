@@ -280,7 +280,7 @@ export class ServiceInstanceResourceService {
             'application/json'
         ];
 
-        return this.httpClient.post<Array<Instance>>(`${this.basePath}/api/serviceInstances/dt`,
+        return this.httpClient.post<Array<Instance>>(`${this.basePath}/api/serviceInstance`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

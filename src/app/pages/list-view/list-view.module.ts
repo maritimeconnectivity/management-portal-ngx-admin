@@ -36,6 +36,6 @@ import { ServiceRegistryApiModule } from '../../backend-api/service-registry';
   ],
   providers: [
     NotifierService,
-  ]
+  ],
 })
 export class ListViewModule { }

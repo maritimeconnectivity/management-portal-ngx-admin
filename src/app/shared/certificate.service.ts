@@ -34,7 +34,7 @@ export class CertificateService {
       const cert = certificates[key_certs];
       for (const key in cert) {
         certificates[key_certs][key] = key.endsWith('At') || key === 'end' || key === 'start' ?
-        formatDate(new Date(parseInt(cert[key])),'MMM d, y', 'en_GB') : cert[key];
+        formatDate(new Date(parseInt(cert[key])),'MMM d, y hh:mm:ss', 'en_GB') : cert[key];
       }
       if (cert['revoked']) {
         cert["revokeInfo"] = cert["revokedAt"];
@@ -60,8 +60,35 @@ export class CertificateService {
     };
   }
 
+  public issueNewCertificateFromMIR(entityType: EntityType, entityMrn: string, orgMrn: string, version?: string)
+            : Observable<CertificateBundle> {
+		if (entityType == null || !entityMrn) { // We lost our state data somehow???
+			throw new Error('Internal state lost');
+		}
+		switch (entityType) {
+      case EntityType.Organization: {
+        return this.organizationsService.newOrgCert(entityMrn);
+      }
+      case EntityType.Device: {
+        return this.devicesService.newDeviceCert(orgMrn, entityMrn);
+      }
+      case EntityType.Service: {
+        return this.servicesService.newServiceCert(orgMrn, entityMrn, version);
+      }
+      case EntityType.User: {
+        return this.usersService.newUserCert(orgMrn, entityMrn);
+      }
+      case EntityType.Vessel: {
+        return this.vesselsService.newVesselCert(orgMrn, entityMrn);
+      }
+      case EntityType.MMS: {
+        return this.mmsService.newMMSCert(orgMrn, entityMrn);
+      }
+    }
+	}
+
 	public issueNewCertificate(csr: string, entityType: EntityType, entityMrn: string, orgMrn: string, version?: string)
-            : Observable<string | CertificateBundle> {
+            : Observable<string> {
 		if (entityType == null || !entityMrn) { // We lost our state data somehow???
 			throw new Error('Internal state lost');
 		}

@@ -29,6 +29,7 @@ export class DetailComponent implements OnInit {
   menuTypeName = '';
   isEntity = false;
   entityMrn = '';
+  orgMrn = '';
   values = {};
   activeCertificates = [];
   revokedCertificates = [];
@@ -93,7 +94,7 @@ export class DetailComponent implements OnInit {
       this.isEntity = EntityTypes.includes(this.menuType);
       this.entityMrn = decodeURIComponent(this.route.snapshot.paramMap.get("id"));
       //this.version = decodeURIComponent(this.route.snapshot.paramMap.get("ver"));
-
+      this.orgMrn = AuthInfo.orgMrn;
       //this is my organization page when it comes with no name
       this.route.queryParams.subscribe(e =>
         this.isMyOrgPage = this.entityMrn === AuthInfo.orgMrn && e.name === undefined);
