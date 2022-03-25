@@ -5,10 +5,11 @@ import { RoleControllerService } from './../backend-api/identity-registry/api/ro
 import { KeycloakService } from 'keycloak-angular';
 import { Component } from '@angular/core';
 
-import { MENU_ITEMS, MENU_FOR_ADMIN, MENU_FOR_ORG } from './pages-menu';
+import { MENU_ITEMS, MENU_FOR_ADMIN, MENU_FOR_ORG, MENU_FOR_SR, MENU_FOR_IR } from './pages-menu';
 import { AuthInfo } from '../auth/model/AuthInfo';
 import { PermissionResolver, rolesToPermission } from '../auth/auth.permission';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AppConfig } from '../app.config';
 
 @Component({
   selector: 'ngx-pages',
@@ -33,12 +34,23 @@ export class PagesComponent {
     if (userToken){
       AuthInfo.parseAuthInfo(userToken);
 
+      this.assignMCPComponentMenu();
+
       this.assignOrganizationMenu();
 
       this.assignAdminMenu();
     } else {
       console.log("Move to main page!");
-    }    
+    }
+  }
+
+  assignMCPComponentMenu = () => {
+    if (AppConfig.HAS_SERVICE_REGISTRY) {
+      this.menu.unshift(MENU_FOR_SR);
+      this.menu.unshift(MENU_FOR_IR);
+    } else {
+      this.menu.unshift(MENU_FOR_IR);
+    }
   }
 
   assignOrganizationMenu = () => {

@@ -6,6 +6,7 @@
 export const environment = {
   production: true,
   irBasePath: 'https://api.maritimeconnectivity.net',
+  hasServiceRegistry: true,
   srBasePath: 'https://sr.local.mcp',
   keycloakJson: 'assets/prod-keycloak.json',
   environmentText: 'PROD',

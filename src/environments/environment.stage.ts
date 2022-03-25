@@ -11,6 +11,7 @@
 export const environment = {
   production: false,
   irBasePath: 'https://staging-api.maritimeconnectivity.net',
+  hasServiceRegistry: true,
   srBasePath: 'https://sr.local.mcp',
   keycloakJson: 'assets/staging-keycloak.json',
   environmentText: 'TEST',
