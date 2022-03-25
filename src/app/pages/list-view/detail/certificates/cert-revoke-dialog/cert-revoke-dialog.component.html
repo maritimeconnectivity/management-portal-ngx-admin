@@ -1,12 +1,38 @@
-<div class="row">
-    <div class="col-md-12 col-lg-6 col-xxxl-3">
-      <nb-card>
-        <nb-card-header>Open Dialog</nb-card-header>
-        <nb-card-body>
-          <button nbButton (click)="dismiss()">Open Dialog with component</button>
+<nb-card class="modal-window">
+    <nb-card-header>
+        Revoke certificate for {{entityTitle}} ({{entityMrn}})
+    </nb-card-header>
+    <nb-card-body>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    <span class="subtitle">
+                        Revocation reason:
+                    </span><br>
+                    <nb-select placeholder="Please choose a reason" (selectedChange)="onMenuItemSelected($event)">
+                        <nb-option *ngFor="let reason of reasons" [value]="reason.value"> {{ reason.title }}</nb-option>
+                    </nb-select><br>
+                    <div class="description">
+                        {{description}}
+                    </div>
+                </div>
+
+                <div class="col-sm">
+                    <span class="subtitle">
+                        Revocation date:
+                    </span><br>
+                    <input nbInput
+                       placeholder="Form Picker"
+                       [nbDatepicker]="formpicker">
+                    <nb-datepicker #formpicker></nb-datepicker>
+                </div>
+            </div>
+            
+        </div>
+    </nb-card-body>
+    <nb-card-footer>
+        <button nbButton status="primary" (click)="dismiss()">Revoke</button>
+        <button nbButton status="danger" (click)="dismiss()">Cancel</button>
+    </nb-card-footer>
+  </nb-card>
   
-          <button nbButton (click)="dismiss()">Open Dialog with template</button>
-        </nb-card-body>
-      </nb-card>
-    </div>
-</div>

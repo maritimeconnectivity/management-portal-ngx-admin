@@ -4,7 +4,7 @@ import { ListViewRoutingModule } from './list-view-routing.module';
 import { EditComponent } from './edit/edit.component';
 import { ListComponent } from './list/list.component';
 import { DetailComponent } from './detail/detail.component';
-import { NbButtonModule, NbCalendarModule, NbCardModule, NbIconModule, NbInputModule, NbPopoverModule, NbSelectModule, NbTabsetModule } from '@nebular/theme';
+import { NbButtonModule, NbCardModule, NbDatepickerModule, NbIconModule, NbInputModule, NbPopoverModule, NbSelectModule, NbTabsetModule } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { CertificatesComponent } from './detail/certificates/certificates.component';
 import { NotifierModule, NotifierService } from 'angular-notifier';
@@ -31,7 +31,7 @@ import { CertRevokeDialogComponent } from './detail/certificates/cert-revoke-dia
     NbButtonModule,
     NbPopoverModule,
     NbSelectModule,
-    NbCalendarModule,
+    NbDatepickerModule,
     Ng2SmartTableModule,
     ListViewRoutingModule,
     NotifierModule.withConfig(customNotifierOptions),
