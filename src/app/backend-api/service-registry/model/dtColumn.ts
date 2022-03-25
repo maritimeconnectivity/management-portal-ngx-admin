@@ -9,12 +9,13 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { DtSearch } from './dtSearch';
 
 
-export interface Xml { 
-    comment?: string;
-    content: string;
-    contentContentType?: string;
-    id?: number;
-    name: string;
+export interface DtColumn { 
+    data?: string;
+    name?: string;
+    orderable?: boolean;
+    search?: DtSearch;
+    searchable?: boolean;
 }

@@ -44,6 +44,7 @@ export class CertIssueDialogComponent implements OnInit{
   @Input() fileHelper: FileHelperService;
   @Input() certificateService: CertificateService;
   
+  nameNoSpaces: string;
   isLoading: boolean;
   certificateBundle: CertificateBundle;
   labelValues: Array<LabelValueModel>;
@@ -55,6 +56,7 @@ export class CertIssueDialogComponent implements OnInit{
     this.isLoading = false;
     if (this.entityMrn) {
       this.generateLabelValues();
+      this.nameNoSpaces = this.entityTitle.split(' ').join('_');
     }
   }
   dismiss() {

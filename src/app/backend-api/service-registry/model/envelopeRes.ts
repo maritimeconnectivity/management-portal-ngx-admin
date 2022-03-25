@@ -11,10 +11,14 @@
  */
 
 
-export interface Xml { 
-    comment?: string;
-    content: string;
-    contentContentType?: string;
-    id?: number;
-    name: string;
+export interface EnvelopeRes { 
+    area?: number;
+    diameter?: number;
+    height?: number;
+    maxX?: number;
+    maxY?: number;
+    minX?: number;
+    minY?: number;
+    _null?: boolean;
+    width?: number;
 }

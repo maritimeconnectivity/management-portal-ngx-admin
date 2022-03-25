@@ -9,12 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { CoordinateSequenceFactory } from './coordinateSequenceFactory';
+import { PrecisionModelRes } from './precisionModelRes';
 
 
-export interface Xml { 
-    comment?: string;
-    content: string;
-    contentContentType?: string;
-    id?: number;
-    name: string;
+export interface GeometryFactoryRes { 
+    coordinateSequenceFactory?: CoordinateSequenceFactory;
+    precisionModel?: PrecisionModelRes;
+    srid?: number;
 }

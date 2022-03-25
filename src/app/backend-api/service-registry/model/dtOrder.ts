@@ -11,10 +11,14 @@
  */
 
 
-export interface Xml { 
-    comment?: string;
-    content: string;
-    contentContentType?: string;
-    id?: number;
-    name: string;
+export interface DtOrder { 
+    column?: number;
+    dir?: DtOrder.DirEnum;
+}
+export namespace DtOrder {
+    export type DirEnum = 'asc' | 'desc';
+    export const DirEnum = {
+        Asc: 'asc' as DirEnum,
+        Desc: 'desc' as DirEnum
+    };
 }

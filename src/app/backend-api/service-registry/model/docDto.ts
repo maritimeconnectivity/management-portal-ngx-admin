@@ -11,10 +11,12 @@
  */
 
 
-export interface Xml { 
+export interface DocDto { 
     comment?: string;
-    content: string;
-    contentContentType?: string;
+    filecontent: string;
+    filecontentContentType?: string;
     id?: number;
+    instanceId?: number;
+    mimetype: string;
     name: string;
 }

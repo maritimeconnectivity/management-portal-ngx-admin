@@ -1,9 +1,10 @@
+import { DocDto } from './../backend-api/service-registry/model/docDto';
+import { XmlDto } from './../backend-api/service-registry/model/xmlDto';
 import { Injectable } from '@angular/core';
 import { NotifierService } from 'angular-notifier';
 import * as fileSaver from "file-saver";
 import * as JSZip from 'jszip';
 import { CertificateBundle } from '../backend-api/identity-registry';
-import { Doc, Xml } from '../backend-api/service-registry';
 
 @Injectable({
   providedIn: 'root'
@@ -55,7 +56,7 @@ export class FileHelperService {
     }
   }
 
-  public downloadXml(xmlFile:Xml, notifierService: NotifierService):void {
+  public downloadXml(xmlFile:XmlDto, notifierService: NotifierService):void {
     if (!xmlFile) {
       notifierService.notify('error', 'No file to download');
       return;
@@ -67,7 +68,7 @@ export class FileHelperService {
     this.downloadFile(fileContent, fileType, fileName, notifierService);
   }
 
-  public downloadDoc(docFile:Doc, notifierService: NotifierService):void {
+  public downloadDoc(docFile:DocDto, notifierService: NotifierService):void {
     if (!docFile) {
       notifierService.notify('error', 'No file to download');
       return;

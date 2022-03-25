@@ -2,6 +2,60 @@ import { NbMenuItem } from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
+    title: 'Identity Registry',
+    icon: 'lock-outline',
+    children: [
+      {
+        title: 'Organizations',
+        link: '/pages/ir/organizations',
+      },
+      {
+        title: 'User Guide',
+        link: '/pages/ir/guide',
+      },
+    ],
+  },
+  {
+    title: 'Service Registry',
+    icon: 'layers-outline',
+    children: [
+      {
+        title: 'Search',
+        link: '/pages/sr/search',
+      },
+      {
+        title: 'Administration',
+        children: [
+          {
+            title: 'Approve ledger registration',
+            link: '/pages/sr/approve-svc',
+          },
+          {
+            title: 'Services',
+            link: '/pages/sr/instances',
+          },
+        ],
+      },
+      {
+        title: 'My Organization',
+        children: [
+          {
+            title: 'Register service',
+            link: '/pages/sr/instances/register',
+          },
+          {
+            title: 'Services',
+            link: '/pages/sr/instances',
+          },
+        ],
+      },
+      {
+        title: 'User Guide',
+        link: '/pages/sr/guide',
+      },
+    ],
+  },
+  {
     title: 'Contact',
     icon: 'email',
     link: '/pages/contact',
@@ -16,7 +70,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'bulb-outline',
     link: '/pages/about',
   },
-  /*
+  //*
   {
     title: 'Backup',
     group: true,
@@ -290,63 +344,6 @@ export const MENU_FOR_ORG = {
     {
       title: 'Roles',
       link: '/pages/ir/roles',
-    },
-  ],
-};
-
-export const MENU_FOR_IR ={
-  title: 'Identity Registry',
-  icon: 'lock-outline',
-  children: [
-    {
-      title: 'Organizations',
-      link: '/pages/ir/organizations',
-    },
-    {
-      title: 'User Guide',
-      link: '/pages/ir/guide',
-    },
-  ],
-};
-
-export const MENU_FOR_SR =
-{
-  title: 'Service Registry',
-  icon: 'layers-outline',
-  children: [
-    {
-      title: 'Search',
-      link: '/pages/sr/search',
-    },
-    {
-      title: 'Administration',
-      children: [
-        {
-          title: 'Approve ledger registration',
-          link: '/pages/sr/approve-svc',
-        },
-        {
-          title: 'Services',
-          link: '/pages/sr/instances',
-        },
-      ],
-    },
-    {
-      title: 'My Organization',
-      children: [
-        {
-          title: 'Register service',
-          link: '/pages/sr/instances/register',
-        },
-        {
-          title: 'Services',
-          link: '/pages/sr/instances',
-        },
-      ],
-    },
-    {
-      title: 'User Guide',
-      link: '/pages/sr/guide',
     },
   ],
 };

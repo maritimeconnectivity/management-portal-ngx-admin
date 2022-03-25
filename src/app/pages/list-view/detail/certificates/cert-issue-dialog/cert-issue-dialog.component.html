@@ -18,7 +18,7 @@
                         imported as a password protected PKCS#12 keystore. 
                         If you want to manually generate the keystore, which is the recommended approach, click the corresponding button below and download the resulting zip file, unzip it and then use OpenSSL 
                         to generate the keystore using the following command:
-                        <br><br><pre>openssl pkcs12 -export -out keystore.p12 -in Certificate_$nameNoSpaces.pem -inkey PrivateKey_$nameNoSpaces.pem</pre>
+                        <br><br><pre>openssl pkcs12 -export -out keystore.p12 -in Certificate_{{nameNoSpaces}}.pem -inkey PrivateKey_{{nameNoSpaces}}.pem</pre>
                         This will prompt you for a passphrase to protect the keystore. If successful the command will 
                         result in a PKCS#12 keystore file called 'keystore.p12'.
                         <br>If you don't want to generate a keystore at all you can just skip executing the OpenSSL command.

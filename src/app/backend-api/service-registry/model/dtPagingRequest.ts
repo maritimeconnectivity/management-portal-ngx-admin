@@ -9,12 +9,16 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { DtColumn } from './dtColumn';
+import { DtOrder } from './dtOrder';
+import { DtSearch } from './dtSearch';
 
 
-export interface Xml { 
-    comment?: string;
-    content: string;
-    contentContentType?: string;
-    id?: number;
-    name: string;
+export interface DtPagingRequest { 
+    columns?: Array<DtColumn>;
+    draw?: number;
+    length?: number;
+    order?: Array<DtOrder>;
+    search?: DtSearch;
+    start?: number;
 }

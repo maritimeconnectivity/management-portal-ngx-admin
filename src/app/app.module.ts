@@ -1,4 +1,5 @@
-import { ApiModule } from './backend-api/identity-registry/api.module';
+import { ApiModule as MIRApiModule } from './backend-api/identity-registry/api.module';
+import { ApiModule as MSRApiModule } from './backend-api/service-registry';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 /**
  * @license
@@ -31,7 +32,8 @@ import { initializeKeycloak } from './auth/app.init';
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
-    ApiModule,
+    MIRApiModule,
+    MSRApiModule,
     KeycloakAngularModule,
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),

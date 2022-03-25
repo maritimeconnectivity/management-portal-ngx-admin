@@ -9,12 +9,14 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { Type } from './type';
 
 
-export interface Xml { 
-    comment?: string;
-    content: string;
-    contentContentType?: string;
-    id?: number;
-    name: string;
+export interface PrecisionModelRes { 
+    floating?: boolean;
+    maximumSignificantDigits?: number;
+    offsetX?: number;
+    offsetY?: number;
+    scale?: number;
+    type?: Type;
 }

@@ -7,7 +7,7 @@ import { OrganizationControllerService } from './../backend-api/identity-registr
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CertificateBundle, CertificateRevocation } from '../backend-api/identity-registry';
-import { getRevokeReasonTextFromRevocationReason } from '../util/certRevokeInfo';
+import { getReasonOptionFromRevocationReason } from '../util/certRevokeInfo';
 import { formatDate } from '@angular/common';
 import { EntityType } from '../pages/models/menuType';
 
@@ -38,7 +38,7 @@ export class CertificateService {
       }
       if (cert['revoked']) {
         cert["revokeInfo"] = cert["revokedAt"];
-        cert["revokeReasonText"] = getRevokeReasonTextFromRevocationReason(cert["revokeReason"]);
+        cert["revokeReasonText"] = getReasonOptionFromRevocationReason(cert["revokeReason"]);
       }
       formatted.push(cert);
     }

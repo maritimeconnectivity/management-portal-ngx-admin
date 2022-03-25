@@ -11,10 +11,6 @@
  */
 
 
-export interface Xml { 
-    comment?: string;
-    content: string;
-    contentContentType?: string;
-    id?: number;
-    name: string;
+export interface PrecisionModelReq { 
+    scale?: number;
 }

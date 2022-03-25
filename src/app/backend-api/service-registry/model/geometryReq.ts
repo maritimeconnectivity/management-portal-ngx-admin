@@ -9,12 +9,13 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { EnvelopeReq } from './envelopeReq';
+import { GeometryFactoryReq } from './geometryFactoryReq';
 
 
-export interface Xml { 
-    comment?: string;
-    content: string;
-    contentContentType?: string;
-    id?: number;
-    name: string;
+export interface GeometryReq { 
+    envelope?: EnvelopeReq;
+    factory?: GeometryFactoryReq;
+    srid?: number;
+    userData?: any;
 }

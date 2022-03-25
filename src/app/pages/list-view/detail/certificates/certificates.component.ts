@@ -1,3 +1,5 @@
+import { Certificate } from './../../../../backend-api/identity-registry/model/certificate';
+import { CertRevokeDialogComponent } from './cert-revoke-dialog/cert-revoke-dialog.component';
 import { CertIssueDialogComponent } from './cert-issue-dialog/cert-issue-dialog.component';
 import { ActiveCertificatesColumn, RevokedCertificatesColumn } from '../../../models/columnForCertificate';
 import { Component, Input, OnInit } from '@angular/core';
@@ -58,7 +60,7 @@ export class CertificatesComponent implements OnInit {
     }
   }
 
-  open() {
+  openIssueDialog() {
     this.dialogService.open(CertIssueDialogComponent, {
       context: {
         entityMrn: this.entityMrn,
@@ -73,16 +75,28 @@ export class CertificatesComponent implements OnInit {
     });
   }
 
+  openRevokeDialog(data: Certificate) {
+    console.log(data);
+    this.dialogService.open(CertRevokeDialogComponent, {
+      context: {
+        entityMrn: this.entityMrn,
+        entityTitle: this.entityTitle,
+        // entityType: this.entityType,
+        // orgMrn: this.orgMrn,
+        // instanceVersion: this.instanceVersion,
+        // notifierService: this.notifierService,
+        // fileHelper: this.fileHelper,
+        // certificateService: this.certificateService,
+      },
+    });
+  }
+
   onEdit(event): void {
     this.download(event.data);
   }
 
   onDelete(event): void {
-    if (window.confirm('Are you sure you want to revoke the certificate?')) {
-      event.confirm.resolve();
-    } else {
-      event.confirm.reject();
-    }
+    this.openRevokeDialog(event.data);
   }
 
   download(certificate:MCPCertificate) {

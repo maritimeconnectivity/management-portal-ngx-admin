@@ -9,12 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { InstanceDtDto } from './instanceDtDto';
 
 
-export interface Xml { 
-    comment?: string;
-    content: string;
-    contentContentType?: string;
-    id?: number;
-    name: string;
+export interface DtPageOfInstanceDtDto { 
+    data?: Array<InstanceDtDto>;
+    draw?: number;
+    recordsFiltered?: number;
+    recordsTotal?: number;
 }

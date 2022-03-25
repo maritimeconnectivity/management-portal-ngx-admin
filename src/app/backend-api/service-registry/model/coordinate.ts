@@ -11,10 +11,9 @@
  */
 
 
-export interface Xml { 
-    comment?: string;
-    content: string;
-    contentContentType?: string;
-    id?: number;
-    name: string;
+export interface Coordinate { 
+    m?: number;
+    x?: number;
+    y?: number;
+    z?: number;
 }

@@ -11,7 +11,7 @@
  */
 
 
-export interface Xml { 
+export interface XmlDto { 
     comment?: string;
     content: string;
     contentContentType?: string;
