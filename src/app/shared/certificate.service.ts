@@ -38,7 +38,7 @@ export class CertificateService {
       }
       if (cert['revoked']) {
         cert["revokeInfo"] = cert["revokedAt"];
-        cert["revokeReasonText"] = getReasonOptionFromRevocationReason(cert["revokeReason"]);
+        cert["revokeReasonText"] = getReasonOptionFromRevocationReason(cert["revokeReason"]).title;
       }
       formatted.push(cert);
     }
