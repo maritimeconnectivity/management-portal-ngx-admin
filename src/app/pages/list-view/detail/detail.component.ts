@@ -53,10 +53,8 @@ export class DetailComponent implements OnInit {
           );
         } else if(this.menuType === MenuTypeNames.role){
           
-        } else if(this.menuType === MenuTypeNames.service){
-          
         } else {
-          this.loadDataContent(this.menuType, AuthInfo.user.organization, this.entityMrn).subscribe(
+          this.route.queryParams.subscribe(e => this.loadDataContent(this.menuType, AuthInfo.user.organization, this.entityMrn, e.version).subscribe(
             data => {
               this.adjustData(data);
               const splited = this.certificateService.splitByRevokeStatus(data.certificates);
@@ -65,7 +63,7 @@ export class DetailComponent implements OnInit {
               this.revokedCertificates = splited.revokedCertificates;
             },
             error => this.notifierService.notify('error', error.message),
-          );
+          ));
         }
       } else {
           throw new Error(`There's no such thing as '${this.menuType}DataService'`);
@@ -115,7 +113,7 @@ export class DetailComponent implements OnInit {
       return this.vesselControllerService.getVessel(orgMrn, entityMrn);
     } else if (context === MenuTypeNames.mms) {
       return this.mmsControllerService.getMMS(orgMrn, entityMrn);
-    } else if (context === MenuTypeNames.service) {
+    } else if (context === MenuTypeNames.service && version) {
       return this.serviceControllerService.getServiceVersion(orgMrn, entityMrn, version);
     }
     return new Observable();

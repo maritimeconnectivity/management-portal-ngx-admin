@@ -76,17 +76,10 @@ export class CertificatesComponent implements OnInit {
   }
 
   openRevokeDialog(data: Certificate) {
-    console.log(data);
     this.dialogService.open(CertRevokeDialogComponent, {
       context: {
         entityMrn: this.entityMrn,
         entityTitle: this.entityTitle,
-        // entityType: this.entityType,
-        // orgMrn: this.orgMrn,
-        // instanceVersion: this.instanceVersion,
-        // notifierService: this.notifierService,
-        // fileHelper: this.fileHelper,
-        // certificateService: this.certificateService,
       },
     });
   }
