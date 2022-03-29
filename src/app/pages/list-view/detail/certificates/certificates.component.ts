@@ -80,12 +80,19 @@ export class CertificatesComponent implements OnInit {
       context: {
         entityMrn: this.entityMrn,
         entityTitle: this.entityTitle,
+        entityType: this.entityType,
+        orgMrn: this.orgMrn,
+        certificateId: data.serialNumber,
+        instanceVersion: this.instanceVersion,
+        notifierService: this.notifierService,
+        certificateService: this.certificateService,
       },
     });
   }
 
   onEdit(event): void {
     this.download(event.data);
+    this.notifierService.notify('success', 'Chosen certificate has downloaded');
   }
 
   onDelete(event): void {

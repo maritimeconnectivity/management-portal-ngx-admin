@@ -17,7 +17,7 @@ export interface CertificateRevocation {
     /**
      * The date the certificate revocation should be activated.
      */
-    revokedAt: Date;
+    revokedAt: string;
     /**
      * The reason the certificates has been revoked
      */

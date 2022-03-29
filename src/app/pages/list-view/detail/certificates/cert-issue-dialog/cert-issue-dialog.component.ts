@@ -61,6 +61,9 @@ export class CertIssueDialogComponent implements OnInit{
   }
   dismiss() {
     this.ref.close();
+    if (this.certificateBundle) {
+      location.reload();
+    }
   }
 
   locallyWManualKeystore(): void {
@@ -77,6 +80,7 @@ export class CertIssueDialogComponent implements OnInit{
 
   public zipAndDownload() {
     this.fileHelper.downloadPemCertificate(this.certificateBundle, this.entityTitle, this.serverGeneratedKeys, this.notifierService);
+    this.notifierService.notify('success', 'Chosen certificate has downloaded');
   }
 
   public issueNewWithServerKeys() {
@@ -86,6 +90,7 @@ export class CertIssueDialogComponent implements OnInit{
           this.certificateBundle = certificateBundle;
           this.serverGeneratedKeys = true;
           this.isLoading = false;
+          this.notifierService.notify('success', 'You can now download the issued certificate');
         }, err => {
           this.isLoading = false;
           if (err.status === 410) {
@@ -114,9 +119,10 @@ export class CertIssueDialogComponent implements OnInit{
           let csrBytes = csr.toSchema().toBER(false);
           let pemCsr = this.toPem(csrBytes, 'CERTIFICATE REQUEST');
           this.certificateService.issueNewCertificate(pemCsr, this.entityType as EntityType, this.entityMrn, this.orgMrn, this.instanceVersion)
-              .subscribe((certificate) => {},
+              .subscribe((certificate) => {
+              },
               err => {
-                console.log(err);
+                // succeessful response but failed due to PEM fitting to json format
                 if(err.status === 201) {
                   {
                     const certificate = err.error.text;
@@ -142,6 +148,7 @@ export class CertIssueDialogComponent implements OnInit{
                               keystorePassword: password
                             };
                             this.isLoading = false;
+                            this.notifierService.notify('success', 'You can now download the issued certificate');
                           }, err => {
                             this.isLoading = false;
                             this.notifierService.notify('error',
@@ -155,6 +162,7 @@ export class CertIssueDialogComponent implements OnInit{
                               certificate: certificate
                             }
                           };
+                          this.notifierService.notify('success', 'You can now download the issued certificate');
                           this.isLoading = false;
                         }
                       }, err => {

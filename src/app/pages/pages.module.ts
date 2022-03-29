@@ -20,7 +20,6 @@ import { SearchComponent } from './service-registry/sr-search/search/search.comp
 import { IrInfoComponent } from './about/ir-info/ir-info.component';
 import { SrInfoComponent } from './about/sr-info/sr-info.component';
 import { PortalInfoComponent } from './about/portal-info/portal-info.component';
-import { customNotifierOptions } from '../shared/customNotifierOption';
 
 @NgModule({
   imports: [
@@ -38,7 +37,6 @@ import { customNotifierOptions } from '../shared/customNotifierOption';
     LeafletModule.forRoot(),
     MiscellaneousModule,
     Ng2SmartTableModule,
-    NotifierModule.withConfig(customNotifierOptions),
   ],
   declarations: [
     PagesComponent,

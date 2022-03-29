@@ -24,6 +24,8 @@ import {
   NbWindowModule,
 } from '@nebular/theme';
 import { initializeKeycloak } from './auth/app.init';
+import { customNotifierOptions } from './shared/customNotifierOption';
+import { NotifierModule } from 'angular-notifier';
 
 @NgModule({
   declarations: [AppComponent],
@@ -46,6 +48,7 @@ import { initializeKeycloak } from './auth/app.init';
     }),
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
+    NotifierModule.withConfig(customNotifierOptions),
   ],
   bootstrap: [AppComponent],
   providers: [

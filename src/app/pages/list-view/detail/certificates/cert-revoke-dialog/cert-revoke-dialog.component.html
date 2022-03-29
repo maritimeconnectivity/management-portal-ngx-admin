@@ -5,34 +5,36 @@
     <nb-card-body>
         <div class="container">
             <div class="row">
-                <div class="col-sm">
+                <div class="col">
                     <span class="subtitle">
                         Revocation reason:
                     </span><br>
-                    <nb-select placeholder="Please choose a reason" (selectedChange)="onMenuItemSelected($event)">
+                    <nb-select fullWidth placeholder="Choose a reason" (selectedChange)="onMenuItemSelected($event)">
                         <nb-option *ngFor="let reason of reasons" [value]="reason.value"> {{ reason.title }}</nb-option>
-                    </nb-select><br>
-                    <div class="description">
-                        {{description}}
-                    </div>
+                    </nb-select>
                 </div>
 
-                <div class="col-sm">
+                <div class="col">
                     <span class="subtitle">
                         Revocation date:
                     </span><br>
-                    <input nbInput
-                       placeholder="Form Picker"
-                       [nbDatepicker]="formpicker">
-                    <nb-datepicker #formpicker></nb-datepicker>
+                    <input nbInput fullWidth
+                       placeholder="Choose a date"
+                       [nbDatepicker]="formpicker" >
+                    <nb-datepicker #formpicker (dateChange)="onDateChange($event)"></nb-datepicker>
                 </div>
             </div>
-            
+            <div class="row">
+                <div class="col">
+                    <div class="headline">
+                        {{description}}
+                    </div>
+                </div>
+            </div>
         </div>
     </nb-card-body>
     <nb-card-footer>
-        <button nbButton status="primary" (click)="dismiss()">Revoke</button>
-        <button nbButton status="danger" (click)="dismiss()">Cancel</button>
+        <button type="button" nbButton status="primary" (click)="doRevoke()">Revoke</button>
+        <button type="button" nbButton status="danger" (click)="dismiss()">Cancel</button>
     </nb-card-footer>
   </nb-card>
-  
