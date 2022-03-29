@@ -12,6 +12,7 @@ import { DeviceControllerService, MmsControllerService, OrganizationControllerSe
 import { Observable } from 'rxjs/Observable';
 import { AuthInfo } from '../../../auth/model/AuthInfo';
 import { NotifierService } from 'angular-notifier';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'ngx-detail',
@@ -19,12 +20,12 @@ import { NotifierService } from 'angular-notifier';
   styleUrls: ['./detail.component.scss']
 })
 export class DetailComponent implements OnInit {
-  @Input() name = '';
-
+  name = '';
   isLoading = false;
   menuType = 'device';
   version = '';
   isMyOrgPage = false;
+  isForNew = false;
   columnForMenu = ColumnForMenu[this.menuType];
   contextForAttributes = 'detail';
   iconName = 'circle';
@@ -32,65 +33,78 @@ export class DetailComponent implements OnInit {
   isEntity = false;
   entityMrn = '';
   orgMrn = '';
+  isUnapprovedorg = false;
   values = {};
   activeCertificates = [];
   revokedCertificates = [];
+  formGroup: FormGroup;
 
   ngOnInit(): void {
-    // assign entity name from query parameter
-    this.route.queryParams.subscribe(e => this.name = e.name);
-
     // filtered with context
     this.columnForMenu = Object.entries(ColumnForMenu[this.menuType]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes));
-    if(ColumnForMenu.hasOwnProperty(this.menuType)) {
-      this.isLoading = true;
-      if (MenuType.includes(this.menuType)) {
-        if(this.menuType === MenuTypeNames.organization){
-          this.loadOrgContent(this.entityMrn).subscribe(
-            data => {
-              this.isLoading = false;
-              this.adjustData(data);
-              const splited = this.certificateService.splitByRevokeStatus(data.certificates);
-
-              this.activeCertificates = splited.activeCertificates;
-              this.revokedCertificates = splited.revokedCertificates;
-            },
-            error => this.notifierService.notify('error', error.message),
-          );
-        } else if(this.menuType === MenuTypeNames.unapprovedorg){
-          this.organizationControllerService.getUnapprovedOrganizations().subscribe(
-            data => {
-              this.isLoading = false;
-              this.adjustData(data.content.filter(d => d.mrn === this.entityMrn).pop());
-            }
-          );
-          
-        } else if(this.menuType === MenuTypeNames.role){
-          
+    
+    if (this.isForNew) {
+      this.name = 'New ' + this.menuType;
+    } else {
+      if(ColumnForMenu.hasOwnProperty(this.menuType)) {
+        this.isLoading = true;
+        if (MenuType.includes(this.menuType)) {
+          if(this.menuType === MenuTypeNames.organization){
+            this.loadOrgContent(this.entityMrn).subscribe(
+              data => {
+                this.isLoading = false;
+                this.name = data.name;
+                this.adjustData(data);
+                const splited = this.certificateService.splitByRevokeStatus(data.certificates);
+  
+                this.activeCertificates = splited.activeCertificates;
+                this.revokedCertificates = splited.revokedCertificates;
+              },
+              error => this.notifierService.notify('error', error.message),
+            );
+          } else if(this.menuType === MenuTypeNames.unapprovedorg){
+            this.isUnapprovedorg = true;
+            this.organizationControllerService.getUnapprovedOrganizations().subscribe(
+              data => {
+                this.isLoading = false;
+                this.adjustData(data.content.filter(d => d.mrn === this.entityMrn).pop());
+              }
+            );
+          } else if(this.menuType === MenuTypeNames.role){
+            
+          } else {
+            this.route.queryParams.subscribe(e => this.loadDataContent(this.menuType, AuthInfo.user.organization, this.entityMrn, e.version).subscribe(
+              data => {
+                this.isLoading = false;
+                this.adjustData(data);
+                const splited = this.certificateService.splitByRevokeStatus(data.certificates);
+  
+                this.activeCertificates = splited.activeCertificates;
+                this.revokedCertificates = splited.revokedCertificates;
+              },
+              error => this.notifierService.notify('error', error.message),
+            ));
+          }
         } else {
-          this.route.queryParams.subscribe(e => this.loadDataContent(this.menuType, AuthInfo.user.organization, this.entityMrn, e.version).subscribe(
-            data => {
-              this.isLoading = false;
-              this.adjustData(data);
-              const splited = this.certificateService.splitByRevokeStatus(data.certificates);
-
-              this.activeCertificates = splited.activeCertificates;
-              this.revokedCertificates = splited.revokedCertificates;
-            },
-            error => this.notifierService.notify('error', error.message),
-          ));
+          this.isLoading = false;
+            throw new Error(`There's no such thing as '${this.menuType}DataService'`);
         }
       } else {
         this.isLoading = false;
-          throw new Error(`There's no such thing as '${this.menuType}DataService'`);
+        throw new Error(`There's no '${this.menuType}DataService' in ColumnForMenu`);
       }
-    } else {
-      this.isLoading = false;
-      throw new Error(`There's no '${this.menuType}DataService' in ColumnForMenu`);
     }
+
+    const group = {};
+    for (const key in this.columnForMenu) {
+      group[this.columnForMenu[key][0]] = [null, this.columnForMenu[key][1].required ? [Validators.required] : []];
+    }
+    this.formGroup = this.formBuilder.group(group);
   }
 
-  constructor(private route: ActivatedRoute, private router: Router, private location: Location, iconsLibrary: NbIconLibraries,
+  constructor(private route: ActivatedRoute, private router: Router, private location: Location,
+    private formBuilder: FormBuilder,
+    private iconsLibrary: NbIconLibraries,
     private userControllerService: UserControllerService,
     private deviceControllerService: DeviceControllerService,
     private roleControllerService: RoleControllerService,
@@ -108,15 +122,29 @@ export class DetailComponent implements OnInit {
       this.isEntity = EntityTypes.includes(this.menuType);
       this.entityMrn = decodeURIComponent(this.route.snapshot.paramMap.get("id"));
       this.orgMrn = AuthInfo.orgMrn;
+      this.isForNew = this.entityMrn === 'new';
+
       //this is my organization page when it comes with no name
       this.route.queryParams.subscribe(e =>
-        this.isMyOrgPage = this.entityMrn === AuthInfo.orgMrn && e.name === undefined);
+        {
+          this.isMyOrgPage = this.entityMrn === AuthInfo.orgMrn && e.name === undefined;
+          this.name = e.name;
+        });
 
       iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
   }
 
   cancel() {
     this.location.back(); // <-- go back to previous location on cancel
+  }
+
+  submit() {
+    console.log(this.columnForMenu);
+  }
+
+  onBlur(input_id, value) {
+    const id = input_id.replace('input_','');
+    this.columnForMenu = this.columnForMenu.map(e => e[0] === id ? [e[0], {...e[1], value: value}] : e);
   }
 
   loadDataContent = (context: string, orgMrn: string, entityMrn: string, version?: string): Observable<Entity> => {

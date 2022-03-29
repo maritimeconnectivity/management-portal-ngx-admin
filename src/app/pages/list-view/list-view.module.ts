@@ -11,6 +11,7 @@ import { NotifierModule, NotifierService } from 'angular-notifier';
 import { customNotifierOptions } from '../../shared/customNotifierOption';
 import { CertIssueDialogComponent } from './detail/certificates/cert-issue-dialog/cert-issue-dialog.component';
 import { CertRevokeDialogComponent } from './detail/certificates/cert-revoke-dialog/cert-revoke-dialog.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import { CertRevokeDialogComponent } from './detail/certificates/cert-revoke-dia
   ],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     NbInputModule,
     NbCardModule,
     NbIconModule,

@@ -1,6 +1,13 @@
 <nb-card>
     <nb-card-header>
-      <span class="icon_header"><nb-icon [icon]="iconName" pack="fas"></nb-icon></span>{{title}}
+      <div class="row">
+        <div class="col my-auto">
+          <span class="icon_header"><nb-icon [icon]="iconName" pack="fas"></nb-icon></span>{{title}}
+        </div>
+        <div class="col-md-auto">
+          <button type="button" nbButton status="primary">Add new</button>
+        </div>
+      </div>
     </nb-card-header>
   
     <nb-card-body [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary">

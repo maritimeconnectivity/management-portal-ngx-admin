@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-lg-12">
-    <div *ngIf="!isMyOrgPage">
+    <div *ngIf="!isMyOrgPage && !isForNew">
       <button nbButton status="info" ghost (click)="cancel()">
         <nb-icon icon="arrow-ios-back" pack="eva"></nb-icon> 
         Back to {{entityTypeName}} list
@@ -15,34 +15,35 @@
         </nb-card-header>
       
         <nb-card-body [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary">
-            <form>
-              <div class="form-group row" *ngFor="let attribute of columnForMenu">
-                <label for="input{{attribute[0]}}" class="label col-sm-3 col-form-label" nbPopover="{{attribute[1].description}}" nbPopoverTrigger="hint" nbPopoverPlacement="top">{{attribute[1].title}}</label>
-                <div class="col-sm-9">
-                  <input type="text" nbInput fullWidth id="input{{attribute[0]}}" placeholder="{{attribute[0]}}" value="{{attribute[1].value}}">
-                </div>
+          <form [formGroup]="formGroup" (ngSubmit)="submit()" >
+            <div class="form-group row" *ngFor="let attribute of columnForMenu">
+              <label for="input{{attribute[0]}}" class="label col-sm-3 col-form-label" nbPopover="{{attribute[1].description}}" nbPopoverTrigger="hint" nbPopoverPlacement="top">{{attribute[1].title}}</label>
+              <div class="col-sm-9">
+                <input type="text" nbInput fullWidth id="input_{{attribute[0]}}" class="form-control" status="{{formGroup.get(attribute[0]).value ? 'success' : attribute[1].required ? 'danger': ''}}" value="{{attribute[1].value}}" formControlName="{{attribute[0]}}" *ngIf="isForNew">
+                <input type="text" nbInput fullWidth id="input_{{attribute[0]}}" class="form-control" status="{{formGroup.get(attribute[0]).value ? 'success' : attribute[1].required ? 'danger': ''}}"  value="{{attribute[1].value}}" formControlName="{{attribute[0]}}" *ngIf="!isForNew" (blur)="onBlur($event.target.id, $event.target.value)">
               </div>
-              <div class="form-group row" *ngIf="isEntity" >
-                <label for="inputActiveCert" class="label col-sm-3 col-form-label">Active certificates</label>
-                <div class="col-sm-9">
-                  <ngx-certificates [data]="activeCertificates" [forRevoked]="false" [entityType]="menuType" [entityTitle]="name" [entityMrn]="entityMrn" [orgMrn]="orgMrn"></ngx-certificates>
-                </div>
+            </div>
+            <div class="form-group row" *ngIf="isEntity && !isForNew" >
+              <label for="inputActiveCert" class="label col-sm-3 col-form-label">Active certificates</label>
+              <div class="col-sm-9">
+                <ngx-certificates [data]="activeCertificates" [forRevoked]="false" [entityType]="menuType" [entityTitle]="name" [entityMrn]="entityMrn" [orgMrn]="orgMrn"></ngx-certificates>
               </div>
-              <div class="form-group row" *ngIf="isEntity" >
-                <label for="inputRevokedCert" class="label col-sm-3 col-form-label">Revoked certificates</label>
-                <div class="col-sm-9">
-                  <ngx-certificates [data]="revokedCertificates" [forRevoked]="true"></ngx-certificates>
-                </div>
+            </div>
+            <div class="form-group row" *ngIf="isEntity && !isForNew" >
+              <label for="inputRevokedCert" class="label col-sm-3 col-form-label">Revoked certificates</label>
+              <div class="col-sm-9">
+                <ngx-certificates [data]="revokedCertificates" [forRevoked]="true"></ngx-certificates>
               </div>
-            </form>
-            
+            </div>
+            <div class="buttons-row">
+              <button type="submit" nbButton status="primary" *ngIf="isForNew" [disabled]="!formGroup.valid">Submit</button>
+              <button type="button" nbButton status="danger" *ngIf="isForNew" (click)="cancel()">Cancel</button>
+              <button type="button" nbButton status="primary" *ngIf="!isUnapprovedorg && !isForNew">Update</button>
+              <button type="button" nbButton status="primary" *ngIf="isUnapprovedorg">Approve</button>
+              <button type="button" nbButton status="danger" *ngIf="isUnapprovedorg">Reject</button>
+            </div>
+          </form>
         </nb-card-body>
-        <nb-card-footer>
-          <div class="buttons-row">
-            <button type="button" nbButton status="primary" >Update</button>
-            <button type="button" nbButton status="danger" >Approve</button>
-          </div>
-        </nb-card-footer>
       </nb-card>
   </div>
 </div>
