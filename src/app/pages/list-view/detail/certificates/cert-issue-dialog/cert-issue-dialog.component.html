@@ -7,7 +7,7 @@
             Select cert issue method
         </div>
     </nb-card-header>
-    <nb-card-body>
+    <nb-card-body [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary">
         <div *ngIf="!certificateBundle">
             <p>There are four ways to issue a new certificate:</p>
             <div class="col-12">
@@ -71,7 +71,10 @@
         </div>
     </nb-card-body>
     <nb-card-footer>
-      <button nbButton status="danger" (click)="dismiss()">Close</button>
+        <div class="buttons-row">
+
+            <button nbButton status="danger" (click)="dismiss()">Close</button>
+        </div>
     </nb-card-footer>
   </nb-card>
   

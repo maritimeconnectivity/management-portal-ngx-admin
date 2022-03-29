@@ -39,7 +39,7 @@ export class ListComponent implements OnInit {
   iconName = 'circle';
   menuTypeName = '';
   data = [];
-
+  isLoading = false;
   settings;
   mySettings = {
     mode: 'external',
@@ -86,37 +86,40 @@ export class ListComponent implements OnInit {
       this.settings = Object.assign({}, this.mySettings);
       // Not-approved organization list
       this.title = `${capitalize(this.menuTypeName)} list${ResourceType.includes(this.menuType) ? ' for ' + AuthInfo.user.organization : ''}`;
-      
+      this.isLoading = true;
+
       if (MenuType.includes(this.menuType)) {
         if(this.menuType === MenuTypeNames.organization || this.menuType === MenuTypeNames.unapprovedorg){
           this.loadDataContent(this.menuType).subscribe(
-            res => this.source.load(res.content),
+            res => {this.source.load(res.content); this.isLoading = false;},
             error => this.notifierService.notify('error', error.message),
           );
         } else if(this.menuType === MenuTypeNames.role){
           this.loadMyOrganization().subscribe(
             resOrg => this.loadRoles(resOrg.mrn).subscribe(
-              resData => this.source.load(resData)
+              resData => {this.source.load(resData); this.isLoading = false;}
             ),
             error => this.notifierService.notify('error', error.message),
           );
         } else if(this.menuType === MenuTypeNames.instance){
           this.loadServiceInstances().subscribe(
-            resData => this.source.load(resData),
+            resData => {this.source.load(resData); this.isLoading = false;},
             error => this.notifierService.notify('error', error.message),
           );
         } else {
           this.loadMyOrganization().subscribe(
             resOrg => this.loadDataContent(this.menuType, resOrg.mrn).subscribe(
-              resData => this.source.load(resData.content)
+              res => {this.source.load(res.content); this.isLoading = false;}
             ),
             error => this.notifierService.notify('error', error.message),
           );
         }
       } else {
-          throw new Error(`There's no such thing as '${this.menuType}DataService'`);
+        this.isLoading = false;
+        throw new Error(`There's no such thing as '${this.menuType}DataService'`);
       }
     } else {
+      this.isLoading = false;
       throw new Error(`There's no '${this.menuType}DataService' in ColumnForMenu`);
     }
   }

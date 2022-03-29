@@ -20,6 +20,8 @@ import { NotifierService } from 'angular-notifier';
 })
 export class DetailComponent implements OnInit {
   @Input() name = '';
+
+  isLoading = false;
   menuType = 'device';
   version = '';
   isMyOrgPage = false;
@@ -35,14 +37,18 @@ export class DetailComponent implements OnInit {
   revokedCertificates = [];
 
   ngOnInit(): void {
+    // assign entity name from query parameter
+    this.route.queryParams.subscribe(e => this.name = e.name);
+
     // filtered with context
     this.columnForMenu = Object.entries(ColumnForMenu[this.menuType]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes));
     if(ColumnForMenu.hasOwnProperty(this.menuType)) {
+      this.isLoading = true;
       if (MenuType.includes(this.menuType)) {
-        if(this.menuType === MenuTypeNames.organization || this.menuType === MenuTypeNames.unapprovedorg){
+        if(this.menuType === MenuTypeNames.organization){
           this.loadOrgContent(this.entityMrn).subscribe(
             data => {
-              this.name = data.name;
+              this.isLoading = false;
               this.adjustData(data);
               const splited = this.certificateService.splitByRevokeStatus(data.certificates);
 
@@ -51,11 +57,20 @@ export class DetailComponent implements OnInit {
             },
             error => this.notifierService.notify('error', error.message),
           );
+        } else if(this.menuType === MenuTypeNames.unapprovedorg){
+          this.organizationControllerService.getUnapprovedOrganizations().subscribe(
+            data => {
+              this.isLoading = false;
+              this.adjustData(data.content.filter(d => d.mrn === this.entityMrn).pop());
+            }
+          );
+          
         } else if(this.menuType === MenuTypeNames.role){
           
         } else {
           this.route.queryParams.subscribe(e => this.loadDataContent(this.menuType, AuthInfo.user.organization, this.entityMrn, e.version).subscribe(
             data => {
+              this.isLoading = false;
               this.adjustData(data);
               const splited = this.certificateService.splitByRevokeStatus(data.certificates);
 
@@ -66,12 +81,13 @@ export class DetailComponent implements OnInit {
           ));
         }
       } else {
+        this.isLoading = false;
           throw new Error(`There's no such thing as '${this.menuType}DataService'`);
       }
     } else {
+      this.isLoading = false;
       throw new Error(`There's no '${this.menuType}DataService' in ColumnForMenu`);
     }
-    this.route.queryParams.subscribe(e => this.name = e.name);
   }
 
   constructor(private route: ActivatedRoute, private router: Router, private location: Location, iconsLibrary: NbIconLibraries,
@@ -91,7 +107,6 @@ export class DetailComponent implements OnInit {
       this.iconName = MenuTypeIconNames[this.menuType];
       this.isEntity = EntityTypes.includes(this.menuType);
       this.entityMrn = decodeURIComponent(this.route.snapshot.paramMap.get("id"));
-      //this.version = decodeURIComponent(this.route.snapshot.paramMap.get("ver"));
       this.orgMrn = AuthInfo.orgMrn;
       //this is my organization page when it comes with no name
       this.route.queryParams.subscribe(e =>

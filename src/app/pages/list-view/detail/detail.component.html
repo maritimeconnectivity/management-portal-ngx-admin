@@ -14,7 +14,7 @@
           <span class="icon_header"><nb-icon [icon]="iconName" pack="fas"></nb-icon></span>{{name}}
         </nb-card-header>
       
-        <nb-card-body>
+        <nb-card-body [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary">
             <form>
               <div class="form-group row" *ngFor="let attribute of columnForMenu">
                 <label for="input{{attribute[0]}}" class="label col-sm-3 col-form-label" nbPopover="{{attribute[1].description}}" nbPopoverTrigger="hint" nbPopoverPlacement="top">{{attribute[1].title}}</label>
@@ -37,6 +37,12 @@
             </form>
             
         </nb-card-body>
+        <nb-card-footer>
+          <div class="buttons-row">
+            <button type="button" nbButton status="primary" >Update</button>
+            <button type="button" nbButton status="danger" >Approve</button>
+          </div>
+        </nb-card-footer>
       </nb-card>
   </div>
 </div>

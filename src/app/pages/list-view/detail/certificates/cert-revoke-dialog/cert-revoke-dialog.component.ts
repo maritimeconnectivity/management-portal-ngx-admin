@@ -31,7 +31,7 @@ export class CertRevokeDialogComponent implements OnInit {
   dayCellComponent = DayCellComponent;
   
   constructor(protected ref: NbDialogRef<CertRevokeDialogComponent>) {
-    RevokationReasonEnum
+    this.isLoading = false;
     for (const reason in RevokationReasonEnum) {
       this.reasons.push(getReasonOptionFromRevocationReason(reason.toLocaleLowerCase() as RevokationReasonEnum));
     }
@@ -49,6 +49,7 @@ export class CertRevokeDialogComponent implements OnInit {
           this.ref.close();
           this.notifierService.notify('success',
               'Certificate has been successfully revoked');
+          this.isLoading = false;
         }, err => {
           this.isLoading = false;
           if (err.status === 410) {
