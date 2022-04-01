@@ -26,8 +26,8 @@
           <form [formGroup]="formGroup">
             <div class="form-group row" *ngFor="let attribute of columnForMenu">
               <label for="input{{attribute[0]}}" class="label col-sm-3 col-form-label" nbPopover="{{attribute[1].description}}" nbPopoverTrigger="hint" nbPopoverPlacement="top">{{attribute[1].title}}</label>
-              <div class="col-sm-9" >
-                <p *ngIf="!isEditing" id="keyword.name">{{ formGroup.get(attribute[0]).value }}</p>
+              <div class="col-sm-9 my-auto" >
+                <p class="my-auto" *ngIf="!isEditing" id="keyword.name">{{ formGroup.get(attribute[0]).value }}</p>
                 <input *ngIf="isEditing" type="text" nbInput fullWidth id="input_{{attribute[0]}}" class="form-control" status="{{formGroup.get(attribute[0]).value ? formGroup.get(attribute[0]).valid ? 'success' : 'danger' : attribute[1].required ? 'danger' : ''}}" formControlName="{{attribute[0]}}" required="{{attribute[1].required === true}}">
               </div>
             </div>
