@@ -11,7 +11,7 @@ export const ColumnForMenu = {
       title: 'Maritime Resource Name (MRN)',
       type: 'string',
       description: 'MCP MRN as unique identifer',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       immutable: true,
       required: true,
     },
@@ -19,7 +19,7 @@ export const ColumnForMenu = {
       title: 'Name',
       type: 'string',
       description: 'Name of device',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       required: true,
     },
     permissions: {
@@ -32,13 +32,13 @@ export const ColumnForMenu = {
       title: 'Subsidiary MRN',
       type: 'string',
       description: 'Additional MRN assigned to entity',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     homeMMSUrl: {
       title: 'Home MMS URL',
       type: 'string',
       description: 'URL of home MMS',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     createdAt: {
       title: 'Created at',
@@ -47,6 +47,7 @@ export const ColumnForMenu = {
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
       },
+      immutable: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -56,6 +57,7 @@ export const ColumnForMenu = {
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
       },
+      immutable: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -68,7 +70,7 @@ export const ColumnForMenu = {
       title: 'Maritime Resource Name (MRN)',
       type: 'string',
       description: 'MCP MRN as unique identifer',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       immutable: true,
       required: true,
     },
@@ -76,26 +78,26 @@ export const ColumnForMenu = {
       title: 'Name',
       type: 'string',
       description: 'Name of organization',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       required: true,
     },
     mrnSubsidiary: {
       title: 'Subsidiary MRN',
       type: 'string',
       description: 'Additional MRN assigned to entity',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     homeMMSUrl: {
       title: 'Home MMS URL',
       type: 'string',
       description: 'URL of home MMS',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     email: {
       title: 'e-mail',
       type: 'string',
       description: 'Contact e-mail',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       immutable: true,
       required: true,
     },
@@ -103,28 +105,28 @@ export const ColumnForMenu = {
       title: 'URL',
       type: 'string',
       description: 'URL of organization',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       required: true,
     },
     address: {
       title: 'Address',
       type: 'string',
       description: 'Address of organization',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
       required: true,
     },
     country: {
       title: 'Country',
       type: 'string',
       description: 'Country that organization belongs to',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       required: true,
     },
     federationType: {
       title: 'Federation type',
       type: 'string',
       description: 'OpenID Connect federation type',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     createdAt: {
       title: 'Created at',
@@ -133,6 +135,7 @@ export const ColumnForMenu = {
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
       },
+      immutable: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -142,6 +145,7 @@ export const ColumnForMenu = {
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
       },
+      immutable: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -154,7 +158,7 @@ export const ColumnForMenu = {
       title: 'Maritime Resource Name (MRN)',
       type: 'string',
       description: 'MCP MRN as unique identifer',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       immutable: true,
       required: true,
     },
@@ -162,7 +166,7 @@ export const ColumnForMenu = {
       title: 'Name',
       type: 'string',
       description: 'Name of service',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       required: true,
     },
     permissions: {
@@ -175,38 +179,38 @@ export const ColumnForMenu = {
       title: 'Subsidiary MRN',
       type: 'string',
       description: 'Additional MRN assigned to entity',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     homeMMSUrl: {
       title: 'Home MMS URL',
       type: 'string',
       description: 'URL of home MMS',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     instanceVersion: {
       title: 'Instance version',
       type: 'string',
       description: 'Version of service instance',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       required: true,
     },
     oidcAccessType: {
       title: 'Access type',
       type: 'string',
       description: 'OpenID Connect access type',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     oidcClientId: {
       title: 'OIDC client ID',
       type: 'string',
       description: 'OpenID Connect client ID',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     vessel: {
       title: 'Vessel',
       type: 'string',
       description: 'Correlated vessel',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     createdAt: {
       title: 'Created at',
@@ -215,6 +219,7 @@ export const ColumnForMenu = {
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
       },
+      immutable: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -224,6 +229,7 @@ export const ColumnForMenu = {
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
       },
+      immutable: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -236,27 +242,27 @@ export const ColumnForMenu = {
       title: 'Maritime Resource Name (MRN)',
       type: 'string',
       description: 'MCP MRN as unique identifer',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       immutable: true,
       required: true,
     },
     firstName: {
       title: 'First name',
       type: 'string',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       required: true,
     },
     lastName: {
       title: 'Last name',
       type: 'string',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       required: true,
     },
     email: {
       title: 'e-mail',
       type: 'string',
       description: 'Contact e-mail',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       immutable: true,
       required: true,
     },
@@ -264,19 +270,19 @@ export const ColumnForMenu = {
       title: 'Permissions',
       type: 'string',
       description: 'List of permissions assigned by the organization',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
     },
     mrnSubsidiary: {
       title: 'Subsidiary MRN',
       type: 'string',
       description: 'Additional MRN assigned to entity',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     homeMMSUrl: {
       title: 'Home MMS URL',
       type: 'string',
       description: 'URL of home MMS',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     createdAt: {
       title: 'Created at',
@@ -285,6 +291,7 @@ export const ColumnForMenu = {
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
       },
+      immutable: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -294,6 +301,7 @@ export const ColumnForMenu = {
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
       },
+      immutable: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -306,7 +314,7 @@ export const ColumnForMenu = {
       title: 'Maritime Resource Name (MRN)',
       type: 'string',
       description: 'MCP MRN as unique identifer',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       immutable: true,
       required: true,
     },
@@ -314,7 +322,7 @@ export const ColumnForMenu = {
       title: 'Name',
       type: 'string',
       description: 'Name of device',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       required: true,
     },
     permissions: {
@@ -327,44 +335,44 @@ export const ColumnForMenu = {
       title: 'Subsidiary MRN',
       type: 'string',
       description: 'Additional MRN assigned to entity',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     homeMMSUrl: {
       title: 'Home MMS URL',
       type: 'string',
       description: 'URL of home MMS',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     // vessel specific
     imoNumber: {
       title: 'IMO number',
       type: 'string',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
     },
     mmsiNumber: {
       title: 'MMSI number',
       type: 'string',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
     },
     callsign: {
       title: 'Call sign',
       type: 'string',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
     },
     flagstate: {
       title: 'Flag state',
       type: 'string',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
     },
     aisClass: {
       title: 'AIS class',
       type: 'string',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
     },
     portOfRegister: {
       title: 'Port of register',
       type: 'string',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
     },
     createdAt: {
       title: 'Created at',
@@ -373,6 +381,7 @@ export const ColumnForMenu = {
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
       },
+      immutable: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -382,6 +391,7 @@ export const ColumnForMenu = {
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
       },
+      immutable: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -393,13 +403,13 @@ export const ColumnForMenu = {
     permission: {
       title: 'Permission',
       type: 'string',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       required: true,
     },
     roleName: {
       title: 'Role name',
       type: 'string',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       required: true,
     },
     createdAt: {
@@ -409,6 +419,7 @@ export const ColumnForMenu = {
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
       },
+      immutable: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -418,6 +429,7 @@ export const ColumnForMenu = {
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
       },
+      immutable: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -430,7 +442,7 @@ export const ColumnForMenu = {
       title: 'Maritime Resource Name (MRN)',
       type: 'string',
       description: 'MCP MRN as unique identifer',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       immutable: true,
       required: true,
     },
@@ -438,26 +450,26 @@ export const ColumnForMenu = {
       title: 'Name',
       type: 'string',
       description: 'Name of organization',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       required: true,
     },
     mrnSubsidiary: {
       title: 'Subsidiary MRN',
       type: 'string',
       description: 'Additional MRN assigned to entity',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     homeMMSUrl: {
       title: 'Home MMS URL',
       type: 'string',
       description: 'URL of home MMS',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     email: {
       title: 'e-mail',
       type: 'string',
       description: 'Contact e-mail',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       immutable: true,
       required: true,
     },
@@ -465,28 +477,28 @@ export const ColumnForMenu = {
       title: 'URL',
       type: 'string',
       description: 'URL of organization',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       required: true,
     },
     address: {
       title: 'Address',
       type: 'string',
       description: 'Address of organization',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
       required: true,
     },
     country: {
       title: 'Country',
       type: 'string',
       description: 'Country that organization belongs to',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       required: true,
     },
     federationType: {
       title: 'Federation type',
       type: 'string',
       description: 'OpenID Connect federation type',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     createdAt: {
       title: 'Created at',
@@ -495,6 +507,7 @@ export const ColumnForMenu = {
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
       },
+      immutable: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -504,6 +517,7 @@ export const ColumnForMenu = {
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
       },
+      immutable: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -516,50 +530,50 @@ export const ColumnForMenu = {
       title: 'Name',
       type: 'string',
       description: 'Name of service instance',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       required: true,
     },
     version: {
       title: 'Instance version',
       type: 'string',
       description: 'Version of service instance',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       required: true,
     },
     serviceType: {
       title: 'Type',
       type: 'string',
       description: 'Type',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
     },
     status: {
       title: 'Status',
       type: 'string',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     endpointUri: {
       title: 'Endpoint URI',
       type: 'string',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
       required: true,
     },
     organizationId: {
       title: 'Organization',
       type: 'string',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
       immutable: true,
       required: true,
     },
     keywords: {
       title: 'Keywords',
       type: 'string',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     instanceId: {
       title: 'Instance ID',
       type: 'string',
       description: 'MCP MRN as unique identifer',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       immutable: true,
       required: true,
     },
@@ -570,6 +584,7 @@ export const ColumnForMenu = {
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
       },
+      immutable: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -579,6 +594,7 @@ export const ColumnForMenu = {
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
       },
+      immutable: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -591,7 +607,7 @@ export const ColumnForMenu = {
       title: 'Maritime Resource Name (MRN)',
       type: 'string',
       description: 'Unique identifier of service instance',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       immutable: true,
       required: true,
     },
@@ -599,51 +615,51 @@ export const ColumnForMenu = {
       title: 'Name',
       type: 'string',
       description: 'Name of service instance',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       required: true,
     },
     permissions: {
       title: 'Permissions',
       type: 'string',
       description: 'List of permissions assigned by the organization',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     mrnSubsidiary: {
       title: 'Subsidiary MRN',
       type: 'string',
       description: 'Additional MRN assigned to entity',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     homeMMSUrl: {
       title: 'Home MMS URL',
       type: 'string',
       description: 'URL of home MMS',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     instanceVersion: {
       title: 'Instance version',
       type: 'string',
       description: 'Version of service instance',
-      visibleFrom: ['create', 'edit', 'detail', 'list'],
+      visibleFrom: ['detail', 'list'],
       required: true,
     },
     oidcAccessType: {
       title: 'Access type',
       type: 'string',
       description: 'OpenID Connect access type',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     oidcClientId: {
       title: 'OIDC client ID',
       type: 'string',
       description: 'OpenID Connect client ID',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     vessel: {
       title: 'Vessel',
       type: 'string',
       description: 'Correlated vessel',
-      visibleFrom: ['create', 'edit', 'detail'],
+      visibleFrom: ['detail'],
     },
     createdAt: {
       title: 'Created at',
@@ -652,6 +668,7 @@ export const ColumnForMenu = {
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
       },
+      immutable: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -661,6 +678,7 @@ export const ColumnForMenu = {
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
       },
+      immutable: true,
       visibleFrom: ['detail', 'list'],
     },
   },

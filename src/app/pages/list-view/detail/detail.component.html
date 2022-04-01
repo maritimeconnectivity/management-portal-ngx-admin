@@ -8,36 +8,43 @@
     </div>
     <nb-card>
         <nb-card-header>
-          <div>
-            
+          <div class="row">
+            <div class="col my-auto">
+              <span class="icon_header"><nb-icon [icon]="iconName" pack="fas"></nb-icon></span>{{name}}
+            </div>
+            <div class="col-md-auto">
+              <button type="submit" nbButton status="primary" *ngIf="isForNew" (click)="submit()" [disabled]="!formGroup.valid">Submit</button>
+              <button type="button" nbButton status="danger" *ngIf="isForNew" (click)="cancel()">Cancel</button>
+              <button type="button" nbButton status="primary" *ngIf="!isEditing && !isForNew" (click)="invertIsEditing()" >Edit</button>
+              <button type="submit" nbButton status="primary" *ngIf="isEditing && !isForNew" [disabled]="!formGroup.valid">Update</button>
+              <button type="button" nbButton status="danger" *ngIf="isEditing && !isForNew" (click)="invertIsEditing()" >Cancel</button>
+            </div>
           </div>
-          <span class="icon_header"><nb-icon [icon]="iconName" pack="fas"></nb-icon></span>{{name}}
         </nb-card-header>
       
         <nb-card-body [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary">
-          <form [formGroup]="formGroup" (ngSubmit)="submit()" >
+          <form [formGroup]="formGroup">
             <div class="form-group row" *ngFor="let attribute of columnForMenu">
               <label for="input{{attribute[0]}}" class="label col-sm-3 col-form-label" nbPopover="{{attribute[1].description}}" nbPopoverTrigger="hint" nbPopoverPlacement="top">{{attribute[1].title}}</label>
-              <div class="col-sm-9">
-                <input type="text" nbInput fullWidth id="input_{{attribute[0]}}" class="form-control" status="{{formGroup.get(attribute[0]).value ? 'success' : attribute[1].required ? 'danger': ''}}" formControlName="{{attribute[0]}}" required="{{attribute[1].required}}">
+              <div class="col-sm-9" >
+                <p *ngIf="!isEditing" id="keyword.name">{{ formGroup.get(attribute[0]).value }}</p>
+                <input *ngIf="isEditing" type="text" nbInput fullWidth id="input_{{attribute[0]}}" class="form-control" status="{{formGroup.get(attribute[0]).value ? formGroup.get(attribute[0]).valid ? 'success' : 'danger' : attribute[1].required ? 'danger' : ''}}" formControlName="{{attribute[0]}}" required="{{attribute[1].required === true}}">
               </div>
             </div>
-            <div class="form-group row" *ngIf="isEntity && !isForNew" >
+            <div class="form-group row" *ngIf="isEntity && !isForNew && !isEditing" >
               <label for="inputActiveCert" class="label col-sm-3 col-form-label">Active certificates</label>
               <div class="col-sm-9">
                 <ngx-certificates [data]="activeCertificates" [forRevoked]="false" [entityType]="menuType" [entityTitle]="name" [entityMrn]="entityMrn" [orgMrn]="orgMrn"></ngx-certificates>
               </div>
             </div>
-            <div class="form-group row" *ngIf="isEntity && !isForNew" >
+            <div class="form-group row" *ngIf="isEntity && !isForNew && !isEditing" >
               <label for="inputRevokedCert" class="label col-sm-3 col-form-label">Revoked certificates</label>
               <div class="col-sm-9">
                 <ngx-certificates [data]="revokedCertificates" [forRevoked]="true"></ngx-certificates>
               </div>
             </div>
             <div class="buttons-row">
-              <button type="submit" nbButton status="primary" *ngIf="isForNew" [disabled]="!formGroup.valid">Submit</button>
-              <button type="button" nbButton status="danger" *ngIf="isForNew" (click)="cancel()">Cancel</button>
-              <button type="button" nbButton status="primary" *ngIf="!isUnapprovedorg && !isForNew" [disabled]="!formGroup.valid">Update</button>
+              
               <button type="button" nbButton status="primary" *ngIf="isUnapprovedorg">Approve</button>
               <button type="button" nbButton status="danger" *ngIf="isUnapprovedorg">Reject</button>
             </div>

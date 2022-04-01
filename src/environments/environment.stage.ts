@@ -15,5 +15,5 @@ export const environment = {
   srBasePath: 'https://sr.local.mcp',
   keycloakJson: 'assets/staging-keycloak.json',
   environmentText: 'TEST',
-  idpNamespace: 'mcc-test',
+  idpNamespace: 'mcc-stage',
 };
