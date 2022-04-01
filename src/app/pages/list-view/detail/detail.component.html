@@ -7,7 +7,7 @@
       </button>
     </div>
     <nb-card>
-        <nb-card-header>
+        <nb-card-header *ngIf="isLoaded">
           <div class="row">
             <div class="col my-auto">
               <span class="icon_header"><nb-icon [icon]="iconName" pack="fas"></nb-icon></span>{{name}}
@@ -23,10 +23,21 @@
         </nb-card-header>
       
         <nb-card-body [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary">
-          <form [formGroup]="formGroup">
+          <div class="row" *ngIf="!isLoaded">
+            <div class="col my-auto">
+              <h1>Failed to load</h1>
+            </div>
+          </div>
+          <form [formGroup]="formGroup" *ngIf="isLoaded">
+            <div class="form-group row" *ngIf="isForNew">
+              <label class="label col-sm-3 col-form-label">Short ID for MRN</label>
+              <div class="col-sm-9 my-auto">
+                <input type="text" nbInput fullWidth id="input_shortId" class="form-control" status="{{isShortIdValid ? 'success' : 'danger'}}" required="true" (input)="addShortIdToMrn($event.target.value)" value="{{shortId}}">
+              </div>
+            </div>
             <div class="form-group row" *ngFor="let attribute of columnForMenu">
               <label for="input{{attribute[0]}}" class="label col-sm-3 col-form-label" nbPopover="{{attribute[1].description}}" nbPopoverTrigger="hint" nbPopoverPlacement="top">{{attribute[1].title}}</label>
-              <div class="col-sm-9 my-auto" >
+              <div class="col-sm-9 my-auto">
                 <p class="my-auto" *ngIf="!isEditing" id="keyword.name">{{ formGroup.get(attribute[0]).value }}</p>
                 <input *ngIf="isEditing" type="text" nbInput fullWidth id="input_{{attribute[0]}}" class="form-control" status="{{formGroup.get(attribute[0]).value ? formGroup.get(attribute[0]).valid ? 'success' : 'danger' : attribute[1].required ? 'danger' : ''}}" formControlName="{{attribute[0]}}" required="{{attribute[1].required === true}}">
               </div>

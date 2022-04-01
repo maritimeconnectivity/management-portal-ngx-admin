@@ -48,6 +48,7 @@ export const ColumnForMenu = {
         return convertTime(timestamp);
       },
       immutable: true,
+      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -58,6 +59,7 @@ export const ColumnForMenu = {
         return convertTime(timestamp);
       },
       immutable: true,
+      notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -136,6 +138,7 @@ export const ColumnForMenu = {
         return convertTime(timestamp);
       },
       immutable: true,
+      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -146,6 +149,7 @@ export const ColumnForMenu = {
         return convertTime(timestamp);
       },
       immutable: true,
+      notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -220,6 +224,7 @@ export const ColumnForMenu = {
         return convertTime(timestamp);
       },
       immutable: true,
+      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -230,6 +235,7 @@ export const ColumnForMenu = {
         return convertTime(timestamp);
       },
       immutable: true,
+      notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -292,6 +298,7 @@ export const ColumnForMenu = {
         return convertTime(timestamp);
       },
       immutable: true,
+      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -302,6 +309,7 @@ export const ColumnForMenu = {
         return convertTime(timestamp);
       },
       immutable: true,
+      notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -382,6 +390,7 @@ export const ColumnForMenu = {
         return convertTime(timestamp);
       },
       immutable: true,
+      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -392,6 +401,7 @@ export const ColumnForMenu = {
         return convertTime(timestamp);
       },
       immutable: true,
+      notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -420,6 +430,7 @@ export const ColumnForMenu = {
         return convertTime(timestamp);
       },
       immutable: true,
+      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -430,6 +441,7 @@ export const ColumnForMenu = {
         return convertTime(timestamp);
       },
       immutable: true,
+      notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -508,6 +520,7 @@ export const ColumnForMenu = {
         return convertTime(timestamp);
       },
       immutable: true,
+      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -518,6 +531,7 @@ export const ColumnForMenu = {
         return convertTime(timestamp);
       },
       immutable: true,
+      notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -585,6 +599,7 @@ export const ColumnForMenu = {
         return convertTime(timestamp);
       },
       immutable: true,
+      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -595,6 +610,7 @@ export const ColumnForMenu = {
         return convertTime(timestamp);
       },
       immutable: true,
+      notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -669,6 +685,7 @@ export const ColumnForMenu = {
         return convertTime(timestamp);
       },
       immutable: true,
+      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -679,6 +696,7 @@ export const ColumnForMenu = {
         return convertTime(timestamp);
       },
       immutable: true,
+      notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
     },
   },

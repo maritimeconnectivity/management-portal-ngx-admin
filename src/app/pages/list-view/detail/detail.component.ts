@@ -40,17 +40,27 @@ export class DetailComponent implements OnInit {
   revokedCertificates = [];
   formGroup: FormGroup;
   isEditing = false;
+  shortId = '';
+  isLoaded = false;
+  isShortIdValid = false;
 
   ngOnInit(): void {
+    if (this.isForNew) {
+      this.isEditing = true;
+    }
     // filtered with context
-    this.columnForMenu = Object.entries(ColumnForMenu[this.menuType]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes));
+    this.columnForMenu = Object.entries(ColumnForMenu[this.menuType]).filter(([k,v]) => 
+      Array.isArray(v['visibleFrom']) &&
+      v['visibleFrom'].includes(this.contextForAttributes) &&
+      (!this.isEditing || (this.isForNew && v['notShowOnEdit'] !== true)));
 
     this.setFormWithValidators();
 
     if (this.isForNew) {
       this.name = 'New ' + this.menuType;
       this.formGroup.get('mrn').setValue(this.mrnHelperService.mrnMaskForOrganization());
-      this.isEditing = true;
+      this.formGroup.get('mrn').disable();
+      this.isLoaded = true;
     } else {
       this.fetchFieldValues();
     }
@@ -89,6 +99,25 @@ export class DetailComponent implements OnInit {
       iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
   }
 
+  settle(result: boolean) {
+    this.isLoading = false;
+    this.isLoaded = result;
+  }
+
+  addShortIdToMrn(shortId: string) {
+    const mrn = this.mrnHelperService.mrnMask(this.menuType) + shortId;
+    this.formGroup.get('mrn').setValue(mrn);
+    this.isShortIdValid = this.validateMrn(mrn);
+  }
+
+  validateMrn(mrn: string) {
+    if (this.menuTypeName === MenuTypeNames.organization || this.menuTypeName === MenuTypeNames.approveorg) {
+      return new RegExp(this.mrnHelperService.mrnMcpIdpRegexForOrg()).test(mrn);
+    } else {
+      return new RegExp(this.mrnHelperService.mrnMcpIdpRegex()).test(mrn);
+    }
+  }
+
   getValidators(field: any) {
     const validators = [];
     if (field[1].required) {
@@ -98,10 +127,10 @@ export class DetailComponent implements OnInit {
       validators.push(Validators.email);
     }
     if (field[0] === 'mrn') {
-      if (this.menuTypeName === MenuTypeNames.organization) {
-        validators.push(Validators.pattern(this.mrnHelperService.mrnMcpIdpRegex()));
-      } else {
+      if (this.menuTypeName === MenuTypeNames.organization || this.menuTypeName === MenuTypeNames.approveorg) {
         validators.push(Validators.pattern(this.mrnHelperService.mrnMcpIdpRegexForOrg()));
+      } else {
+        validators.push(Validators.pattern(this.mrnHelperService.mrnMcpIdpRegex()));
       }
     }
     return validators;
@@ -118,7 +147,7 @@ export class DetailComponent implements OnInit {
         if(this.menuType === MenuTypeNames.organization){
           this.loadOrgContent(this.entityMrn).subscribe(
             data => {
-              this.isLoading = false;
+              this.settle(true);
               this.name = data.name;
               this.adjustData(data);
               const splited = this.certificateService.splitByRevokeStatus(data.certificates);
@@ -132,7 +161,7 @@ export class DetailComponent implements OnInit {
           this.isUnapprovedorg = true;
           this.organizationControllerService.getUnapprovedOrganizations().subscribe(
             data => {
-              this.isLoading = false;
+              this.settle(true);
               this.adjustData(data.content.filter(d => d.mrn === this.entityMrn).pop());
             }
           );
@@ -141,7 +170,7 @@ export class DetailComponent implements OnInit {
         } else {
           this.route.queryParams.subscribe(e => this.loadDataContent(this.menuType, AuthInfo.user.organization, this.entityMrn, e.version).subscribe(
             data => {
-              this.isLoading = false;
+              this.settle(true);
               this.adjustData(data);
               const splited = this.certificateService.splitByRevokeStatus(data.certificates);
 
@@ -152,11 +181,11 @@ export class DetailComponent implements OnInit {
           ));
         }
       } else {
-        this.isLoading = false;
+        this.settle(false);
           throw new Error(`There's no such thing as '${this.menuType}DataService'`);
       }
     } else {
-      this.isLoading = false;
+      this.settle(false);
       throw new Error(`There's no '${this.menuType}DataService' in ColumnForMenu`);
     }
   }
@@ -166,7 +195,7 @@ export class DetailComponent implements OnInit {
   }
 
   submit() {
-    console.log(this.columnForMenu);
+    console.log(this.formGroup);
   }
 
   loadDataContent = (context: string, orgMrn: string, entityMrn: string, version?: string): Observable<Entity> => {
@@ -203,8 +232,15 @@ export class DetailComponent implements OnInit {
         if (relevant[1].immutable === true) {
           this.formGroup.get(relevant[0]).disable();
         }
-        this.formGroup.get(relevant[0]).setValue(relevant[0].endsWith('At') ?
-        (new Date(parseInt(data[key]))).toUTCString() : data[key]);
+        if (relevant[0] === 'mrn') {
+          this.shortId = this.mrnHelperService.shortIdFromMrn(data[key]);
+          const mrn = this.mrnHelperService.mrnMask(this.menuType) + this.shortId;
+          this.isShortIdValid = this.validateMrn(mrn);
+          this.formGroup.get(relevant[0]).setValue(mrn);
+        } else {
+          this.formGroup.get(relevant[0]).setValue(relevant[0].endsWith('At') ?
+            (new Date(parseInt(data[key]))).toUTCString() : data[key]);
+        }
       }
     }
   }

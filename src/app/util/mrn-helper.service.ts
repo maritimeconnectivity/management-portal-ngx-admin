@@ -1,3 +1,4 @@
+import { MenuType, MenuTypeNames } from './../pages/models/menuType';
 import { Injectable } from '@angular/core';
 import { AppConfig } from '../app.config';
 import { AuthInfo } from '../auth/model/AuthInfo';
@@ -7,13 +8,12 @@ import { AuthInfo } from '../auth/model/AuthInfo';
 })
 export class MrnHelperService {
 
-  
   private idpNamespace = AppConfig.IDP_NAMESPACE;
 	public mrnMCP: string = 'urn:mrn:mcp:';
 
-	private orgShortNameFromMrn(orgMrn:string){
-		let orgSplit = orgMrn.split(':');
-		return orgSplit[orgSplit.length-1];
+	public shortIdFromMrn(mrn:string){
+		let split = mrn.split(':');
+		return split[split.length-1];
 	}
 
 	private mrnPreFix():string {
@@ -25,11 +25,11 @@ export class MrnHelperService {
 		return orgSplit[0] + ":";
 	}
 
-	public orgShortName():string {
-		return this.orgShortNameFromMrn(AuthInfo.orgMrn);
+	public orgShortId():string {
+		return this.shortIdFromMrn(AuthInfo.orgMrn);
 	}
 
-	public mrnMcpIdpRegex():string {
+	public mrnMcpIdpRegexForOrg():string {
 		return "urn:mrn:mcp:(device|org|user|vessel|service|mms):"+this.idpNamespace+":((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)|)*)$";
 	}
 
@@ -37,8 +37,29 @@ export class MrnHelperService {
 		return "urn:mrn:([a-z0-9]([a-z0-9]|-){0,20}[a-z0-9]):([a-z0-9][-a-z0-9]{0,20}[a-z0-9]):((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)|)*)((\?\+((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)||\?)*))?(\?=((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)||\?)*))?)?(#(((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)||\?)*))?$";
 	}
 
-	public mrnMcpIdpRegexForOrg():string {
-		return "urn:mrn:mcp:(device|org|user|vessel|service|mms):"+this.idpNamespace+":"+this.orgShortName()+"((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)|)*)$";
+	public mrnMcpIdpRegex():string {
+		return "urn:mrn:mcp:(device|org|user|vessel|service|mms):"+this.idpNamespace+":"+this.orgShortId()+"((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)|)*)$";
+	}
+
+	public mrnMask(menuType: string) {
+		switch(menuType) {
+			case MenuTypeNames.device:
+				return this.mrnMaskForDevice();
+			case MenuTypeNames.user:
+				return this.mrnMaskForUser();
+			case MenuTypeNames.organization:
+				return this.mrnMaskForOrganization();
+			case MenuTypeNames.vessel:
+				return this.mrnMaskForVessel();
+			case MenuTypeNames.instance:
+				return this.mrnMaskForInstance();
+			case MenuTypeNames.service:
+				return this.mrnMaskForInstance();
+			case MenuTypeNames.mms:
+				return this.mrnMaskForMms();
+			default:
+				return this.mrnMaskForOrganization();
+		}
 	}
 
 	public mrnPattern(): string {
@@ -49,11 +70,15 @@ export class MrnHelperService {
 	}
 
 	public mrnMaskForVessel():string {
-		return this.mrnMCP + 'vessel:' + this.idpNamespace + ':' + this.orgShortName() + ':';
+		return this.mrnMCP + 'vessel:' + this.idpNamespace + ':' + this.orgShortId() + ':';
+	}
+
+	public mrnMaskForMms():string {
+		return this.mrnMCP + 'mms:' + this.idpNamespace + ':' + this.orgShortId() + ':';
 	}
 
 	public mrnMaskForDevice():string {
-		return this.mrnMCP + 'device:' + this.idpNamespace + ':' + this.orgShortName() + ':';
+		return this.mrnMCP + 'device:' + this.idpNamespace + ':' + this.orgShortId() + ':';
 	}
 
 	public mrnMaskForOrganization():string {
@@ -61,34 +86,34 @@ export class MrnHelperService {
 	}
 
 	public mrnMaskForUserOfOrg(orgMrn:string):string {
-		return this.mrnPreFixForOrg(orgMrn) + 'user:' + this.idpNamespace + ':' + this.orgShortNameFromMrn(orgMrn) + ':';
+		return this.mrnPreFixForOrg(orgMrn) + 'user:' + this.idpNamespace + ':' + this.shortIdFromMrn(orgMrn) + ':';
 	}
 
 	public mrnMaskForUser():string {
-		return this.mrnMCP + 'user:' + this.idpNamespace + ':' + this.orgShortName() + ':';
+		return this.mrnMCP + 'user:' + this.idpNamespace + ':' + this.orgShortId() + ':';
 	}
 
 	public mrnMaskForSpecification():string {
 		// TODO Temp check until mrn-service is ready
-		return this.mrnMCP + 'service:' + this.idpNamespace + ':' + this.orgShortName() + ':specification:';
-		//return "urn:mrn:[mcp|stm]:service:specification:" + this.orgShortName() + ':';
+		return this.mrnMCP + 'service:' + this.idpNamespace + ':' + this.orgShortId() + ':specification:';
+		//return "urn:mrn:[mcp|stm]:service:specification:" + this.orgShortId() + ':';
 	}
 
 	public mrnMaskForDesign():string {
 		// TODO Temp check until mrn-service is ready
-		return this.mrnMCP + 'service:' + this.idpNamespace + ':' + this.orgShortName() + ':design:';
-		//return "urn:mrn:[mcp|stm]:service:design:" + this.orgShortName() + ':';
+		return this.mrnMCP + 'service:' + this.idpNamespace + ':' + this.orgShortId() + ':design:';
+		//return "urn:mrn:[mcp|stm]:service:design:" + this.orgShortId() + ':';
 	}
 
 	public mrnMaskForInstance():string {
-		return this.mrnMCP + 'service:' + this.idpNamespace + ':' + this.orgShortName() + ':instance:';
-		//return this.mrnPreFix() + 'service:instance:' + this.orgShortName() + ':';
+		return this.mrnMCP + 'service:' + this.idpNamespace + ':' + this.orgShortId() + ':instance:';
+		//return this.mrnPreFix() + 'service:instance:' + this.orgShortId() + ':';
 	}
 
 	public mrnMaskTextForInstance():string {
 		// TODO Temp check until mrn-service is ready
-		return this.mrnMCP + 'service:' + this.idpNamespace + ':' + this.orgShortName() + ':instance:';
-		//return "urn:mrn:[mcp|stm]:service:instance:" + this.orgShortName() + ':';
+		return this.mrnMCP + 'service:' + this.idpNamespace + ':' + this.orgShortId() + ':instance:';
+		//return "urn:mrn:[mcp|stm]:service:instance:" + this.orgShortId() + ':';
 	}
 
 	public checkMrnForSpecification(specificationMrn:string) : boolean {
@@ -97,7 +122,7 @@ export class MrnHelperService {
 		console.log(rawRegex);
 		let regex = new RegExp(rawRegex);
 		return regex.test(specificationMrn);
-		//return specificationMrn.indexOf(':service:specification:' + this.orgShortName() + ':') >= 0 && specificationMrn.startsWith('urn:mrn:');
+		//return specificationMrn.indexOf(':service:specification:' + this.orgShortId() + ':') >= 0 && specificationMrn.startsWith('urn:mrn:');
 		//return this.checkMrn(specificationMrn, this.mrnMaskForSpecification());
 	}
 
@@ -106,7 +131,7 @@ export class MrnHelperService {
 		let rawRegex = `^${this.mrnMaskForDesign()}((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)|\/)*)$`;
 		let regex = new RegExp(rawRegex);
 		return regex.test(designMrn);
-		//return designMrn.indexOf(':service:design:' + this.orgShortName() + ':') >= 0 && designMrn.startsWith('urn:mrn:');
+		//return designMrn.indexOf(':service:design:' + this.orgShortId() + ':') >= 0 && designMrn.startsWith('urn:mrn:');
 	//	return this.checkMrn(designMrn, this.mrnMaskForDesign());
 	}
 
@@ -115,7 +140,7 @@ export class MrnHelperService {
 		let rawRegex = `^${this.mrnMaskForInstance()}((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)|\/)*)$`;
 		let regex = new RegExp(rawRegex, 'g');
 		return regex.test(instanceMrn);
-		//return instanceMrn.indexOf(':service:instance:' + this.orgShortName() + ':') >= 0 && instanceMrn.startsWith('urn:mrn:');
+		//return instanceMrn.indexOf(':service:instance:' + this.orgShortId() + ':') >= 0 && instanceMrn.startsWith('urn:mrn:');
 		//return this.checkMrn(instanceMrn, this.mrnMaskForInstance());
 	}
 
