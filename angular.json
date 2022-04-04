@@ -19,8 +19,8 @@
             "polyfills": "src/polyfills.ts",
             "assets": [
               "src/assets",
-              "src/favicon.ico",
-              "src/favicon.png",
+              "favicon.ico",
+              "favicon.png",
               {
                 "glob": "**/*",
                 "input": "node_modules/leaflet/dist/images",
