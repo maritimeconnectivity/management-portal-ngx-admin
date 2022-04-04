@@ -30,7 +30,7 @@
             </div>
           </div>
           <form [formGroup]="formGroup" *ngIf="isLoaded">
-            <div class="form-group row" *ngIf="isForNew">
+            <div class="form-group row" *ngIf="isForNew && menuType !== 'role'">
               <label class="label col-sm-3 col-form-label">Short ID for MRN</label>
               <div class="col-sm-9 my-auto">
                 <input type="text" nbInput fullWidth id="input_shortId" class="form-control" status="{{isShortIdValid ? 'success' : 'danger'}}" required="true" (input)="addShortIdToMrn($event.target.value)" value="{{shortId}}">

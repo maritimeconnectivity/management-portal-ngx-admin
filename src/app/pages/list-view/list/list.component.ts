@@ -135,8 +135,11 @@ export class ListComponent implements OnInit {
   onEdit(event): void {
     this.router.navigate([this.router.url,
       event.data.mrn ? encodeURIComponent(event.data.mrn) : event.data.id],
-        { queryParams: { name: event.data.name ? event.data.name : event.data.lastName + ' ' + event.data.firstName,
-          version: event.data.instanceVersion }});
+        { queryParams: { name: event.data.roleName ? event.data.roleName :
+            event.data.name ? event.data.name :
+            event.data.lastName + ' ' + event.data.firstName,
+          version: event.data.instanceVersion,
+         }});
   }
 
   onAddNew(): void {

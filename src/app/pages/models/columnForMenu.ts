@@ -411,14 +411,14 @@ export const ColumnForMenu = {
       title: 'ID',
       type: 'number',
     },
-    permission: {
-      title: 'Permission',
+    roleName: {
+      title: 'Role name',
       type: 'string',
       visibleFrom: ['detail', 'list'],
       required: true,
     },
-    roleName: {
-      title: 'Role name',
+    permission: {
+      title: 'Permission',
       type: 'string',
       visibleFrom: ['detail', 'list'],
       required: true,

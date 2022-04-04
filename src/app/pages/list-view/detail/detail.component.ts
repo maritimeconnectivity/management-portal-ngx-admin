@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { NbIconLibraries } from '@nebular/theme';
 import { MenuTypeIconNames } from '../../models/menuType';
-import { DeviceControllerService, MMS, MmsControllerService, OrganizationControllerService, RoleControllerService, Service, ServiceControllerService, User, UserControllerService, Vessel, VesselControllerService } from '../../../backend-api/identity-registry';
+import { DeviceControllerService, MMS, MmsControllerService, OrganizationControllerService, Role, RoleControllerService, Service, ServiceControllerService, User, UserControllerService, Vessel, VesselControllerService } from '../../../backend-api/identity-registry';
 import { Observable } from 'rxjs/Observable';
 import { AuthInfo } from '../../../auth/model/AuthInfo';
 import { NotifierService } from 'angular-notifier';
@@ -42,6 +42,7 @@ export class DetailComponent implements OnInit {
   formGroup: FormGroup;
   isEditing = false;
   shortId = '';
+  roleId = -1;
   isLoaded = true;
   isShortIdValid = false;
 
@@ -59,8 +60,10 @@ export class DetailComponent implements OnInit {
 
     if (this.isForNew) {
       this.name = 'New ' + this.menuType;
-      this.formGroup.get('mrn').setValue(this.mrnHelperService.mrnMaskForOrganization());
-      this.formGroup.get('mrn').disable();
+      if (this.formGroup.get('mrn')){
+        this.formGroup.get('mrn').setValue(this.mrnHelperService.mrnMask(this.menuType));
+        this.formGroup.get('mrn').disable();
+      }
       this.isLoaded = true;
     } else {
       this.fetchFieldValues();
@@ -172,8 +175,15 @@ export class DetailComponent implements OnInit {
               this.adjustData(data.content.filter(d => d.mrn === this.entityMrn).pop());
             }
           );
-        } else if(this.menuType === MenuTypeNames.role){
-          
+        } else if(this.menuType === MenuTypeNames.role) {
+          const id = parseInt(this.entityMrn);
+          this.roleControllerService.getRole(this.orgMrn, id).subscribe(
+            data => {
+              this.settle(true);
+              this.roleId = data.id;
+              this.adjustData(data);
+            }
+          )
         } else {
           this.route.queryParams.subscribe(e => this.loadDataContent(this.menuType, AuthInfo.user.organization, this.entityMrn, e.version).subscribe(
             data => {
@@ -202,10 +212,21 @@ export class DetailComponent implements OnInit {
   }
 
   submit() {
-    const body = { ...this.formGroup.value, mrn: this.formGroup.get('mrn').value};
+    const body = { ...this.formGroup.value };
+    if (this.menuType === 'role') {
+      this.loadOrgContent(this.orgMrn).subscribe(
+        res => this.submitDateToBackend({ ...body, idOrganization: res.id}),
+        err => this.notifierService.notify('error', 'Error in fetching organization information'),
+      );
+    } else {
+      this.submitDateToBackend({...body, mrn: this.formGroup.get('mrn')}, this.formGroup.get('mrn').value);
+    }
     this.isLoading = true;
+  }
+
+  submitDateToBackend(body: object, mrn?: string) {
     if (this.isForNew) {
-      this.createData(this.menuType, body, AuthInfo.orgMrn).subscribe(
+      this.registerData(this.menuType, body, AuthInfo.orgMrn).subscribe(
         res => {
           this.notifierService.notify('success', 'New ' + this.menuType + ' has been created');
           this.isLoading = false;
@@ -218,7 +239,7 @@ export class DetailComponent implements OnInit {
       );
     } else {
       // editing
-      this.updateData(this.menuType, body, AuthInfo.orgMrn, body.mrn, this.instanceVersion).subscribe(
+      this.updateData(this.menuType, body, AuthInfo.orgMrn, mrn, this.instanceVersion).subscribe(
         res => {
           this.notifierService.notify('success', this.menuType + ' has been updated');
           this.isLoading = false;
@@ -232,7 +253,7 @@ export class DetailComponent implements OnInit {
     }
   }
 
-  createData = (context: string, body: object, orgMrn: string): Observable<Entity> => {
+  registerData = (context: string, body: object, orgMrn: string): Observable<Entity> => {
     if (context === MenuTypeNames.user) {
       return this.userControllerService.createUser(body as User, orgMrn);
     } else if (context === MenuTypeNames.device) {
@@ -245,6 +266,8 @@ export class DetailComponent implements OnInit {
       return this.serviceControllerService.createService(body as Service, orgMrn);
     } else if (context === MenuTypeNames.organization) {
       return this.organizationControllerService.applyOrganization(body as Organization);
+    } else if (context === MenuTypeNames.role) {
+      return this.roleControllerService.createRole(body as Role, orgMrn);
     }
     return new Observable();
   }
@@ -262,6 +285,8 @@ export class DetailComponent implements OnInit {
       return this.serviceControllerService.updateService(body as Service, orgMrn, entityMrn, version);
     } else if (context === MenuTypeNames.organization) {
       return this.organizationControllerService.updateOrganization(body as Organization, entityMrn);
+    } else if (context === MenuTypeNames.role) {
+      return this.roleControllerService.updateRole(body as Role, orgMrn, this.roleId);
     }
     return new Observable();
   }
@@ -300,7 +325,7 @@ export class DetailComponent implements OnInit {
         if (relevant[1].immutable === true) {
           this.formGroup.get(relevant[0]).disable();
         }
-        if (relevant[0] === 'mrn') {
+        if (this.menuType !== 'role' && relevant[0] === 'mrn') {
           this.shortId = this.mrnHelperService.shortIdFromMrn(data[key]);
           const mrn = this.mrnHelperService.mrnMask(this.menuType) + this.shortId;
           this.isShortIdValid = this.validateMrn(mrn);
