@@ -1,3 +1,4 @@
+import { AuthService } from './../../../auth/auth.service';
 import { InstanceControllerService } from './../../../backend-api/service-registry/api/instanceController.service';
 import { ServiceControllerService } from './../../../backend-api/identity-registry/api/serviceController.service';
 import { DeviceControllerService } from './../../../backend-api/identity-registry/api/deviceController.service';
@@ -14,7 +15,6 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { ResourceType, MenuType, MenuTypeIconNames, MenuTypeNames } from '../../models/menuType';
 import { NbIconLibraries } from '@nebular/theme';
 import { NotifierService } from 'angular-notifier';
-import { AuthInfo } from '../../../auth/model/AuthInfo';
 import { MmsControllerService, Role, VesselControllerService } from '../../../backend-api/identity-registry';
 import { PageEntity } from '../../../backend-api/identity-registry/model/pageEntity';
 import { InstanceDto } from '../../../backend-api/service-registry';
@@ -69,6 +69,7 @@ export class ListComponent implements OnInit {
     private mmsControllerService: MmsControllerService,
     private organizationControllerService: OrganizationControllerService,
     private notifierService: NotifierService,
+    private authService: AuthService,
     ) {
     this.menuType = this.router.url.split("/").pop();
     this.menuType = this.menuType.replace('-', '').substr(0,this.menuType.length-1);
@@ -85,7 +86,7 @@ export class ListComponent implements OnInit {
       );
       this.settings = Object.assign({}, this.mySettings);
       // Not-approved organization list
-      this.title = `${capitalize(this.menuTypeName)} list${ResourceType.includes(this.menuType) ? ' for ' + AuthInfo.user.organization : ''}`;
+      this.title = `${capitalize(this.menuTypeName)} list${ResourceType.includes(this.menuType) ? ' for ' + this.authService.authState.user.organization : ''}`;
       this.isLoading = true;
 
       if (MenuType.includes(this.menuType)) {
@@ -166,7 +167,7 @@ export class ListComponent implements OnInit {
 
   loadMyOrganization = ():Observable<Organization> => {
     // fetch organization information from it
-    return this.organizationControllerService.getOrganizationByMrn(AuthInfo.orgMrn);
+    return this.organizationControllerService.getOrganizationByMrn(this.authService.authState.orgMrn);
 	}
 
   loadServiceInstances = ():Observable<InstanceDto[]> => {

@@ -12,9 +12,9 @@ import { NbIconLibraries } from '@nebular/theme';
 import { MenuTypeIconNames } from '../../models/menuType';
 import { DeviceControllerService, MMS, MmsControllerService, OrganizationControllerService, Role, RoleControllerService, Service, ServiceControllerService, User, UserControllerService, Vessel, VesselControllerService } from '../../../backend-api/identity-registry';
 import { Observable } from 'rxjs/Observable';
-import { AuthInfo } from '../../../auth/model/AuthInfo';
 import { NotifierService } from 'angular-notifier';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'ngx-detail',
@@ -82,7 +82,9 @@ export class DetailComponent implements OnInit {
     private organizationControllerService: OrganizationControllerService,
     private certificateService: CertificateService,
     private notifierService: NotifierService,
-    private mrnHelperService: MrnHelperService) {
+    private mrnHelperService: MrnHelperService,
+    private authService: AuthService
+    ) {
       const arrays = this.router.url.split("/");
       this.menuType = arrays[arrays.length-2];
       this.menuType = this.menuType.replace('-', '').substr(0, this.menuType.length-1);
@@ -90,13 +92,13 @@ export class DetailComponent implements OnInit {
       this.iconName = MenuTypeIconNames[this.menuType];
       this.isEntity = EntityTypes.includes(this.menuType);
       this.entityMrn = decodeURIComponent(this.route.snapshot.paramMap.get("id"));
-      this.orgMrn = AuthInfo.orgMrn;
+      this.orgMrn = this.authService.authState.orgMrn;
       this.isForNew = this.entityMrn === 'new';
 
       //this is my organization page when it comes with no name
       this.route.queryParams.subscribe(e =>
         {
-          this.isMyOrgPage = this.entityMrn === AuthInfo.orgMrn && e.name === undefined;
+          this.isMyOrgPage = this.entityMrn === this.authService.authState.orgMrn && e.name === undefined;
           this.name = e.name;
           this.instanceVersion = e.version;
         });
@@ -185,7 +187,7 @@ export class DetailComponent implements OnInit {
             }
           )
         } else {
-          this.route.queryParams.subscribe(e => this.loadDataContent(this.menuType, AuthInfo.user.organization, this.entityMrn, e.version).subscribe(
+          this.route.queryParams.subscribe(e => this.loadDataContent(this.menuType, this.authService.authState.user.organization, this.entityMrn, e.version).subscribe(
             data => {
               this.settle(true);
               this.adjustData(data);
@@ -226,7 +228,7 @@ export class DetailComponent implements OnInit {
 
   submitDateToBackend(body: object, mrn?: string) {
     if (this.isForNew) {
-      this.registerData(this.menuType, body, AuthInfo.orgMrn).subscribe(
+      this.registerData(this.menuType, body, this.authService.authState.orgMrn).subscribe(
         res => {
           this.notifierService.notify('success', 'New ' + this.menuType + ' has been created');
           this.isLoading = false;
@@ -239,7 +241,7 @@ export class DetailComponent implements OnInit {
       );
     } else {
       // editing
-      this.updateData(this.menuType, body, AuthInfo.orgMrn, mrn, this.instanceVersion).subscribe(
+      this.updateData(this.menuType, body, this.authService.authState.orgMrn, mrn, this.instanceVersion).subscribe(
         res => {
           this.notifierService.notify('success', this.menuType + ' has been updated');
           this.isLoading = false;

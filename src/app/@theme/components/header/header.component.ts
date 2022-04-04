@@ -1,3 +1,4 @@
+import { AuthService } from './../../../auth/auth.service';
 import { KeycloakService } from 'keycloak-angular';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
@@ -6,7 +7,6 @@ import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { AuthInfo } from '../../../auth/model/AuthInfo';
 
 @Component({
   selector: 'ngx-header',
@@ -45,14 +45,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private themeService: NbThemeService,
               private layoutService: LayoutService,
               private breakpointService: NbMediaBreakpointsService,
-              private keycloakService: KeycloakService) {
+              private keycloakService: KeycloakService,
+              private authService: AuthService) {
   }
 
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
 
-    if (AuthInfo.user) {
-      this.userName = AuthInfo.user.firstName + " for " + AuthInfo.user.organization;
+    if (this.authService.authState.user) {
+      this.userName = this.authService.authState.user.firstName + " for " + this.authService.authState.user.organization;
     }
 
     const { xl } = this.breakpointService.getBreakpointsMap();
