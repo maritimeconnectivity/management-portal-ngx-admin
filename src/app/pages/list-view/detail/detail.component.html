@@ -16,7 +16,8 @@
               <button type="submit" nbButton status="primary" *ngIf="isForNew" (click)="submit()" [disabled]="!formGroup.valid">Submit</button>
               <button type="button" nbButton status="danger" *ngIf="isForNew" (click)="cancel()">Cancel</button>
               <button type="button" nbButton status="primary" *ngIf="!isEditing && !isForNew" (click)="invertIsEditing()" >Edit</button>
-              <button type="submit" nbButton status="primary" *ngIf="isEditing && !isForNew" [disabled]="!formGroup.valid">Update</button>
+              <button type="submit" nbButton status="primary" *ngIf="isEditing && !isForNew && menuType === 'service'" (click)="updateForNewVer()" [disabled]="!formGroup.valid">New version</button>
+              <button type="submit" nbButton status="primary" *ngIf="isEditing && !isForNew" (click)="submit()" [disabled]="!formGroup.valid">Update</button>
               <button type="button" nbButton status="danger" *ngIf="isEditing && !isForNew" (click)="invertIsEditing()" >Cancel</button>
             </div>
           </div>
@@ -44,18 +45,17 @@
             </div>
             <div class="form-group row" *ngIf="isEntity && !isForNew && !isEditing" >
               <label for="inputActiveCert" class="label col-sm-3 col-form-label">Active certificates</label>
-              <div class="col-sm-9">
-                <ngx-certificates [data]="activeCertificates" [forRevoked]="false" [entityType]="menuType" [entityTitle]="name" [entityMrn]="entityMrn" [orgMrn]="orgMrn"></ngx-certificates>
+              <div class="col">
+                <ngx-certificates [data]="activeCertificates" [forRevoked]="false" [entityType]="menuType" [entityTitle]="name" [entityMrn]="entityMrn" [orgMrn]="orgMrn" [instanceVersion]="instanceVersion"></ngx-certificates>
               </div>
             </div>
             <div class="form-group row" *ngIf="isEntity && !isForNew && !isEditing" >
               <label for="inputRevokedCert" class="label col-sm-3 col-form-label">Revoked certificates</label>
-              <div class="col-sm-9">
+              <div class="col">
                 <ngx-certificates [data]="revokedCertificates" [forRevoked]="true"></ngx-certificates>
               </div>
             </div>
             <div class="buttons-row">
-              
               <button type="button" nbButton status="primary" *ngIf="isUnapprovedorg">Approve</button>
               <button type="button" nbButton status="danger" *ngIf="isUnapprovedorg">Reject</button>
             </div>

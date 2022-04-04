@@ -139,6 +139,10 @@ export class ListComponent implements OnInit {
           version: event.data.instanceVersion }});
   }
 
+  onAddNew(): void {
+    this.router.navigate([this.router.url, 'new']);
+  }
+
   onSearch(query: string = '') {
     this.source.setFilter([
       // fields we want to include in the search

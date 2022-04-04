@@ -196,6 +196,7 @@ export const ColumnForMenu = {
       type: 'string',
       description: 'Version of service instance',
       visibleFrom: ['detail', 'list'],
+      immutable: true,
       required: true,
     },
     oidcAccessType: {
@@ -552,6 +553,7 @@ export const ColumnForMenu = {
       type: 'string',
       description: 'Version of service instance',
       visibleFrom: ['detail', 'list'],
+      immutable: true,
       required: true,
     },
     serviceType: {
@@ -657,6 +659,7 @@ export const ColumnForMenu = {
       type: 'string',
       description: 'Version of service instance',
       visibleFrom: ['detail', 'list'],
+      immutable: true,
       required: true,
     },
     oidcAccessType: {

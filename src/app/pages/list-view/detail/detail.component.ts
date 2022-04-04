@@ -1,3 +1,4 @@
+import { Device } from './../../../backend-api/identity-registry/model/device';
 import { MrnHelperService } from './../../../util/mrn-helper.service';
 import { CertificateService } from './../../../shared/certificate.service';
 import { Organization } from './../../../backend-api/identity-registry/model/organization';
@@ -9,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { NbIconLibraries } from '@nebular/theme';
 import { MenuTypeIconNames } from '../../models/menuType';
-import { DeviceControllerService, MmsControllerService, OrganizationControllerService, RoleControllerService, ServiceControllerService, UserControllerService, VesselControllerService } from '../../../backend-api/identity-registry';
+import { DeviceControllerService, MMS, MmsControllerService, OrganizationControllerService, RoleControllerService, Service, ServiceControllerService, User, UserControllerService, Vessel, VesselControllerService } from '../../../backend-api/identity-registry';
 import { Observable } from 'rxjs/Observable';
 import { AuthInfo } from '../../../auth/model/AuthInfo';
 import { NotifierService } from 'angular-notifier';
@@ -24,7 +25,7 @@ export class DetailComponent implements OnInit {
   name = '';
   isLoading = false;
   menuType = 'device';
-  version = '';
+  instanceVersion = '';
   isMyOrgPage = false;
   isForNew = false;
   columnForMenu = ColumnForMenu[this.menuType];
@@ -41,7 +42,7 @@ export class DetailComponent implements OnInit {
   formGroup: FormGroup;
   isEditing = false;
   shortId = '';
-  isLoaded = false;
+  isLoaded = true;
   isShortIdValid = false;
 
   ngOnInit(): void {
@@ -94,9 +95,15 @@ export class DetailComponent implements OnInit {
         {
           this.isMyOrgPage = this.entityMrn === AuthInfo.orgMrn && e.name === undefined;
           this.name = e.name;
+          this.instanceVersion = e.version;
         });
 
       iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
+  }
+
+  updateForNewVer() {
+    this.formGroup.get('instanceVersion').enable();
+    this.isForNew = true;
   }
 
   settle(result: boolean) {
@@ -195,7 +202,68 @@ export class DetailComponent implements OnInit {
   }
 
   submit() {
-    console.log(this.formGroup);
+    const body = { ...this.formGroup.value, mrn: this.formGroup.get('mrn').value};
+    this.isLoading = true;
+    if (this.isForNew) {
+      this.createData(this.menuType, body, AuthInfo.orgMrn).subscribe(
+        res => {
+          this.notifierService.notify('success', 'New ' + this.menuType + ' has been created');
+          this.isLoading = false;
+          this.router.navigate(['../../' + this.menuType + 's'], {relativeTo: this.route});
+        },
+        err => {
+          this.notifierService.notify('error', 'Creation has failed - ' + err.message);
+          this.isLoading = false;
+        }
+      );
+    } else {
+      // editing
+      this.updateData(this.menuType, body, AuthInfo.orgMrn, body.mrn, this.instanceVersion).subscribe(
+        res => {
+          this.notifierService.notify('success', this.menuType + ' has been updated');
+          this.isLoading = false;
+          this.router.navigate([this.router.url]);
+        },
+        err => {
+          this.notifierService.notify('error', 'Update has failed - ' + err.message);
+          this.isLoading = false;
+        }
+      );
+    }
+  }
+
+  createData = (context: string, body: object, orgMrn: string): Observable<Entity> => {
+    if (context === MenuTypeNames.user) {
+      return this.userControllerService.createUser(body as User, orgMrn);
+    } else if (context === MenuTypeNames.device) {
+      return this.deviceControllerService.createDevice(body as Device, orgMrn);
+    } else if (context === MenuTypeNames.vessel) {
+      return this.vesselControllerService.createVessel(body as Vessel, orgMrn);
+    } else if (context === MenuTypeNames.mms) {
+      return this.mmsControllerService.createMMS(body as MMS, orgMrn);
+    } else if (context === MenuTypeNames.service) {
+      return this.serviceControllerService.createService(body as Service, orgMrn);
+    } else if (context === MenuTypeNames.organization) {
+      return this.organizationControllerService.applyOrganization(body as Organization);
+    }
+    return new Observable();
+  }
+
+  updateData = (context: string, body: object, orgMrn: string, entityMrn: string, version?: string): Observable<Entity> => {
+    if (context === MenuTypeNames.user) {
+      return this.userControllerService.updateUser(body as User, orgMrn, entityMrn);
+    } else if (context === MenuTypeNames.device) {
+      return this.deviceControllerService.updateDevice(body as Device, orgMrn, entityMrn);
+    } else if (context === MenuTypeNames.vessel) {
+      return this.vesselControllerService.updateVessel(body as Vessel, orgMrn, entityMrn);
+    } else if (context === MenuTypeNames.mms) {
+      return this.mmsControllerService.updateMMS(body as MMS, orgMrn, entityMrn);
+    } else if (context === MenuTypeNames.service && version) {
+      return this.serviceControllerService.updateService(body as Service, orgMrn, entityMrn, version);
+    } else if (context === MenuTypeNames.organization) {
+      return this.organizationControllerService.updateOrganization(body as Organization, entityMrn);
+    }
+    return new Observable();
   }
 
   loadDataContent = (context: string, orgMrn: string, entityMrn: string, version?: string): Observable<Entity> => {
