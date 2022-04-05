@@ -15,6 +15,7 @@ import { Observable } from 'rxjs/Observable';
 import { NotifierService } from 'angular-notifier';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../auth/auth.service';
+import { AuthPermission } from '../../../auth/auth.permission';
 
 @Component({
   selector: 'ngx-detail',
@@ -337,6 +338,25 @@ export class DetailComponent implements OnInit {
             (new Date(parseInt(data[key]))).toUTCString() : data[key]);
         }
       }
+    }
+  }
+
+  isAdmin = () => {
+    const context = this.menuType;
+    if (context === MenuTypeNames.user) {
+      return this.authService.authState.hasPermission(AuthPermission.UserAdmin);
+    } else if (context === MenuTypeNames.device) {
+      return this.authService.authState.hasPermission(AuthPermission.DeviceAdmin);
+    } else if (context === MenuTypeNames.vessel) {
+      return this.authService.authState.hasPermission(AuthPermission.VesselAdmin);
+    } else if (context === MenuTypeNames.mms) {
+      return this.authService.authState.hasPermission(AuthPermission.MMSAdmin);
+    } else if (context === MenuTypeNames.service) {
+      return this.authService.authState.hasPermission(AuthPermission.ServiceAdmin);
+    } else if (context === MenuTypeNames.organization || context === MenuTypeNames.role) {
+      return this.authService.authState.hasPermission(AuthPermission.OrgAdmin);
+    } else {
+      return false;
     }
   }
 }

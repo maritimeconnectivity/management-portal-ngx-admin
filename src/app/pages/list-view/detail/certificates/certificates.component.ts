@@ -43,6 +43,7 @@ export class CertificatesComponent implements OnInit {
   @Input() entityType: string;
   @Input() orgMrn: string;
   @Input() instanceVersion: string;
+  @Input() hasPermission: string;
 
   certificateTitle = "Certificate for ";
 
@@ -61,33 +62,41 @@ export class CertificatesComponent implements OnInit {
   }
 
   openIssueDialog() {
-    this.dialogService.open(CertIssueDialogComponent, {
-      context: {
-        entityMrn: this.entityMrn,
-        entityTitle: this.entityTitle,
-        entityType: this.entityType,
-        orgMrn: this.orgMrn,
-        instanceVersion: this.instanceVersion,
-        notifierService: this.notifierService,
-        fileHelper: this.fileHelper,
-        certificateService: this.certificateService,
-      },
-    });
+    if (this.hasPermission) {
+      this.dialogService.open(CertIssueDialogComponent, {
+        context: {
+          entityMrn: this.entityMrn,
+          entityTitle: this.entityTitle,
+          entityType: this.entityType,
+          orgMrn: this.orgMrn,
+          instanceVersion: this.instanceVersion,
+          notifierService: this.notifierService,
+          fileHelper: this.fileHelper,
+          certificateService: this.certificateService,
+        },
+      });
+    } else {
+      this.notifierService.notify('error', 'You don\'t have right permission');
+    }
   }
 
   openRevokeDialog(data: Certificate) {
-    this.dialogService.open(CertRevokeDialogComponent, {
-      context: {
-        entityMrn: this.entityMrn,
-        entityTitle: this.entityTitle,
-        entityType: this.entityType,
-        orgMrn: this.orgMrn,
-        certificateId: data.serialNumber,
-        instanceVersion: this.instanceVersion,
-        notifierService: this.notifierService,
-        certificateService: this.certificateService,
-      },
-    });
+    if (this.hasPermission) {
+      this.dialogService.open(CertRevokeDialogComponent, {
+        context: {
+          entityMrn: this.entityMrn,
+          entityTitle: this.entityTitle,
+          entityType: this.entityType,
+          orgMrn: this.orgMrn,
+          certificateId: data.serialNumber,
+          instanceVersion: this.instanceVersion,
+          notifierService: this.notifierService,
+          certificateService: this.certificateService,
+        },
+      });
+    } else {
+      this.notifierService.notify('error', 'You don\'t have right permission');
+    }
   }
 
   onEdit(event): void {

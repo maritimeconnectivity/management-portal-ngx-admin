@@ -18,6 +18,7 @@ import { NotifierService } from 'angular-notifier';
 import { MmsControllerService, Role, VesselControllerService } from '../../../backend-api/identity-registry';
 import { PageEntity } from '../../../backend-api/identity-registry/model/pageEntity';
 import { InstanceDto } from '../../../backend-api/service-registry';
+import { AuthPermission } from '../../../auth/auth.permission';
 
 const capitalize = (s): string => {
   if (typeof s !== 'string') return ''
@@ -126,10 +127,14 @@ export class ListComponent implements OnInit {
   }
 
   onDelete(event): void {
-    if (window.confirm('Are you sure you want to delete?')) {
-      event.confirm.resolve();
+    if (!this.isAdmin()) {
+      this.notifierService.notify('error', 'You don\'t have right permission');
     } else {
-      event.confirm.reject();
+      if (window.confirm('Are you sure you want to delete?')) {
+        event.confirm.resolve();
+      } else {
+        event.confirm.reject();
+      }
     }
   }
 
@@ -195,5 +200,24 @@ export class ListComponent implements OnInit {
 
   loadRoles = (orgMrn: string):Observable<Role[]> => {
     return this.roleControllerService.getRoles(orgMrn);
+  }
+
+  isAdmin = () => {
+    const context = this.menuType;
+    if (context === MenuTypeNames.user) {
+      return this.authService.authState.hasPermission(AuthPermission.UserAdmin);
+    } else if (context === MenuTypeNames.device) {
+      return this.authService.authState.hasPermission(AuthPermission.DeviceAdmin);
+    } else if (context === MenuTypeNames.vessel) {
+      return this.authService.authState.hasPermission(AuthPermission.VesselAdmin);
+    } else if (context === MenuTypeNames.mms) {
+      return this.authService.authState.hasPermission(AuthPermission.MMSAdmin);
+    } else if (context === MenuTypeNames.service) {
+      return this.authService.authState.hasPermission(AuthPermission.ServiceAdmin);
+    } else if (context === MenuTypeNames.organization || context === MenuTypeNames.role) {
+      return this.authService.authState.hasPermission(AuthPermission.OrgAdmin);
+    } else {
+      return false;
+    }
   }
 }

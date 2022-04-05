@@ -4,10 +4,10 @@ import { Organization } from './../backend-api/identity-registry/model/organizat
 import { OrganizationControllerService } from './../backend-api/identity-registry/api/organizationController.service';
 import { RoleControllerService } from './../backend-api/identity-registry/api/roleController.service';
 import { KeycloakService } from 'keycloak-angular';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { MENU_ITEMS, MENU_FOR_ADMIN, MENU_FOR_ORG} from './pages-menu';
-import { PermissionResolver, rolesToPermission } from '../auth/auth.permission';
+import { AuthPermission, PermissionResolver, rolesToPermission } from '../auth/auth.permission';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AppConfig } from '../app.config';
 
@@ -21,7 +21,7 @@ import { AppConfig } from '../app.config';
     </ngx-one-column-layout>
   `,
 })
-export class PagesComponent {
+export class PagesComponent implements OnInit {
   menu = MENU_ITEMS;
 
   constructor(
@@ -33,9 +33,18 @@ export class PagesComponent {
     if (!AppConfig.HAS_SERVICE_REGISTRY) {
       this.menu = this.menu.filter(e => e.title !== 'Service Registry');
     }
+  }
 
+  ngOnInit(): void {
+    if (this.authService.rolesLoaded) {
+      this.applyRoleToMenu();
+    } else {
+      this.authService.rolesLoaded.subscribe( () => this.applyRoleToMenu());
+    }
+  }
+
+  applyRoleToMenu = () => {
     this.assignOrganizationMenu();
-
     this.assignAdminMenu();
   }
 
@@ -63,7 +72,6 @@ export class PagesComponent {
         if(PermissionResolver.canApproveOrg(this.authService.authState.permission)){
           this.menu.find(e => e.title === 'Identity Registry').children.unshift(MENU_FOR_ADMIN);
         }
-      }
-    )
+    });
   }
 }

@@ -94,7 +94,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.keycloakService.clearToken();
-    this.keycloakService.logout(window.location.origin);
+    this.authService.logout();
   }
 }
