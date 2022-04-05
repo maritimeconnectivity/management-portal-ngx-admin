@@ -16,6 +16,11 @@ export const routes: Routes = [
       .then(m => m.PagesModule),
   },
   {
+    path: '',
+    loadChildren: () => import('./landing/landing.module')
+      .then(m => m.LandingModule),
+  },
+  {
     path: 'auth',
     component: NbAuthComponent,
     children: [
@@ -45,7 +50,7 @@ export const routes: Routes = [
       },
     ],
   },
-  { path: '', redirectTo: 'pages', pathMatch: 'full' },
+  { path: '', redirectTo: '', pathMatch: 'full' },
   { path: '**', redirectTo: 'pages' },
 ];
 

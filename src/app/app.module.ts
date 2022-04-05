@@ -1,6 +1,6 @@
+import { LandingModule } from './landing/landing.module';
 import { ApiModule as MIRApiModule } from './backend-api/identity-registry/api.module';
 import { ApiModule as MSRApiModule } from './backend-api/service-registry';
-import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 /**
  * @license
  * Copyright Akveo. All Rights Reserved.
@@ -8,7 +8,7 @@ import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
  */
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
@@ -23,9 +23,10 @@ import {
   NbToastrModule,
   NbWindowModule,
 } from '@nebular/theme';
-import { initializeKeycloak } from './auth/app.init';
 import { customNotifierOptions } from './shared/customNotifierOption';
 import { NotifierModule } from 'angular-notifier';
+import { AuthModule } from './auth/auth.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [AppComponent],
@@ -36,7 +37,9 @@ import { NotifierModule } from 'angular-notifier';
     AppRoutingModule,
     MIRApiModule,
     MSRApiModule,
-    KeycloakAngularModule,
+    AuthModule,
+    LandingModule,
+    RouterModule,
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),
     NbDatepickerModule.forRoot(),
@@ -51,14 +54,6 @@ import { NotifierModule } from 'angular-notifier';
     NotifierModule.withConfig(customNotifierOptions),
   ],
   bootstrap: [AppComponent],
-  providers: [
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initializeKeycloak,
-      multi: true,
-      deps: [KeycloakService],
-    },
-  ],
 })
 export class AppModule {
 }
