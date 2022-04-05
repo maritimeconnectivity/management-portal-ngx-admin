@@ -55,9 +55,9 @@
                 <ngx-certificates [data]="revokedCertificates" [forRevoked]="true"></ngx-certificates>
               </div>
             </div>
-            <div class="buttons-row">
-              <button type="button" nbButton status="primary" *ngIf="isUnapprovedorg">Approve</button>
-              <button type="button" nbButton status="danger" *ngIf="isUnapprovedorg">Reject</button>
+            <div class="buttons-row" *ngIf="isUnapprovedorg && canApproveOrg">
+              <button type="button" nbButton status="primary">Approve</button>
+              <button type="button" nbButton status="danger">Reject</button>
             </div>
           </form>
         </nb-card-body>

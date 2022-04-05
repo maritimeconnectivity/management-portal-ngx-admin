@@ -15,7 +15,7 @@ import { Observable } from 'rxjs/Observable';
 import { NotifierService } from 'angular-notifier';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../auth/auth.service';
-import { AuthPermission } from '../../../auth/auth.permission';
+import { AuthPermission, PermissionResolver, rolesToPermission } from '../../../auth/auth.permission';
 
 @Component({
   selector: 'ngx-detail',
@@ -37,6 +37,7 @@ export class DetailComponent implements OnInit {
   entityMrn = '';
   orgMrn = '';
   isUnapprovedorg = false;
+  canApproveOrg = false;
   values = {};
   activeCertificates = [];
   revokedCertificates = [];
@@ -105,6 +106,14 @@ export class DetailComponent implements OnInit {
         });
 
       iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
+
+      this.roleControllerService.getMyRole(this.authService.authState.orgMrn).subscribe(
+        roles => {
+          this.authService.authState.permission = rolesToPermission(roles);
+          if (PermissionResolver.canApproveOrg(this.authService.authState.permission)){
+            this.canApproveOrg = true;
+          }
+      });
   }
 
   updateForNewVer() {
