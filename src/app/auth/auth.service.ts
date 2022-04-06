@@ -159,7 +159,7 @@ private createAuthState(): AuthState {
 
   login() {
   	let url = window.location;
-    AuthService.staticAuthInfo.authz.login({redirectUri:  url.protocol + "//" + url.host + "/"});
+    AuthService.staticAuthInfo.authz.login({redirectUri:  url.protocol + "//" + url.host + "/pages/ir/organizations/" + AuthService.staticAuthInfo.orgMrn});
   }
 
   logout() {
@@ -167,8 +167,7 @@ private createAuthState(): AuthState {
 		  this.authState.loggedIn = false;
 		  AuthService.staticAuthInfo.authz.logout();
 		  AuthService.staticAuthInfo.authz = null;
-	  }catch (err) { // State is somehow lost. Just do nothing.
-
+	  } catch (err) { // State is somehow lost. Just do nothing.
 	  }
   }
 
