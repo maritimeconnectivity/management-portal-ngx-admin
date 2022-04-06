@@ -159,7 +159,7 @@ private createAuthState(): AuthState {
 
   login() {
   	let url = window.location;
-    AuthService.staticAuthInfo.authz.login({redirectUri:  url.protocol + "//" + url.host + "/pages/ir/organizations/" + AuthService.staticAuthInfo.orgMrn});
+    AuthService.staticAuthInfo.authz.login({redirectUri:  url.protocol + "//" + url.host + "/pages/ir/organizations/"});
   }
 
   logout() {

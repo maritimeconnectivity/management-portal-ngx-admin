@@ -3,14 +3,14 @@ import { Organization } from '../../backend-api/identity-registry/model/organiza
 import { EntityDataService } from './entity-data.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApproveOrgDataService extends EntityDataService {
   myOrganization: Organization;
   
   getList() {
     return [
-      {"id":10,"createdAt":1607586546000,"updatedAt":1607589078000,"name":"SMART Navigation Project, KRISO","mrn":"urn:mrn:mcp:org:mcc:smart001","email":"smart@kriso.re.kr","url":"http://www.smartnav.org","address":"1312 beon-gil, Yuseong-daero, Yuseong Gu, Daejeon","country":"Republic of Korea","federationType":"test-idp","certificates":[],"identityProviderAttributes":[]}
+      {'id':10,'createdAt':1607586546000,'updatedAt':1607589078000,'name':'SMART Navigation Project, KRISO','mrn':'urn:mrn:mcp:org:mcc:smart001','email':'smart@kriso.re.kr','url':'http://www.smartnav.org','address':'1312 beon-gil, Yuseong-daero, Yuseong Gu, Daejeon','country':'Republic of Korea','federationType':'test-idp','certificates':[],'identityProviderAttributes':[]}
     ];
   }
 
