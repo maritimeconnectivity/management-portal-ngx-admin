@@ -224,14 +224,14 @@ export class DetailComponent implements OnInit {
   }
 
   submit() {
-    const body = { ...this.formGroup.value };
+    const body = { ...this.formGroup.value};
     if (this.menuType === 'role') {
       this.loadOrgContent(this.orgMrn).subscribe(
         res => this.submitDateToBackend({ ...body, idOrganization: res.id}),
         err => this.notifierService.notify('error', 'Error in fetching organization information'),
       );
     } else {
-      this.submitDateToBackend({...body, mrn: this.formGroup.get('mrn')}, this.formGroup.get('mrn').value);
+      this.submitDateToBackend({...body, mrn: this.formGroup.get('mrn').value}, this.formGroup.get('mrn').value);
     }
     this.isLoading = true;
   }
@@ -255,7 +255,7 @@ export class DetailComponent implements OnInit {
         res => {
           this.notifierService.notify('success', this.menuType + ' has been updated');
           this.isLoading = false;
-          this.router.navigate([this.router.url]);
+          this.isEditing = false;
         },
         err => {
           this.notifierService.notify('error', 'Update has failed - ' + err.message);

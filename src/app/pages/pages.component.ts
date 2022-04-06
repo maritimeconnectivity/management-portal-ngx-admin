@@ -52,7 +52,8 @@ export class PagesComponent implements OnInit {
     if (this.authService.authState.orgMrn) {
       this.organizationControllerService.getOrganizationByMrn(this.authService.authState.orgMrn).subscribe(
         (org: Organization) => {
-          MENU_FOR_ORG.title = org.name;
+          this.authService.updateOrgName(org.name);
+          MENU_FOR_ORG.title = this.authService.authState.orgName;
           MENU_FOR_ORG.children.unshift({
             title: 'Info',
             link: 'ir/organizations/' + encodeURIComponent(this.authService.authState.orgMrn),

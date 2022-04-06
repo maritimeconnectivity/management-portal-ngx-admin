@@ -5,6 +5,7 @@ export interface StaticAuthInfo {
 	logoutUrl?:string,
 	permission?: any,
 	orgMrn?: string,
+	orgName?: string,
 	user?: AuthUser
 	authz?: any
 }

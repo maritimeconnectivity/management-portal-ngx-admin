@@ -84,6 +84,7 @@ private createAuthState(): AuthState {
       loggedIn: AuthService.staticAuthInfo.loggedIn,
       permission: AuthPermission.User,
       orgMrn: AuthService.staticAuthInfo.orgMrn,
+      orgName: AuthService.staticAuthInfo.orgName,
 	    user: AuthService.staticAuthInfo.user,
       rolesLoaded: false,
 		acting: false,
@@ -183,6 +184,11 @@ private createAuthState(): AuthState {
           });
       }
     });
+  }
+
+  public updateOrgName(orgName: string) {
+    AuthService.staticAuthInfo.orgName = orgName;
+    this.authState.orgName = orgName;
   }
 
 	public static handle401() {

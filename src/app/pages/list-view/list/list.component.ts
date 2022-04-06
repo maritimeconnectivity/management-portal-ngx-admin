@@ -1,3 +1,4 @@
+import { StaticAuthInfo } from './../../../auth/model/StaticAuthInfo';
 import { AuthService } from './../../../auth/auth.service';
 import { InstanceControllerService } from './../../../backend-api/service-registry/api/instanceController.service';
 import { ServiceControllerService } from './../../../backend-api/identity-registry/api/serviceController.service';
@@ -87,7 +88,7 @@ export class ListComponent implements OnInit {
       );
       this.settings = Object.assign({}, this.mySettings);
       // Not-approved organization list
-      this.title = `${capitalize(this.menuTypeName)} list${ResourceType.includes(this.menuType) ? ' for ' + this.authService.authState.user.organization : ''}`;
+      this.title = `${capitalize(this.menuTypeName)} list${ResourceType.includes(this.menuType) ? ' for ' + this.authService.authState.orgName : ''}`;
       this.isLoading = true;
 
       if (MenuType.includes(this.menuType)) {
