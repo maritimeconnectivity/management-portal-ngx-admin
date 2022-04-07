@@ -1,8 +1,10 @@
-# MCP Management Portal
+# Management Portal
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-This is a spin-off implementation of MCP Management Portal.
+This is a spin-off implementation of Management Portal enabling management of MCP components.
+
+The Management Portal is an utility tool for better accessibility but not a part of MCP components.
 
 ## ngx-admin [<img src="https://i.imgur.com/oMcxwZ0.png" alt="Eva Design System" height="20px" />](https://eva.design?utm_campaign=eva_design%20-%20home%20-%20ngx_admin%20github%20readme&utm_source=ngx_admin&utm_medium=referral&utm_content=top_status_tile) [![Build Status](https://travis-ci.org/akveo/ngx-admin.svg?branch=master)](https://travis-ci.org/akveo/ngx-admin)
 
