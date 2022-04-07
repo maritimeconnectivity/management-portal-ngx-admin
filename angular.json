@@ -21,6 +21,7 @@
               "src/assets",
               "src/assets/icons/favicon.ico",
               "src/assets/icons/favicon.png",
+              "src/CNAME",
               {
                 "glob": "**/*",
                 "input": "node_modules/leaflet/dist/images",

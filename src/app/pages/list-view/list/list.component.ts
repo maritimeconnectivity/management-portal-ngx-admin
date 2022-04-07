@@ -20,12 +20,12 @@ import { MmsControllerService, Role, VesselControllerService } from '../../../ba
 import { PageEntity } from '../../../backend-api/identity-registry/model/pageEntity';
 import { InstanceDto } from '../../../backend-api/service-registry';
 import { AuthPermission } from '../../../auth/auth.permission';
+import { formatData } from '../../../util/dataFormatter';
 
 const capitalize = (s): string => {
   if (typeof s !== 'string') return ''
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
-
 @Component({
   selector: 'ngx-list',
   templateUrl: './list.component.html',
@@ -94,13 +94,14 @@ export class ListComponent implements OnInit {
       if (MenuType.includes(this.menuType)) {
         if(this.menuType === MenuTypeNames.organization || this.menuType === MenuTypeNames.unapprovedorg){
           this.loadDataContent(this.menuType).subscribe(
-            res => {this.source.load(res.content); this.isLoading = false;},
+            res => {this.source.load(this.formatResponse(res.content)); this.isLoading = false;},
             error => this.notifierService.notify('error', error.message),
           );
         } else if(this.menuType === MenuTypeNames.role){
           this.loadMyOrganization().subscribe(
             resOrg => this.loadRoles(resOrg.mrn).subscribe(
-              resData => {this.source.load(resData); this.isLoading = false;}
+              resData => {this.source.load(resData); this.isLoading = false;},
+              error => this.notifierService.notify('error', error.message),
             ),
             error => this.notifierService.notify('error', error.message),
           );
@@ -112,7 +113,8 @@ export class ListComponent implements OnInit {
         } else {
           this.loadMyOrganization().subscribe(
             resOrg => this.loadDataContent(this.menuType, resOrg.mrn).subscribe(
-              res => {this.source.load(res.content); this.isLoading = false;}
+              res => {this.source.load(this.formatResponse(res.content)); this.isLoading = false;},
+              error => this.notifierService.notify('error', error.message),
             ),
             error => this.notifierService.notify('error', error.message),
           );
@@ -125,6 +127,10 @@ export class ListComponent implements OnInit {
       this.isLoading = false;
       throw new Error(`There's no '${this.menuType}DataService' in ColumnForMenu`);
     }
+  }
+
+  formatResponse(data: any[]) {
+    return data.map(d => formatData(d));
   }
 
   onDelete(event): void {

@@ -1,3 +1,4 @@
+import { convertTime } from './../util/timeConverter';
 import { MmsControllerService } from './../backend-api/identity-registry/api/mmsController.service';
 import { VesselControllerService } from './../backend-api/identity-registry/api/vesselController.service';
 import { UserControllerService } from './../backend-api/identity-registry/api/userController.service';
@@ -34,7 +35,7 @@ export class CertificateService {
       const cert = certificates[key_certs];
       for (const key in cert) {
         certificates[key_certs][key] = key.endsWith('At') || key === 'end' || key === 'start' ?
-        formatDate(new Date(parseInt(cert[key])),'MMM d, y hh:mm:ss', 'en_GB') : cert[key];
+        convertTime(parseInt(cert[key])) : cert[key];
       }
       if (cert['revoked']) {
         cert["revokeInfo"] = cert["revokedAt"];

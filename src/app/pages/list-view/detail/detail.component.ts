@@ -1,3 +1,4 @@
+import { formatData, formatVesselToUpload } from '../../../util/dataFormatter';
 import { Device } from './../../../backend-api/identity-registry/model/device';
 import { MrnHelperService } from './../../../util/mrn-helper.service';
 import { CertificateService } from './../../../shared/certificate.service';
@@ -290,7 +291,7 @@ export class DetailComponent implements OnInit {
     } else if (context === MenuTypeNames.device) {
       return this.deviceControllerService.updateDevice(body as Device, orgMrn, entityMrn);
     } else if (context === MenuTypeNames.vessel) {
-      return this.vesselControllerService.updateVessel(body as Vessel, orgMrn, entityMrn);
+      return this.vesselControllerService.updateVessel(formatVesselToUpload(body) as Vessel, orgMrn, entityMrn);
     } else if (context === MenuTypeNames.mms) {
       return this.mmsControllerService.updateMMS(body as MMS, orgMrn, entityMrn);
     } else if (context === MenuTypeNames.service && version) {
@@ -330,7 +331,8 @@ export class DetailComponent implements OnInit {
     this.formGroup = this.formBuilder.group(group);
   }
 
-  adjustData = (data: object) => {
+  adjustData = (rawData: object) => {
+    const data = formatData(rawData);
     for(const key in data) {
       const relevant = this.columnForMenu.filter(e => e[0] === key)[0];
       if (relevant) {
@@ -343,8 +345,7 @@ export class DetailComponent implements OnInit {
           this.isShortIdValid = this.validateMrn(mrn);
           this.formGroup.get(relevant[0]).setValue(mrn);
         } else {
-          this.formGroup.get(relevant[0]).setValue(relevant[0].endsWith('At') ?
-            (new Date(parseInt(data[key]))).toUTCString() : data[key]);
+          this.formGroup.get(relevant[0]).setValue(data[key]);
         }
       }
     }
