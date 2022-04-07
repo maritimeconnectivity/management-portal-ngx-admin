@@ -27,6 +27,27 @@ export const formatData = (data: object): object => {
   return menuData;
 };
 
+export const formatVesselToUpload = (vesselData: object): object => {
+  let attributes = [];
+  for (const key in vesselData) {
+    const attributeName = camel2snake(key);
+    if (
+      Object.values(VesselAttribute.AttributeNameEnum).find(
+        (e) => e === attributeName)
+    ) {
+      attributes.push({
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        attributeName: attributeName,
+        attributeValue: vesselData[key],
+      });
+      delete vesselData[key];
+    }
+  }
+  vesselData["attributes"] = attributes;
+  return vesselData;
+}
+
 const snake2camel = (input) =>
   input
     .split("-")

@@ -1,4 +1,4 @@
-import { formatData } from '../../../util/dataFormatter';
+import { formatData, formatVesselToUpload } from '../../../util/dataFormatter';
 import { Device } from './../../../backend-api/identity-registry/model/device';
 import { MrnHelperService } from './../../../util/mrn-helper.service';
 import { CertificateService } from './../../../shared/certificate.service';
@@ -291,7 +291,7 @@ export class DetailComponent implements OnInit {
     } else if (context === MenuTypeNames.device) {
       return this.deviceControllerService.updateDevice(body as Device, orgMrn, entityMrn);
     } else if (context === MenuTypeNames.vessel) {
-      return this.vesselControllerService.updateVessel(body as Vessel, orgMrn, entityMrn);
+      return this.vesselControllerService.updateVessel(formatVesselToUpload(body) as Vessel, orgMrn, entityMrn);
     } else if (context === MenuTypeNames.mms) {
       return this.mmsControllerService.updateMMS(body as MMS, orgMrn, entityMrn);
     } else if (context === MenuTypeNames.service && version) {
