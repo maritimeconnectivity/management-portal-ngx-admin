@@ -340,18 +340,6 @@ export const ColumnForMenu = {
       description: 'List of permissions assigned by the organization',
       visibleFrom: ['edit', 'detail'],
     },
-    mrnSubsidiary: {
-      title: 'Subsidiary MRN',
-      type: 'string',
-      description: 'Additional MRN assigned to entity',
-      visibleFrom: ['detail'],
-    },
-    homeMMSUrl: {
-      title: 'Home MMS URL',
-      type: 'string',
-      description: 'URL of home MMS',
-      visibleFrom: ['detail'],
-    },
     // vessel specific
     imoNumber: {
       title: 'IMO number',
@@ -382,6 +370,18 @@ export const ColumnForMenu = {
       title: 'Port of register',
       type: 'string',
       visibleFrom: ['detail', 'list'],
+    },
+    mrnSubsidiary: {
+      title: 'Subsidiary MRN',
+      type: 'string',
+      description: 'Additional MRN assigned to entity',
+      visibleFrom: ['detail'],
+    },
+    homeMMSUrl: {
+      title: 'Home MMS URL',
+      type: 'string',
+      description: 'URL of home MMS',
+      visibleFrom: ['detail'],
     },
     createdAt: {
       title: 'Created at',
