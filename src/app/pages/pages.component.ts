@@ -1,6 +1,15 @@
-import { Component } from '@angular/core';
+import { AuthService } from './../auth/auth.service';
+import { NotifierService } from 'angular-notifier';
+import { Organization } from './../backend-api/identity-registry/model/organization';
+import { OrganizationControllerService } from './../backend-api/identity-registry/api/organizationController.service';
+import { RoleControllerService } from './../backend-api/identity-registry/api/roleController.service';
+import { KeycloakService } from 'keycloak-angular';
+import { Component, OnInit } from '@angular/core';
 
-import { MENU_ITEMS } from './pages-menu';
+import { MENU_ITEMS, MENU_FOR_ADMIN, MENU_FOR_ORG} from './pages-menu';
+import { AuthPermission, PermissionResolver, rolesToPermission } from '../auth/auth.permission';
+import { HttpErrorResponse } from '@angular/common/http';
+import { AppConfig } from '../app.config';
 
 @Component({
   selector: 'ngx-pages',
@@ -12,7 +21,58 @@ import { MENU_ITEMS } from './pages-menu';
     </ngx-one-column-layout>
   `,
 })
-export class PagesComponent {
-
+export class PagesComponent implements OnInit {
   menu = MENU_ITEMS;
+
+  constructor(
+    private roleControllerService: RoleControllerService,
+    private organizationControllerService: OrganizationControllerService,
+    private notifierService: NotifierService,
+    private authService: AuthService,
+    ) {
+    if (!AppConfig.HAS_SERVICE_REGISTRY) {
+      this.menu = this.menu.filter(e => e.title !== 'Service Registry');
+    }
+  }
+
+  ngOnInit(): void {
+    if (this.authService.rolesLoaded) {
+      this.applyRoleToMenu();
+    } else {
+      this.authService.rolesLoaded.subscribe( () => this.applyRoleToMenu());
+    }
+  }
+
+  applyRoleToMenu = () => {
+    this.assignOrganizationMenu();
+    this.assignAdminMenu();
+  }
+
+  assignOrganizationMenu = () => {
+    if (this.authService.authState.orgMrn) {
+      this.organizationControllerService.getOrganizationByMrn(this.authService.authState.orgMrn).subscribe(
+        (org: Organization) => {
+          this.authService.updateOrgName(org.name);
+          MENU_FOR_ORG.title = this.authService.authState.orgName;
+          MENU_FOR_ORG.children.unshift({
+            title: 'Info',
+            link: 'ir/organizations/' + encodeURIComponent(this.authService.authState.orgMrn),
+          });
+        },
+        (error: HttpErrorResponse) => this.notifierService.notify('error', error.message),
+      )
+    this.menu.find(e => e.title === 'Identity Registry').children.unshift(MENU_FOR_ORG);
+    }
+  }
+
+  assignAdminMenu = () => {
+    this.roleControllerService.getMyRole(this.authService.authState.orgMrn).subscribe(
+      roles => {
+        this.authService.authState.permission = rolesToPermission(roles);
+        // add menu for admin user
+        if(PermissionResolver.canApproveOrg(this.authService.authState.permission)){
+          this.menu.find(e => e.title === 'Identity Registry').children.unshift(MENU_FOR_ADMIN);
+        }
+    });
+  }
 }

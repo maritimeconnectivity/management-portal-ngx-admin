@@ -1,0 +1,40 @@
+<nb-layout>
+    <nb-layout-header class="image-container">
+        <div class="d-flex">
+            <div class="mr-auto p-2">
+                <a class="text-white" href="https://maritimeconnectivity.net/" target="_blank">Maritime Connectivity Platform</a>
+            </div>
+        </div>
+    </nb-layout-header>
+    <nb-layout-column class="image-container">
+        <nb-card class="trans-background">
+            <nb-card-body class="trans-background flex justify-content-center">
+                <div class="row">
+                    <div class="col text-center w-100">
+                        <img class="mcp-logo p-4" src = "assets/images/mcp.svg" alt="MCP logo"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col text-center w-100">
+                        <p class="title-font text-white p-3 w-100">MCC MCP Testbed</p>
+                        <p class="subtitle-font text-white w-100">Management Portal</p>
+                        <h5 class="description-font p-1 text-white w-100">Test environment</h5>
+                    </div>
+                </div>
+                <div class="row justify-content-center p-4">
+                    <div class="buttons-row">
+                        <button status="primary" nbButton type="button" (click)="logIn()">Log in</button>
+                        <button status="success" nbButton type="button">Register</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col text-center p-2">
+                        <p class="lead description-font text-white">A website for administrators managing resources in 
+                            <a class="text-white" href="https://maritimeconnectivity.net/mcp-documents/#MIR" target="_blank">Maritime Identity Registry</a> and 
+                            <a class="text-white" href="https://maritimeconnectivity.net/mcp-documents/#MSR" target="_blank">Maritime Service Registry</a></p>
+                    </div>
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </nb-layout-column>
+</nb-layout>

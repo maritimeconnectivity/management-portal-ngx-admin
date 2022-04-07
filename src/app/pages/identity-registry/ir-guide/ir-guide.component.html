@@ -1,0 +1,103 @@
+<nb-card class="col-md-12 col-lg-12 col-xxxl-12">
+    <nb-card-header>
+        MCP management portal for Maritime Identity Registry (MIR)
+    </nb-card-header>
+    <nb-card-body>
+        <p>
+            MCP management portal aims to provide a front-end interface to MCP users. 
+            Everything in the MCP Management Portal is centered around the organization of the logged in user.
+            Every entity in the Identity Registry section, only has data for the users own organization.
+            An organization’s own entities: Vessels, Devices, Users, and Certificates are considered private and will never be shown to others.    
+        </p>
+        
+        <p>
+            User group of MIR is defined as:
+        </p>
+        <ul class="mb-12">
+          <li>User</li>
+          <li>Organization admin</li>
+          <li>MIR admin</li>
+        </ul>
+    </nb-card-body>
+  </nb-card>
+
+  <div class="steppers-container row">
+    <div class="col-md-12 col-lg-6 col-xxxl-6">
+        <nb-card size="medium">
+          <nb-card-header>
+              How to join MIR
+          </nb-card-header>
+          <nb-card-body>
+            <nb-stepper orientation="vertical">
+              <nb-step label="First step">
+                <h3>Request to join</h3>
+                <p class="lorem">
+                  Proin varius accumsan semper. Praesent consequat tincidunt sagittis. Curabitur egestas sem a ipsum bibendum,
+                  sit amet fringilla orci efficitur. Nam bibendum lectus ut viverra tristique. Fusce eu pulvinar magna, quis
+                  viverra ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent metus turpis, commodo vel
+                  placerat quis, lobortis in ligula.
+                </p>
+                <button nbButton disabled nbStepperNext>prev</button>
+                <button nbButton nbStepperNext>next</button>
+              </nb-step>
+              <nb-step label="Second step">
+                <h3>Vetting of organization</h3>
+                <p class="lorem">
+                  Curabitur luctus mattis risus nec condimentum. Donec at dui turpis. Sed vehicula fringilla rutrum. Nullam
+                  sed ornare magna. Mauris vitae laoreet diam. Mauris fermentum ligula at lacinia semper. Nulla placerat dui
+                  eu sapien pellentesque, eu placerat leo luctus. Cras pharetra blandit fermentum.
+                </p>
+                <button nbButton nbStepperPrevious>prev</button>
+                <button nbButton nbStepperNext>next</button>
+              </nb-step>
+              <nb-step label="Third step">
+                <h3>Approval of request</h3>
+                <p class="lorem">
+                  Proin varius accumsan semper. Praesent consequat tincidunt sagittis. Curabitur egestas sem a ipsum bibendum,
+                  sit amet fringilla orci efficitur. Nam bibendum lectus ut viverra tristique. Fusce eu pulvinar magna, quis
+                  viverra ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent metus turpis, commodo vel
+                  placerat quis, lobortis in ligula.
+                </p>
+                <p class="lorem">
+                  Curabitur luctus mattis risus nec condimentum. Donec at dui turpis. Sed vehicula fringilla rutrum. Nullam
+                  sed ornare magna. Mauris vitae laoreet diam. Mauris fermentum ligula at lacinia semper. Nulla placerat dui
+                  eu sapien pellentesque, eu placerat leo luctus. Cras pharetra blandit fermentum.
+                </p>
+                <button nbButton nbStepperPrevious>prev</button>
+                <button nbButton nbStepperNext>next</button>
+              </nb-step>
+              <nb-step label="Fourth step">
+                <h3>Ready to use MIR and portal!</h3>
+                <p class="lorem">
+                  Proin varius accumsan semper. Praesent consequat tincidunt sagittis. Curabitur egestas sem a ipsum bibendum,
+                  sit amet fringilla orci efficitur. Nam bibendum lectus ut viverra tristique. Fusce eu pulvinar magna, quis
+                  viverra ex.
+                </p>
+                <button nbButton nbStepperPrevious>prev</button>
+                <button nbButton disabled nbStepperNext>next</button>
+              </nb-step>
+            </nb-stepper>
+          </nb-card-body>
+        </nb-card>
+      </div>
+
+    <div class="col-md-12 col-lg-6 col-xxxl-6">
+        <nb-card size="small">
+            <nb-card-header>
+                How to use
+            </nb-card-header>
+            <nb-tabset>
+              <nb-tab tabTitle="For user">
+                <p>Under 'My Organization' menu, you can see the assets belongs to your organization categorized by the MCP entity type.</p>
+              </nb-tab>
+              <nb-tab tabTitle="For organization admin">
+                <p>Under 'My Organization' menu, you can see the assets belongs to your organization categorized by the MCP entity type.</p>
+              </nb-tab>
+              <nb-tab tabTitle="For MIR admin">
+                <p>Under 'Administration' menu, you can see the organization list belongs to your MIR.</p>
+              </nb-tab>
+            </nb-tabset>
+        </nb-card>
+    </div>
+  </div>
+  

@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ngx-admin-demo": {
+    "management-portal": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -19,8 +19,8 @@
             "polyfills": "src/polyfills.ts",
             "assets": [
               "src/assets",
-              "src/favicon.ico",
-              "src/favicon.png",
+              "src/assets/icons/favicon.ico",
+              "src/assets/icons/favicon.png",
               {
                 "glob": "**/*",
                 "input": "node_modules/leaflet/dist/images",
@@ -85,6 +85,22 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ]
+            },
+            "staging": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.stage.ts"
+                }
+              ]
+            },
+            "test": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.test.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": ""
@@ -92,18 +108,24 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ngx-admin-demo:build"
+            "browserTarget": "management-portal:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ngx-admin-demo:build:production"
+              "browserTarget": "management-portal:build:production"
+            },
+            "staging": {
+              "browserTarget": "management-portal:build:staging"
+            },
+            "test": {
+              "browserTarget": "management-portal:build:test"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ngx-admin-demo:build"
+            "browserTarget": "management-portal:build"
           }
         },
         "test": {
@@ -137,8 +159,8 @@
             ],
             "assets": [
               "src/assets",
-              "src/favicon.ico",
-              "src/favicon.png",
+              "src/assets/icons/favicon.ico",
+              "src/assets/icons/favicon.png",
               {
                 "glob": "**/*",
                 "input": "node_modules/leaflet/dist/images",
@@ -157,10 +179,13 @@
             "typeCheck": true,
             "exclude": []
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy"
         }
       }
     },
-    "ngx-admin-demo-e2e": {
+    "management-portal-e2e": {
       "root": "",
       "sourceRoot": "",
       "projectType": "application",
@@ -169,7 +194,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "ngx-admin-demo:serve"
+            "devServerTarget": "management-portal:serve"
           }
         },
         "lint": {
@@ -184,7 +209,7 @@
       }
     }
   },
-  "defaultProject": "ngx-admin-demo",
+  "defaultProject": "management-portal",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "ngx",

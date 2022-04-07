@@ -1,0 +1,42 @@
+<nb-card class="modal-window">
+    <nb-card-header>
+        Revoke certificate for {{entityTitle}} ({{entityMrn}})
+    </nb-card-header>
+    <nb-card-body [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <span class="subtitle">
+                        Revocation reason:
+                    </span><br>
+                    <nb-select fullWidth placeholder="Choose a reason" (selectedChange)="onMenuItemSelected($event)">
+                        <nb-option *ngFor="let reason of reasons" [value]="reason.value"> {{ reason.title }}</nb-option>
+                    </nb-select>
+                </div>
+
+                <div class="col">
+                    <span class="subtitle">
+                        Revocation date:
+                    </span><br>
+                    <input nbInput fullWidth
+                       placeholder="Choose a date"
+                       [nbDatepicker]="formpicker" >
+                    <nb-datepicker #formpicker (dateChange)="onDateChange($event)"></nb-datepicker>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="headline">
+                        {{description}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nb-card-body>
+    <nb-card-footer>
+        <div class="buttons-row">
+            <button type="button" nbButton status="primary" (click)="doRevoke()">Revoke</button>
+            <button type="button" nbButton status="danger" (click)="dismiss()">Cancel</button>
+        </div>
+    </nb-card-footer>
+  </nb-card>

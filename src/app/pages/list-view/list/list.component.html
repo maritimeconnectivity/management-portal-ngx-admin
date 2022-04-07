@@ -1,0 +1,22 @@
+<nb-card>
+    <nb-card-header>
+      <div class="row">
+        <div class="col my-auto">
+          <span class="icon_header"><nb-icon [icon]="iconName" pack="fas"></nb-icon></span>{{title}}
+        </div>
+        <div class="col-md-auto">
+          <button type="button" nbButton status="primary" (click)="onAddNew()" *ngIf="isAdmin()">Add new</button>
+        </div>
+      </div>
+    </nb-card-header>
+  
+    <nb-card-body [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary">
+      <div>
+        <input #search class="search" type="text" placeholder="Search..." (keydown.enter)="onSearch(search.value)">
+      </div>
+      <ng2-smart-table *ngIf="showTables" [settings]="settings" [source]="source" (edit)="onEdit($event)" (delete)="onDelete($event)">
+      </ng2-smart-table>
+    </nb-card-body>
+  </nb-card>
+
+<notifier-container></notifier-container>

@@ -1,3 +1,6 @@
+import { LandingModule } from './landing/landing.module';
+import { ApiModule as MIRApiModule } from './backend-api/identity-registry/api.module';
+import { ApiModule as MSRApiModule } from './backend-api/service-registry';
 /**
  * @license
  * Copyright Akveo. All Rights Reserved.
@@ -20,6 +23,10 @@ import {
   NbToastrModule,
   NbWindowModule,
 } from '@nebular/theme';
+import { customNotifierOptions } from './shared/customNotifierOption';
+import { NotifierModule } from 'angular-notifier';
+import { AuthModule } from './auth/auth.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,6 +35,11 @@ import {
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
+    MIRApiModule,
+    MSRApiModule,
+    AuthModule,
+    LandingModule,
+    RouterModule,
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),
     NbDatepickerModule.forRoot(),
@@ -39,6 +51,7 @@ import {
     }),
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
+    NotifierModule.withConfig(customNotifierOptions),
   ],
   bootstrap: [AppComponent],
 })
