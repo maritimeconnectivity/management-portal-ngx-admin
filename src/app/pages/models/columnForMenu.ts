@@ -100,7 +100,6 @@ export const ColumnForMenu = {
       type: 'string',
       description: 'Contact e-mail',
       visibleFrom: ['detail', 'list'],
-      immutable: true,
       required: true,
     },
     url: {
@@ -129,6 +128,7 @@ export const ColumnForMenu = {
       type: 'string',
       description: 'OpenID Connect federation type',
       visibleFrom: ['detail'],
+      immutable: true,
     },
     createdAt: {
       title: 'Created at',
@@ -483,7 +483,6 @@ export const ColumnForMenu = {
       type: 'string',
       description: 'Contact e-mail',
       visibleFrom: ['detail', 'list'],
-      immutable: true,
       required: true,
     },
     url: {
@@ -512,6 +511,7 @@ export const ColumnForMenu = {
       type: 'string',
       description: 'OpenID Connect federation type',
       visibleFrom: ['detail'],
+      immutable: true,
     },
     createdAt: {
       title: 'Created at',

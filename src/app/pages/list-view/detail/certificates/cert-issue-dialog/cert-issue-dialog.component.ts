@@ -43,6 +43,7 @@ export class CertIssueDialogComponent implements OnInit{
   @Input() notifierService: NotifierService;
   @Input() fileHelper: FileHelperService;
   @Input() certificateService: CertificateService;
+  @Input() updateCertificate: () => void;
   
   nameNoSpaces: string;
   isLoading: boolean;
@@ -59,10 +60,11 @@ export class CertIssueDialogComponent implements OnInit{
       this.nameNoSpaces = this.entityTitle.split(' ').join('_');
     }
   }
+
   dismiss() {
     this.ref.close();
     if (this.certificateBundle) {
-      location.reload();
+      this.updateCertificate();
     }
   }
 
@@ -421,8 +423,6 @@ export class CertIssueDialogComponent implements OnInit{
         })
     );
 
-    sequence.then(() => {
-      return pfx.toSchema().toBER(false) as ArrayBuffer;});
-    return undefined;
+    return sequence.then(() => pfx.toSchema().toBER(false));
   }
 }

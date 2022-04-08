@@ -98,6 +98,9 @@ export class DetailComponent implements OnInit {
       this.orgMrn = this.authService.authState.orgMrn;
       this.isForNew = this.entityMrn === 'new';
 
+      // preventing refresh
+      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+
       //this is my organization page when it comes with no name
       this.route.queryParams.subscribe(e =>
         {
@@ -178,7 +181,10 @@ export class DetailComponent implements OnInit {
               this.activeCertificates = splited.activeCertificates;
               this.revokedCertificates = splited.revokedCertificates;
             },
-            error => this.notifierService.notify('error', error.message),
+            error => {
+              this.notifierService.notify('error', error.message);
+              this.router.navigateByUrl('/pages/404');
+            },
           );
         } else if(this.menuType === MenuTypeNames.unapprovedorg){
           this.isUnapprovedorg = true;
@@ -186,7 +192,11 @@ export class DetailComponent implements OnInit {
             data => {
               this.settle(true);
               this.adjustData(data.content.filter(d => d.mrn === this.entityMrn).pop());
-            }
+            },
+            error => {
+              this.notifierService.notify('error', error.message);
+              this.router.navigateByUrl('/pages/404');
+            },
           );
         } else if(this.menuType === MenuTypeNames.role) {
           const id = parseInt(this.entityMrn);
@@ -195,7 +205,11 @@ export class DetailComponent implements OnInit {
               this.settle(true);
               this.roleId = data.id;
               this.adjustData(data);
-            }
+            },
+            error => {
+              this.notifierService.notify('error', error.message);
+              this.router.navigateByUrl('/pages/404');
+            },
           )
         } else {
           this.route.queryParams.subscribe(e => this.loadDataContent(this.menuType, this.authService.authState.user.organization, this.entityMrn, e.version).subscribe(
@@ -207,7 +221,10 @@ export class DetailComponent implements OnInit {
               this.activeCertificates = splited.activeCertificates;
               this.revokedCertificates = splited.revokedCertificates;
             },
-            error => this.notifierService.notify('error', error.message),
+            error => {
+              this.notifierService.notify('error', error.message);
+              this.router.navigateByUrl('/pages/404');
+            },
           ));
         }
       } else {
@@ -217,6 +234,29 @@ export class DetailComponent implements OnInit {
     } else {
       this.settle(false);
       throw new Error(`There's no '${this.menuType}DataService' in ColumnForMenu`);
+    }
+  }
+
+  refreshData() {
+    this.fetchFieldValues();
+  }
+
+  moveToListPage() {
+    this.router.navigate(['../../' + this.menuType + 's'], {relativeTo: this.route});
+  }
+
+  delete() {
+    let message = 'Are you sure you want to delete?';
+    message = EntityTypes.indexOf(this.menuType)>=0 ?
+      message + ' All certificates under this entity will be revoked.' : message;
+    if (confirm(message)) {
+      this.deleteData(this.menuType, this.orgMrn, this.entityMrn, this.instanceVersion).subscribe(
+        res => {
+          this.notifierService.notify('success', this.name + ' has been successfully deleted');
+          this.moveToListPage();
+        },
+        err => this.notifierService.notify('error', 'There was error in deletion - ' + err.message)
+      );
     }
   }
 
@@ -243,7 +283,7 @@ export class DetailComponent implements OnInit {
         res => {
           this.notifierService.notify('success', 'New ' + this.menuType + ' has been created');
           this.isLoading = false;
-          this.router.navigate(['../../' + this.menuType + 's'], {relativeTo: this.route});
+          this.moveToListPage();
         },
         err => {
           this.notifierService.notify('error', 'Creation has failed - ' + err.message);
@@ -304,6 +344,25 @@ export class DetailComponent implements OnInit {
     return new Observable();
   }
 
+  deleteData = (context: string, orgMrn: string, entityMrn: string, version?: string): Observable<Entity> => {
+    if (context === MenuTypeNames.user) {
+      return this.userControllerService.deleteUser(orgMrn, entityMrn);
+    } else if (context === MenuTypeNames.device) {
+      return this.deviceControllerService.deleteDevice(orgMrn, entityMrn);
+    } else if (context === MenuTypeNames.vessel) {
+      return this.vesselControllerService.deleteVessel(orgMrn, entityMrn);
+    } else if (context === MenuTypeNames.mms) {
+      return this.mmsControllerService.deleteMMS(orgMrn, entityMrn);
+    } else if (context === MenuTypeNames.service && version) {
+      return this.serviceControllerService.deleteService(orgMrn, entityMrn, version);
+    } else if (context === MenuTypeNames.organization) {
+      return this.organizationControllerService.deleteOrg(entityMrn);
+    } else if (context === MenuTypeNames.role) {
+      return this.roleControllerService.deleteRole(orgMrn, this.roleId);
+    }
+    return new Observable();
+  }
+
   loadDataContent = (context: string, orgMrn: string, entityMrn: string, version?: string): Observable<Entity> => {
     if (context === MenuTypeNames.user) {
       return this.userControllerService.getUser(orgMrn, entityMrn);
@@ -317,6 +376,25 @@ export class DetailComponent implements OnInit {
       return this.serviceControllerService.getServiceVersion(orgMrn, entityMrn, version);
     }
     return new Observable();
+  }
+
+  isAdmin = (): boolean => {
+    const context = this.menuType;
+    if (context === MenuTypeNames.user) {
+      return this.authService.authState.hasPermission(AuthPermission.UserAdmin);
+    } else if (context === MenuTypeNames.device) {
+      return this.authService.authState.hasPermission(AuthPermission.DeviceAdmin);
+    } else if (context === MenuTypeNames.vessel) {
+      return this.authService.authState.hasPermission(AuthPermission.VesselAdmin);
+    } else if (context === MenuTypeNames.mms) {
+      return this.authService.authState.hasPermission(AuthPermission.MMSAdmin);
+    } else if (context === MenuTypeNames.service) {
+      return this.authService.authState.hasPermission(AuthPermission.ServiceAdmin);
+    } else if (context === MenuTypeNames.organization || context === MenuTypeNames.role) {
+      return this.authService.authState.hasPermission(AuthPermission.OrgAdmin);
+    } else {
+      return false;
+    }
   }
 
   loadOrgContent = (mrn: string): Observable<Organization> => {
@@ -348,25 +426,6 @@ export class DetailComponent implements OnInit {
           this.formGroup.get(relevant[0]).setValue(data[key]);
         }
       }
-    }
-  }
-
-  isAdmin = () => {
-    const context = this.menuType;
-    if (context === MenuTypeNames.user) {
-      return this.authService.authState.hasPermission(AuthPermission.UserAdmin);
-    } else if (context === MenuTypeNames.device) {
-      return this.authService.authState.hasPermission(AuthPermission.DeviceAdmin);
-    } else if (context === MenuTypeNames.vessel) {
-      return this.authService.authState.hasPermission(AuthPermission.VesselAdmin);
-    } else if (context === MenuTypeNames.mms) {
-      return this.authService.authState.hasPermission(AuthPermission.MMSAdmin);
-    } else if (context === MenuTypeNames.service) {
-      return this.authService.authState.hasPermission(AuthPermission.ServiceAdmin);
-    } else if (context === MenuTypeNames.organization || context === MenuTypeNames.role) {
-      return this.authService.authState.hasPermission(AuthPermission.OrgAdmin);
-    } else {
-      return false;
     }
   }
 }

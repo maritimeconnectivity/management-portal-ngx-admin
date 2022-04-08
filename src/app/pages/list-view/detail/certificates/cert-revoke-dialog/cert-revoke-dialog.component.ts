@@ -22,6 +22,7 @@ export class CertRevokeDialogComponent implements OnInit {
   @Input() entityType: string;
   @Input() certificateService: CertificateService;
   @Input() notifierService: NotifierService;
+  @Input() updateCertificate: () => void;
   
   isLoading: boolean;
   date = new Date();
@@ -50,6 +51,7 @@ export class CertRevokeDialogComponent implements OnInit {
           this.notifierService.notify('success',
               'Certificate has been successfully revoked');
           this.isLoading = false;
+          this.updateCertificate();
         }, err => {
           this.isLoading = false;
           if (err.status === 410) {

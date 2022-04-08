@@ -49,6 +49,9 @@ export class PagesComponent implements OnInit {
   }
 
   assignOrganizationMenu = () => {
+    if (this.menu.find(e => e.title === 'Identity Registry').children.find(e => e.title === MENU_FOR_ORG.title)) {
+      return ;
+    }
     if (this.authService.authState.orgMrn) {
       this.organizationControllerService.getOrganizationByMrn(this.authService.authState.orgMrn).subscribe(
         (org: Organization) => {
@@ -66,6 +69,9 @@ export class PagesComponent implements OnInit {
   }
 
   assignAdminMenu = () => {
+    if (this.menu.find(e => e.title === 'Identity Registry').children.find(e => e.title === MENU_FOR_ADMIN.title)) {
+      return ;
+    }
     this.roleControllerService.getMyRole(this.authService.authState.orgMrn).subscribe(
       roles => {
         this.authService.authState.permission = rolesToPermission(roles);
