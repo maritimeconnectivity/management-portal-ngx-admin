@@ -98,6 +98,9 @@ export class DetailComponent implements OnInit {
       this.orgMrn = this.authService.authState.orgMrn;
       this.isForNew = this.entityMrn === 'new';
 
+      // preventing refresh
+      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+
       //this is my organization page when it comes with no name
       this.route.queryParams.subscribe(e =>
         {
@@ -218,6 +221,10 @@ export class DetailComponent implements OnInit {
       this.settle(false);
       throw new Error(`There's no '${this.menuType}DataService' in ColumnForMenu`);
     }
+  }
+
+  refreshData() {
+    this.fetchFieldValues();
   }
 
   cancel() {
@@ -351,7 +358,7 @@ export class DetailComponent implements OnInit {
     }
   }
 
-  isAdmin = () => {
+  isAdmin = (): boolean => {
     const context = this.menuType;
     if (context === MenuTypeNames.user) {
       return this.authService.authState.hasPermission(AuthPermission.UserAdmin);

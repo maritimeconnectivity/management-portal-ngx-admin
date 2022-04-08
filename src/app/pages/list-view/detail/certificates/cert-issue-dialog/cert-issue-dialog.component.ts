@@ -43,6 +43,7 @@ export class CertIssueDialogComponent implements OnInit{
   @Input() notifierService: NotifierService;
   @Input() fileHelper: FileHelperService;
   @Input() certificateService: CertificateService;
+  @Input() updateCertificate: () => void;
   
   nameNoSpaces: string;
   isLoading: boolean;
@@ -59,10 +60,11 @@ export class CertIssueDialogComponent implements OnInit{
       this.nameNoSpaces = this.entityTitle.split(' ').join('_');
     }
   }
+
   dismiss() {
     this.ref.close();
     if (this.certificateBundle) {
-      location.reload();
+      this.updateCertificate();
     }
   }
 
@@ -378,10 +380,8 @@ export class CertIssueDialogComponent implements OnInit{
     });
 
     let passwordConverted = stringToArrayBuffer(password);
-    let sequence = Promise.resolve();
-
-    sequence = sequence.then(
-        () => pfx.parsedValue.authenticatedSafe.parsedValue.safeContents[0].value
+    let sequence: Promise<ArrayBuffer> =
+      pfx.parsedValue.authenticatedSafe.parsedValue.safeContents[0].value
             .safeBags[0].bagValue.makeInternalValues({
           password: passwordConverted,
           contentEncryptionAlgorithm: {
@@ -390,8 +390,7 @@ export class CertIssueDialogComponent implements OnInit{
           },
           hmacHashAlgorithm: 'SHA-256',
           iterationCount: 100000
-        })
-    );
+        });
 
     sequence = sequence.then(
         () => pfx.parsedValue.authenticatedSafe.makeInternalValues({
@@ -421,8 +420,9 @@ export class CertIssueDialogComponent implements OnInit{
         })
     );
 
-    sequence.then(() => {
-      return pfx.toSchema().toBER(false) as ArrayBuffer;});
-    return undefined;
+    sequence.then(() => pfx.toSchema().toBER(false) as ArrayBuffer).catch(err => {
+        this.notifierService.notify('error', 'Error in generating message' + err.message)
+      });
+    return sequence;
   }
 }

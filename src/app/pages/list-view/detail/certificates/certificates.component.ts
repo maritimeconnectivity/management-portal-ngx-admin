@@ -2,7 +2,7 @@ import { Certificate } from './../../../../backend-api/identity-registry/model/c
 import { CertRevokeDialogComponent } from './cert-revoke-dialog/cert-revoke-dialog.component';
 import { CertIssueDialogComponent } from './cert-issue-dialog/cert-issue-dialog.component';
 import { ActiveCertificatesColumn, RevokedCertificatesColumn } from '../../../models/columnForCertificate';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Certificate as MCPCertificate, CertificateBundle, PemCertificate } from '../../../../backend-api/identity-registry';
 import { FileHelperService } from '../../../../shared/file-helper.service';
@@ -43,7 +43,8 @@ export class CertificatesComponent implements OnInit {
   @Input() entityType: string;
   @Input() orgMrn: string;
   @Input() instanceVersion: string;
-  @Input() hasPermission: string;
+  @Input() hasPermission: boolean;
+  @Output() onUpdate: EventEmitter<any> = new EventEmitter();
 
   certificateTitle = "Certificate for ";
 
@@ -73,7 +74,10 @@ export class CertificatesComponent implements OnInit {
           notifierService: this.notifierService,
           fileHelper: this.fileHelper,
           certificateService: this.certificateService,
+          updateCertificate: () => this.onUpdate.emit()
         },
+        closeOnBackdropClick: false,
+        closeOnEsc: false,
       });
     } else {
       this.notifierService.notify('error', 'You don\'t have right permission');
@@ -92,7 +96,10 @@ export class CertificatesComponent implements OnInit {
           instanceVersion: this.instanceVersion,
           notifierService: this.notifierService,
           certificateService: this.certificateService,
+          updateCertificate: () => this.onUpdate.emit()
         },
+        closeOnBackdropClick: false,
+        closeOnEsc: false,
       });
     } else {
       this.notifierService.notify('error', 'You don\'t have right permission');
