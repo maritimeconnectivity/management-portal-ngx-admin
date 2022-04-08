@@ -380,8 +380,10 @@ export class CertIssueDialogComponent implements OnInit{
     });
 
     let passwordConverted = stringToArrayBuffer(password);
-    let sequence: Promise<ArrayBuffer> =
-      pfx.parsedValue.authenticatedSafe.parsedValue.safeContents[0].value
+    let sequence = Promise.resolve();
+
+    sequence = sequence.then(
+        () => pfx.parsedValue.authenticatedSafe.parsedValue.safeContents[0].value
             .safeBags[0].bagValue.makeInternalValues({
           password: passwordConverted,
           contentEncryptionAlgorithm: {
@@ -390,7 +392,8 @@ export class CertIssueDialogComponent implements OnInit{
           },
           hmacHashAlgorithm: 'SHA-256',
           iterationCount: 100000
-        });
+        })
+    );
 
     sequence = sequence.then(
         () => pfx.parsedValue.authenticatedSafe.makeInternalValues({
@@ -420,9 +423,6 @@ export class CertIssueDialogComponent implements OnInit{
         })
     );
 
-    sequence.then(() => pfx.toSchema().toBER(false) as ArrayBuffer).catch(err => {
-        this.notifierService.notify('error', 'Error in generating message' + err.message)
-      });
-    return sequence;
+    return sequence.then(() => pfx.toSchema().toBER(false));
   }
 }

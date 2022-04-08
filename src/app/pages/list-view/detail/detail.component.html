@@ -16,6 +16,7 @@
               <button type="submit" nbButton status="primary" *ngIf="isForNew" (click)="submit()" [disabled]="!formGroup.valid">Submit</button>
               <button type="button" nbButton status="danger" *ngIf="isForNew" (click)="cancel()">Cancel</button>
               <button type="button" nbButton status="primary" *ngIf="!isEditing && !isForNew" (click)="invertIsEditing()" >Edit</button>
+              <button type="button" nbButton status="danger" *ngIf="!isEditing && !isForNew" (click)="delete()" >Delete</button>
               <button type="submit" nbButton status="primary" *ngIf="isEditing && !isForNew && menuType === 'service'" (click)="updateForNewVer()" [disabled]="!formGroup.valid">New version</button>
               <button type="submit" nbButton status="primary" *ngIf="isEditing && !isForNew" (click)="submit()" [disabled]="!formGroup.valid">Update</button>
               <button type="button" nbButton status="danger" *ngIf="isEditing && !isForNew" (click)="invertIsEditing()" >Cancel</button>

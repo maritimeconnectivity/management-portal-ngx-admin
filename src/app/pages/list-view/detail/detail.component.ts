@@ -181,7 +181,10 @@ export class DetailComponent implements OnInit {
               this.activeCertificates = splited.activeCertificates;
               this.revokedCertificates = splited.revokedCertificates;
             },
-            error => this.notifierService.notify('error', error.message),
+            error => {
+              this.notifierService.notify('error', error.message);
+              this.router.navigateByUrl('/pages/404');
+            },
           );
         } else if(this.menuType === MenuTypeNames.unapprovedorg){
           this.isUnapprovedorg = true;
@@ -189,7 +192,11 @@ export class DetailComponent implements OnInit {
             data => {
               this.settle(true);
               this.adjustData(data.content.filter(d => d.mrn === this.entityMrn).pop());
-            }
+            },
+            error => {
+              this.notifierService.notify('error', error.message);
+              this.router.navigateByUrl('/pages/404');
+            },
           );
         } else if(this.menuType === MenuTypeNames.role) {
           const id = parseInt(this.entityMrn);
@@ -198,7 +205,11 @@ export class DetailComponent implements OnInit {
               this.settle(true);
               this.roleId = data.id;
               this.adjustData(data);
-            }
+            },
+            error => {
+              this.notifierService.notify('error', error.message);
+              this.router.navigateByUrl('/pages/404');
+            },
           )
         } else {
           this.route.queryParams.subscribe(e => this.loadDataContent(this.menuType, this.authService.authState.user.organization, this.entityMrn, e.version).subscribe(
@@ -210,7 +221,10 @@ export class DetailComponent implements OnInit {
               this.activeCertificates = splited.activeCertificates;
               this.revokedCertificates = splited.revokedCertificates;
             },
-            error => this.notifierService.notify('error', error.message),
+            error => {
+              this.notifierService.notify('error', error.message);
+              this.router.navigateByUrl('/pages/404');
+            },
           ));
         }
       } else {
@@ -225,6 +239,22 @@ export class DetailComponent implements OnInit {
 
   refreshData() {
     this.fetchFieldValues();
+  }
+
+  moveToListPage() {
+    this.router.navigate(['../../' + this.menuType + 's'], {relativeTo: this.route});
+  }
+
+  delete() {
+    if (confirm('Are you sure you want to delete?')) {
+      this.deleteData(this.menuType, this.orgMrn, this.entityMrn, this.instanceVersion).subscribe(
+        res => {
+          this.notifierService.notify('success', this.name + ' has been successfully deleted');
+          this.moveToListPage();
+        },
+        err => this.notifierService.notify('error', 'There was error in deletion - ' + err.message)
+      );
+    }
   }
 
   cancel() {
@@ -250,7 +280,7 @@ export class DetailComponent implements OnInit {
         res => {
           this.notifierService.notify('success', 'New ' + this.menuType + ' has been created');
           this.isLoading = false;
-          this.router.navigate(['../../' + this.menuType + 's'], {relativeTo: this.route});
+          this.moveToListPage();
         },
         err => {
           this.notifierService.notify('error', 'Creation has failed - ' + err.message);
@@ -307,6 +337,25 @@ export class DetailComponent implements OnInit {
       return this.organizationControllerService.updateOrganization(body as Organization, entityMrn);
     } else if (context === MenuTypeNames.role) {
       return this.roleControllerService.updateRole(body as Role, orgMrn, this.roleId);
+    }
+    return new Observable();
+  }
+
+  deleteData = (context: string, orgMrn: string, entityMrn: string, version?: string): Observable<Entity> => {
+    if (context === MenuTypeNames.user) {
+      return this.userControllerService.deleteUser(orgMrn, entityMrn);
+    } else if (context === MenuTypeNames.device) {
+      return this.deviceControllerService.deleteDevice(orgMrn, entityMrn);
+    } else if (context === MenuTypeNames.vessel) {
+      return this.vesselControllerService.deleteVessel(orgMrn, entityMrn);
+    } else if (context === MenuTypeNames.mms) {
+      return this.mmsControllerService.deleteMMS(orgMrn, entityMrn);
+    } else if (context === MenuTypeNames.service && version) {
+      return this.serviceControllerService.deleteService(orgMrn, entityMrn, version);
+    } else if (context === MenuTypeNames.organization) {
+      return this.organizationControllerService.deleteOrg(entityMrn);
+    } else if (context === MenuTypeNames.role) {
+      return this.roleControllerService.deleteRole(orgMrn, this.roleId);
     }
     return new Observable();
   }
