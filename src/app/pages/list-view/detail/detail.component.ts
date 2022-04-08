@@ -246,7 +246,10 @@ export class DetailComponent implements OnInit {
   }
 
   delete() {
-    if (confirm('Are you sure you want to delete?')) {
+    let message = 'Are you sure you want to delete?';
+    message = EntityTypes.indexOf(this.menuType)>=0 ?
+      message + ' All certificates under this entity will be revoked.' : message;
+    if (confirm(message)) {
       this.deleteData(this.menuType, this.orgMrn, this.entityMrn, this.instanceVersion).subscribe(
         res => {
           this.notifierService.notify('success', this.name + ' has been successfully deleted');
@@ -375,6 +378,25 @@ export class DetailComponent implements OnInit {
     return new Observable();
   }
 
+  isAdmin = (): boolean => {
+    const context = this.menuType;
+    if (context === MenuTypeNames.user) {
+      return this.authService.authState.hasPermission(AuthPermission.UserAdmin);
+    } else if (context === MenuTypeNames.device) {
+      return this.authService.authState.hasPermission(AuthPermission.DeviceAdmin);
+    } else if (context === MenuTypeNames.vessel) {
+      return this.authService.authState.hasPermission(AuthPermission.VesselAdmin);
+    } else if (context === MenuTypeNames.mms) {
+      return this.authService.authState.hasPermission(AuthPermission.MMSAdmin);
+    } else if (context === MenuTypeNames.service) {
+      return this.authService.authState.hasPermission(AuthPermission.ServiceAdmin);
+    } else if (context === MenuTypeNames.organization || context === MenuTypeNames.role) {
+      return this.authService.authState.hasPermission(AuthPermission.OrgAdmin);
+    } else {
+      return false;
+    }
+  }
+
   loadOrgContent = (mrn: string): Observable<Organization> => {
     return this.organizationControllerService.getOrganizationByMrn(mrn);
   }
@@ -404,25 +426,6 @@ export class DetailComponent implements OnInit {
           this.formGroup.get(relevant[0]).setValue(data[key]);
         }
       }
-    }
-  }
-
-  isAdmin = (): boolean => {
-    const context = this.menuType;
-    if (context === MenuTypeNames.user) {
-      return this.authService.authState.hasPermission(AuthPermission.UserAdmin);
-    } else if (context === MenuTypeNames.device) {
-      return this.authService.authState.hasPermission(AuthPermission.DeviceAdmin);
-    } else if (context === MenuTypeNames.vessel) {
-      return this.authService.authState.hasPermission(AuthPermission.VesselAdmin);
-    } else if (context === MenuTypeNames.mms) {
-      return this.authService.authState.hasPermission(AuthPermission.MMSAdmin);
-    } else if (context === MenuTypeNames.service) {
-      return this.authService.authState.hasPermission(AuthPermission.ServiceAdmin);
-    } else if (context === MenuTypeNames.organization || context === MenuTypeNames.role) {
-      return this.authService.authState.hasPermission(AuthPermission.OrgAdmin);
-    } else {
-      return false;
     }
   }
 }

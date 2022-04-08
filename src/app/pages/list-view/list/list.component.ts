@@ -13,7 +13,7 @@ import { ColumnForMenu } from '../../models/columnForMenu';
 import { Component, Injector, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
-import { ResourceType, MenuType, MenuTypeIconNames, MenuTypeNames } from '../../models/menuType';
+import { ResourceType, MenuType, MenuTypeIconNames, MenuTypeNames, EntityTypes } from '../../models/menuType';
 import { NbIconLibraries } from '@nebular/theme';
 import { NotifierService } from 'angular-notifier';
 import { MmsControllerService, Role, VesselControllerService } from '../../../backend-api/identity-registry';
@@ -21,6 +21,7 @@ import { PageEntity } from '../../../backend-api/identity-registry/model/pageEnt
 import { InstanceDto } from '../../../backend-api/service-registry';
 import { AuthPermission } from '../../../auth/auth.permission';
 import { formatData } from '../../../util/dataFormatter';
+import { Entity } from '../../../backend-api/identity-registry/model/entity';
 
 const capitalize = (s): string => {
   if (typeof s !== 'string') return ''
@@ -37,7 +38,8 @@ export class ListComponent implements OnInit {
   menuType: string = 'device';
   title = ' for ';
   contextForAttributes = 'list';
-  organizationName = 'MCC';
+  orgName = 'MCC';
+  orgMrn = '';
   iconName = 'circle';
   menuTypeName = '';
   data = [];
@@ -77,10 +79,15 @@ export class ListComponent implements OnInit {
     this.menuType = this.menuType.replace('-', '').substr(0,this.menuType.length-1);
     this.menuTypeName = MenuTypeNames[this.menuType];
     this.iconName = MenuTypeIconNames[this.menuType];
+    this.orgMrn = this.authService.authState.orgMrn;
     iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
   }
 
   ngOnInit(): void {
+    this.fetchValues();
+  }
+
+  fetchValues() {
     // filtered with context
     if(ColumnForMenu.hasOwnProperty(this.menuType)) {
       this.mySettings.columns = Object.assign({}, ...
@@ -137,12 +144,42 @@ export class ListComponent implements OnInit {
     if (!this.isAdmin()) {
       this.notifierService.notify('error', 'You don\'t have right permission');
     } else {
-      if (window.confirm('Are you sure you want to delete?')) {
-        event.confirm.resolve();
-      } else {
-        event.confirm.reject();
-      }
+      this.delete(this.menuType, this.orgMrn, event.data.mrn, event.data.instanceVersion, event.data.id);
     }
+  }
+
+  delete(menuType: string, orgMrn: string, entityMrn: string, instanceVersion?: string, roleId?: number) {
+    let message = 'Are you sure you want to delete?';
+    message = EntityTypes.indexOf(this.menuType)>=0 ?
+      message + ' All certificates under this entity will be revoked.' : message;
+    if (confirm(message)) {
+      this.deleteData(menuType, orgMrn, entityMrn, instanceVersion).subscribe(
+        res => {
+          this.notifierService.notify('success', this.menuTypeName + ' has been successfully deleted');
+          this.fetchValues();
+        },
+        err => this.notifierService.notify('error', 'There was error in deletion - ' + err.message)
+      );
+    }
+  }
+
+  deleteData = (context: string, orgMrn: string, entityMrn: string, version?: string, roleId?: number): Observable<Entity> => {
+    if (context === MenuTypeNames.user) {
+      return this.userControllerService.deleteUser(orgMrn, entityMrn);
+    } else if (context === MenuTypeNames.device) {
+      return this.deviceControllerService.deleteDevice(orgMrn, entityMrn);
+    } else if (context === MenuTypeNames.vessel) {
+      return this.vesselControllerService.deleteVessel(orgMrn, entityMrn);
+    } else if (context === MenuTypeNames.mms) {
+      return this.mmsControllerService.deleteMMS(orgMrn, entityMrn);
+    } else if (context === MenuTypeNames.service && version) {
+      return this.serviceControllerService.deleteService(orgMrn, entityMrn, version);
+    } else if (context === MenuTypeNames.organization) {
+      return this.organizationControllerService.deleteOrg(entityMrn);
+    } else if (context === MenuTypeNames.role && roleId) {
+      return this.roleControllerService.deleteRole(orgMrn, roleId);
+    }
+    return new Observable();
   }
 
   onEdit(event): void {
