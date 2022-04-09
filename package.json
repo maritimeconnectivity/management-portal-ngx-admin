@@ -68,6 +68,7 @@
     "lodash": "^4.17.21",
     "lodash.template": ">=4.5.0",
     "minimist": ">=1.2.6",
+    "moment": "^2.29.2",
     "nebular-icons": "1.1.0",
     "ng2-ckeditor": "^1.2.9",
     "ng2-smart-table": "^1.6.0",
