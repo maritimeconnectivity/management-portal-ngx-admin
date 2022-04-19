@@ -7,6 +7,7 @@ import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ngx-header',
@@ -18,6 +19,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
   userName: string;
+  logoutUrl: string;
 
   themes = [
     {
@@ -45,7 +47,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private themeService: NbThemeService,
               private layoutService: LayoutService,
               private breakpointService: NbMediaBreakpointsService,
-              private keycloakService: KeycloakService,
+              private router: Router,
               private authService: AuthService) {
   }
 
@@ -53,8 +55,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.currentTheme = this.themeService.currentTheme;
 
     if (this.authService.authState.user) {
-      this.userName = this.authService.authState.user.firstName + " for " + this.authService.authState.user.organization;
+      this.userName = this.authService.authState.user.lastName + ' ' + this.authService.authState.user.firstName;
     }
+
+    this.logoutUrl = this.authService.getLogoutUrl();
 
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()
@@ -89,7 +93,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   navigateHome() {
-    this.menuService.navigateHome();
+    this.router.navigate(['dashboard']);
     return false;
   }
 

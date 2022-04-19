@@ -12,6 +12,7 @@ export const environment = {
   production: false,
   staging: false,
   irBasePath: 'https://test-api.maritimeconnectivity.net',
+  oidcBasePath: 'https://test-maritimeid.maritimeconnectivity.net',
   hasServiceRegistry: true,
   srBasePath: 'https://msr-test.maritimeconnectivity.net',
   keycloakJson: 'assets/test-keycloak.json',

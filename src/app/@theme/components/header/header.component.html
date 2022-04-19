@@ -17,9 +17,9 @@
       <nb-search type="rotate-layout"></nb-search>
     </nb-action>
     <nb-action class="user-action" *nbIsGranted="['view', 'user']" >
-      <nb-user [name]="userName">
+      <nb-user [name]="userName" (click)="navigateHome()">
       </nb-user>
     </nb-action>
   </nb-actions>
-  <a href="#" (click)="logout()">Log out</a>
+  <a href="{{logoutUrl}}">Log out</a>
 </div>

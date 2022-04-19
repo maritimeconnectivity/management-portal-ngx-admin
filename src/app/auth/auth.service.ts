@@ -5,9 +5,11 @@ import { AuthState } from './model/AuthState';
 import { StaticAuthInfo } from './model/StaticAuthInfo';
 import { AuthPermission, PermissionResolver } from './auth.permission';
 import { AuthUser } from './model/AuthUser';
-import { Role } from "../backend-api/identity-registry/model/role";
+import { Role } from '../backend-api/identity-registry/model/role';
 
 import RoleNameEnum = Role.RoleNameEnum;
+import { Router } from '@angular/router';
+import { AppConfig } from '../app.config';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +21,11 @@ export class AuthService {
   
   public authState: AuthState;
 
-  constructor(private roleControllerService: RoleControllerService, private notifierService: NotifierService) {
+  constructor(
+    private roleControllerService: RoleControllerService,
+    private notifierService: NotifierService,
+    private router: Router,
+    ) {
     this.authState = this.createAuthState();
     this.findPermissionRoles();
   }
@@ -159,17 +165,25 @@ private createAuthState(): AuthState {
   }
 
   login() {
-  	let url = window.location;
-    AuthService.staticAuthInfo.authz.login({redirectUri:  url.protocol + "//" + url.host + "/pages/ir/organizations/"});
+  	const url = window.location;
+    AuthService.staticAuthInfo.authz.login({redirectUri:  url.protocol + "//" + url.host + "/pages/dashboard/"});
   }
 
   logout() {
 	  try {
-		  this.authState.loggedIn = false;
-		  AuthService.staticAuthInfo.authz.logout();
+      this.authState.loggedIn = false;
+      const url = window.location;
+      const loginPage = url.protocol + "//" + url.host + '/login';
+		  AuthService.staticAuthInfo.authz.logout(loginPage);
 		  AuthService.staticAuthInfo.authz = null;
 	  } catch (err) { // State is somehow lost. Just do nothing.
 	  }
+  }
+
+  public getLogoutUrl(): string {
+    const url = window.location;
+    const loginPage = url.protocol + "//" + url.host + '/login';
+    return AppConfig.OIDC_BASE_PATH + '/auth/realms/MCP/protocol/openid-connect/logout?redirect_uri=' + loginPage;
   }
 
   static getToken(): Promise<string> {
