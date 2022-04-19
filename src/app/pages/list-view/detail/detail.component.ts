@@ -169,8 +169,8 @@ export class DetailComponent implements OnInit {
   fetchFieldValues() {
     if(ColumnForMenu.hasOwnProperty(this.menuType)) {
       this.isLoading = true;
-      if (MenuType.includes(this.menuType)) {
-        if(this.menuType === MenuTypeNames.organization){
+      if (Object.values(MenuType).includes(this.menuType as MenuType)) {
+        if(this.menuType === MenuType.Organization){
           this.loadOrgContent(this.entityMrn).subscribe(
             data => {
               this.settle(true);
@@ -186,7 +186,7 @@ export class DetailComponent implements OnInit {
               this.router.navigateByUrl('/pages/404');
             },
           );
-        } else if(this.menuType === MenuTypeNames.unapprovedorg){
+        } else if(this.menuType === MenuType.UnapprovedOrg){
           this.isUnapprovedorg = true;
           this.organizationControllerService.getUnapprovedOrganizations().subscribe(
             data => {
@@ -198,7 +198,7 @@ export class DetailComponent implements OnInit {
               this.router.navigateByUrl('/pages/404');
             },
           );
-        } else if(this.menuType === MenuTypeNames.role) {
+        } else if(this.menuType === MenuType.Role) {
           const id = parseInt(this.entityMrn);
           this.roleControllerService.getRole(this.orgMrn, id).subscribe(
             data => {

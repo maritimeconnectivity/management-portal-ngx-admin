@@ -549,7 +549,7 @@ export const ColumnForMenu = {
       required: true,
     },
     version: {
-      title: 'Instance version',
+      title: 'Version',
       type: 'string',
       description: 'Version of service instance',
       visibleFrom: ['detail', 'list'],
@@ -565,7 +565,7 @@ export const ColumnForMenu = {
     status: {
       title: 'Status',
       type: 'string',
-      visibleFrom: ['detail'],
+      visibleFrom: ['detail', 'list'],
     },
     endpointUri: {
       title: 'Endpoint URI',
@@ -597,20 +597,14 @@ export const ColumnForMenu = {
       title: 'Created at',
       type: 'string',
       filter: false,
-      valuePrepareFunction: (timestamp: any) => {
-        return convertTime(timestamp);
-      },
       immutable: true,
       notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
-    updatedAt: {
+    lastUpdatedAt: {
       title: 'Updated at',
       type: 'string',
       filter: false,
-      valuePrepareFunction: (timestamp: any) => {
-        return convertTime(timestamp);
-      },
       immutable: true,
       notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
@@ -621,14 +615,6 @@ export const ColumnForMenu = {
       title: 'ID',
       type: 'number',
     },
-    mrn: {
-      title: 'Maritime Resource Name (MRN)',
-      type: 'string',
-      description: 'Unique identifier of service instance',
-      visibleFrom: ['detail', 'list'],
-      immutable: true,
-      required: true,
-    },
     name: {
       title: 'Name',
       type: 'string',
@@ -636,68 +622,63 @@ export const ColumnForMenu = {
       visibleFrom: ['detail', 'list'],
       required: true,
     },
-    permissions: {
-      title: 'Permissions',
-      type: 'string',
-      description: 'List of permissions assigned by the organization',
-      visibleFrom: ['detail'],
-    },
-    mrnSubsidiary: {
-      title: 'Subsidiary MRN',
-      type: 'string',
-      description: 'Additional MRN assigned to entity',
-      visibleFrom: ['detail'],
-    },
-    homeMMSUrl: {
-      title: 'Home MMS URL',
-      type: 'string',
-      description: 'URL of home MMS',
-      visibleFrom: ['detail'],
-    },
-    instanceVersion: {
-      title: 'Instance version',
+    version: {
+      title: 'Version',
       type: 'string',
       description: 'Version of service instance',
       visibleFrom: ['detail', 'list'],
       immutable: true,
       required: true,
     },
-    oidcAccessType: {
-      title: 'Access type',
+    serviceType: {
+      title: 'Type',
       type: 'string',
-      description: 'OpenID Connect access type',
+      description: 'Type',
+      visibleFrom: ['detail', 'list'],
+    },
+    status: {
+      title: 'Status',
+      type: 'string',
+      visibleFrom: ['detail', 'list'],
+    },
+    endpointUri: {
+      title: 'Endpoint URI',
+      type: 'string',
+      visibleFrom: ['detail'],
+      required: true,
+    },
+    organizationId: {
+      title: 'Organization',
+      type: 'string',
+      visibleFrom: ['detail'],
+      immutable: true,
+      required: true,
+    },
+    keywords: {
+      title: 'Keywords',
+      type: 'string',
       visibleFrom: ['detail'],
     },
-    oidcClientId: {
-      title: 'OIDC client ID',
+    instanceId: {
+      title: 'Instance ID',
       type: 'string',
-      description: 'OpenID Connect client ID',
-      visibleFrom: ['detail'],
-    },
-    vessel: {
-      title: 'Vessel',
-      type: 'string',
-      description: 'Correlated vessel',
-      visibleFrom: ['detail'],
+      description: 'MCP MRN as unique identifer',
+      visibleFrom: ['detail', 'list'],
+      immutable: true,
+      required: true,
     },
     createdAt: {
       title: 'Created at',
       type: 'string',
       filter: false,
-      valuePrepareFunction: (timestamp: any) => {
-        return convertTime(timestamp);
-      },
       immutable: true,
       notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
-    updatedAt: {
+    lastUpdatedAt: {
       title: 'Updated at',
       type: 'string',
       filter: false,
-      valuePrepareFunction: (timestamp: any) => {
-        return convertTime(timestamp);
-      },
       immutable: true,
       notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],

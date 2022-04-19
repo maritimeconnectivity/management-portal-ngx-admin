@@ -20,7 +20,7 @@ import { MmsControllerService, Role, VesselControllerService } from '../../../ba
 import { PageEntity } from '../../../backend-api/identity-registry/model/pageEntity';
 import { InstanceDto } from '../../../backend-api/service-registry';
 import { AuthPermission } from '../../../auth/auth.permission';
-import { formatData } from '../../../util/dataFormatter';
+import { formatData, formatServiceData } from '../../../util/dataFormatter';
 import { Entity } from '../../../backend-api/identity-registry/model/entity';
 
 const capitalize = (s): string => {
@@ -98,13 +98,13 @@ export class ListComponent implements OnInit {
       this.title = `${capitalize(this.menuTypeName)} list${ResourceType.includes(this.menuType) ? ' for ' + this.authService.authState.orgName : ''}`;
       this.isLoading = true;
 
-      if (MenuType.includes(this.menuType)) {
-        if(this.menuType === MenuTypeNames.organization || this.menuType === MenuTypeNames.unapprovedorg){
+      if (Object.values(MenuType).includes(this.menuType as MenuType)) {
+        if(this.menuType === MenuType.Organization || this.menuType === MenuType.UnapprovedOrg){
           this.loadDataContent(this.menuType).subscribe(
             res => {this.source.load(this.formatResponse(res.content)); this.isLoading = false;},
             error => this.notifierService.notify('error', error.message),
           );
-        } else if(this.menuType === MenuTypeNames.role){
+        } else if(this.menuType === MenuType.Role){
           this.loadMyOrganization().subscribe(
             resOrg => this.loadRoles(resOrg.mrn).subscribe(
               resData => {this.source.load(resData); this.isLoading = false;},
@@ -112,9 +112,14 @@ export class ListComponent implements OnInit {
             ),
             error => this.notifierService.notify('error', error.message),
           );
-        } else if(this.menuType === MenuTypeNames.instance){
+        } else if(this.menuType === MenuType.Instance){
           this.loadServiceInstances().subscribe(
-            resData => {this.source.load(resData); this.isLoading = false;},
+            resData => {this.source.load(this.formatResponseForService(resData)); this.isLoading = false;},
+            error => this.notifierService.notify('error', error.message),
+          );
+        } else if(this.menuType === MenuType.UnapprovedSvc){
+          this.loadServiceInstances().subscribe(
+            resData => {this.source.load(this.formatResponseForService(resData)); this.isLoading = false;},
             error => this.notifierService.notify('error', error.message),
           );
         } else {
@@ -140,6 +145,10 @@ export class ListComponent implements OnInit {
     return data.map(d => formatData(d));
   }
 
+  formatResponseForService(data: any[]) {
+    return data.map(d => formatServiceData(d));
+  }
+  
   onDelete(event): void {
     if (!this.isAdmin()) {
       this.notifierService.notify('error', 'You don\'t have right permission');
@@ -224,19 +233,19 @@ export class ListComponent implements OnInit {
   }
 
   loadDataContent = (context: string, orgMrn?: string):Observable<PageEntity> => {
-    if (context === MenuTypeNames.user) {
+    if (context === MenuType.User) {
       return this.userControllerService.getOrganizationUsers(orgMrn);
-    } else if (context === MenuTypeNames.device) {
+    } else if (context === MenuType.Device) {
       return this.deviceControllerService.getOrganizationDevices(orgMrn);
-    } else if (context === MenuTypeNames.vessel) {
+    } else if (context === MenuType.Vessel) {
       return this.vesselControllerService.getOrganizationVessels(orgMrn);
-    } else if (context === MenuTypeNames.mms) {
+    } else if (context === MenuType.MMS) {
       return this.mmsControllerService.getOrganizationMMSes(orgMrn);
-    } else if (context === MenuTypeNames.service) {
+    } else if (context === MenuType.Service) {
       return this.serviceControllerService.getOrganizationServices(orgMrn);
-    } else if (context === MenuTypeNames.organization) {
+    } else if (context === MenuType.Organization) {
       return this.organizationControllerService.getOrganization();
-    } else if (context === MenuTypeNames.unapprovedorg) {
+    } else if (context === MenuType.UnapprovedOrg) {
       return this.organizationControllerService.getUnapprovedOrganizations();
     }
     return new Observable();

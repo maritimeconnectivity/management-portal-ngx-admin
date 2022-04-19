@@ -20,34 +20,25 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'layers-outline',
     children: [
       {
-        title: 'Search',
-        link: '/pages/sr/search',
-      },
-      {
-        title: 'Administration',
-        children: [
-          {
-            title: 'Approve ledger registration',
-            link: '/pages/sr/approve-svc',
-          },
-          {
-            title: 'Services',
-            link: '/pages/sr/instances',
-          },
-        ],
+        title: 'Approve ledger registration',
+        link: '/pages/sr/approve-svc',
       },
       {
         title: 'My Organization',
         children: [
           {
-            title: 'Register service',
-            link: '/pages/sr/instances/register',
-          },
-          {
             title: 'Services',
             link: '/pages/sr/instances',
           },
         ],
+      },
+      {
+        title: 'Services',
+        link: '/pages/sr/instances',
+      },
+      {
+        title: 'Search',
+        link: '/pages/sr/search',
       },
       {
         title: 'User Guide',

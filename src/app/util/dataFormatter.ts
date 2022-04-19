@@ -27,6 +27,16 @@ export const formatData = (data: object): object => {
   return menuData;
 };
 
+export const formatServiceData = (data: object): object => {
+  let menuData = {};
+  for (const key in data) {
+    menuData[key] = key.endsWith("At")
+        ? convertTime(new Date(data[key]))
+        : data[key];
+  }
+  return menuData;
+};
+
 export const formatVesselToUpload = (vesselData: object): object => {
   let attributes = [];
   for (const key in vesselData) {
