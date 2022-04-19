@@ -1,9 +1,8 @@
 {
-    "realm": "MCP",
-    "bearer-only": true,
-    "auth-server-url": "https://id.local.mcp/auth/",
-    "ssl-required": "external",
-    "resource": "mcpidreg",
-    "confidential-port": 0
-  }
-  
+  "realm": "MCP",
+  "auth-server-url": "https://test-maritimeid.maritimeconnectivity.net/auth/",
+  "ssl-required": "external",
+  "resource": "MCP-Portal",
+  "public-client": true,
+  "confidential-port": 0
+}

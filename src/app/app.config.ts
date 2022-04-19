@@ -3,6 +3,7 @@ import { environment } from '../environments/environment';
 
 export class AppConfig {
   static KEYCLOAK_JSON: string;
+  static OIDC_BASE_PATH: string;
   static ENDORSEMENT_BASE_PATH: string;
   static IR_BASE_PATH: string;
   static HAS_SERVICE_REGISTRY: boolean;
@@ -17,6 +18,8 @@ export class AppConfig {
     AppConfig.ENVIRONMENT_TEXT = environment.environmentText,
     AppConfig.IDP_NAMESPACE = environment.idpNamespace;
     AppConfig.HAS_SERVICE_REGISTRY = environment.hasServiceRegistry;
+    AppConfig.OIDC_BASE_PATH = environment.oidcBasePath;
+
   }
 }
 AppConfig._initialize();

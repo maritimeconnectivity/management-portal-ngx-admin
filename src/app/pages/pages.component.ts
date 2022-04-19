@@ -1,3 +1,4 @@
+import { NbMenuService } from '@nebular/theme';
 import { AuthService } from './../auth/auth.service';
 import { NotifierService } from 'angular-notifier';
 import { Organization } from './../backend-api/identity-registry/model/organization';
@@ -16,7 +17,7 @@ import { AppConfig } from '../app.config';
   styleUrls: ['pages.component.scss'],
   template: `
     <ngx-one-column-layout>
-      <nb-menu [items]="menu"></nb-menu>
+      <nb-menu [items]="menu" autoCollapse="true"></nb-menu>
       <router-outlet></router-outlet>
     </ngx-one-column-layout>
   `,

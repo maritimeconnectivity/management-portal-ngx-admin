@@ -15,7 +15,7 @@ export class ECommerceUserActivityComponent implements OnDestroy {
 
   userActivity: UserActive[] = [];
   type = 'month';
-  types = ['week', 'month', 'year'];
+  types = ['user', 'month', 'year'];
   currentTheme: string;
 
   constructor(private themeService: NbThemeService,
@@ -33,7 +33,7 @@ export class ECommerceUserActivityComponent implements OnDestroy {
     this.userActivityService.getUserActivityData(period)
       .pipe(takeWhile(() => this.alive))
       .subscribe(userActivityData => {
-        this.userActivity = userActivityData;
+        this.userActivity = [];
       });
   }
 

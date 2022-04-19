@@ -10,9 +10,10 @@
 
 export const environment = {
   production: false,
-  irBasePath: 'https://staging-api.maritimeconnectivity.net',
+  irBasePath: 'https://test-api.maritimeconnectivity.net',
+  oidcBasePath: 'https://test-maritimeid.maritimeconnectivity.net',
   hasServiceRegistry: true,
-  srBasePath: 'https://sr.local.mcp',
+  srBasePath: 'https://msr-test.maritimeconnectivity.net',
   keycloakJson: 'assets/staging-keycloak.json',
   environmentText: 'TEST',
   idpNamespace: 'mcc-stage',
