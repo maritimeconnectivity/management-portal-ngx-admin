@@ -8,6 +8,13 @@
     padding: 10px;
 }
 
+.reference {
+  color: rgb(100, 100, 100);
+  a {
+    color: rgb(100, 100, 100);
+  }
+}
+
 @include nb-install-component() {
     .buttons-row {
       margin: -0.5rem;
