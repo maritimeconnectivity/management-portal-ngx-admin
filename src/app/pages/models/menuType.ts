@@ -19,6 +19,7 @@ export enum MenuType {
   Role = 'role',
   Agent = 'agent',
   Instance = 'instance',
+  InstanceOfOrg = 'instanceorg',
   UnapprovedOrg = 'approveorg',
   UnapprovedSvc = 'approvesvc',
 }
@@ -35,6 +36,7 @@ export const MenuTypeNames = {
   agent: 'agent',
   mms: 'mms',
   instance: 'instance',
+  instanceorg: 'instance',
   approveorg: 'unapproved organization',
   approvesvc: 'unapproved service',
   orgsvc: 'owned service',
@@ -50,6 +52,7 @@ export const MenuTypeIconNames = {
   agent: 'user',
   mms: 'forward',
   instance: 'compass',
+  instanceorg: 'compass',
   approveorg: 'clipboard',
   approvesvc: 'clipboard',
 }

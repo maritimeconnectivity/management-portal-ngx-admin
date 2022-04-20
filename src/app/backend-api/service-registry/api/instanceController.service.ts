@@ -1,3 +1,4 @@
+import { AppConfig } from './../../../app.config';
 /**
  * Maritime Connectivity Platform Service Registry API
  * Maritime Connectivity Platform Service Registry, developed by the MCC MSR WG
@@ -30,7 +31,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class InstanceControllerService {
 
-    protected basePath = 'https://msr-test.maritimeconnectivity.net';
+    protected basePath = AppConfig.SR_BASE_PATH;
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -252,11 +253,6 @@ export class InstanceControllerService {
     public getInstancesUsingGET(offset?: number, paged?: boolean, pageNumber?: number, pageSize?: number, sortSorted?: boolean, sortUnsorted?: boolean, unpaged?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<InstanceDtoRes>>>;
     public getInstancesUsingGET(offset?: number, paged?: boolean, pageNumber?: number, pageSize?: number, sortSorted?: boolean, sortUnsorted?: boolean, unpaged?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<InstanceDtoRes>>>;
     public getInstancesUsingGET(offset?: number, paged?: boolean, pageNumber?: number, pageSize?: number, sortSorted?: boolean, sortUnsorted?: boolean, unpaged?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-
-
-
-
 
 
 

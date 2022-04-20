@@ -28,7 +28,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
         children: [
           {
             title: 'Services',
-            link: '/pages/sr/instances',
+            link: '/pages/sr/instanceorg',
           },
         ],
       },

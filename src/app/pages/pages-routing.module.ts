@@ -81,6 +81,11 @@ const routes: Routes = [
         .then(m => m.ListViewModule),
     },
     {
+      path: 'sr/instanceorg',
+      loadChildren: () => import('./list-view/list-view.module')
+        .then(m => m.ListViewModule),
+    },
+    {
       path: 'sr/approve-svc',
       loadChildren: () => import('./list-view/list-view.module')
         .then(m => m.ListViewModule),

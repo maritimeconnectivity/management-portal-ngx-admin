@@ -1,3 +1,4 @@
+import { AuthState } from './../../../auth/model/AuthState';
 import { StaticAuthInfo } from './../../../auth/model/StaticAuthInfo';
 import { AuthService } from './../../../auth/auth.service';
 import { InstanceControllerService } from './../../../backend-api/service-registry/api/instanceController.service';
@@ -18,7 +19,7 @@ import { NbIconLibraries } from '@nebular/theme';
 import { NotifierService } from 'angular-notifier';
 import { MmsControllerService, Role, VesselControllerService } from '../../../backend-api/identity-registry';
 import { PageEntity } from '../../../backend-api/identity-registry/model/pageEntity';
-import { InstanceDto } from '../../../backend-api/service-registry';
+import { InstanceDto, SearchControllerService } from '../../../backend-api/service-registry';
 import { AuthPermission } from '../../../auth/auth.permission';
 import { formatData, formatServiceData } from '../../../util/dataFormatter';
 import { Entity } from '../../../backend-api/identity-registry/model/entity';
@@ -61,6 +62,7 @@ export class ListComponent implements OnInit {
   };
   showTables = true;
   source: LocalDataSource = new LocalDataSource();
+  isForServiceForOrg = false;
 
   constructor(private router: Router,
     iconsLibrary: NbIconLibraries,
@@ -70,17 +72,27 @@ export class ListComponent implements OnInit {
     private vesselControllerService: VesselControllerService,
     private serviceControllerService: ServiceControllerService,
     private instanceControllerService: InstanceControllerService,
+    private searchControllerService: SearchControllerService,
     private mmsControllerService: MmsControllerService,
     private organizationControllerService: OrganizationControllerService,
     private notifierService: NotifierService,
     private authService: AuthService,
     ) {
     this.menuType = this.router.url.split("/").pop();
-    this.menuType = this.menuType.replace('-', '').substr(0,this.menuType.length-1);
-    this.menuTypeName = MenuTypeNames[this.menuType];
-    this.iconName = MenuTypeIconNames[this.menuType];
-    this.orgMrn = this.authService.authState.orgMrn;
-    iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
+    this.menuType = this.menuType.endsWith('s') ? this.menuType.replace('-', '').substr(0,this.menuType.length-1) :
+      this.menuType.replace('-', '');
+    if (this.menuType === MenuType.InstanceOfOrg) {
+      this.isForServiceForOrg = true;
+      this.menuType = MenuType.Instance;
+    }
+    if (Object.values(MenuType).includes(this.menuType as MenuType)) {
+      this.menuTypeName = MenuTypeNames[this.menuType];
+      this.iconName = MenuTypeIconNames[this.menuType];
+      this.orgMrn = this.authService.authState.orgMrn;
+      iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
+    } else {
+      this.router.navigate(['**']);
+    }
   }
 
   ngOnInit(): void {
@@ -112,8 +124,8 @@ export class ListComponent implements OnInit {
             ),
             error => this.notifierService.notify('error', error.message),
           );
-        } else if(this.menuType === MenuType.Instance){
-          this.loadServiceInstances().subscribe(
+        } else if(this.menuType === MenuType.Instance || this.menuType === MenuType.InstanceOfOrg){
+          this.loadServiceInstances(this.isForServiceForOrg ? this.orgMrn : undefined).subscribe(
             resData => {this.source.load(this.formatResponseForService(resData)); this.isLoading = false;},
             error => this.notifierService.notify('error', error.message),
           );
@@ -159,7 +171,7 @@ export class ListComponent implements OnInit {
 
   delete(menuType: string, orgMrn: string, entityMrn: string, instanceVersion?: string, roleId?: number) {
     let message = 'Are you sure you want to delete?';
-    message = EntityTypes.indexOf(this.menuType)>=0 ?
+    message = EntityTypes.indexOf(this.menuType) >= 0 ?
       message + ' All certificates under this entity will be revoked.' : message;
     if (confirm(message)) {
       this.deleteData(menuType, orgMrn, entityMrn, instanceVersion).subscribe(
@@ -228,8 +240,9 @@ export class ListComponent implements OnInit {
     return this.organizationControllerService.getOrganizationByMrn(this.authService.authState.orgMrn);
 	}
 
-  loadServiceInstances = ():Observable<InstanceDto[]> => {
-    return this.instanceControllerService.getInstancesUsingGET();
+  loadServiceInstances = (orgMrn?: string):Observable<InstanceDto[]> => {
+    return orgMrn ? this.searchControllerService.searchInstancesUsingGET('', '', false, 'organizationId:' + orgMrn.split(":").join("\\:") + "*") :
+      this.instanceControllerService.getInstancesUsingGET();
   }
 
   loadDataContent = (context: string, orgMrn?: string):Observable<PageEntity> => {
