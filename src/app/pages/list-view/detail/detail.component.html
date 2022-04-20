@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-lg-12">
-    <div *ngIf="!isMyOrgPage && !isForNew">
+    <div *ngIf="!noBacklink && !isForNew">
       <button nbButton status="info" ghost (click)="cancel()">
         <nb-icon icon="arrow-ios-back" pack="eva"></nb-icon> 
         Back to {{entityTypeName}} list

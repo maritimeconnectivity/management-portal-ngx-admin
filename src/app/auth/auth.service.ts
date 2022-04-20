@@ -166,7 +166,7 @@ private createAuthState(): AuthState {
 
   login() {
   	const url = window.location;
-    AuthService.staticAuthInfo.authz.login({redirectUri:  url.protocol + "//" + url.host + "/pages/dashboard/"});
+    AuthService.staticAuthInfo.authz.login({redirectUri:  url.protocol + "//" + url.host + "/pages/ir/users/"});
   }
 
   logout() {

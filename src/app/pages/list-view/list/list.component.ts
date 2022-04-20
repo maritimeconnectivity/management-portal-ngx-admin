@@ -1,3 +1,4 @@
+import { AuthState } from './../../../auth/model/AuthState';
 import { StaticAuthInfo } from './../../../auth/model/StaticAuthInfo';
 import { AuthService } from './../../../auth/auth.service';
 import { InstanceControllerService } from './../../../backend-api/service-registry/api/instanceController.service';
@@ -18,9 +19,9 @@ import { NbIconLibraries } from '@nebular/theme';
 import { NotifierService } from 'angular-notifier';
 import { MmsControllerService, Role, VesselControllerService } from '../../../backend-api/identity-registry';
 import { PageEntity } from '../../../backend-api/identity-registry/model/pageEntity';
-import { InstanceDto } from '../../../backend-api/service-registry';
+import { InstanceDto, SearchControllerService } from '../../../backend-api/service-registry';
 import { AuthPermission } from '../../../auth/auth.permission';
-import { formatData } from '../../../util/dataFormatter';
+import { formatData, formatServiceData } from '../../../util/dataFormatter';
 import { Entity } from '../../../backend-api/identity-registry/model/entity';
 
 const capitalize = (s): string => {
@@ -61,6 +62,7 @@ export class ListComponent implements OnInit {
   };
   showTables = true;
   source: LocalDataSource = new LocalDataSource();
+  isForServiceForOrg = false;
 
   constructor(private router: Router,
     iconsLibrary: NbIconLibraries,
@@ -70,17 +72,27 @@ export class ListComponent implements OnInit {
     private vesselControllerService: VesselControllerService,
     private serviceControllerService: ServiceControllerService,
     private instanceControllerService: InstanceControllerService,
+    private searchControllerService: SearchControllerService,
     private mmsControllerService: MmsControllerService,
     private organizationControllerService: OrganizationControllerService,
     private notifierService: NotifierService,
     private authService: AuthService,
     ) {
     this.menuType = this.router.url.split("/").pop();
-    this.menuType = this.menuType.replace('-', '').substr(0,this.menuType.length-1);
-    this.menuTypeName = MenuTypeNames[this.menuType];
-    this.iconName = MenuTypeIconNames[this.menuType];
-    this.orgMrn = this.authService.authState.orgMrn;
-    iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
+    this.menuType = this.menuType.endsWith('s') ? this.menuType.replace('-', '').substr(0,this.menuType.length-1) :
+      this.menuType.replace('-', '');
+    if (this.menuType === MenuType.InstanceOfOrg) {
+      this.isForServiceForOrg = true;
+      this.menuType = MenuType.Instance;
+    }
+    if (Object.values(MenuType).includes(this.menuType as MenuType)) {
+      this.menuTypeName = MenuTypeNames[this.menuType];
+      this.iconName = MenuTypeIconNames[this.menuType];
+      this.orgMrn = this.authService.authState.orgMrn;
+      iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
+    } else {
+      this.router.navigate(['**']);
+    }
   }
 
   ngOnInit(): void {
@@ -95,16 +107,16 @@ export class ListComponent implements OnInit {
       );
       this.settings = Object.assign({}, this.mySettings);
       // Not-approved organization list
-      this.title = `${capitalize(this.menuTypeName)} list${ResourceType.includes(this.menuType) ? ' for ' + this.authService.authState.orgName : ''}`;
+      this.title = `${capitalize(this.menuTypeName)} list`;
       this.isLoading = true;
 
-      if (MenuType.includes(this.menuType)) {
-        if(this.menuType === MenuTypeNames.organization || this.menuType === MenuTypeNames.unapprovedorg){
+      if (Object.values(MenuType).includes(this.menuType as MenuType)) {
+        if(this.menuType === MenuType.Organization || this.menuType === MenuType.UnapprovedOrg){
           this.loadDataContent(this.menuType).subscribe(
             res => {this.source.load(this.formatResponse(res.content)); this.isLoading = false;},
             error => this.notifierService.notify('error', error.message),
           );
-        } else if(this.menuType === MenuTypeNames.role){
+        } else if(this.menuType === MenuType.Role){
           this.loadMyOrganization().subscribe(
             resOrg => this.loadRoles(resOrg.mrn).subscribe(
               resData => {this.source.load(resData); this.isLoading = false;},
@@ -112,9 +124,14 @@ export class ListComponent implements OnInit {
             ),
             error => this.notifierService.notify('error', error.message),
           );
-        } else if(this.menuType === MenuTypeNames.instance){
+        } else if(this.menuType === MenuType.Instance || this.menuType === MenuType.InstanceOfOrg){
+          this.loadServiceInstances(this.isForServiceForOrg ? this.orgMrn : undefined).subscribe(
+            resData => {this.source.load(this.formatResponseForService(resData)); this.isLoading = false;},
+            error => this.notifierService.notify('error', error.message),
+          );
+        } else if(this.menuType === MenuType.UnapprovedSvc){
           this.loadServiceInstances().subscribe(
-            resData => {this.source.load(resData); this.isLoading = false;},
+            resData => {this.source.load(this.formatResponseForService(resData)); this.isLoading = false;},
             error => this.notifierService.notify('error', error.message),
           );
         } else {
@@ -140,6 +157,10 @@ export class ListComponent implements OnInit {
     return data.map(d => formatData(d));
   }
 
+  formatResponseForService(data: any[]) {
+    return data.map(d => formatServiceData(d));
+  }
+  
   onDelete(event): void {
     if (!this.isAdmin()) {
       this.notifierService.notify('error', 'You don\'t have right permission');
@@ -150,7 +171,7 @@ export class ListComponent implements OnInit {
 
   delete(menuType: string, orgMrn: string, entityMrn: string, instanceVersion?: string, roleId?: number) {
     let message = 'Are you sure you want to delete?';
-    message = EntityTypes.indexOf(this.menuType)>=0 ?
+    message = EntityTypes.indexOf(this.menuType) >= 0 ?
       message + ' All certificates under this entity will be revoked.' : message;
     if (confirm(message)) {
       this.deleteData(menuType, orgMrn, entityMrn, instanceVersion).subscribe(
@@ -219,24 +240,25 @@ export class ListComponent implements OnInit {
     return this.organizationControllerService.getOrganizationByMrn(this.authService.authState.orgMrn);
 	}
 
-  loadServiceInstances = ():Observable<InstanceDto[]> => {
-    return this.instanceControllerService.getInstancesUsingGET();
+  loadServiceInstances = (orgMrn?: string):Observable<InstanceDto[]> => {
+    return orgMrn ? this.searchControllerService.searchInstancesUsingGET('', '', false, 'organizationId:' + orgMrn.split(":").join("\\:") + "*") :
+      this.instanceControllerService.getInstancesUsingGET();
   }
 
   loadDataContent = (context: string, orgMrn?: string):Observable<PageEntity> => {
-    if (context === MenuTypeNames.user) {
+    if (context === MenuType.User) {
       return this.userControllerService.getOrganizationUsers(orgMrn);
-    } else if (context === MenuTypeNames.device) {
+    } else if (context === MenuType.Device) {
       return this.deviceControllerService.getOrganizationDevices(orgMrn);
-    } else if (context === MenuTypeNames.vessel) {
+    } else if (context === MenuType.Vessel) {
       return this.vesselControllerService.getOrganizationVessels(orgMrn);
-    } else if (context === MenuTypeNames.mms) {
+    } else if (context === MenuType.MMS) {
       return this.mmsControllerService.getOrganizationMMSes(orgMrn);
-    } else if (context === MenuTypeNames.service) {
+    } else if (context === MenuType.Service) {
       return this.serviceControllerService.getOrganizationServices(orgMrn);
-    } else if (context === MenuTypeNames.organization) {
+    } else if (context === MenuType.Organization) {
       return this.organizationControllerService.getOrganization();
-    } else if (context === MenuTypeNames.unapprovedorg) {
+    } else if (context === MenuType.UnapprovedOrg) {
       return this.organizationControllerService.getUnapprovedOrganizations();
     }
     return new Observable();

@@ -22,12 +22,13 @@ import { LedgerRequestDto } from '../model/ledgerRequestDto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
+import { AppConfig } from '../../../app.config';
 
 
 @Injectable()
 export class LedgerRequestControllerService {
 
-    protected basePath = 'https://msr-test.maritimeconnectivity.net';
+    protected basePath = AppConfig.SR_BASE_PATH;
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

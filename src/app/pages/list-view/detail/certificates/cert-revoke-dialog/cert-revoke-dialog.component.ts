@@ -28,6 +28,7 @@ export class CertRevokeDialogComponent implements OnInit {
   date = new Date();
   reasons = [];
   description = '';
+  reference = '';
   revokationReason: RevokationReasonEnum;
   dayCellComponent = DayCellComponent;
   
@@ -75,6 +76,7 @@ export class CertRevokeDialogComponent implements OnInit {
     const chosenReasonOption = getReasonOptionFromRevocationReason(event);
     this.revokationReason = chosenReasonOption.value;
     this.description = chosenReasonOption.description;
+    this.reference = chosenReasonOption.reference;
   }
 
   onDateChange(event) {

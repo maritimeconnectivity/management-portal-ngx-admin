@@ -1,5 +1,3 @@
-export const MenuType = ['device', 'vessel', 'user', 'service', 'organization', 'role', 'agent', 'instance', 'approveorg', 'approvesvc'];
-
 export const EntityTypes = ['device', 'vessel', 'user', 'service', 'organization', 'mms'];
 
 export enum EntityType {
@@ -9,6 +7,21 @@ export enum EntityType {
   User = 'user',
   Vessel = 'vessel',
   MMS = 'mms'
+}
+
+export enum MenuType {
+  Device = 'device',
+  Organization = 'organization',
+  Service = 'service',
+  User = 'user',
+  Vessel = 'vessel',
+  MMS = 'mms',
+  Role = 'role',
+  Agent = 'agent',
+  Instance = 'instance',
+  InstanceOfOrg = 'instanceorg',
+  UnapprovedOrg = 'approveorg',
+  UnapprovedSvc = 'approvesvc',
 }
 
 export const ResourceType = ['device', 'vessel', 'user', 'service', 'role', 'agent'];
@@ -23,9 +36,10 @@ export const MenuTypeNames = {
   agent: 'agent',
   mms: 'mms',
   instance: 'instance',
-  unapprovedorg: 'approveorg',
+  instanceorg: 'instance',
   approveorg: 'unapproved organization',
   approvesvc: 'unapproved service',
+  orgsvc: 'owned service',
 }
 
 export const MenuTypeIconNames = {
@@ -38,6 +52,7 @@ export const MenuTypeIconNames = {
   agent: 'user',
   mms: 'forward',
   instance: 'compass',
+  instanceorg: 'compass',
   approveorg: 'clipboard',
   approvesvc: 'clipboard',
 }
