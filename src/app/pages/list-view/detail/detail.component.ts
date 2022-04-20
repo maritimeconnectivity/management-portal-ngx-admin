@@ -28,7 +28,7 @@ export class DetailComponent implements OnInit {
   isLoading = false;
   menuType = 'device';
   instanceVersion = '';
-  isMyOrgPage = false;
+  noBacklink = false;
   isForNew = false;
   columnForMenu = ColumnForMenu[this.menuType];
   contextForAttributes = 'detail';
@@ -104,7 +104,7 @@ export class DetailComponent implements OnInit {
       //this is my organization page when it comes with no name
       this.route.queryParams.subscribe(e =>
         {
-          this.isMyOrgPage = this.entityMrn === this.authService.authState.orgMrn && e.name === undefined;
+          this.noBacklink = e.name === undefined;
           this.name = e.name;
           this.instanceVersion = e.version;
         });
@@ -215,6 +215,9 @@ export class DetailComponent implements OnInit {
           this.route.queryParams.subscribe(e => this.loadDataContent(this.menuType, this.authService.authState.user.organization, this.entityMrn, e.version).subscribe(
             data => {
               this.settle(true);
+              if (this.menuType === MenuType.User) {
+                this.name = (data as User).firstName + " " + (data as User).lastName;
+              }
               this.adjustData(data);
               const splited = this.certificateService.splitByRevokeStatus(data.certificates);
 

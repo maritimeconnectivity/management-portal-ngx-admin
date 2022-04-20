@@ -107,7 +107,7 @@ export class ListComponent implements OnInit {
       );
       this.settings = Object.assign({}, this.mySettings);
       // Not-approved organization list
-      this.title = `${capitalize(this.menuTypeName)} list${ResourceType.includes(this.menuType) ? ' for ' + this.authService.authState.orgName : ''}`;
+      this.title = `${capitalize(this.menuTypeName)} list`;
       this.isLoading = true;
 
       if (Object.values(MenuType).includes(this.menuType as MenuType)) {
