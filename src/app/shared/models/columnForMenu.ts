@@ -590,7 +590,20 @@ export const ColumnForMenu = {
       type: 'string',
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail', 'list'],
-      immutable: true,
+      required: true,
+    },
+    designId: {
+      title: 'Technical design ID',
+      type: 'string',
+      description: 'MCP MRN as unique identifer',
+      visibleFrom: ['detail', 'list'],
+      required: true,
+    },
+    designVer: {
+      title: 'Technical design version',
+      type: 'string',
+      description: 'MCP MRN as unique identifer',
+      visibleFrom: ['detail'],
       required: true,
     },
     createdAt: {
