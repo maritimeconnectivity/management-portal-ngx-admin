@@ -201,7 +201,7 @@ export class ListComponent implements OnInit {
   }
 
   onEdit(event): void {
-    const mrn = this.menuType === MenuType.Instance ? event.data.instanceId : event.data.mrn;
+    const mrn = this.menuType === MenuType.Instance ? event.data.id : event.data.mrn;
     this.router.navigate([this.router.url,
       mrn ? encodeURIComponent(mrn) : event.data.id],
         { queryParams: { name: event.data.roleName ? event.data.roleName :

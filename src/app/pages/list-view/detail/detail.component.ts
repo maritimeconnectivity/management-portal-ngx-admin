@@ -1,3 +1,4 @@
+import { InstanceDtDto } from './../../../backend-api/service-registry/model/instanceDtDto';
 import { FormGroup } from '@angular/forms';
 import { InstanceControllerService } from './../../../backend-api/service-registry/api/instanceController.service';
 import { formatVesselToUpload } from '../../../util/dataFormatter';
@@ -40,7 +41,7 @@ export class DetailComponent implements OnInit {
   revokedCertificates = [];
   isEditing = false;
   shortId = '';
-  roleId = -1;
+  numberId = -1;
   isLoaded = true;
   isShortIdValid = false;
   data = {};
@@ -79,6 +80,7 @@ export class DetailComponent implements OnInit {
       this.entityMrn = decodeURIComponent(this.route.snapshot.paramMap.get("id"));
       this.orgMrn = this.authService.authState.orgMrn;
       this.isForNew = this.entityMrn === 'new';
+      this.numberId = this.menuType === MenuType.Instance ? parseInt(this.entityMrn) : -1;
 
       // preventing refresh
       this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -133,7 +135,7 @@ export class DetailComponent implements OnInit {
           this.roleControllerService.getRole(this.orgMrn, id).subscribe(
             data => {
               this.settle(true);
-              this.roleId = data.id;
+              this.numberId = data.id;
               this.editableForm.adjustTitle(this.menuType, this.title);
               this.editableForm.adjustData(data);
             },
@@ -143,7 +145,7 @@ export class DetailComponent implements OnInit {
             },
           )
         } else {
-          this.route.queryParams.subscribe(e => this.loadDataContent(this.menuType, this.authService.authState.user.organization, this.entityMrn, e.version).subscribe(
+          this.route.queryParams.subscribe(e => this.loadDataContent(this.menuType, this.authService.authState.user.organization, this.entityMrn, e.version, this.numberId).subscribe(
             data => {
               this.settle(true);
               if (this.menuType === MenuType.User) {
@@ -248,11 +250,13 @@ export class DetailComponent implements OnInit {
       return this.organizationControllerService.applyOrganization(body as Organization);
     } else if (context === MenuTypeNames.role) {
       return this.roleControllerService.createRole(body as Role, orgMrn);
+    } else if (context === MenuTypeNames.instance) {
+      return this.instanceControllerService.createInstanceUsingPOST(body as InstanceDtDto);
     }
     return new Observable();
   }
 
-  updateData = (context: string, body: object, orgMrn: string, entityMrn: string, version?: string): Observable<Entity> => {
+  updateData = (context: string, body: object, orgMrn: string, entityMrn: string, version?: string, instanceId?: number): Observable<Entity> => {
     if (context === MenuType.User) {
       return this.userControllerService.updateUser(body as User, orgMrn, entityMrn);
     } else if (context === MenuType.Device) {
@@ -266,12 +270,14 @@ export class DetailComponent implements OnInit {
     } else if (context === MenuType.Organization) {
       return this.organizationControllerService.updateOrganization(body as Organization, entityMrn);
     } else if (context === MenuTypeNames.role) {
-      return this.roleControllerService.updateRole(body as Role, orgMrn, this.roleId);
+      return this.roleControllerService.updateRole(body as Role, orgMrn, this.numberId);
+    } else if (context === MenuTypeNames.instance) {
+      return this.instanceControllerService.updateInstanceUsingPUT(instanceId, body as InstanceDtDto);
     }
     return new Observable();
   }
 
-  deleteData = (context: string, orgMrn: string, entityMrn: string, version?: string): Observable<Entity> => {
+  deleteData = (context: string, orgMrn: string, entityMrn: string, version?: string, instanceId?: number): Observable<Entity> => {
     if (context === MenuType.User) {
       return this.userControllerService.deleteUser(orgMrn, entityMrn);
     } else if (context === MenuType.Device) {
@@ -285,12 +291,14 @@ export class DetailComponent implements OnInit {
     } else if (context === MenuType.Organization) {
       return this.organizationControllerService.deleteOrg(entityMrn);
     } else if (context === MenuTypeNames.role) {
-      return this.roleControllerService.deleteRole(orgMrn, this.roleId);
+      return this.roleControllerService.deleteRole(orgMrn, this.numberId);
+    } else if (context === MenuTypeNames.instance) {
+      return this.instanceControllerService.deleteInstanceUsingDELETE(instanceId);
     }
     return new Observable();
   }
 
-  loadDataContent = (context: string, orgMrn: string, entityMrn: string, version?: string): Observable<Entity> => {
+  loadDataContent = (context: string, orgMrn: string, entityMrn: string, version?: string, instanceId?: number): Observable<Entity> => {
     if (context === MenuType.User) {
       return this.userControllerService.getUser(orgMrn, entityMrn);
     } else if (context === MenuType.Device) {
@@ -304,7 +312,7 @@ export class DetailComponent implements OnInit {
     } else if (context === MenuType.Organization) {
       return this.loadOrgContent(entityMrn);
     } else if (context === MenuType.Instance) {
-      //return this.instanceControllerService.getInstanceUsingGET();
+      return this.instanceControllerService.getInstanceUsingGET(instanceId);
     }
     return new Observable();
   }
