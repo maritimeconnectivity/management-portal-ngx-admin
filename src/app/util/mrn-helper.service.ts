@@ -1,8 +1,7 @@
 import { AuthService } from './../auth/auth.service';
-import { MenuType, MenuTypeNames } from "./../pages/models/menuType";
+import { MenuType, MenuTypeNames } from "../shared/models/menuType";
 import { Injectable } from "@angular/core";
 import { AppConfig } from "../app.config";
-import { StaticAuthInfo } from "../auth/model/StaticAuthInfo";
 
 @Injectable({
   providedIn: "root",
