@@ -1,20 +1,17 @@
-import { formatData, formatVesselToUpload } from '../../../util/dataFormatter';
+import { FormGroup } from '@angular/forms';
+import { InstanceControllerService } from './../../../backend-api/service-registry/api/instanceController.service';
+import { formatVesselToUpload } from '../../../util/dataFormatter';
 import { Device } from './../../../backend-api/identity-registry/model/device';
-import { MrnHelperService } from './../../../util/mrn-helper.service';
-import { CertificateService } from './../../../shared/certificate.service';
+import { Location } from '@angular/common';
 import { Organization } from './../../../backend-api/identity-registry/model/organization';
 import { Entity } from './../../../backend-api/identity-registry/model/entity';
-import { EntityTypes, MenuType, MenuTypeNames } from './../../models/menuType';
-import { ColumnForMenu } from '../../models/columnForMenu';
-import { Component, Input, OnInit } from '@angular/core';
+import { EntityTypes, MenuType, MenuTypeIconNames, MenuTypeNames } from '../../../shared/models/menuType';
+import { ColumnForMenu } from '../../../shared/models/columnForMenu';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
-import { NbIconLibraries } from '@nebular/theme';
-import { MenuTypeIconNames } from '../../models/menuType';
 import { DeviceControllerService, MMS, MmsControllerService, OrganizationControllerService, Role, RoleControllerService, Service, ServiceControllerService, User, UserControllerService, Vessel, VesselControllerService } from '../../../backend-api/identity-registry';
 import { Observable } from 'rxjs/Observable';
 import { NotifierService } from 'angular-notifier';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../auth/auth.service';
 import { AuthPermission, PermissionResolver, rolesToPermission } from '../../../auth/auth.permission';
 
@@ -24,17 +21,16 @@ import { AuthPermission, PermissionResolver, rolesToPermission } from '../../../
   styleUrls: ['./detail.component.scss']
 })
 export class DetailComponent implements OnInit {
-  name = '';
+  title = '';
   isLoading = false;
   menuType = 'device';
+  iconName = 'circle';
   instanceVersion = '';
   noBacklink = false;
   isForNew = false;
   columnForMenu = ColumnForMenu[this.menuType];
   contextForAttributes = 'detail';
-  iconName = 'circle';
   menuTypeName = '';
-  isEntity = false;
   entityMrn = '';
   orgMrn = '';
   isUnapprovedorg = false;
@@ -42,40 +38,29 @@ export class DetailComponent implements OnInit {
   values = {};
   activeCertificates = [];
   revokedCertificates = [];
-  formGroup: FormGroup;
   isEditing = false;
   shortId = '';
   roleId = -1;
   isLoaded = true;
   isShortIdValid = false;
+  data = {};
+
+  @ViewChild('editableForm') editableForm;
 
   ngOnInit(): void {
     if (this.isForNew) {
       this.isEditing = true;
     }
-    // filtered with context
-    this.columnForMenu = Object.entries(ColumnForMenu[this.menuType]).filter(([k,v]) => 
-      Array.isArray(v['visibleFrom']) &&
-      v['visibleFrom'].includes(this.contextForAttributes) &&
-      (!this.isEditing || (this.isForNew && v['notShowOnEdit'] !== true)));
 
-    this.setFormWithValidators();
-
+    this.iconName = MenuTypeIconNames[this.menuType];
     if (this.isForNew) {
-      this.name = 'New ' + this.menuType;
-      if (this.formGroup.get('mrn')){
-        this.formGroup.get('mrn').setValue(this.mrnHelperService.mrnMask(this.menuType));
-        this.formGroup.get('mrn').disable();
-      }
-      this.isLoaded = true;
+      this.title = 'New ' + this.menuType;
     } else {
       this.fetchFieldValues();
     }
   }
 
-  constructor(private route: ActivatedRoute, private router: Router, private location: Location,
-    private formBuilder: FormBuilder,
-    private iconsLibrary: NbIconLibraries,
+  constructor(private route: ActivatedRoute, private router: Router,
     private userControllerService: UserControllerService,
     private deviceControllerService: DeviceControllerService,
     private roleControllerService: RoleControllerService,
@@ -83,17 +68,14 @@ export class DetailComponent implements OnInit {
     private serviceControllerService: ServiceControllerService,
     private mmsControllerService: MmsControllerService,
     private organizationControllerService: OrganizationControllerService,
-    private certificateService: CertificateService,
+    private instanceControllerService: InstanceControllerService,
     private notifierService: NotifierService,
-    private mrnHelperService: MrnHelperService,
-    private authService: AuthService
+    private authService: AuthService,
+    private location: Location,
     ) {
       const arrays = this.router.url.split("/");
       this.menuType = arrays[arrays.length-2];
       this.menuType = this.menuType.replace('-', '').substr(0, this.menuType.length-1);
-      this.menuTypeName = MenuTypeNames[this.menuType];
-      this.iconName = MenuTypeIconNames[this.menuType];
-      this.isEntity = EntityTypes.includes(this.menuType);
       this.entityMrn = decodeURIComponent(this.route.snapshot.paramMap.get("id"));
       this.orgMrn = this.authService.authState.orgMrn;
       this.isForNew = this.entityMrn === 'new';
@@ -105,11 +87,9 @@ export class DetailComponent implements OnInit {
       this.route.queryParams.subscribe(e =>
         {
           this.noBacklink = e.name === undefined;
-          this.name = e.name;
+          this.title = e.name;
           this.instanceVersion = e.version;
         });
-
-      iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
 
       this.roleControllerService.getMyRole(this.authService.authState.orgMrn).subscribe(
         roles => {
@@ -120,78 +100,28 @@ export class DetailComponent implements OnInit {
       });
   }
 
-  updateForNewVer() {
-    this.formGroup.get('instanceVersion').enable();
-    this.isForNew = true;
+  cancel() {
+    this.location.back();
   }
 
   settle(result: boolean) {
     this.isLoading = false;
-    this.isLoaded = result;
-  }
-
-  addShortIdToMrn(shortId: string) {
-    const mrn = this.mrnHelperService.mrnMask(this.menuType) + shortId;
-    this.formGroup.get('mrn').setValue(mrn);
-    this.isShortIdValid = this.validateMrn(mrn);
-  }
-
-  validateMrn(mrn: string) {
-    if (this.menuTypeName === MenuTypeNames.organization || this.menuTypeName === MenuTypeNames.approveorg) {
-      return new RegExp(this.mrnHelperService.mrnMcpIdpRegexForOrg()).test(mrn);
-    } else {
-      return new RegExp(this.mrnHelperService.mrnMcpIdpRegex()).test(mrn);
+    if (this.editableForm) {
+      this.editableForm.settled(result);
     }
-  }
-
-  getValidators(field: any) {
-    const validators = [];
-    if (field[1].required) {
-      validators.push(Validators.required);
-    }
-    if (field[0] === 'email') {
-      validators.push(Validators.email);
-    }
-    if (field[0] === 'mrn') {
-      if (this.menuTypeName === MenuTypeNames.organization || this.menuTypeName === MenuTypeNames.approveorg) {
-        validators.push(Validators.pattern(this.mrnHelperService.mrnMcpIdpRegexForOrg()));
-      } else {
-        validators.push(Validators.pattern(this.mrnHelperService.mrnMcpIdpRegex()));
-      }
-    }
-    return validators;
-  }
-
-  invertIsEditing() {
-    this.isEditing = !this.isEditing;
   }
 
   fetchFieldValues() {
     if(ColumnForMenu.hasOwnProperty(this.menuType)) {
       this.isLoading = true;
       if (Object.values(MenuType).includes(this.menuType as MenuType)) {
-        if(this.menuType === MenuType.Organization){
-          this.loadOrgContent(this.entityMrn).subscribe(
-            data => {
-              this.settle(true);
-              this.name = data.name;
-              this.adjustData(data);
-              const splited = this.certificateService.splitByRevokeStatus(data.certificates);
-
-              this.activeCertificates = splited.activeCertificates;
-              this.revokedCertificates = splited.revokedCertificates;
-            },
-            error => {
-              this.notifierService.notify('error', error.message);
-              this.router.navigateByUrl('/pages/404');
-            },
-          );
-        } else if(this.menuType === MenuType.UnapprovedOrg){
+        if(this.menuType === MenuType.UnapprovedOrg){
           this.isUnapprovedorg = true;
           this.organizationControllerService.getUnapprovedOrganizations().subscribe(
             data => {
               this.settle(true);
-              this.adjustData(data.content.filter(d => d.mrn === this.entityMrn).pop());
+              this.editableForm.adjustTitle(this.menuType, this.title);
+              this.editableForm.adjustData(data.content.filter(d => d.mrn === this.entityMrn).pop());
             },
             error => {
               this.notifierService.notify('error', error.message);
@@ -204,7 +134,8 @@ export class DetailComponent implements OnInit {
             data => {
               this.settle(true);
               this.roleId = data.id;
-              this.adjustData(data);
+              this.editableForm.adjustTitle(this.menuType, this.title);
+              this.editableForm.adjustData(data);
             },
             error => {
               this.notifierService.notify('error', error.message);
@@ -216,13 +147,12 @@ export class DetailComponent implements OnInit {
             data => {
               this.settle(true);
               if (this.menuType === MenuType.User) {
-                this.name = (data as User).firstName + " " + (data as User).lastName;
+                this.title = (data as User).firstName + " " + (data as User).lastName;
+              } else if (this.menuType === MenuType.Organization) {
+                this.title = (data as Organization).name;
               }
-              this.adjustData(data);
-              const splited = this.certificateService.splitByRevokeStatus(data.certificates);
-
-              this.activeCertificates = splited.activeCertificates;
-              this.revokedCertificates = splited.revokedCertificates;
+              this.editableForm.adjustTitle(this.menuType, this.title);
+              this.editableForm.adjustData(data);
             },
             error => {
               this.notifierService.notify('error', error.message);
@@ -255,7 +185,7 @@ export class DetailComponent implements OnInit {
     if (confirm(message)) {
       this.deleteData(this.menuType, this.orgMrn, this.entityMrn, this.instanceVersion).subscribe(
         res => {
-          this.notifierService.notify('success', this.name + ' has been successfully deleted');
+          this.notifierService.notify('success', this.title + ' has been successfully deleted');
           this.moveToListPage();
         },
         err => this.notifierService.notify('error', 'There was error in deletion - ' + err.message)
@@ -263,34 +193,29 @@ export class DetailComponent implements OnInit {
     }
   }
 
-  cancel() {
-    this.location.back(); // <-- go back to previous location on cancel
-  }
-
-  submit() {
-    const body = { ...this.formGroup.value};
+  submit(formGroup: FormGroup) {
+    const body = { ...formGroup.value};
     if (this.menuType === 'role') {
       this.loadOrgContent(this.orgMrn).subscribe(
-        res => this.submitDateToBackend({ ...body, idOrganization: res.id}),
+        res => this.submitDataToBackend({ ...body, idOrganization: res.id}),
         err => this.notifierService.notify('error', 'Error in fetching organization information'),
       );
     } else {
-      this.submitDateToBackend({...body, mrn: this.formGroup.get('mrn').value}, this.formGroup.get('mrn').value);
+      this.submitDataToBackend({...body, mrn: formGroup.get('mrn').value}, formGroup.get('mrn').value);
     }
-    this.isLoading = true;
   }
 
-  submitDateToBackend(body: object, mrn?: string) {
+  submitDataToBackend(body: object, mrn?: string) {
     if (this.isForNew) {
       this.registerData(this.menuType, body, this.authService.authState.orgMrn).subscribe(
         res => {
           this.notifierService.notify('success', 'New ' + this.menuType + ' has been created');
-          this.isLoading = false;
+          this.settle(true);
           this.moveToListPage();
         },
         err => {
           this.notifierService.notify('error', 'Creation has failed - ' + err.message);
-          this.isLoading = false;
+          this.settle(true);
         }
       );
     } else {
@@ -298,29 +223,28 @@ export class DetailComponent implements OnInit {
       this.updateData(this.menuType, body, this.authService.authState.orgMrn, mrn, this.instanceVersion).subscribe(
         res => {
           this.notifierService.notify('success', this.menuType + ' has been updated');
-          this.isLoading = false;
-          this.isEditing = false;
+          this.settle(true);
         },
         err => {
           this.notifierService.notify('error', 'Update has failed - ' + err.message);
-          this.isLoading = false;
+          this.settle(true);
         }
       );
     }
   }
 
   registerData = (context: string, body: object, orgMrn: string): Observable<Entity> => {
-    if (context === MenuTypeNames.user) {
+    if (context === MenuType.User) {
       return this.userControllerService.createUser(body as User, orgMrn);
-    } else if (context === MenuTypeNames.device) {
+    } else if (context === MenuType.Device) {
       return this.deviceControllerService.createDevice(body as Device, orgMrn);
-    } else if (context === MenuTypeNames.vessel) {
+    } else if (context === MenuType.Vessel) {
       return this.vesselControllerService.createVessel(body as Vessel, orgMrn);
-    } else if (context === MenuTypeNames.mms) {
+    } else if (context === MenuType.MMS) {
       return this.mmsControllerService.createMMS(body as MMS, orgMrn);
-    } else if (context === MenuTypeNames.service) {
+    } else if (context === MenuType.Service) {
       return this.serviceControllerService.createService(body as Service, orgMrn);
-    } else if (context === MenuTypeNames.organization) {
+    } else if (context === MenuType.Organization) {
       return this.organizationControllerService.applyOrganization(body as Organization);
     } else if (context === MenuTypeNames.role) {
       return this.roleControllerService.createRole(body as Role, orgMrn);
@@ -329,17 +253,17 @@ export class DetailComponent implements OnInit {
   }
 
   updateData = (context: string, body: object, orgMrn: string, entityMrn: string, version?: string): Observable<Entity> => {
-    if (context === MenuTypeNames.user) {
+    if (context === MenuType.User) {
       return this.userControllerService.updateUser(body as User, orgMrn, entityMrn);
-    } else if (context === MenuTypeNames.device) {
+    } else if (context === MenuType.Device) {
       return this.deviceControllerService.updateDevice(body as Device, orgMrn, entityMrn);
-    } else if (context === MenuTypeNames.vessel) {
+    } else if (context === MenuType.Vessel) {
       return this.vesselControllerService.updateVessel(formatVesselToUpload(body) as Vessel, orgMrn, entityMrn);
-    } else if (context === MenuTypeNames.mms) {
+    } else if (context === MenuType.MMS) {
       return this.mmsControllerService.updateMMS(body as MMS, orgMrn, entityMrn);
-    } else if (context === MenuTypeNames.service && version) {
+    } else if (context === MenuType.Service && version) {
       return this.serviceControllerService.updateService(body as Service, orgMrn, entityMrn, version);
-    } else if (context === MenuTypeNames.organization) {
+    } else if (context === MenuType.Organization) {
       return this.organizationControllerService.updateOrganization(body as Organization, entityMrn);
     } else if (context === MenuTypeNames.role) {
       return this.roleControllerService.updateRole(body as Role, orgMrn, this.roleId);
@@ -348,17 +272,17 @@ export class DetailComponent implements OnInit {
   }
 
   deleteData = (context: string, orgMrn: string, entityMrn: string, version?: string): Observable<Entity> => {
-    if (context === MenuTypeNames.user) {
+    if (context === MenuType.User) {
       return this.userControllerService.deleteUser(orgMrn, entityMrn);
-    } else if (context === MenuTypeNames.device) {
+    } else if (context === MenuType.Device) {
       return this.deviceControllerService.deleteDevice(orgMrn, entityMrn);
-    } else if (context === MenuTypeNames.vessel) {
+    } else if (context === MenuType.Vessel) {
       return this.vesselControllerService.deleteVessel(orgMrn, entityMrn);
-    } else if (context === MenuTypeNames.mms) {
+    } else if (context === MenuType.MMS) {
       return this.mmsControllerService.deleteMMS(orgMrn, entityMrn);
-    } else if (context === MenuTypeNames.service && version) {
+    } else if (context === MenuType.Service && version) {
       return this.serviceControllerService.deleteService(orgMrn, entityMrn, version);
-    } else if (context === MenuTypeNames.organization) {
+    } else if (context === MenuType.Organization) {
       return this.organizationControllerService.deleteOrg(entityMrn);
     } else if (context === MenuTypeNames.role) {
       return this.roleControllerService.deleteRole(orgMrn, this.roleId);
@@ -367,69 +291,45 @@ export class DetailComponent implements OnInit {
   }
 
   loadDataContent = (context: string, orgMrn: string, entityMrn: string, version?: string): Observable<Entity> => {
-    if (context === MenuTypeNames.user) {
+    if (context === MenuType.User) {
       return this.userControllerService.getUser(orgMrn, entityMrn);
-    } else if (context === MenuTypeNames.device) {
+    } else if (context === MenuType.Device) {
       return this.deviceControllerService.getDevice(orgMrn, entityMrn);
-    } else if (context === MenuTypeNames.vessel) {
+    } else if (context === MenuType.Vessel) {
       return this.vesselControllerService.getVessel(orgMrn, entityMrn);
-    } else if (context === MenuTypeNames.mms) {
+    } else if (context === MenuType.MMS) {
       return this.mmsControllerService.getMMS(orgMrn, entityMrn);
-    } else if (context === MenuTypeNames.service && version) {
+    } else if (context === MenuType.Service && version) {
       return this.serviceControllerService.getServiceVersion(orgMrn, entityMrn, version);
+    } else if (context === MenuType.Organization) {
+      return this.loadOrgContent(entityMrn);
+    } else if (context === MenuType.Instance) {
+      //return this.instanceControllerService.getInstanceUsingGET();
     }
     return new Observable();
   }
 
   isAdmin = (): boolean => {
     const context = this.menuType;
-    if (context === MenuTypeNames.user) {
+    if (context === MenuType.User) {
       return this.authService.authState.hasPermission(AuthPermission.UserAdmin);
-    } else if (context === MenuTypeNames.device) {
+    } else if (context === MenuType.Device) {
       return this.authService.authState.hasPermission(AuthPermission.DeviceAdmin);
-    } else if (context === MenuTypeNames.vessel) {
+    } else if (context === MenuType.Vessel) {
       return this.authService.authState.hasPermission(AuthPermission.VesselAdmin);
-    } else if (context === MenuTypeNames.mms) {
+    } else if (context === MenuType.MMS) {
       return this.authService.authState.hasPermission(AuthPermission.MMSAdmin);
-    } else if (context === MenuTypeNames.service) {
+    } else if (context === MenuType.Service) {
       return this.authService.authState.hasPermission(AuthPermission.ServiceAdmin);
-    } else if (context === MenuTypeNames.organization || context === MenuTypeNames.role) {
+    } else if (context === MenuType.Organization || context === MenuTypeNames.role) {
       return this.authService.authState.hasPermission(AuthPermission.OrgAdmin);
     } else {
       return false;
     }
   }
 
-  loadOrgContent = (mrn: string): Observable<Organization> => {
-    return this.organizationControllerService.getOrganizationByMrn(mrn);
-  }
-
-  setFormWithValidators = () => {
-    const group = {};
-    for (const key in this.columnForMenu) {
-      group[this.columnForMenu[key][0]] = [null, this.getValidators(this.columnForMenu[key])];
-    }
-    this.formGroup = this.formBuilder.group(group);
-  }
-
-  adjustData = (rawData: object) => {
-    const data = formatData(rawData);
-    for(const key in data) {
-      const relevant = this.columnForMenu.filter(e => e[0] === key)[0];
-      if (relevant) {
-        if (relevant[1].immutable === true) {
-          this.formGroup.get(relevant[0]).disable();
-        }
-        if (this.menuType !== 'role' && relevant[0] === 'mrn') {
-          this.shortId = this.mrnHelperService.shortIdFromMrn(data[key]);
-          const mrn = this.mrnHelperService.mrnMask(this.menuType) + this.shortId;
-          this.isShortIdValid = this.validateMrn(mrn);
-          this.formGroup.get(relevant[0]).setValue(mrn);
-        } else {
-          this.formGroup.get(relevant[0]).setValue(data[key]);
-        }
-      }
-    }
+  loadOrgContent = (orgMrn: string): Observable<Organization> => {
+    return this.organizationControllerService.getOrganizationByMrn(orgMrn);
   }
 }
 

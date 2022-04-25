@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
-import { CertificateBundle } from '../../../../../backend-api/identity-registry';
-import { TOKEN_DELIMITER } from './../../../../../shared/app.constants';
-import { EntityType } from './../../../../models/menuType';
+import { CertificateBundle } from '../../../backend-api/identity-registry';
+import { TOKEN_DELIMITER } from '../../app.constants';
+import { EntityType } from '../../models/menuType';
 import { Convert } from 'pvtsutils';
 import PrivateKeyInfo from 'pkijs/build/PrivateKeyInfo';
 import Certificate from 'pkijs/build/Certificate';
@@ -18,8 +18,8 @@ import PKCS8ShroudedKeyBag from 'pkijs/build/PKCS8ShroudedKeyBag';
 import Attribute from 'pkijs/build/Attribute';
 import { getRandomValues } from 'pkijs/build/common';
 import { BitString, BmpString, fromBER, OctetString, PrintableString } from 'asn1js';
-import { CertificateService } from '../../../../../shared/certificate.service';
-import { FileHelperService } from '../../../../../shared/file-helper.service';
+import { CertificateService } from '../../certificate.service';
+import { FileHelperService } from '../../file-helper.service';
 import { NotifierService } from 'angular-notifier';
 export interface LabelValueModel {
   label:string;

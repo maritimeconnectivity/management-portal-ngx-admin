@@ -1,3 +1,4 @@
+import { SharedModule } from './../../shared/shared.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ListViewRoutingModule } from './list-view-routing.module';
@@ -5,25 +6,17 @@ import { ListComponent } from './list/list.component';
 import { DetailComponent } from './detail/detail.component';
 import { NbButtonModule, NbCardModule, NbDatepickerModule, NbIconModule, NbInputModule, NbPopoverModule, NbSelectModule, NbSpinnerModule, NbTabsetModule } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-import { CertificatesComponent } from './detail/certificates/certificates.component';
 import { NotifierModule, NotifierService } from 'angular-notifier';
 import { customNotifierOptions } from '../../shared/customNotifierOption';
-import { CertIssueDialogComponent } from './detail/certificates/cert-issue-dialog/cert-issue-dialog.component';
-import { CertRevokeDialogComponent } from './detail/certificates/cert-revoke-dialog/cert-revoke-dialog.component';
-import { ReactiveFormsModule } from '@angular/forms';
-
 
 @NgModule({
   declarations: [
     ListComponent,
     DetailComponent,
-    CertificatesComponent,
-    CertIssueDialogComponent,
-    CertRevokeDialogComponent,
   ],
   imports: [
     CommonModule,
-    ReactiveFormsModule,
+    SharedModule,
     NbInputModule,
     NbCardModule,
     NbIconModule,

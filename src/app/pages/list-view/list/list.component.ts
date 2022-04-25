@@ -1,20 +1,17 @@
-import { AuthState } from './../../../auth/model/AuthState';
-import { StaticAuthInfo } from './../../../auth/model/StaticAuthInfo';
 import { AuthService } from './../../../auth/auth.service';
 import { InstanceControllerService } from './../../../backend-api/service-registry/api/instanceController.service';
 import { ServiceControllerService } from './../../../backend-api/identity-registry/api/serviceController.service';
 import { DeviceControllerService } from './../../../backend-api/identity-registry/api/deviceController.service';
 import { Observable } from 'rxjs/Observable';
 import { RoleControllerService } from './../../../backend-api/identity-registry/api/roleController.service';
-import { KeycloakService } from 'keycloak-angular';
 import { Organization } from './../../../backend-api/identity-registry/model/organization';
 import { OrganizationControllerService } from './../../../backend-api/identity-registry/api/organizationController.service';
 import { UserControllerService } from './../../../backend-api/identity-registry/api/userController.service';
-import { ColumnForMenu } from '../../models/columnForMenu';
-import { Component, Injector, OnInit } from '@angular/core';
+import { ColumnForMenu } from '../../../shared/models/columnForMenu';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
-import { ResourceType, MenuType, MenuTypeIconNames, MenuTypeNames, EntityTypes } from '../../models/menuType';
+import { MenuType, MenuTypeIconNames, MenuTypeNames, EntityTypes } from '../../../shared/models/menuType';
 import { NbIconLibraries } from '@nebular/theme';
 import { NotifierService } from 'angular-notifier';
 import { MmsControllerService, Role, VesselControllerService } from '../../../backend-api/identity-registry';
@@ -204,8 +201,9 @@ export class ListComponent implements OnInit {
   }
 
   onEdit(event): void {
+    const mrn = this.menuType === MenuType.Instance ? event.data.instanceId : event.data.mrn;
     this.router.navigate([this.router.url,
-      event.data.mrn ? encodeURIComponent(event.data.mrn) : event.data.id],
+      mrn ? encodeURIComponent(mrn) : event.data.id],
         { queryParams: { name: event.data.roleName ? event.data.roleName :
             event.data.name ? event.data.name :
             event.data.lastName + ' ' + event.data.firstName,
@@ -282,6 +280,8 @@ export class ListComponent implements OnInit {
       return this.authService.authState.hasPermission(AuthPermission.ServiceAdmin);
     } else if (context === MenuTypeNames.organization || context === MenuTypeNames.role) {
       return this.authService.authState.hasPermission(AuthPermission.OrgAdmin);
+    } else if (context === MenuTypeNames.instance) {
+      return true;
     } else {
       return false;
     }

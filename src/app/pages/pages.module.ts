@@ -1,6 +1,5 @@
-import { NotifierModule } from 'angular-notifier';
 import { NgModule } from '@angular/core';
-import { NbMenuModule, NbCardModule, NbButtonModule, NbSelectComponent, NbSelectModule, NbTabsetModule, NbStepperModule, NbInputModule, NbSpinnerModule } from '@nebular/theme';
+import { NbMenuModule, NbCardModule, NbButtonModule, NbSelectModule, NbTabsetModule, NbStepperModule, NbInputModule, NbSpinnerModule } from '@nebular/theme';
 
 import { ThemeModule } from '../@theme/theme.module';
 import { PagesComponent } from './pages.component';

@@ -1,11 +1,11 @@
 import { NotifierService } from 'angular-notifier';
-import { CertificateService } from './../../../../../shared/certificate.service';
-import { RevokationReasonEnum, CertificateRevocation } from './../../../../../backend-api/identity-registry/model/certificateRevocation';
+import { CertificateService } from '../../certificate.service';
+import { RevokationReasonEnum } from '../../../backend-api/identity-registry/model/certificateRevocation';
 import { Component, Input, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
-import { DayCellComponent } from '../../../../extra-components/calendar/day-cell/day-cell.component';
-import { getReasonOptionFromRevocationReason } from '../../../../../util/certRevokeInfo';
-import { EntityType } from '../../../../models/menuType';
+import { DayCellComponent } from '../../../pages/extra-components/calendar/day-cell/day-cell.component';
+import { getReasonOptionFromRevocationReason } from '../../../util/certRevokeInfo';
+import { EntityType } from '../../models/menuType';
 
 @Component({
   selector: 'ngx-cert-revoke-dialog',

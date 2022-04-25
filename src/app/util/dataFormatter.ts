@@ -1,6 +1,6 @@
 import { formatDate } from "@angular/common";
 import { VesselAttribute } from "../backend-api/identity-registry/model/vesselAttribute";
-import { MenuTypeNames } from "../pages/models/menuType";
+import { MenuTypeNames } from "../shared/models/menuType";
 import { convertTime } from "./timeConverter";
 export const formatData = (data: object): object => {
   let menuData = {};
@@ -31,8 +31,8 @@ export const formatServiceData = (data: object): object => {
   let menuData = {};
   for (const key in data) {
     menuData[key] = key.endsWith("At")
-        ? convertTime(new Date(data[key]))
-        : data[key];
+      ? convertTime(new Date(data[key]))
+      : data[key];
   }
   return menuData;
 };
@@ -43,7 +43,8 @@ export const formatVesselToUpload = (vesselData: object): object => {
     const attributeName = camel2snake(key);
     if (
       Object.values(VesselAttribute.AttributeNameEnum).find(
-        (e) => e === attributeName)
+        (e) => e === attributeName
+      )
     ) {
       attributes.push({
         createdAt: new Date(),
@@ -56,7 +57,7 @@ export const formatVesselToUpload = (vesselData: object): object => {
   }
   vesselData["attributes"] = attributes;
   return vesselData;
-}
+};
 
 const snake2camel = (input) =>
   input

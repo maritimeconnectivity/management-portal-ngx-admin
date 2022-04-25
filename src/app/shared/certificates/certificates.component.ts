@@ -1,14 +1,14 @@
-import { Certificate } from './../../../../backend-api/identity-registry/model/certificate';
+import { Certificate } from '../../backend-api/identity-registry/model/certificate';
 import { CertRevokeDialogComponent } from './cert-revoke-dialog/cert-revoke-dialog.component';
 import { CertIssueDialogComponent } from './cert-issue-dialog/cert-issue-dialog.component';
-import { ActiveCertificatesColumn, RevokedCertificatesColumn } from '../../../models/columnForCertificate';
+import { ActiveCertificatesColumn, RevokedCertificatesColumn } from '../models/columnForCertificate';
 import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
-import { Certificate as MCPCertificate, CertificateBundle, PemCertificate } from '../../../../backend-api/identity-registry';
-import { FileHelperService } from '../../../../shared/file-helper.service';
+import { Certificate as MCPCertificate, CertificateBundle, PemCertificate } from '../../backend-api/identity-registry';
+import { FileHelperService } from '../file-helper.service';
 import { NotifierService } from 'angular-notifier';
 import { NbDialogService } from '@nebular/theme';
-import { CertificateService } from '../../../../shared/certificate.service';
+import { CertificateService } from '../certificate.service';
 @Component({
   selector: 'ngx-certificates',
   templateUrl: './certificates.component.html',

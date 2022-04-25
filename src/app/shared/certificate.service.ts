@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 import { CertificateBundle, CertificateRevocation } from '../backend-api/identity-registry';
 import { getReasonOptionFromRevocationReason } from '../util/certRevokeInfo';
 import { formatDate } from '@angular/common';
-import { EntityType } from '../pages/models/menuType';
+import { EntityType } from './models/menuType';
 
 @Injectable({
   providedIn: 'root'
