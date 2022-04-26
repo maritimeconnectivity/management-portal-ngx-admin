@@ -22,6 +22,7 @@ export enum MenuType {
   InstanceOfOrg = 'instanceorg',
   UnapprovedOrg = 'approveorg',
   UnapprovedSvc = 'approvesvc',
+  NewOrganization = 'newOrganization',
 }
 
 export const ResourceType = ['device', 'vessel', 'user', 'service', 'role', 'agent'];

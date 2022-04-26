@@ -1,7 +1,12 @@
 @import '../../@theme/styles/themes';
 
+nb-card {
+    max-height: 80vh;
+    width: 80vw;
+}
+
 nb-card-body {
-    overflow: visible;
+    overflow: auto;
     padding-top: 0;
   
     > * {

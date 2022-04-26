@@ -23,20 +23,22 @@
       </div>
     </div>
     <form [formGroup]="formGroup" *ngIf="isLoaded">
-      <div class="form-group row" *ngIf="isForNew && menuType !== 'role'">
-        <label class="label col-sm-3 col-form-label">Short ID for MRN</label>
-        <div class="col-sm-9 my-auto">
-          <input type="text" nbInput fullWidth id="input_shortId" class="form-control" status="{{isShortIdValid ? 'success' : 'danger'}}" required="true" (input)="addShortIdToMrn('mrn', $event.target.value)" value="{{shortId}}">
+      <div *ngFor="let attribute of columnForMenu">
+        <div class="form-group row" *ngIf="isForNew && menuType !== 'role' && (attribute[0].includes('mrn') || attribute[0].includes('Mrn'))">
+          <label class="label col-sm-3 col-form-label">Short ID for {{attribute[1].title}}</label>
+          <div class="col-sm-9 my-auto">
+            <input type="text" nbInput fullWidth id="input_shortId_{{attribute[0]}}" class="form-control" status="{{isShortIdValid ? 'success' : 'danger'}}" required="true" (input)="addShortIdToMrn(attribute[0], $event.target.value)" value="{{shortId}}">
+          </div>
         </div>
-      </div>
-      <div class="form-group row" *ngFor="let attribute of columnForMenu">
-        <label for="input{{attribute[0]}}" class="label col-sm-3 col-form-label" nbPopover="{{attribute[1].description}}" nbPopoverTrigger="hint" nbPopoverPlacement="top">{{attribute[1].title}}</label>
-        <div class="col-sm-9 my-auto">
-          <p class="my-auto" *ngIf="!isEditing" id="keyword.name">{{ formGroup.get(attribute[0]).value }}</p>
-          <input *ngIf="isEditing" type="text" nbInput fullWidth id="input_{{attribute[0]}}" class="form-control"
-            status="{{formGroup.get(attribute[0]).value ? formGroup.get(attribute[0]).valid ? 'success' : 'danger' : attribute[1].required ? 'danger' : ''}}"
-            formControlName="{{attribute[0]}}"
-            required="{{attribute[1].required === true}}">
+        <div class="form-group row" *ngIf="!attribute[1].notShowOnEdit">
+          <label for="input{{attribute[0]}}" class="label col-sm-3 col-form-label" nbPopover="{{attribute[1].description}}" nbPopoverTrigger="hint" nbPopoverPlacement="top">{{attribute[1].title}}</label>
+          <div class="col-sm-9 my-auto">
+            <p class="my-auto" *ngIf="!isEditing" id="keyword.name">{{ formGroup.get(attribute[0]).value }}</p>
+            <input *ngIf="isEditing" type="text" nbInput fullWidth id="input_{{attribute[0]}}" class="form-control"
+              status="{{formGroup.get(attribute[0]).value ? formGroup.get(attribute[0]).valid ? 'success' : 'danger' : attribute[1].required || menuType === 'newOrganization' ? 'danger' : ''}}"
+              formControlName="{{attribute[0]}}"
+              required="{{attribute[1].required === true || menuType === 'newOrganization'}}">
+          </div>
         </div>
       </div>
       <div class="form-group row" *ngIf="isEntity && !isForNew && !isEditing" >

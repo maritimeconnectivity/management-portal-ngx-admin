@@ -28,7 +28,9 @@ export class MrnHelperService {
   }
 
   public orgShortId(): string {
-    return this.shortIdFromMrn(this.authService.authState.orgMrn);
+    return this.authService.authState.orgMrn ?
+    this.shortIdFromMrn(this.authService.authState.orgMrn) :
+    undefined;
   }
 
   public mrnMcpIdpRegexForOrg(): string {
@@ -43,12 +45,12 @@ export class MrnHelperService {
     return "urn:mrn:([a-z0-9]([a-z0-9]|-){0,20}[a-z0-9]):([a-z0-9][-a-z0-9]{0,20}[a-z0-9]):((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)|)*)((?+((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)||?)*))?(?=((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)||?)*))?)?(#(((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)||?)*))?$";
   }
 
-  public mrnMcpIdpRegex(): string {
+  public mrnMcpIdpRegex(orgShortId?: string): string {
     return (
       "urn:mrn:mcp:(device|org|user|vessel|service|mms):" +
       this.idpNamespace +
       ":" +
-      this.orgShortId() +
+      this.orgShortId() ? this.orgShortId() : orgShortId +
       "((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)|)*)$"
     );
   }
@@ -115,7 +117,7 @@ export class MrnHelperService {
 
   public mrnMaskForUserOfOrg(orgMrn: string): string {
     return (
-      this.mrnPreFixForOrg(orgMrn) +
+      this.mrnMCP +
       "user:" +
       this.idpNamespace +
       ":" +

@@ -1,4 +1,4 @@
-import { NbCardModule, NbSpinnerModule, NbButtonModule, NbIconModule, NbDatepickerModule, NbSelectModule } from '@nebular/theme';
+import { NbCardModule, NbSpinnerModule, NbButtonModule, NbIconModule, NbDatepickerModule, NbSelectModule, NbInputModule } from '@nebular/theme';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EditableFormComponent } from './editable-form/editable-form.component';
@@ -24,6 +24,7 @@ import { CertRevokeDialogComponent } from './certificates/cert-revoke-dialog/cer
     NbIconModule,
     NbDatepickerModule,
     NbSelectModule,
+    NbInputModule,
     Ng2SmartTableModule,
   ],
   exports: [

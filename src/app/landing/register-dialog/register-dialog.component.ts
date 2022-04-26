@@ -1,5 +1,5 @@
 import { AppConfig } from './../../app.config';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { ColumnForMenu } from '../../shared/models/columnForMenu';
 
@@ -9,11 +9,13 @@ import { ColumnForMenu } from '../../shared/models/columnForMenu';
   styleUrls: ['./register-dialog.component.scss']
 })
 export class RegisterDialogComponent implements OnInit {
+  title = 'Requested information to join';
   menuType = 'newOrganization';
   isForNew = true;
   environmentName: string;
   clause: string;
   agreed = false;
+  submitted = false;
 
   constructor(protected ref: NbDialogRef<RegisterDialogComponent>) {
     this.environmentName = AppConfig.ENVIRONMENT_TITLE;
@@ -32,6 +34,6 @@ export class RegisterDialogComponent implements OnInit {
   }
 
   submit(): void {
-    console.log();
+    this.submitted = true;
   }
 }

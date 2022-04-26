@@ -56,20 +56,28 @@ export class EditableFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.menuTypeName = MenuTypeNames[this.menuType];
+    this.isEntity = EntityTypes.includes(this.menuType);
+
     // filtered with context
     this.columnForMenu = Object.entries(ColumnForMenu[this.menuType]).filter(([k,v]) => 
-      Array.isArray(v['visibleFrom']) &&
-      v['visibleFrom'].includes(this.contextForAttributes) &&
-      (!this.isEditing || (this.isForNew && v['notShowOnEdit'] !== true)));
-
+      Array.isArray(v['visibleFrom']) && // array type checking
+      v['visibleFrom'].includes(this.contextForAttributes) && // context filtering, either detail or list
+      (!this.isEditing || (this.isForNew && v['notShowOnEdit'] !== true))); 
+      
     this.setFormWithValidators();
 
     if (this.isForNew) {
       this.isEditing = true;
-      if (this.formGroup.get('mrn')){
-        this.formGroup.get('mrn').setValue(this.mrnHelperService.mrnMask(this.menuType));
-        this.formGroup.get('mrn').disable();
-      }
+      Object.keys(this.formGroup.controls).forEach(field => {
+        if (field.includes('mrn') || field.includes('Mrn')){
+          this.formGroup.get(field).setValue( field === 'adminMrn' ?
+            this.mrnHelperService.mrnMaskForUserOfOrg(this.getOrgShortId()) :
+            this.mrnHelperService.mrnMask(
+            this.menuType === MenuType.NewOrganization ? MenuType.Organization : this.menuType));
+          this.formGroup.get(field).disable();
+        }
+      });
       this.settled(true);
     }
   }
@@ -101,7 +109,11 @@ export class EditableFormComponent implements OnInit {
   }
 
   addShortIdToMrn(field: string, shortId: string) {
-    const mrn = this.mrnHelperService.mrnMask(this.menuType) + shortId;
+    const mrn = (field === 'adminMrn' ?
+    this.mrnHelperService.mrnMaskForUserOfOrg(this.getOrgShortId()) :
+    this.mrnHelperService.mrnMask(
+    this.menuType === MenuType.NewOrganization ? MenuType.Organization : this.menuType))
+     + shortId;
     this.formGroup.get(field).setValue(mrn);
     this.isShortIdValid = this.validateMrn(mrn);
   }
@@ -111,7 +123,7 @@ export class EditableFormComponent implements OnInit {
     if (field[1].required) {
       validators.push(Validators.required);
     }
-    if (field[0] === 'email') {
+    if (field[0].includes('email') || field[0].includes('Email')) {
       validators.push(Validators.email);
     }
     if (field[0] === 'mrn') {
@@ -125,18 +137,17 @@ export class EditableFormComponent implements OnInit {
   }
 
   validateMrn(mrn: string) {
-    if (this.menuType === MenuType.Organization || this.menuType === MenuType.UnapprovedOrg) {
+    if (this.menuType === MenuType.Organization || this.menuType === MenuType.UnapprovedOrg
+        || this.menuType === MenuType.NewOrganization) {
       return new RegExp(this.mrnHelperService.mrnMcpIdpRegexForOrg()).test(mrn);
     } else {
-      return new RegExp(this.mrnHelperService.mrnMcpIdpRegex()).test(mrn);
+      return new RegExp(this.mrnHelperService.mrnMcpIdpRegex(
+        this.menuType === MenuType.NewOrganization ? this.getOrgShortId() : undefined)).test(mrn);
     }
   }
 
-  adjustTitle = (menuType: string, title: string) => {
-    this.menuType = menuType;
-    this.menuTypeName = MenuTypeNames[this.menuType];
-    this.isEntity = EntityTypes.includes(this.menuType);
-    this.title = title;
+  getOrgShortId(): string {
+    return this.formGroup.get('orgMrn').value.split(":").pop();
   }
 
   adjustData = (rawData: object) => {
