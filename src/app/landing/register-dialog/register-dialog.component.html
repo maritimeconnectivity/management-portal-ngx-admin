@@ -1,0 +1,45 @@
+<nb-card>
+    <nb-card-header>
+        Request to join {{environmentName}}
+    </nb-card-header>
+    <nb-card-body>
+        <div *ngIf="!agreed">
+            <div class="rows">
+                <div class="col-xxxl-3">
+                    <strong>Terms of use</strong>
+                </div>
+            </div>
+            <div class="rows">
+                <div class="col-xxxl-3">
+                    {{clause}}
+                </div>
+            </div>
+        </div>
+        <div *ngIf="agreed">
+            <div class="rows">
+                <div class="col-xxxl-3">
+                    <ngx-editable-form
+                    [hasHeader]="false" [menuType]="menuType" [isForNew]="isForNew"
+                    [isAdmin]="false" [title]="title" [iconName]="iconName" [isUnapprovedorg]="isUnapprovedorg"
+                    [canApproveOrg]="canApproveOrg" [entityMrn]="entityMrn" [orgMrn]="orgMrn"
+                    [instanceVersion]="instanceVersion" [isLoading]="isLoading" [isLoaded]="isLoaded"
+                    (onCancel)="dismiss()" (onSubmit)="submit($event)" (onDelete)="delete()"
+                    ></ngx-editable-form>
+                </div>
+            </div>
+        </div>
+    </nb-card-body>
+    <nb-card-footer>
+        <div>
+            <div class="buttons-row" *ngIf="!agreed">
+                <button nbButton status="success" (click)="agree()">Agree</button>
+                <button nbButton status="danger" (click)="dismiss()">Disagree</button>
+            </div>
+            <div *ngIf="agreed">
+                <button nbButton status="success" (click)="submit()">Submit</button>
+                <button nbButton status="danger" (click)="dismiss()">Close</button>
+            </div>
+        </div>
+    </nb-card-footer>
+  </nb-card>
+  

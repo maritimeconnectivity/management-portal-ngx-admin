@@ -45,6 +45,7 @@ export class DetailComponent implements OnInit {
   isLoaded = true;
   isShortIdValid = false;
   data = {};
+  mrnMask = '';
 
   @ViewChild('editableForm') editableForm;
 
@@ -81,7 +82,7 @@ export class DetailComponent implements OnInit {
       this.orgMrn = this.authService.authState.orgMrn;
       this.isForNew = this.entityMrn === 'new';
       this.numberId = this.menuType === MenuType.Instance ? parseInt(this.entityMrn) : -1;
-
+      
       // preventing refresh
       this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 

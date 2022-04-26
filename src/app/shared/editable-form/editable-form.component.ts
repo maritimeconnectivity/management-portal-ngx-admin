@@ -27,6 +27,7 @@ export class EditableFormComponent implements OnInit {
   @Input() iconName: string;
   @Input() isLoading: boolean;
   @Input() isLoaded: boolean;
+  @Input() hasHeader: boolean;
 
   @Output() onCancel = new EventEmitter<FormGroup>();
   @Output() onDelete = new EventEmitter<FormGroup>();
@@ -99,9 +100,9 @@ export class EditableFormComponent implements OnInit {
     this.isForNew = true;
   }
 
-  addShortIdToMrn(shortId: string) {
+  addShortIdToMrn(field: string, shortId: string) {
     const mrn = this.mrnHelperService.mrnMask(this.menuType) + shortId;
-    this.formGroup.get('mrn').setValue(mrn);
+    this.formGroup.get(field).setValue(mrn);
     this.isShortIdValid = this.validateMrn(mrn);
   }
 

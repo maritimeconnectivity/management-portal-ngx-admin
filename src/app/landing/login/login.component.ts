@@ -1,7 +1,9 @@
+import { RegisterDialogComponent } from './../register-dialog/register-dialog.component';
 import { NotifierService } from 'angular-notifier';
 import { AuthService } from './../../auth/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { NbDialogService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-login',
@@ -15,7 +17,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private notifierService: NotifierService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dialogService: NbDialogService,
   ) {}
 
   ngOnInit(): void {
@@ -33,5 +36,13 @@ export class LoginComponent implements OnInit {
 
   logIn() {
     this.authService.login();
+  }
+
+  createRegisterDialog() {
+    this.dialogService.open(RegisterDialogComponent, {
+      context: {
+        
+      },
+    });
   }
 }

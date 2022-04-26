@@ -1,5 +1,5 @@
 <nb-card>
-  <nb-card-header *ngIf="isLoaded">
+  <nb-card-header *ngIf="isLoaded && hasHeader">
     <div class="row">
       <div class="col my-auto">
         <span class="icon_header"><nb-icon [icon]="iconName" pack="fas"></nb-icon></span>{{title}}
@@ -26,7 +26,7 @@
       <div class="form-group row" *ngIf="isForNew && menuType !== 'role'">
         <label class="label col-sm-3 col-form-label">Short ID for MRN</label>
         <div class="col-sm-9 my-auto">
-          <input type="text" nbInput fullWidth id="input_shortId" class="form-control" status="{{isShortIdValid ? 'success' : 'danger'}}" required="true" (input)="addShortIdToMrn($event.target.value)" value="{{shortId}}">
+          <input type="text" nbInput fullWidth id="input_shortId" class="form-control" status="{{isShortIdValid ? 'success' : 'danger'}}" required="true" (input)="addShortIdToMrn('mrn', $event.target.value)" value="{{shortId}}">
         </div>
       </div>
       <div class="form-group row" *ngFor="let attribute of columnForMenu">
