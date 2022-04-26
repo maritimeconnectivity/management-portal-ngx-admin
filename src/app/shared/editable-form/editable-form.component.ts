@@ -56,9 +56,6 @@ export class EditableFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.menuTypeName = MenuTypeNames[this.menuType];
-    this.isEntity = EntityTypes.includes(this.menuType);
-
     // filtered with context
     this.columnForMenu = Object.entries(ColumnForMenu[this.menuType]).filter(([k,v]) => 
       Array.isArray(v['visibleFrom']) && // array type checking
@@ -106,6 +103,13 @@ export class EditableFormComponent implements OnInit {
   updateForNewVer() {
     this.formGroup.get('instanceVersion').enable();
     this.isForNew = true;
+  }
+
+  adjustTitle = (menuType: string, title: string) => {
+    this.menuType = menuType;
+    this.menuTypeName = MenuTypeNames[this.menuType];
+    this.isEntity = EntityTypes.includes(this.menuType);
+    this.title = title;
   }
 
   addShortIdToMrn(field: string, shortId: string) {
