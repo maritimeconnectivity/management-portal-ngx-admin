@@ -20,6 +20,7 @@ export class AuthService {
 	public rolesLoaded: EventEmitter<any> = new EventEmitter<any>();
   
   public authState: AuthState;
+  private realmName = 'MCP';
 
   constructor(
     private roleControllerService: RoleControllerService,
@@ -199,7 +200,7 @@ private createAuthState(): AuthState {
   public getLogoutUrl(): string {
     const url = window.location;
     const loginPage = url.protocol + "//" + url.host + '/login';
-    return AppConfig.OIDC_BASE_PATH + '/auth/realms/MCP/protocol/openid-connect/logout?redirect_uri=' + loginPage;
+    return AppConfig.OIDC_BASE_PATH + '/auth/realms/'+this.realmName+'/protocol/openid-connect/logout?redirect_uri=' + loginPage;
   }
 
   static getToken(): Promise<string> {
