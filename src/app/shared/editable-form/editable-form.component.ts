@@ -17,7 +17,6 @@ export class EditableFormComponent implements OnInit {
   @Input() menuType: string;
   @Input() instanceVersion: string;
   @Input() isForNew: boolean;
-  @Input() isShortIdValid: boolean;
   @Input() isUnapprovedorg: boolean;
   @Input() canApproveOrg: boolean;
   @Input() entityMrn: string;
@@ -44,6 +43,7 @@ export class EditableFormComponent implements OnInit {
   menuTypeName = '';
   activeCertificates = [];
   revokedCertificates = [];
+  orgShortId = undefined;
   
   constructor(
     private mrnHelperService: MrnHelperService,
@@ -68,7 +68,7 @@ export class EditableFormComponent implements OnInit {
       Object.keys(this.formGroup.controls).forEach(field => {
         if (field.includes('mrn') || field.includes('Mrn')){
           this.formGroup.get(field).setValue( field === 'adminMrn' ?
-            this.mrnHelperService.mrnMaskForUserOfOrg(this.getOrgShortId()) :
+            this.mrnHelperService.mrnMaskForUserOfOrg('') :
             this.mrnHelperService.mrnMask(
             this.menuType === MenuType.NewOrganization ? MenuType.Organization : this.menuType));
           this.formGroup.get(field).disable();
@@ -116,12 +116,16 @@ export class EditableFormComponent implements OnInit {
 
   addShortIdToMrn(field: string, shortId: string) {
     const mrn = (field === 'adminMrn' ?
-    this.mrnHelperService.mrnMaskForUserOfOrg(this.getOrgShortId()) :
+    this.mrnHelperService.mrnMaskForUserOfOrg(this.orgShortId) :
     this.mrnHelperService.mrnMask(
     this.menuType === MenuType.NewOrganization ? MenuType.Organization : this.menuType))
      + shortId;
     this.formGroup.get(field).setValue(mrn);
-    this.isShortIdValid = this.validateMrn(mrn);
+    if (field === 'orgMrn') {
+      this.orgShortId = this.formGroup.get('orgMrn').value.split(":").pop();
+      const adminShortId = this.formGroup.get('adminMrn').value.split(":").pop();
+      this.formGroup.get('adminMrn').setValue(this.mrnHelperService.mrnMaskForUserOfOrg(this.orgShortId) + adminShortId);
+    }
   }
 
   getValidators(field: any) {
@@ -132,28 +136,14 @@ export class EditableFormComponent implements OnInit {
     if (field[0].includes('email') || field[0].includes('Email')) {
       validators.push(Validators.email);
     }
-    if (field[0] === 'mrn') {
+    if (field[0].includes('mrn') || field[0].includes('Mrn')) {
       if (this.menuType === MenuType.Organization || this.menuType === MenuType.UnapprovedOrg) {
         validators.push(Validators.pattern(this.mrnHelperService.mrnMcpIdpRegexForOrg()));
       } else {
-        validators.push(Validators.pattern(this.mrnHelperService.mrnMcpIdpRegex()));
+        validators.push(Validators.pattern(this.mrnHelperService.mrnMcpIdpRegex(this.orgShortId)));
       }
     }
     return validators;
-  }
-
-  validateMrn(mrn: string) {
-    if (this.menuType === MenuType.Organization || this.menuType === MenuType.UnapprovedOrg
-        || this.menuType === MenuType.NewOrganization) {
-      return new RegExp(this.mrnHelperService.mrnMcpIdpRegexForOrg()).test(mrn);
-    } else {
-      return new RegExp(this.mrnHelperService.mrnMcpIdpRegex(
-        this.menuType === MenuType.NewOrganization ? this.getOrgShortId() : undefined)).test(mrn);
-    }
-  }
-
-  getOrgShortId(): string {
-    return this.formGroup.get('orgMrn').value.split(":").pop();
   }
 
   adjustData = (rawData: object) => {
@@ -168,7 +158,6 @@ export class EditableFormComponent implements OnInit {
         if (this.menuType !== 'role' && relevant[0] === 'mrn') {
           this.shortId = this.mrnHelperService.shortIdFromMrn(data[key]);
           const mrn = this.mrnHelperService.mrnMask(this.menuType) + this.shortId;
-          this.isShortIdValid = this.validateMrn(mrn);
           this.formGroup.get(relevant[0]).setValue(mrn);
         } else {
           this.formGroup.get(relevant[0]).setValue(data[key]);

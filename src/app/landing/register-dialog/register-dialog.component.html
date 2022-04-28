@@ -1,55 +1,57 @@
-<nb-card *ngIf="!agreed && !submitted">
-    <nb-card-header>
-        Request to join {{environmentName}}
-    </nb-card-header>
-    <nb-card-body>
-        <div *ngIf="!agreed">
-            <div class="rows">
-                <div class="col-xxxl-3">
-                    <strong>Terms of use</strong>
+<div class="card-container">
+    <nb-card *ngIf="!agreed && !submitted">
+        <nb-card-header>
+            Request to join {{environmentName}}
+        </nb-card-header>
+        <nb-card-body>
+            <div *ngIf="!agreed">
+                <div class="rows">
+                    <div class="col-xxxl-3">
+                        <strong>Terms of use</strong>
+                    </div>
+                </div>
+                <div class="rows">
+                    <div class="col-xxxl-3">
+                        {{clause}}
+                    </div>
                 </div>
             </div>
-            <div class="rows">
-                <div class="col-xxxl-3">
-                    {{clause}}
+        </nb-card-body>
+        <nb-card-footer>
+            <div>
+                <div class="buttons-row">
+                    <button nbButton status="success" (click)="agree()">Agree</button>
+                    <button nbButton status="danger" (click)="dismiss()">Disagree</button>
                 </div>
             </div>
-        </div>
-    </nb-card-body>
-    <nb-card-footer>
-        <div>
-            <div class="buttons-row">
-                <button nbButton status="success" (click)="agree()">Agree</button>
-                <button nbButton status="danger" (click)="dismiss()">Disagree</button>
+        </nb-card-footer>
+    </nb-card>
+    
+    <div *ngIf="agreed && !submitted">
+        <div class="rows">
+            <div class="col-xxxl-3">
+                <ngx-editable-form #editableForm
+                [title]="title" [hasHeader]="true" [menuType]="menuType" [isForNew]="isForNew"
+                [isAdmin]="true" [title]="title" [iconName]="iconName" [isUnapprovedorg]="isUnapprovedorg"
+                [canApproveOrg]="canApproveOrg" [entityMrn]="entityMrn" [orgMrn]="orgMrn"
+                [instanceVersion]="instanceVersion" [isLoading]="isLoading" [isLoaded]="isLoaded"
+                (onCancel)="dismiss()" (onSubmit)="submit($event)" (onDelete)="delete()"
+                ></ngx-editable-form>
             </div>
-        </div>
-    </nb-card-footer>
-</nb-card>
-
-<div *ngIf="agreed && !submitted">
-    <div class="rows">
-        <div class="col-xxxl-3">
-            <ngx-editable-form #editableForm
-            [title]="title" [hasHeader]="true" [menuType]="menuType" [isForNew]="isForNew"
-            [isAdmin]="true" [title]="title" [iconName]="iconName" [isUnapprovedorg]="isUnapprovedorg"
-            [canApproveOrg]="canApproveOrg" [entityMrn]="entityMrn" [orgMrn]="orgMrn"
-            [instanceVersion]="instanceVersion" [isLoading]="isLoading" [isLoaded]="isLoaded"
-            (onCancel)="dismiss()" (onSubmit)="submit($event)" (onDelete)="delete()"
-            ></ngx-editable-form>
         </div>
     </div>
+    
+    <nb-card *ngIf="submitted">
+        <nb-card-header>
+            Your information has been successfully submitted!
+        </nb-card-header>
+        <nb-card-body>
+            <h5 class="text-center">MIR Administrator will process the information and be in contact with you.</h5>
+        </nb-card-body>
+        <nb-card-footer>
+            <div class="buttons-row">
+                <button nbButton status="danger" (click)="dismiss()">Close</button>
+            </div>
+        </nb-card-footer>
+    </nb-card>
 </div>
-
-<nb-card *ngIf="submitted">
-    <nb-card-header>
-        Your information has been successfully submitted.
-    </nb-card-header>
-    <nb-card-body>
-        <h5>MIR Administrator will process the information and be in contact with you.</h5>
-    </nb-card-body>
-    <nb-card-footer>
-        <div class="buttons-row">
-            <button nbButton status="danger" (click)="dismiss()">Close</button>
-        </div>
-    </nb-card-footer>
-</nb-card>
