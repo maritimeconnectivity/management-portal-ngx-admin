@@ -3,7 +3,7 @@ import { RoleControllerService } from './../backend-api/identity-registry/api/ro
 import { EventEmitter, Injectable } from '@angular/core';
 import { AuthState } from './model/AuthState';
 import { StaticAuthInfo } from './model/StaticAuthInfo';
-import { AuthPermission, PermissionResolver } from './auth.permission';
+import { AuthPermission, AuthPermissionForMSR, PermissionResolver } from './auth.permission';
 import { AuthUser } from './model/AuthUser';
 import { Role } from '../backend-api/identity-registry/model/role';
 
@@ -94,7 +94,7 @@ private createAuthState(): AuthState {
 	    user: AuthService.staticAuthInfo.user,
       rolesLoaded: false,
 		acting: false,
-		hasPermission(permissionRole: AuthPermission): boolean {
+		hasPermissionInMIR(permissionRole: AuthPermission): boolean {
 			switch (permissionRole) {
 				case AuthPermission.User:
 					return true;
@@ -117,7 +117,21 @@ private createAuthState(): AuthState {
 				default:
 					return false;
             }
-		}
+		},
+    hasPermissionInMSR(permissionRole: AuthPermissionForMSR): boolean {
+      switch (permissionRole) {
+				case AuthPermissionForMSR.User:
+					return true;
+				case AuthPermissionForMSR.OrgServiceAdmin:
+					return PermissionResolver.isOrgServiceAdmin(this.user.keycloakMSRPermissions);
+        case AuthPermissionForMSR.LedgerAdmin:
+          return PermissionResolver.isLedgerAdmin(this.user.keycloakMSRPermissions);
+        case AuthPermissionForMSR.MSRAdmin:
+          return PermissionResolver.isMSRAdmin(this.user.keycloakMSRPermissions);
+        default:
+          return false;
+            }
+      }
     };
   }
 
@@ -139,6 +153,7 @@ private createAuthState(): AuthState {
     const firstname = keycloakToken.given_name ? keycloakToken.given_name : "";
     const lastname = keycloakToken.family_name ? keycloakToken.family_name : "";
     const permissions = keycloakToken.permissions ? keycloakToken.permissions : '';
+    const rolesInMSR = keycloakToken["resource_access"] && keycloakToken["resource_access"]["service-registry"] && keycloakToken["resource_access"]["service-registry"]["roles"] ? keycloakToken["resource_access"]["service-registry"]["roles"] : [];
     const mrn = keycloakToken.mrn;
     const email = keycloakToken.email;
     const preferredUsername = keycloakToken.preferred_username
@@ -151,7 +166,8 @@ private createAuthState(): AuthState {
         email: email,
         organization: keycloakToken.org,
         preferredUsername: preferredUsername,
-        keycloakPermissions: permissions.toString(),
+        keycloakMIRPermissions: permissions.toString(),
+        keycloakMSRPermissions: rolesInMSR,
     };
     AuthService.staticAuthInfo.user = authUser;
   }

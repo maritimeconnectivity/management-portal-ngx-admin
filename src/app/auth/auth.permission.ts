@@ -15,6 +15,13 @@ export enum AuthPermission {
     EntityAdmin = 1 << 9,
 }
 
+export enum AuthPermissionForMSR {
+  User = 1 << 0,
+  OrgServiceAdmin = 1 << 1,
+  LedgerAdmin = 1 << 2,
+  MSRAdmin = 1 << 3,
+}
+
 export const rolesToPermission = (roles: string[]): AuthPermission => {
     let permission = AuthPermission.User;
     for (const roleString of roles) {
@@ -113,5 +120,17 @@ export class PermissionResolver {
         (permission & AuthPermission.ApproveOrg) > 0 ||
         this.isSiteAdmin(permission)
       );
+    }
+
+    static isMSRAdmin(roles: string[]) {
+      return roles && roles.length > 0 && roles.includes('admin');
+    }
+
+    static isLedgerAdmin(roles: string[]) {
+      return roles && roles.length > 0 && roles.includes('ledger_admin');
+    }
+
+    static isOrgServiceAdmin(roles: string[]) {
+      return roles && roles.length > 0 && roles.includes('service_admin');
     }
   }

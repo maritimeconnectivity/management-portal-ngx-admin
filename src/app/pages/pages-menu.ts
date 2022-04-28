@@ -20,19 +20,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'layers-outline',
     children: [
       {
-        title: 'Approve ledger registration',
-        link: '/pages/sr/approve-svc',
-      },
-      {
-        title: 'My Organization',
-        children: [
-          {
-            title: 'Services',
-            link: '/pages/sr/instanceorg',
-          },
-        ],
-      },
-      {
         title: 'Services',
         link: '/pages/sr/instances',
       },
@@ -63,12 +50,12 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
 ];
 
-export const MENU_FOR_ADMIN = {
+export const MIR_MENU_FOR_ADMIN = {
   title: 'Approve organization',
   link: '/pages/ir/approve-org',
 };
 
-export const MENU_FOR_ORG = {
+export const MIR_MENU_FOR_ORG = {
   title: 'My Organization',
   home: true,
   children: [
@@ -91,6 +78,16 @@ export const MENU_FOR_ORG = {
     {
       title: 'Roles',
       link: '/pages/ir/roles',
+    },
+  ],
+};
+
+export const MSR_MENU_FOR_ORG = {
+  title: 'My Organization',
+  children: [
+    {
+      title: 'Services',
+      link: '/pages/sr/instanceorg',
     },
   ],
 };

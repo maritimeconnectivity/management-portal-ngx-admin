@@ -14,7 +14,7 @@ import { DeviceControllerService, MMS, MmsControllerService, OrganizationControl
 import { Observable } from 'rxjs/Observable';
 import { NotifierService } from 'angular-notifier';
 import { AuthService } from '../../../auth/auth.service';
-import { AuthPermission, PermissionResolver, rolesToPermission } from '../../../auth/auth.permission';
+import { AuthPermission, AuthPermissionForMSR, PermissionResolver, rolesToPermission } from '../../../auth/auth.permission';
 
 @Component({
   selector: 'ngx-detail',
@@ -45,6 +45,8 @@ export class DetailComponent implements OnInit {
   isLoaded = true;
   isShortIdValid = false;
   data = {};
+  mrnMask = '';
+  isForOrgService = false;
 
   @ViewChild('editableForm') editableForm;
 
@@ -76,12 +78,17 @@ export class DetailComponent implements OnInit {
     ) {
       const arrays = this.router.url.split("/");
       this.menuType = arrays[arrays.length-2];
-      this.menuType = this.menuType.replace('-', '').substr(0, this.menuType.length-1);
+      if (this.menuType === MenuType.InstanceOfOrg) {
+        this.isForOrgService = true;
+        this.menuType = MenuType.Instance;
+      } else {
+        this.menuType = this.menuType.replace('-', '').substr(0, this.menuType.length - 1);
+      }
       this.entityMrn = decodeURIComponent(this.route.snapshot.paramMap.get("id"));
       this.orgMrn = this.authService.authState.orgMrn;
       this.isForNew = this.entityMrn === 'new';
       this.numberId = this.menuType === MenuType.Instance ? parseInt(this.entityMrn) : -1;
-
+      
       // preventing refresh
       this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
@@ -114,7 +121,8 @@ export class DetailComponent implements OnInit {
   }
 
   fetchFieldValues() {
-    if(ColumnForMenu.hasOwnProperty(this.menuType)) {
+    if(ColumnForMenu.hasOwnProperty(this.menuType === MenuType.InstanceOfOrg ?
+        MenuType.Instance : this.menuType)) {
       this.isLoading = true;
       if (Object.values(MenuType).includes(this.menuType as MenuType)) {
         if(this.menuType === MenuType.UnapprovedOrg){
@@ -248,9 +256,9 @@ export class DetailComponent implements OnInit {
       return this.serviceControllerService.createService(body as Service, orgMrn);
     } else if (context === MenuType.Organization) {
       return this.organizationControllerService.applyOrganization(body as Organization);
-    } else if (context === MenuTypeNames.role) {
+    } else if (context === MenuType.Role) {
       return this.roleControllerService.createRole(body as Role, orgMrn);
-    } else if (context === MenuTypeNames.instance) {
+    } else if (context === MenuType.Instance) {
       return this.instanceControllerService.createInstanceUsingPOST(body as InstanceDtDto);
     }
     return new Observable();
@@ -269,9 +277,9 @@ export class DetailComponent implements OnInit {
       return this.serviceControllerService.updateService(body as Service, orgMrn, entityMrn, version);
     } else if (context === MenuType.Organization) {
       return this.organizationControllerService.updateOrganization(body as Organization, entityMrn);
-    } else if (context === MenuTypeNames.role) {
+    } else if (context === MenuType.Role) {
       return this.roleControllerService.updateRole(body as Role, orgMrn, this.numberId);
-    } else if (context === MenuTypeNames.instance) {
+    } else if (context === MenuType.Instance) {
       return this.instanceControllerService.updateInstanceUsingPUT(instanceId, body as InstanceDtDto);
     }
     return new Observable();
@@ -290,9 +298,9 @@ export class DetailComponent implements OnInit {
       return this.serviceControllerService.deleteService(orgMrn, entityMrn, version);
     } else if (context === MenuType.Organization) {
       return this.organizationControllerService.deleteOrg(entityMrn);
-    } else if (context === MenuTypeNames.role) {
+    } else if (context === MenuType.Role) {
       return this.roleControllerService.deleteRole(orgMrn, this.numberId);
-    } else if (context === MenuTypeNames.instance) {
+    } else if (context === MenuType.Instance) {
       return this.instanceControllerService.deleteInstanceUsingDELETE(instanceId);
     }
     return new Observable();
@@ -320,17 +328,21 @@ export class DetailComponent implements OnInit {
   isAdmin = (): boolean => {
     const context = this.menuType;
     if (context === MenuType.User) {
-      return this.authService.authState.hasPermission(AuthPermission.UserAdmin);
+      return this.authService.authState.hasPermissionInMIR(AuthPermission.UserAdmin);
     } else if (context === MenuType.Device) {
-      return this.authService.authState.hasPermission(AuthPermission.DeviceAdmin);
+      return this.authService.authState.hasPermissionInMIR(AuthPermission.DeviceAdmin);
     } else if (context === MenuType.Vessel) {
-      return this.authService.authState.hasPermission(AuthPermission.VesselAdmin);
+      return this.authService.authState.hasPermissionInMIR(AuthPermission.VesselAdmin);
     } else if (context === MenuType.MMS) {
-      return this.authService.authState.hasPermission(AuthPermission.MMSAdmin);
+      return this.authService.authState.hasPermissionInMIR(AuthPermission.MMSAdmin);
     } else if (context === MenuType.Service) {
-      return this.authService.authState.hasPermission(AuthPermission.ServiceAdmin);
+      return this.authService.authState.hasPermissionInMIR(AuthPermission.ServiceAdmin);
     } else if (context === MenuType.Organization || context === MenuTypeNames.role) {
-      return this.authService.authState.hasPermission(AuthPermission.OrgAdmin);
+      return this.authService.authState.hasPermissionInMIR(AuthPermission.OrgAdmin);
+    } else if (context === MenuType.Instance) {
+      return this.isForOrgService ?
+        this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.OrgServiceAdmin) :
+        this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.MSRAdmin);
     } else {
       return false;
     }

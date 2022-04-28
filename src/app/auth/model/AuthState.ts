@@ -1,4 +1,4 @@
-import { AuthPermission } from "../auth.permission";
+import { AuthPermission, AuthPermissionForMSR } from "../auth.permission";
 import { AuthUser } from "./AuthUser";
 
 export interface AuthState {
@@ -9,5 +9,6 @@ export interface AuthState {
   user: AuthUser;
   rolesLoaded: boolean;
   acting: boolean;
-  hasPermission(permissionRole: AuthPermission): boolean;
+  hasPermissionInMIR(permissionRole: AuthPermission): boolean;
+  hasPermissionInMSR(permissionRole: AuthPermissionForMSR): boolean;
 }

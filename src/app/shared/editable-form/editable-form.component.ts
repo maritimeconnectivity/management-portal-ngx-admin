@@ -17,7 +17,6 @@ export class EditableFormComponent implements OnInit {
   @Input() menuType: string;
   @Input() instanceVersion: string;
   @Input() isForNew: boolean;
-  @Input() isShortIdValid: boolean;
   @Input() isUnapprovedorg: boolean;
   @Input() canApproveOrg: boolean;
   @Input() entityMrn: string;
@@ -27,6 +26,7 @@ export class EditableFormComponent implements OnInit {
   @Input() iconName: string;
   @Input() isLoading: boolean;
   @Input() isLoaded: boolean;
+  @Input() hasHeader: boolean;
 
   @Output() onCancel = new EventEmitter<FormGroup>();
   @Output() onDelete = new EventEmitter<FormGroup>();
@@ -36,7 +36,6 @@ export class EditableFormComponent implements OnInit {
   isEditing = false;
   isEntity = false;
   columnForMenu: any;
-  values = {};
   formGroup: FormGroup;
   shortId = '';
   roleId = -1;
@@ -44,6 +43,7 @@ export class EditableFormComponent implements OnInit {
   menuTypeName = '';
   activeCertificates = [];
   revokedCertificates = [];
+  orgShortId = undefined;
   
   constructor(
     private mrnHelperService: MrnHelperService,
@@ -57,18 +57,23 @@ export class EditableFormComponent implements OnInit {
   ngOnInit(): void {
     // filtered with context
     this.columnForMenu = Object.entries(ColumnForMenu[this.menuType]).filter(([k,v]) => 
-      Array.isArray(v['visibleFrom']) &&
-      v['visibleFrom'].includes(this.contextForAttributes) &&
-      (!this.isEditing || (this.isForNew && v['notShowOnEdit'] !== true)));
-
+      Array.isArray(v['visibleFrom']) && // array type checking
+      v['visibleFrom'].includes(this.contextForAttributes) && // context filtering, either detail or list
+      (!this.isEditing || (this.isForNew && v['notShowOnEdit'] !== true))); 
+      
     this.setFormWithValidators();
 
     if (this.isForNew) {
       this.isEditing = true;
-      if (this.formGroup.get('mrn')){
-        this.formGroup.get('mrn').setValue(this.mrnHelperService.mrnMask(this.menuType));
-        this.formGroup.get('mrn').disable();
-      }
+      Object.keys(this.formGroup.controls).forEach(field => {
+        if (field.includes('mrn') || field.includes('Mrn')){
+          this.formGroup.get(field).setValue( field === 'adminMrn' ?
+            this.mrnHelperService.mrnMaskForUserOfOrg('') :
+            this.mrnHelperService.mrnMask(
+            this.menuType === MenuType.NewOrganization ? MenuType.Organization : this.menuType));
+          this.formGroup.get(field).disable();
+        }
+      });
       this.settled(true);
     }
   }
@@ -87,6 +92,9 @@ export class EditableFormComponent implements OnInit {
 
   invertIsEditing() {
     this.isEditing = !this.isEditing;
+    if (!this.isEditing){
+      this.formGroup.reset(this.data);
+    }
   }
 
   settled(value: boolean) {
@@ -99,38 +107,6 @@ export class EditableFormComponent implements OnInit {
     this.isForNew = true;
   }
 
-  addShortIdToMrn(shortId: string) {
-    const mrn = this.mrnHelperService.mrnMask(this.menuType) + shortId;
-    this.formGroup.get('mrn').setValue(mrn);
-    this.isShortIdValid = this.validateMrn(mrn);
-  }
-
-  getValidators(field: any) {
-    const validators = [];
-    if (field[1].required) {
-      validators.push(Validators.required);
-    }
-    if (field[0] === 'email') {
-      validators.push(Validators.email);
-    }
-    if (field[0] === 'mrn') {
-      if (this.menuType === MenuType.Organization || this.menuType === MenuType.UnapprovedOrg) {
-        validators.push(Validators.pattern(this.mrnHelperService.mrnMcpIdpRegexForOrg()));
-      } else {
-        validators.push(Validators.pattern(this.mrnHelperService.mrnMcpIdpRegex()));
-      }
-    }
-    return validators;
-  }
-
-  validateMrn(mrn: string) {
-    if (this.menuType === MenuType.Organization || this.menuType === MenuType.UnapprovedOrg) {
-      return new RegExp(this.mrnHelperService.mrnMcpIdpRegexForOrg()).test(mrn);
-    } else {
-      return new RegExp(this.mrnHelperService.mrnMcpIdpRegex()).test(mrn);
-    }
-  }
-
   adjustTitle = (menuType: string, title: string) => {
     this.menuType = menuType;
     this.menuTypeName = MenuTypeNames[this.menuType];
@@ -138,8 +114,41 @@ export class EditableFormComponent implements OnInit {
     this.title = title;
   }
 
+  addShortIdToMrn(field: string, shortId: string) {
+    const mrn = (field === 'adminMrn' ?
+    this.mrnHelperService.mrnMaskForUserOfOrg(this.orgShortId) :
+    this.mrnHelperService.mrnMask(
+    this.menuType === MenuType.NewOrganization ? MenuType.Organization : this.menuType))
+     + shortId;
+    this.formGroup.get(field).setValue(mrn);
+    if (field === 'orgMrn') {
+      this.orgShortId = this.formGroup.get('orgMrn').value.split(":").pop();
+      const adminShortId = this.formGroup.get('adminMrn').value.split(":").pop();
+      this.formGroup.get('adminMrn').setValue(this.mrnHelperService.mrnMaskForUserOfOrg(this.orgShortId) + adminShortId);
+    }
+  }
+
+  getValidators(field: any) {
+    const validators = [];
+    if (field[1].required) {
+      validators.push(Validators.required);
+    }
+    if (field[0].includes('email') || field[0].includes('Email')) {
+      validators.push(Validators.email);
+    }
+    if (field[0].includes('mrn') || field[0].includes('Mrn')) {
+      if (this.menuType === MenuType.Organization || this.menuType === MenuType.UnapprovedOrg) {
+        validators.push(Validators.pattern(this.mrnHelperService.mrnMcpIdpRegexForOrg()));
+      } else {
+        validators.push(Validators.pattern(this.mrnHelperService.mrnMcpIdpRegex(this.orgShortId)));
+      }
+    }
+    return validators;
+  }
+
   adjustData = (rawData: object) => {
     const data = formatData(rawData);
+    this.data = data;
     for(const key in data) {
       const relevant = this.columnForMenu.filter(e => e[0] === key)[0];
       if (relevant) {
@@ -149,7 +158,6 @@ export class EditableFormComponent implements OnInit {
         if (this.menuType !== 'role' && relevant[0] === 'mrn') {
           this.shortId = this.mrnHelperService.shortIdFromMrn(data[key]);
           const mrn = this.mrnHelperService.mrnMask(this.menuType) + this.shortId;
-          this.isShortIdValid = this.validateMrn(mrn);
           this.formGroup.get(relevant[0]).setValue(mrn);
         } else {
           this.formGroup.get(relevant[0]).setValue(data[key]);
