@@ -37,7 +37,6 @@ export class EditableFormComponent implements OnInit {
   isEditing = false;
   isEntity = false;
   columnForMenu: any;
-  values = {};
   formGroup: FormGroup;
   shortId = '';
   roleId = -1;
@@ -93,6 +92,9 @@ export class EditableFormComponent implements OnInit {
 
   invertIsEditing() {
     this.isEditing = !this.isEditing;
+    if (!this.isEditing){
+      this.formGroup.reset(this.data);
+    }
   }
 
   settled(value: boolean) {
@@ -156,6 +158,7 @@ export class EditableFormComponent implements OnInit {
 
   adjustData = (rawData: object) => {
     const data = formatData(rawData);
+    this.data = data;
     for(const key in data) {
       const relevant = this.columnForMenu.filter(e => e[0] === key)[0];
       if (relevant) {

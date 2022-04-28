@@ -17,7 +17,7 @@ import { NotifierService } from 'angular-notifier';
 import { MmsControllerService, Role, VesselControllerService } from '../../../backend-api/identity-registry';
 import { PageEntity } from '../../../backend-api/identity-registry/model/pageEntity';
 import { InstanceDto, SearchControllerService } from '../../../backend-api/service-registry';
-import { AuthPermission } from '../../../auth/auth.permission';
+import { AuthPermission, AuthPermissionForMSR } from '../../../auth/auth.permission';
 import { formatData, formatServiceData } from '../../../util/dataFormatter';
 import { Entity } from '../../../backend-api/identity-registry/model/entity';
 
@@ -269,19 +269,21 @@ export class ListComponent implements OnInit {
   isAdmin = () => {
     const context = this.menuType;
     if (context === MenuTypeNames.user) {
-      return this.authService.authState.hasPermission(AuthPermission.UserAdmin);
+      return this.authService.authState.hasPermissionInMIR(AuthPermission.UserAdmin);
     } else if (context === MenuTypeNames.device) {
-      return this.authService.authState.hasPermission(AuthPermission.DeviceAdmin);
+      return this.authService.authState.hasPermissionInMIR(AuthPermission.DeviceAdmin);
     } else if (context === MenuTypeNames.vessel) {
-      return this.authService.authState.hasPermission(AuthPermission.VesselAdmin);
+      return this.authService.authState.hasPermissionInMIR(AuthPermission.VesselAdmin);
     } else if (context === MenuTypeNames.mms) {
-      return this.authService.authState.hasPermission(AuthPermission.MMSAdmin);
+      return this.authService.authState.hasPermissionInMIR(AuthPermission.MMSAdmin);
     } else if (context === MenuTypeNames.service) {
-      return this.authService.authState.hasPermission(AuthPermission.ServiceAdmin);
+      return this.authService.authState.hasPermissionInMIR(AuthPermission.ServiceAdmin);
     } else if (context === MenuTypeNames.organization || context === MenuTypeNames.role) {
-      return this.authService.authState.hasPermission(AuthPermission.OrgAdmin);
+      return this.authService.authState.hasPermissionInMIR(AuthPermission.OrgAdmin);
     } else if (context === MenuTypeNames.instance) {
-      return true;
+      return this.isForServiceForOrg ?
+        this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.OrgServiceAdmin) :
+        this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.MSRAdmin);
     } else {
       return false;
     }

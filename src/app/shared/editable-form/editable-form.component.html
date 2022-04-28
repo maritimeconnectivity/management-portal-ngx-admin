@@ -37,6 +37,7 @@
             <input *ngIf="isEditing" type="text" nbInput fullWidth id="input_{{attribute[0]}}" class="form-control"
               status="{{formGroup.get(attribute[0]).value ? formGroup.get(attribute[0]).valid ? 'success' : 'danger' : attribute[1].required || menuType === 'newOrganization' ? 'danger' : ''}}"
               formControlName="{{attribute[0]}}"
+              placeholder="{{attribute[1].placeholder !== undefined ? attribute[1].placeholder : ''}}"
               required="{{attribute[1].required === true || menuType === 'newOrganization'}}">
           </div>
         </div>
@@ -44,7 +45,7 @@
       <div class="form-group row" *ngIf="isEntity && !isForNew && !isEditing" >
         <label for="inputActiveCert" class="label col-sm-3 col-form-label">Active certificates</label>
         <div class="col">
-          <ngx-certificates [data]="activeCertificates" [forRevoked]="false" [entityType]="menuType" [entityTitle]="name" [entityMrn]="entityMrn" [orgMrn]="orgMrn" [instanceVersion]="instanceVersion" [hasPermission]="isAdmin" (onUpdate)="refreshData()"></ngx-certificates>
+          <ngx-certificates [data]="activeCertificates" [forRevoked]="false" [entityType]="menuType" [entityTitle]="name" [entityMrn]="entityMrn" [orgMrn]="orgMrn" [instanceVersion]="instanceVersion" [hasPermissionInMIR]="isAdmin" (onUpdate)="refreshData()"></ngx-certificates>
         </div>
       </div>
       <div class="form-group row" *ngIf="isEntity && !isForNew && !isEditing" >

@@ -43,7 +43,7 @@ export class CertificatesComponent implements OnInit {
   @Input() entityType: string;
   @Input() orgMrn: string;
   @Input() instanceVersion: string;
-  @Input() hasPermission: boolean;
+  @Input() hasPermissionInMIR: boolean;
   @Output() onUpdate: EventEmitter<any> = new EventEmitter();
 
   certificateTitle = "Certificate for ";
@@ -63,7 +63,7 @@ export class CertificatesComponent implements OnInit {
   }
 
   openIssueDialog() {
-    if (this.hasPermission) {
+    if (this.hasPermissionInMIR) {
       this.dialogService.open(CertIssueDialogComponent, {
         context: {
           entityMrn: this.entityMrn,
@@ -85,7 +85,7 @@ export class CertificatesComponent implements OnInit {
   }
 
   openRevokeDialog(data: Certificate) {
-    if (this.hasPermission) {
+    if (this.hasPermissionInMIR) {
       this.dialogService.open(CertRevokeDialogComponent, {
         context: {
           entityMrn: this.entityMrn,
