@@ -675,6 +675,7 @@ export const ColumnForMenu = {
       visibleFrom: ['detail'],
       required: true,
     },
+    /*
     adminMrn: {
       title: 'MRN for admin user',
       type: 'string',
@@ -706,5 +707,6 @@ export const ColumnForMenu = {
       visibleFrom: ['detail'],
       required: true,
     },
+    */
   },
 };

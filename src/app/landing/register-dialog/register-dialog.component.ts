@@ -1,3 +1,6 @@
+import { NotifierService } from 'angular-notifier';
+import { Organization } from './../../backend-api/identity-registry/model/organization';
+import { OrganizationControllerService } from './../../backend-api/identity-registry/api/organizationController.service';
 import { AppConfig } from './../../app.config';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
@@ -17,7 +20,11 @@ export class RegisterDialogComponent implements OnInit {
   agreed = false;
   submitted = false;
 
-  constructor(protected ref: NbDialogRef<RegisterDialogComponent>) {
+  constructor(
+    protected ref: NbDialogRef<RegisterDialogComponent>,
+    private organizationControllerService: OrganizationControllerService,
+    private notifierService: NotifierService,
+    ) {
     this.environmentName = AppConfig.ENVIRONMENT_TITLE;
     this.clause = AppConfig.TERMS_OF_USE;
   }
@@ -33,7 +40,22 @@ export class RegisterDialogComponent implements OnInit {
     this.agreed = true;
   }
 
-  submit(): void {
-    this.submitted = true;
+  submit(value: any): void {
+    const organization: Organization = {
+      name: value.orgName,
+      mrn: value.orgMrn,
+      email: value.orgEmail,
+      url: value.orgUrl,
+      country: value.orgCountry,
+      address: value.orgAddress,
+    };
+    this.organizationControllerService.applyOrganization(organization).subscribe(
+      res => {
+        this.submitted = true;
+      },
+      err => this.notifierService.notify('error', 'There was error in deletion - ' + err.message)
+    );
+    
+    
   }
 }
