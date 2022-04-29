@@ -27,7 +27,7 @@
         <div class="form-group row" *ngIf="isForNew && menuType !== 'role' && (attribute[0].includes('mrn') || attribute[0].includes('Mrn'))">
           <label class="label col-sm-3 col-form-label">Short ID for {{attribute[1].title}}</label>
           <div class="col-sm-9 my-auto">
-            <input type="text" nbInput fullWidth id="input_shortId_{{attribute[0]}}" class="form-control" status="{{isShortIdValid ? 'success' : 'danger'}}" required="true" (input)="addShortIdToMrn(attribute[0], $event.target.value)" value="{{shortId}}">
+            <input type="text" nbInput fullWidth id="input_shortId_{{attribute[0]}}" class="form-control" status="{{validateMrn(formGroup.get(attribute[0]).value) ? 'success' : 'danger'}}" required="true" (input)="addShortIdToMrn(attribute[0], $event.target.value)" value="{{shortId}}">
           </div>
         </div>
         <div class="form-group row" *ngIf="!attribute[1].notShowOnEdit">
