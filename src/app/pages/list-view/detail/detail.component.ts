@@ -203,15 +203,16 @@ export class DetailComponent implements OnInit {
     }
   }
 
-  submit(formGroup: FormGroup) {
-    const body = { ...formGroup.value};
+  submit(body: any) {
     if (this.menuType === 'role') {
       this.loadOrgContent(this.orgMrn).subscribe(
         res => this.submitDataToBackend({ ...body, idOrganization: res.id}),
         err => this.notifierService.notify('error', 'Error in fetching organization information'),
       );
     } else {
-      this.submitDataToBackend({...body, mrn: formGroup.get('mrn').value}, formGroup.get('mrn').value);
+      if (body.mrn) {
+        this.submitDataToBackend(body, body.mrn);
+      }
     }
   }
 
@@ -233,6 +234,9 @@ export class DetailComponent implements OnInit {
       this.updateData(this.menuType, body, this.authService.authState.orgMrn, mrn, this.instanceVersion).subscribe(
         res => {
           this.notifierService.notify('success', this.menuType + ' has been updated');
+          if(this.editableForm) {
+            this.editableForm.invertIsEditing();
+          }
           this.settle(true);
         },
         err => {
