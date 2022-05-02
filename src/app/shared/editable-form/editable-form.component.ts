@@ -1,3 +1,4 @@
+import { OrganizationControllerService } from './../../backend-api/identity-registry/api/organizationController.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { formatData } from '../../util/dataFormatter';
@@ -31,6 +32,7 @@ export class EditableFormComponent implements OnInit {
   @Output() onCancel = new EventEmitter<FormGroup>();
   @Output() onDelete = new EventEmitter<FormGroup>();
   @Output() onSubmit = new EventEmitter<FormGroup>();
+  @Output() onApprove = new EventEmitter<FormGroup>();
 
   data = {};
   isEditing = false;
@@ -117,6 +119,10 @@ export class EditableFormComponent implements OnInit {
     this.isLoading = false;
   }
 
+  approve(){
+    this.onApprove.emit();
+  }
+
   updateForNewVer() {
     this.formGroup.get('instanceVersion').enable();
     this.isForNew = true;
@@ -174,7 +180,7 @@ export class EditableFormComponent implements OnInit {
       validators.push(Validators.email);
     }
     if (field[0] !== 'mrnSubsidiary' && (field[0].includes('mrn') || field[0].includes('Mrn'))) {
-      if (this.menuType === MenuType.Organization || this.menuType === MenuType.UnapprovedOrg) {
+      if (this.menuType === MenuType.Organization || this.menuType === MenuType.OrgCandidate) {
         validators.push(Validators.pattern(this.mrnHelperService.mrnMcpIdpRegexForOrg()));
       } else {
         validators.push(Validators.pattern(this.mrnHelperService.mrnMcpIdpRegex(this.orgShortId)));

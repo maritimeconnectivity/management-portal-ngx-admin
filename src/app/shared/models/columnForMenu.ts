@@ -446,7 +446,7 @@ export const ColumnForMenu = {
       visibleFrom: ['detail', 'list'],
     },
   },
-  approveorg: {
+  orgcandidate: {
     id: {
       title: 'ID',
       type: 'number',

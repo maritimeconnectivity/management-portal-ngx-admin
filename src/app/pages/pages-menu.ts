@@ -52,7 +52,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
 
 export const MIR_MENU_FOR_ADMIN = {
   title: 'Approve organization',
-  link: '/pages/ir/approve-org',
+  link: '/pages/ir/orgcandidates',
 };
 
 export const MIR_MENU_FOR_ORG = {

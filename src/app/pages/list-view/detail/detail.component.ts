@@ -15,6 +15,9 @@ import { Observable } from 'rxjs/Observable';
 import { NotifierService } from 'angular-notifier';
 import { AuthService } from '../../../auth/auth.service';
 import { AuthPermission, AuthPermissionForMSR, PermissionResolver, rolesToPermission } from '../../../auth/auth.permission';
+import { MCP_ADMIN } from '../../../shared/app.constants';
+
+import RoleNameEnum = Role.RoleNameEnum;
 
 @Component({
   selector: 'ngx-detail',
@@ -125,7 +128,7 @@ export class DetailComponent implements OnInit {
         MenuType.Instance : this.menuType)) {
       this.isLoading = true;
       if (Object.values(MenuType).includes(this.menuType as MenuType)) {
-        if(this.menuType === MenuType.UnapprovedOrg){
+        if(this.menuType === MenuType.OrgCandidate){
           this.isUnapprovedorg = true;
           this.organizationControllerService.getUnapprovedOrganizations().subscribe(
             data => {
@@ -198,10 +201,60 @@ export class DetailComponent implements OnInit {
           this.notifierService.notify('success', this.title + ' has been successfully deleted');
           this.moveToListPage();
         },
-        err => this.notifierService.notify('error', 'There was error in deletion - ' + err.message)
+        err => this.notifierService.notify('error', 'There was error in deletion - ' + err.message),
       );
     }
   }
+
+  approve() {
+    if (this.menuType === MenuType.OrgCandidate) {
+      this.notifierService.notify('success', 'Organization Approved');
+      this.moveToListPage();
+                  
+      /*
+      this.organizationControllerService.approveOrganization(this.entityMrn).subscribe(
+        res => {
+          this.createAdminRole().subscribe(
+            role => {
+              this.createUser().subscribe(
+                user => {
+                  this.notifierService.notify('success', 'Organization Approved');
+                  this.moveToListPage();
+                },
+                err => this.notifierService.notify('error', 'The organization was approved, but user creation failed. You can go to organizations and try to create the user again later - ' + err.message),
+              );
+            },
+            err => this.notifierService.notify('error', 'The organization was approved, but role creation failed - ' + err.message),
+          );
+        },
+        err => this.notifierService.notify('error', 'The organization is not approved - ' + err.message),
+      );
+      */
+    }
+  }
+
+  createAdminRole() {
+		const role: Role = {
+			permission: MCP_ADMIN, // TODO is this correct? Revise when creating the new role-functionality
+			roleName: RoleNameEnum.ORGADMIN,
+		};
+
+		return this.roleControllerService.createRole(role, this.entityMrn);
+	}
+
+  createUser() {
+    /*
+		const user:User = {
+			mrn: this.userMrn,
+			firstName: this.userForm.value.firstName,
+			lastName: this.userForm.value.lastName,
+			permissions: MC_ADMIN, // TODO is this correct? Revise when creating the new role-functionality
+			email: this.userForm.value.emails.email
+		};
+
+		return this.userControllerService.createUser(user, this.entityMrn);
+    */
+	}
 
   submit(body: any) {
     if (this.menuType === 'role') {

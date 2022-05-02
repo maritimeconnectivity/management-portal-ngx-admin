@@ -55,7 +55,7 @@
         </div>
       </div>
       <div class="buttons-row" *ngIf="isUnapprovedorg && canApproveOrg">
-        <button type="button" nbButton status="primary">Approve</button>
+        <button type="button" nbButton status="primary" (click)="approve()">Approve</button>
         <button type="button" nbButton status="danger">Reject</button>
       </div>
   </form>    
