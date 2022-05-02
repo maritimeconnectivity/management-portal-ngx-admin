@@ -50,27 +50,27 @@ export class MrnHelperService {
       "urn:mrn:mcp:(device|org|user|vessel|service|mms):" +
       this.idpNamespace +
       ":" +
-      this.orgShortId() ? this.orgShortId() : orgShortId +
+      (orgShortId ? orgShortId : this.orgShortId()) +
       "((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)|)*)$"
     );
   }
 
-  public mrnMask(menuType: string) {
+  public mrnMask(menuType: string, orgShortId? : string) {
     switch (menuType) {
-      case MenuTypeNames.device:
-        return this.mrnMaskForDevice();
-      case MenuTypeNames.user:
-        return this.mrnMaskForUser();
-      case MenuTypeNames.organization:
+      case MenuType.Device:
+        return this.mrnMaskForDevice(orgShortId);
+      case MenuType.User:
+        return this.mrnMaskForUser(orgShortId);
+      case MenuType.Organization:
         return this.mrnMaskForOrganization();
-      case MenuTypeNames.vessel:
-        return this.mrnMaskForVessel();
-      case MenuTypeNames.instance:
-        return this.mrnMaskForInstance();
-      case MenuTypeNames.service:
-        return this.mrnMaskForInstance();
-      case MenuTypeNames.mms:
-        return this.mrnMaskForMms();
+      case MenuType.Vessel:
+        return this.mrnMaskForVessel(orgShortId);
+      case MenuType.Instance:
+        return this.mrnMaskForInstance(orgShortId);
+      case MenuType.Service:
+        return this.mrnMaskForService(orgShortId);
+      case MenuType.MMS:
+        return this.mrnMaskForMms(orgShortId);
       default:
         return this.mrnMaskForOrganization();
     }
@@ -83,30 +83,30 @@ export class MrnHelperService {
     return "It should contain at least 3 characters and only a-z 0-9 + , / ~ - . : = @ ; $ _ ! * '";
   }
 
-  public mrnMaskForVessel(): string {
+  public mrnMaskForVessel(orgShortId?: string): string {
     return (
       this.mrnMCP +
       "vessel:" +
       this.idpNamespace +
       ":" +
-      this.orgShortId() +
+      (orgShortId ? orgShortId : this.orgShortId()) +
       ":"
     );
   }
 
-  public mrnMaskForMms(): string {
+  public mrnMaskForMms(orgShortId?: string): string {
     return (
-      this.mrnMCP + "mms:" + this.idpNamespace + ":" + this.orgShortId() + ":"
+      this.mrnMCP + "mms:" + this.idpNamespace + ":" + (orgShortId ? orgShortId : this.orgShortId()) + ":"
     );
   }
 
-  public mrnMaskForDevice(): string {
+  public mrnMaskForDevice(orgShortId?: string): string {
     return (
       this.mrnMCP +
       "device:" +
       this.idpNamespace +
       ":" +
-      this.orgShortId() +
+      (orgShortId ? orgShortId : this.orgShortId()) +
       ":"
     );
   }
@@ -126,9 +126,9 @@ export class MrnHelperService {
     );
   }
 
-  public mrnMaskForUser(): string {
+  public mrnMaskForUser(orgShortId?: string): string {
     return (
-      this.mrnMCP + "user:" + this.idpNamespace + ":" + this.orgShortId() + ":"
+      this.mrnMCP + "user:" + this.idpNamespace + ":" + (orgShortId ? orgShortId : this.orgShortId()) + ":"
     );
   }
 
@@ -158,16 +158,26 @@ export class MrnHelperService {
     //return "urn:mrn:[mcp|stm]:service:design:" + this.orgShortId() + ':';
   }
 
-  public mrnMaskForInstance(): string {
+  public mrnMaskForService(orgShortId?: string): string {
     return (
       this.mrnMCP +
       "service:" +
       this.idpNamespace +
       ":" +
-      this.orgShortId() +
+      (orgShortId ? orgShortId : this.orgShortId()) +
       ":instance:"
     );
-    //return this.mrnPreFix() + 'service:instance:' + this.orgShortId() + ':';
+  }
+
+  public mrnMaskForInstance(orgShortId?: string): string {
+    return (
+      this.mrnMCP +
+      "instance:" +
+      this.idpNamespace +
+      ":" +
+      (orgShortId ? orgShortId : this.orgShortId()) +
+      ":instance:"
+    );
   }
 
   public mrnMaskTextForInstance(): string {

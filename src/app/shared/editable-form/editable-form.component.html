@@ -4,14 +4,20 @@
       <div class="col my-auto">
         <span class="icon_header"><nb-icon [icon]="iconName" pack="fas"></nb-icon></span>{{title}}
       </div>
-      <div class="col-md-auto" *ngIf="isAdmin">
-        <button type="submit" nbButton status="primary" *ngIf="isForNew" (click)="submit(formGroup)" [disabled]="!formGroup.valid">Submit</button>
-        <button type="button" nbButton status="danger" *ngIf="isForNew" (click)="cancel()">Cancel</button>
-        <button type="button" nbButton status="primary" *ngIf="!isEditing && !isForNew" (click)="invertIsEditing()" >Edit</button>
-        <button type="button" nbButton status="danger" *ngIf="!isEditing && !isForNew" (click)="delete()" >Delete</button>
-        <button type="submit" nbButton status="primary" *ngIf="isEditing && !isForNew && menuType === 'service'" (click)="updateForNewVer()" [disabled]="!formGroup.valid">New version</button>
-        <button type="submit" nbButton status="primary" *ngIf="isEditing && !isForNew" (click)="submit()" [disabled]="!formGroup.valid">Update</button>
-        <button type="button" nbButton status="danger" *ngIf="isEditing && !isForNew" (click)="invertIsEditing()" >Cancel</button>
+      <div class="col-md-auto" *ngIf="showButtons">
+        <div *ngIf="isAdmin">
+          <button type="submit" nbButton status="primary" *ngIf="isForNew" (click)="submit(formGroup)" [disabled]="!formGroup.valid">Submit</button>
+          <button type="button" nbButton status="danger" *ngIf="isForNew" (click)="cancel()">Cancel</button>
+          <button type="button" nbButton status="primary" *ngIf="!isEditing && !isForNew" (click)="invertIsEditing()" >Edit</button>
+          <button type="button" nbButton status="danger" *ngIf="!isEditing && !isForNew" (click)="delete()" >Delete</button>
+          <button type="submit" nbButton status="primary" *ngIf="isEditing && !isForNew && menuType === 'service'" (click)="updateForNewVer()" [disabled]="!formGroup.valid">New version</button>
+          <button type="submit" nbButton status="primary" *ngIf="isEditing && !isForNew" (click)="submit()" [disabled]="!formGroup.valid">Update</button>
+          <button type="button" nbButton status="danger" *ngIf="isEditing && !isForNew" (click)="invertIsEditing()" >Cancel</button>
+        </div>
+        <div *ngIf="canApproveOrg">
+          <button type="button" nbButton status="primary" (click)="approve()">Approve</button>
+          <button type="button" nbButton status="danger">Reject</button>
+        </div>
       </div>
     </div>
   </nb-card-header>
@@ -24,7 +30,7 @@
     </div>
     <form [formGroup]="formGroup" *ngIf="isLoaded">
       <div *ngFor="let attribute of columnForMenu">
-        <div class="form-group row" *ngIf="isForNew && menuType !== 'role' && (attribute[0].includes('mrn') || attribute[0].includes('Mrn'))">
+        <div class="form-group row" *ngIf="isForNew && menuType !== 'role' && needShortId(attribute[0])">
           <label class="label col-sm-3 col-form-label">Short ID for {{attribute[1].title}}</label>
           <div class="col-sm-9 my-auto">
             <input type="text" nbInput fullWidth id="input_shortId_{{attribute[0]}}" class="form-control" status="{{validateMrn(formGroup.get(attribute[0]).value) ? 'success' : 'danger'}}" required="true" (input)="addShortIdToMrn(attribute[0], $event.target.value)" value="{{shortId}}">
@@ -53,10 +59,6 @@
         <div class="col">
           <ngx-certificates [data]="revokedCertificates" [forRevoked]="true" [updateData]="refreshData"></ngx-certificates>
         </div>
-      </div>
-      <div class="buttons-row" *ngIf="isUnapprovedorg && canApproveOrg">
-        <button type="button" nbButton status="primary" (click)="approve()">Approve</button>
-        <button type="button" nbButton status="danger">Reject</button>
       </div>
   </form>    
   </nb-card-body>

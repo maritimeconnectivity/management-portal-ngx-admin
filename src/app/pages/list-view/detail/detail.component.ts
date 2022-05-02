@@ -37,7 +37,6 @@ export class DetailComponent implements OnInit {
   menuTypeName = '';
   entityMrn = '';
   orgMrn = '';
-  isUnapprovedorg = false;
   canApproveOrg = false;
   values = {};
   activeCertificates = [];
@@ -50,6 +49,7 @@ export class DetailComponent implements OnInit {
   data = {};
   mrnMask = '';
   isForOrgService = false;
+  orgShortId = undefined;
 
   @ViewChild('editableForm') editableForm;
 
@@ -106,7 +106,8 @@ export class DetailComponent implements OnInit {
       this.roleControllerService.getMyRole(this.authService.authState.orgMrn).subscribe(
         roles => {
           this.authService.authState.permission = rolesToPermission(roles);
-          if (PermissionResolver.canApproveOrg(this.authService.authState.permission)){
+          if (this.menuType === MenuType.OrgCandidate &&
+            PermissionResolver.canApproveOrg(this.authService.authState.permission)) {
             this.canApproveOrg = true;
           }
       });
@@ -129,12 +130,12 @@ export class DetailComponent implements OnInit {
       this.isLoading = true;
       if (Object.values(MenuType).includes(this.menuType as MenuType)) {
         if(this.menuType === MenuType.OrgCandidate){
-          this.isUnapprovedorg = true;
           this.organizationControllerService.getUnapprovedOrganizations().subscribe(
             data => {
               this.settle(true);
               this.editableForm.adjustTitle(this.menuType, this.title);
               this.editableForm.adjustData(data.content.filter(d => d.mrn === this.entityMrn).pop());
+              this.orgShortId = this.entityMrn.split(':').pop();
             },
             error => {
               this.notifierService.notify('error', error.message);
@@ -208,10 +209,6 @@ export class DetailComponent implements OnInit {
 
   approve() {
     if (this.menuType === MenuType.OrgCandidate) {
-      this.notifierService.notify('success', 'Organization Approved');
-      this.moveToListPage();
-                  
-      /*
       this.organizationControllerService.approveOrganization(this.entityMrn).subscribe(
         res => {
           this.createAdminRole().subscribe(
@@ -229,7 +226,6 @@ export class DetailComponent implements OnInit {
         },
         err => this.notifierService.notify('error', 'The organization is not approved - ' + err.message),
       );
-      */
     }
   }
 
@@ -243,22 +239,20 @@ export class DetailComponent implements OnInit {
 	}
 
   createUser() {
-    /*
 		const user:User = {
-			mrn: this.userMrn,
-			firstName: this.userForm.value.firstName,
-			lastName: this.userForm.value.lastName,
-			permissions: MC_ADMIN, // TODO is this correct? Revise when creating the new role-functionality
-			email: this.userForm.value.emails.email
+			mrn: this.entityMrn,
+			firstName: 'first',
+			lastName: 'last',
+			permissions: MCP_ADMIN, // TODO is this correct? Revise when creating the new role-functionality
+			email: 'email',
 		};
 
 		return this.userControllerService.createUser(user, this.entityMrn);
-    */
 	}
 
   submit(body: any) {
     if (this.menuType === 'role') {
-      this.loadOrgContent(this.orgMrn).subscribe(
+      this.organizationControllerService.getOrganizationByMrn(this.orgMrn).subscribe(
         res => this.submitDataToBackend({ ...body, idOrganization: res.id}),
         err => this.notifierService.notify('error', 'Error in fetching organization information'),
       );
@@ -375,7 +369,7 @@ export class DetailComponent implements OnInit {
     } else if (context === MenuType.Service && version) {
       return this.serviceControllerService.getServiceVersion(orgMrn, entityMrn, version);
     } else if (context === MenuType.Organization) {
-      return this.loadOrgContent(entityMrn);
+      return this.organizationControllerService.getOrganizationByMrn(entityMrn);
     } else if (context === MenuType.Instance) {
       return this.instanceControllerService.getInstanceUsingGET(instanceId);
     }
@@ -403,10 +397,6 @@ export class DetailComponent implements OnInit {
     } else {
       return false;
     }
-  }
-
-  loadOrgContent = (orgMrn: string): Observable<Organization> => {
-    return this.organizationControllerService.getOrganizationByMrn(orgMrn);
   }
 }
 

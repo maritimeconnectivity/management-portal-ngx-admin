@@ -54,3 +54,5 @@ export const MenuTypeIconNames = {
   instanceorg: 'compass',
   orgcandidate: 'clipboard',
 }
+
+export const ShortIdFields = [ 'mrn', 'orgMrn', 'adminMrn' ];
