@@ -15,8 +15,8 @@
       (onCancel)="cancel()" (onSubmit)="submit($event)" (onDelete)="delete()"
     ></ngx-editable-form>
     <!-- admin user form for approving org menu -->
-    <ngx-editable-form *ngIf="menuType === 'orgcandidate' && orgShortId"
-      [menuType]="'user'" [isForNew]="true" [orgShortId]="orgShortId"
+    <ngx-editable-form #supplementForm *ngIf="menuType === 'orgcandidate' && orgShortId"
+      [menuType]="'user'" [isForNew]="true" [orgShortId]="orgShortId" [defaultPermissions]="defaultPermissions"
       [isAdmin]="isAdmin()" [title]="'Administrator account'" [iconName]="'user'"
       [canApproveOrg]="canApproveOrg" [entityMrn]="" [orgMrn]="entityMrn"
       [instanceVersion]="instanceVersion" [isLoading]="isLoading" [isLoaded]="isLoaded"

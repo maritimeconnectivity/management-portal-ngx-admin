@@ -15,7 +15,7 @@ import { Observable } from 'rxjs/Observable';
 import { NotifierService } from 'angular-notifier';
 import { AuthService } from '../../../auth/auth.service';
 import { AuthPermission, AuthPermissionForMSR, PermissionResolver, rolesToPermission } from '../../../auth/auth.permission';
-import { MCP_ADMIN } from '../../../shared/app.constants';
+import { ORG_ADMIN_AT_MIR } from '../../../shared/app.constants';
 
 import RoleNameEnum = Role.RoleNameEnum;
 
@@ -46,12 +46,13 @@ export class DetailComponent implements OnInit {
   numberId = -1;
   isLoaded = true;
   isShortIdValid = false;
-  data = {};
   mrnMask = '';
   isForOrgService = false;
   orgShortId = undefined;
+  defaultPermissions = undefined;
 
   @ViewChild('editableForm') editableForm;
+  @ViewChild('supplementForm') supplementForm;
 
   ngOnInit(): void {
     if (this.isForNew) {
@@ -80,7 +81,7 @@ export class DetailComponent implements OnInit {
     private location: Location,
     ) {
       const arrays = this.router.url.split("/");
-      this.menuType = arrays[arrays.length-2];
+      this.menuType = arrays[arrays.length - 2];
       if (this.menuType === MenuType.InstanceOfOrg) {
         this.isForOrgService = true;
         this.menuType = MenuType.Instance;
@@ -136,6 +137,7 @@ export class DetailComponent implements OnInit {
               this.editableForm.adjustTitle(this.menuType, this.title);
               this.editableForm.adjustData(data.content.filter(d => d.mrn === this.entityMrn).pop());
               this.orgShortId = this.entityMrn.split(':').pop();
+              this.defaultPermissions = ORG_ADMIN_AT_MIR;
             },
             error => {
               this.notifierService.notify('error', error.message);
@@ -209,44 +211,43 @@ export class DetailComponent implements OnInit {
 
   approve() {
     if (this.menuType === MenuType.OrgCandidate) {
-      this.organizationControllerService.approveOrganization(this.entityMrn).subscribe(
-        res => {
-          this.createAdminRole().subscribe(
-            role => {
-              this.createUser().subscribe(
-                user => {
-                  this.notifierService.notify('success', 'Organization Approved');
-                  this.moveToListPage();
-                },
-                err => this.notifierService.notify('error', 'The organization was approved, but user creation failed. You can go to organizations and try to create the user again later - ' + err.message),
-              );
-            },
-            err => this.notifierService.notify('error', 'The organization was approved, but role creation failed - ' + err.message),
-          );
-        },
-        err => this.notifierService.notify('error', 'The organization is not approved - ' + err.message),
-      );
+      if (!this.supplementForm.formGroup.valid) {
+        this.notifierService.notify('error', 'There is missing information of administrator');
+      } else {
+        this.organizationControllerService.approveOrganization(this.entityMrn).subscribe(
+          res => {
+            this.createAdminRole().subscribe(
+              role => {
+                this.createUser(this.supplementForm.getFormValue()).subscribe(
+                  user => {
+                    this.notifierService.notify('success', 'Organization Approved');
+                    this.moveToListPage();
+                  },
+                  err => this.notifierService.notify('error', 'The organization was approved, but user creation failed. You can go to organizations and try to create the user again later - ' + err.message),
+                );
+              },
+              err => this.notifierService.notify('error', 'The organization was approved, but role creation failed - ' + err.message),
+            );
+          },
+          err => this.notifierService.notify('error', 'The organization is not approved - ' + err.message),
+        );
+      }
     }
   }
 
   createAdminRole() {
 		const role: Role = {
-			permission: MCP_ADMIN, // TODO is this correct? Revise when creating the new role-functionality
+			permission: ORG_ADMIN_AT_MIR, // TODO is this correct? Revise when creating the new role-functionality
 			roleName: RoleNameEnum.ORGADMIN,
 		};
 
 		return this.roleControllerService.createRole(role, this.entityMrn);
 	}
 
-  createUser() {
-		const user:User = {
-			mrn: this.entityMrn,
-			firstName: 'first',
-			lastName: 'last',
-			permissions: MCP_ADMIN, // TODO is this correct? Revise when creating the new role-functionality
-			email: 'email',
-		};
-
+  createUser(user: any) {
+    if (!user) {
+      throw new Error('No user data');
+    }
 		return this.userControllerService.createUser(user, this.entityMrn);
 	}
 

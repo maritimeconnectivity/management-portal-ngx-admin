@@ -29,13 +29,14 @@ export class EditableFormComponent implements OnInit {
   @Input() showButtons: boolean;
   @Input() hasHeader: boolean;
   @Input() orgShortId: string;
+  @Input() defaultPermissions: string;
 
   @Output() onCancel = new EventEmitter<FormGroup>();
   @Output() onDelete = new EventEmitter<FormGroup>();
   @Output() onSubmit = new EventEmitter<FormGroup>();
   @Output() onApprove = new EventEmitter<FormGroup>();
 
-  data = {};
+  loadedData = {};
   isEditing = false;
   isEntity = false;
   isShortIdValid = false;
@@ -57,7 +58,7 @@ export class EditableFormComponent implements OnInit {
     iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
   }
 
-  needShortId(field: string){
+  needShortId = (field: string) => {
     return ShortIdFields.includes(field);
   }
 
@@ -85,6 +86,9 @@ export class EditableFormComponent implements OnInit {
           this.formGroup.get(field).disable();
         }
       });
+      if (this.defaultPermissions) {
+        this.formGroup.get('permissions').setValue(this.defaultPermissions);
+      }
       this.settled(true);
     }
   }
@@ -97,7 +101,15 @@ export class EditableFormComponent implements OnInit {
     this.onDelete.emit();
   }
 
-  fetchMrns() {
+  approve(){
+    this.onApprove.emit();
+  }
+
+  submit() {
+    this.onSubmit.emit(this.getFormValue());
+  }
+
+  fetchMrns = () => {
     const result = {};
     if (this.formGroup.get('mrn')) {
       result['mrn'] = this.formGroup.get('mrn').value;
@@ -111,24 +123,20 @@ export class EditableFormComponent implements OnInit {
     return result;
   }
 
-  submit() {
-    this.onSubmit.emit(Object.assign({}, this.formGroup.value, this.fetchMrns()));
+  getFormValue = () => {
+    return Object.assign({}, this.formGroup.value, this.fetchMrns());
   }
 
-  invertIsEditing() {
+  invertIsEditing = () => {
     this.isEditing = !this.isEditing;
     if (!this.isEditing){
-      this.formGroup.reset(this.data);
+      this.formGroup.reset(this.loadedData);
     }
   }
 
-  settled(value: boolean) {
+  settled = (value: boolean) => {
     this.isLoaded = value;
     this.isLoading = false;
-  }
-
-  approve(){
-    this.onApprove.emit();
   }
 
   updateForNewVer() {
@@ -143,7 +151,7 @@ export class EditableFormComponent implements OnInit {
     this.title = title;
   }
 
-  addShortIdToMrn(field: string, shortId: string) {
+  addShortIdToMrn = (field: string, shortId: string) => {
     const mrn = (field === 'adminMrn' ?
     this.mrnHelperService.mrnMaskForUserOfOrg(this.getOrgShortId()) :
     this.mrnHelperService.mrnMask(
@@ -161,7 +169,7 @@ export class EditableFormComponent implements OnInit {
     }
   }
 
-  validateMrn(mrn: string) {
+  validateMrn = (mrn: string) => {
     if (!mrn || mrn.includes('::') || mrn.endsWith(':')) {
       return false;
     }
@@ -177,12 +185,12 @@ export class EditableFormComponent implements OnInit {
     }
   }
 
-  getOrgShortId(): string {
+  getOrgShortId = (): string => {
     return this.formGroup.get('orgMrn') ? this.formGroup.get('orgMrn').value.split(':').pop() :
       this.orgMrn.split(':').pop();
   }
 
-  getValidators(field: any) {
+  getValidators = (field: any) => {
     const validators = [];
     if (field[1].required) {
       validators.push(Validators.required);
@@ -202,7 +210,7 @@ export class EditableFormComponent implements OnInit {
 
   adjustData = (rawData: object) => {
     const data = formatData(rawData);
-    this.data = data;
+    this.loadedData = data;
     for(const key in data) {
       const relevant = this.columnForMenu.filter(e => e[0] === key)[0];
       if (relevant) {
@@ -234,5 +242,4 @@ export class EditableFormComponent implements OnInit {
     }
     this.formGroup = this.formBuilder.group(group);
   }
-
 }
