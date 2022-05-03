@@ -23,12 +23,13 @@ import { Pageable } from '../model/pageable';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
+import { AppConfig } from '../../../app.config';
 
 
 @Injectable()
 export class SearchControllerService {
 
-    protected basePath = 'https://msr-test.maritimeconnectivity.net';
+    protected basePath = AppConfig.SR_BASE_PATH;
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
