@@ -40,11 +40,20 @@
           <label for="input{{attribute[0]}}" class="label col-sm-3 col-form-label" nbPopover="{{attribute[1].description}}" nbPopoverTrigger="hint" nbPopoverPlacement="top">{{attribute[1].title}}</label>
           <div class="col-sm-9 my-auto">
             <p class="my-auto" *ngIf="!isEditing" id="keyword.name">{{ formGroup.get(attribute[0]).value }}</p>
-            <input *ngIf="isEditing" type="text" nbInput fullWidth id="input_{{attribute[0]}}" class="form-control"
+            <p *ngIf="isEditing" >
+              <input *ngIf="!attribute[1].options" type="text" nbInput fullWidth id="input_{{attribute[0]}}" class="form-control"
               status="{{formGroup.get(attribute[0]).value ? formGroup.get(attribute[0]).valid ? 'success' : 'danger' : attribute[1].required || menuType === 'newOrganization' ? 'danger' : ''}}"
               formControlName="{{attribute[0]}}"
               placeholder="{{attribute[1].placeholder !== undefined ? attribute[1].placeholder : ''}}"
               required="{{attribute[1].required === true || menuType === 'newOrganization'}}">
+              <input *ngIf="attribute[1].options" type="text" nbInput fullWidth id="input_{{attribute[0]}}" class="form-control"
+              status="{{formGroup.get(attribute[0]).value ? formGroup.get(attribute[0]).valid ? 'success' : 'danger' : attribute[1].required || menuType === 'newOrganization' ? 'danger' : ''}}"
+              formControlName="{{attribute[0]}}" hidden
+              required="{{attribute[1].required === true || menuType === 'newOrganization'}}"> 
+              <nb-select *ngIf="attribute[1].options" (selectedChange)="onMenuItemSelected($event, attribute[0])" fullWidth required="attribute[1].required === true">
+                <nb-option *ngFor="let option of attribute[1].options" value="{{option.value}}">{{option.title}}</nb-option>
+              </nb-select>
+            </p>
           </div>
         </div>
       </div>

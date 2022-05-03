@@ -26,6 +26,7 @@ import { CertRevokeDialogComponent } from './certificates/cert-revoke-dialog/cer
     NbSelectModule,
     NbInputModule,
     Ng2SmartTableModule,
+    NbSelectModule,
   ],
   exports: [
     EditableFormComponent,

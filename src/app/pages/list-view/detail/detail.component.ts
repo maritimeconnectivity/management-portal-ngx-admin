@@ -45,7 +45,6 @@ export class DetailComponent implements OnInit {
   shortId = '';
   numberId = -1;
   isLoaded = true;
-  isShortIdValid = false;
   mrnMask = '';
   isForOrgService = false;
   orgShortId = undefined;
@@ -258,9 +257,7 @@ export class DetailComponent implements OnInit {
         err => this.notifierService.notify('error', 'Error in fetching organization information'),
       );
     } else {
-      if (body.mrn) {
-        this.submitDataToBackend(body, body.mrn);
-      }
+      this.submitDataToBackend(body, body.mrn);
     }
   }
 
@@ -332,7 +329,9 @@ export class DetailComponent implements OnInit {
     } else if (context === MenuType.Role) {
       return this.roleControllerService.updateRole(body as Role, orgMrn, this.numberId);
     } else if (context === MenuType.Instance) {
-      return this.instanceControllerService.updateInstanceUsingPUT(instanceId, body as InstanceDtDto);
+      console.log(body as InstanceDtDto);
+      return instanceId ? this.instanceControllerService.updateInstanceUsingPUT(instanceId, body as InstanceDtDto) :
+        this.instanceControllerService.createInstanceUsingPOST(body as InstanceDtDto);
     }
     return new Observable();
   }

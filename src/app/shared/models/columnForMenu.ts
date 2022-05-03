@@ -14,6 +14,7 @@ export const ColumnForMenu = {
       visibleFrom: ['detail', 'list'],
       immutable: true,
       required: true,
+      shortIdType: 'device',
     },
     name: {
       title: 'Name',
@@ -75,6 +76,7 @@ export const ColumnForMenu = {
       visibleFrom: ['detail', 'list'],
       immutable: true,
       required: true,
+      shortIdType: 'organization',
     },
     name: {
       title: 'Name',
@@ -165,6 +167,7 @@ export const ColumnForMenu = {
       visibleFrom: ['detail', 'list'],
       immutable: true,
       required: true,
+      shortIdType: 'service',
     },
     name: {
       title: 'Name',
@@ -252,6 +255,7 @@ export const ColumnForMenu = {
       visibleFrom: ['detail', 'list'],
       immutable: true,
       required: true,
+      shortIdType: 'user',
     },
     firstName: {
       title: 'First name',
@@ -326,6 +330,7 @@ export const ColumnForMenu = {
       visibleFrom: ['detail', 'list'],
       immutable: true,
       required: true,
+      shortIdType: 'vessel',
     },
     name: {
       title: 'Name',
@@ -456,6 +461,7 @@ export const ColumnForMenu = {
       type: 'string',
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail', 'list'],
+      shortIdType: 'organization',
       immutable: true,
       required: true,
     },
@@ -556,16 +562,105 @@ export const ColumnForMenu = {
       immutable: true,
       required: true,
     },
-    serviceType: {
-      title: 'Type',
+    type: {
+      title: 'Service type',
       type: 'string',
-      description: 'Type',
+      options: [
+        {
+          title: 'MS 1 - VTS Information service (INS)',
+          value: 'VTSInformationService',
+        },
+        {
+          title: 'MS 2 - VTS Navigational assistance service (NAS)',
+          value: 'VTSNavigationalAssistanceService',
+        },
+        {
+          title: 'MS 3 - Traffic organization service (TOS)',
+          value: 'TrafficOrganizationService',
+        },
+        {
+          title: 'MS 4 - Port support service (PSS)',
+          value: 'PortSupportService',
+        },
+        {
+          title: 'MS 5 - Maritime safety information (MSI) service',
+          value: 'MaritimeSafetyInformationService',
+        },
+        {
+          title: 'MS 6 - Pilotage service',
+          value: 'PilotageService',
+        },
+        {
+          title: 'MS 7 - Tug service',
+          value: 'TugService',
+        },
+        {
+          title: 'MS 8 - Vessel shore reporting',
+          value: 'VesselShoreReporting',
+        },
+        {
+          title: 'MS 9 - Telemedical assistance service (TMAS)',
+          value: 'TelemedicalAssistanceService',
+        },
+        {
+          title: 'MS 10 - Maritime assistance service (MAS)',
+          value: 'MaritimeAssistanceService',
+        },
+        {
+          title: 'MS 11 - Nautical chart service',
+          value: 'NauticalChartService',
+        },
+        {
+          title: 'MS 12 - Nautical publications service',
+          value: 'NauticalPublicationsService',
+        },
+        {
+          title: 'MS 13 - Ice navigation service',
+          value: 'IceNavigationService',
+        },
+        {
+          title: 'MS 14 - Meteorological information service',
+          value: 'MeteorologicalInformationService',
+        },
+        {
+          title: 'MS 15 - Real-time hydrographic and environmental information services',
+          value: 'RealTimeHydrographicAndEnvironmentalInformationServices',
+        },
+        {
+          title: 'MS 16 - Search and rescue (SAR) service',
+          value: 'SearchAndRescueService',
+        },
+        {
+          title: 'Other',
+          value: 'other:etc',
+        },
+      ],
+      description: 'The service type shall reflect the associated operational service type provided according to defined types',
       visibleFrom: ['detail', 'list'],
     },
     status: {
       title: 'Status',
       type: 'string',
+      options: [
+        {
+          title: 'Provisional',
+          value: 'Provisional',
+        },
+        {
+          title: 'Released',
+          value: 'Released',
+        },
+        {
+          title: 'Deprecated',
+          value: 'Deprecated',
+        },
+        {
+          title: 'Deleted',
+          value: 'Deleted',
+        },
+      ],
       visibleFrom: ['detail', 'list'],
+      required: true,
     },
     endpointUri: {
       title: 'Endpoint URI',
@@ -574,11 +669,10 @@ export const ColumnForMenu = {
       required: true,
     },
     organizationId: {
-      title: 'Organization',
+      title: 'Organization ID',
       type: 'string',
       visibleFrom: ['detail'],
       immutable: true,
-      required: true,
     },
     keywords: {
       title: 'Keywords',
@@ -590,6 +684,7 @@ export const ColumnForMenu = {
       type: 'string',
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail'],
+      shortIdType: 'instance',
       required: true,
     },
     designId: {
@@ -597,6 +692,7 @@ export const ColumnForMenu = {
       type: 'string',
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail'],
+      shortIdType: 'design',
       required: true,
     },
     designVer: {
@@ -624,10 +720,8 @@ export const ColumnForMenu = {
     },
     doc: {
       title: 'Doc',
-      type: 'string',
+      type: 'file',
       filter: false,
-      immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
   },
@@ -638,6 +732,7 @@ export const ColumnForMenu = {
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail'],
       required: true,
+      shortIdType: 'organization',
     },
     orgName: {
       title: 'Organization name',
@@ -682,6 +777,7 @@ export const ColumnForMenu = {
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail'],
       required: true,
+      shortIdType: 'user',
     },
     adminFirstName: {
       title: 'First name of admin user',

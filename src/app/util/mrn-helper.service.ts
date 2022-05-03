@@ -67,8 +67,10 @@ export class MrnHelperService {
         return this.mrnMaskForVessel(orgShortId);
       case MenuType.Instance:
         return this.mrnMaskForInstance(orgShortId);
+      case MenuType.Design:
+        return this.mrnMaskForDesign(orgShortId);
       case MenuType.Service:
-        return this.mrnMaskForService(orgShortId);
+        return this.mrnMaskForInstance(orgShortId);
       case MenuType.MMS:
         return this.mrnMaskForMms(orgShortId);
       default:
@@ -145,38 +147,25 @@ export class MrnHelperService {
     //return "urn:mrn:[mcp|stm]:service:specification:" + this.orgShortId() + ':';
   }
 
-  public mrnMaskForDesign(): string {
-    // TODO Temp check until mrn-service is ready
-    return (
-      this.mrnMCP +
-      "service:" +
-      this.idpNamespace +
-      ":" +
-      this.orgShortId() +
-      ":design:"
-    );
-    //return "urn:mrn:[mcp|stm]:service:design:" + this.orgShortId() + ':';
-  }
-
-  public mrnMaskForService(orgShortId?: string): string {
-    return (
-      this.mrnMCP +
-      "service:" +
-      this.idpNamespace +
-      ":" +
-      (orgShortId ? orgShortId : this.orgShortId()) +
-      ":instance:"
-    );
-  }
-
   public mrnMaskForInstance(orgShortId?: string): string {
     return (
       this.mrnMCP +
-      "instance:" +
+      "service:" +
       this.idpNamespace +
       ":" +
       (orgShortId ? orgShortId : this.orgShortId()) +
       ":instance:"
+    );
+  }
+
+  public mrnMaskForDesign(orgShortId?: string): string {
+    return (
+      this.mrnMCP +
+      "service:" +
+      this.idpNamespace +
+      ":" +
+      (orgShortId ? orgShortId : this.orgShortId()) +
+      ":design:"
     );
   }
 

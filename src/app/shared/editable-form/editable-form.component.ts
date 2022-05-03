@@ -1,10 +1,11 @@
+import { AuthService } from './../../auth/auth.service';
 import { OrganizationControllerService } from './../../backend-api/identity-registry/api/organizationController.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { formatData } from '../../util/dataFormatter';
 import { MrnHelperService } from '../../util/mrn-helper.service';
 import { ColumnForMenu } from '../models/columnForMenu';
-import { EntityTypes, MenuType, MenuTypeNames, ShortIdFields } from '../models/menuType';
+import { EntityTypes, MenuType, MenuTypeNames } from '../models/menuType';
 import { NbIconLibraries } from '@nebular/theme';
 import { CertificateService } from '../certificate.service';
 
@@ -39,7 +40,6 @@ export class EditableFormComponent implements OnInit {
   loadedData = {};
   isEditing = false;
   isEntity = false;
-  isShortIdValid = false;
   columnForMenu: any;
   formGroup: FormGroup;
   shortId = '';
@@ -59,7 +59,11 @@ export class EditableFormComponent implements OnInit {
   }
 
   needShortId = (field: string) => {
-    return ShortIdFields.includes(field);
+    return this.getShortIdType(field) !== undefined;
+  }
+
+  getShortIdType = (field: string) => {
+    return this.columnForMenu.filter(e => e[0] === field).pop()[1].shortIdType;
   }
 
   ngOnInit(): void {
@@ -75,19 +79,16 @@ export class EditableFormComponent implements OnInit {
       this.isEditing = true;
       Object.keys(this.formGroup.controls).forEach(field => {
         if (this.needShortId(field)) {
-          if (this.orgShortId) {
-            this.formGroup.get(field).setValue( this.mrnHelperService.mrnMaskForUserOfOrg(this.orgShortId) );
-          } else {
-            this.formGroup.get(field).setValue( field === 'adminMrn' ?
-            this.mrnHelperService.mrnMaskForUserOfOrg('') :
-            this.mrnHelperService.mrnMask(
-            this.menuType === MenuType.NewOrganization ? MenuType.Organization : this.menuType));
-          }
+          this.formGroup.get(field).setValue( this.mrnHelperService.mrnMask( this.getShortIdType(field), this.orgShortId) );
           this.formGroup.get(field).disable();
         }
       });
       if (this.defaultPermissions) {
         this.formGroup.get('permissions').setValue(this.defaultPermissions);
+      }
+      if (this.menuType === MenuType.Instance) {
+        this.formGroup.get('organizationId').setValue(AuthService.staticAuthInfo.orgMrn);
+        this.formGroup.get('organizationId').disable();
       }
       this.settled(true);
     }
@@ -152,13 +153,9 @@ export class EditableFormComponent implements OnInit {
   }
 
   addShortIdToMrn = (field: string, shortId: string) => {
-    const mrn = (field === 'adminMrn' ?
-    this.mrnHelperService.mrnMaskForUserOfOrg(this.getOrgShortId()) :
-    this.mrnHelperService.mrnMask(
-    this.menuType === MenuType.NewOrganization ? MenuType.Organization : this.menuType, this.orgShortId))
-     + shortId;
+    const mrn = this.mrnHelperService.mrnMask( this.getShortIdType(field), this.orgShortId) + shortId;
     this.formGroup.get(field).setValue(mrn);
-    this.isShortIdValid = shortId.length > 0 && this.validateMrn(mrn);
+    //this.isShortIdValid = shortId.length > 0 && this.validateMrn(mrn);
     if (field === 'orgMrn') {
       this.orgShortId = !this.orgShortId ? this.formGroup.get('orgMrn').value.split(":").pop():
         this.orgShortId;
@@ -220,7 +217,7 @@ export class EditableFormComponent implements OnInit {
         if (this.menuType !== 'role' && relevant[0] === 'mrn') {
           this.shortId = this.mrnHelperService.shortIdFromMrn(data[key]);
           const mrn = this.mrnHelperService.mrnMask(this.menuType, this.orgShortId) + this.shortId;
-          this.isShortIdValid = this.validateMrn(mrn);
+          //this.isShortIdValid = this.validateMrn(mrn);
           this.formGroup.get(relevant[0]).setValue(mrn);
         } else {
           this.formGroup.get(relevant[0]).setValue(data[key]);
@@ -241,5 +238,9 @@ export class EditableFormComponent implements OnInit {
       group[this.columnForMenu[key][0]] = [null, this.getValidators(this.columnForMenu[key])];
     }
     this.formGroup = this.formBuilder.group(group);
+  }
+
+  onMenuItemSelected = (event: any, field: any) => {
+    this.formGroup.get(field).setValue(event);
   }
 }

@@ -53,7 +53,7 @@ export class RegisterDialogComponent implements OnInit {
       res => {
         this.submitted = true;
       },
-      err => this.notifierService.notify('error', 'There was error in deletion - ' + err.message)
+      err => this.notifierService.notify('error', 'There was error in registration of information - ' + err.message)
     );
     
     
