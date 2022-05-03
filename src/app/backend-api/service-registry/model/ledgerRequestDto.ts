@@ -10,25 +10,24 @@
  * Do not edit the class manually.
  */
 
-
 export interface LedgerRequestDto { 
-    createdAt?: string;
     id?: number;
-    lastUpdatedAt?: string;
-    reason?: string;
     serviceInstanceId: number;
     status?: LedgerRequestDto.StatusEnum;
+    reason?: string;
+    createdAt?: string;
+    lastUpdatedAt?: string;
 }
 export namespace LedgerRequestDto {
-    export type StatusEnum = 'CREATED' | 'FAILED' | 'INACTIVE' | 'REJECTED' | 'REQUESTING' | 'SUCCEEDED' | 'VETTED' | 'VETTING';
+    export type StatusEnum = 'INACTIVE' | 'CREATED' | 'VETTING' | 'VETTED' | 'REQUESTING' | 'SUCCEEDED' | 'FAILED' | 'REJECTED';
     export const StatusEnum = {
-        CREATED: 'CREATED' as StatusEnum,
-        FAILED: 'FAILED' as StatusEnum,
         INACTIVE: 'INACTIVE' as StatusEnum,
-        REJECTED: 'REJECTED' as StatusEnum,
+        CREATED: 'CREATED' as StatusEnum,
+        VETTING: 'VETTING' as StatusEnum,
+        VETTED: 'VETTED' as StatusEnum,
         REQUESTING: 'REQUESTING' as StatusEnum,
         SUCCEEDED: 'SUCCEEDED' as StatusEnum,
-        VETTED: 'VETTED' as StatusEnum,
-        VETTING: 'VETTING' as StatusEnum
+        FAILED: 'FAILED' as StatusEnum,
+        REJECTED: 'REJECTED' as StatusEnum
     };
 }

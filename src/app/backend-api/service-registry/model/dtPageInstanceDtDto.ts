@@ -9,8 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { InstanceDtDto } from './instanceDtDto';
 
-
-export interface View { 
-    contentType?: string;
+export interface DtPageInstanceDtDto { 
+    data?: Array<InstanceDtDto>;
+    recordsFiltered?: number;
+    recordsTotal?: number;
+    draw?: number;
 }

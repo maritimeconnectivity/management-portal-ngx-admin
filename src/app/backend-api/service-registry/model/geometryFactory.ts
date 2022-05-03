@@ -12,9 +12,8 @@
 import { CoordinateSequenceFactory } from './coordinateSequenceFactory';
 import { PrecisionModel } from './precisionModel';
 
-
 export interface GeometryFactory { 
-    coordinateSequenceFactory?: CoordinateSequenceFactory;
     precisionModel?: PrecisionModel;
+    coordinateSequenceFactory?: CoordinateSequenceFactory;
     srid?: number;
 }

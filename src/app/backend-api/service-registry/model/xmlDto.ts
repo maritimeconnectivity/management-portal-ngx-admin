@@ -10,11 +10,10 @@
  * Do not edit the class manually.
  */
 
-
 export interface XmlDto { 
+    id?: number;
+    name: string;
     comment?: string;
     content: string;
     contentContentType?: string;
-    id?: number;
-    name: string;
 }

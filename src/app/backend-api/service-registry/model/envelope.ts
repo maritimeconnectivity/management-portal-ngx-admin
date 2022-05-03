@@ -10,15 +10,14 @@
  * Do not edit the class manually.
  */
 
-
 export interface Envelope { 
+    _null?: boolean;
     area?: number;
-    diameter?: number;
-    height?: number;
-    maxX?: number;
+    minY?: number;
     maxY?: number;
     minX?: number;
-    minY?: number;
-    _null?: boolean;
+    maxX?: number;
+    diameter?: number;
     width?: number;
+    height?: number;
 }

@@ -10,10 +10,10 @@
  * Do not edit the class manually.
  */
 
-
 export interface Coordinate { 
-    m?: number;
     x?: number;
     y?: number;
     z?: number;
+    m?: number;
+    coordinate?: Coordinate;
 }

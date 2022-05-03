@@ -10,15 +10,8 @@
  * Do not edit the class manually.
  */
 
-
-export interface EnvelopeRes { 
-    area?: number;
-    diameter?: number;
-    height?: number;
-    maxX?: number;
-    maxY?: number;
-    minX?: number;
-    minY?: number;
-    _null?: boolean;
-    width?: number;
+export interface Pageable { 
+    page?: number;
+    size?: number;
+    sort?: Array<string>;
 }
