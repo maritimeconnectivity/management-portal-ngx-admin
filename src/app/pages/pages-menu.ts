@@ -34,16 +34,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
-    title: 'Contact',
-    icon: 'email',
-    link: '/pages/contact',
-  },
-  {
-    title: 'Report Bug',
-    icon: 'alert-circle-outline',
-    link: '/pages/bug-report',
-  },
-  {
     title: 'About',
     icon: 'bulb-outline',
     link: '/pages/about',

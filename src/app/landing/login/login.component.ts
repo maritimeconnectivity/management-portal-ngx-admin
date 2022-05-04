@@ -1,3 +1,4 @@
+import { ProcessDialogComponent } from './../process-dialog/process-dialog.component';
 import { RegisterDialogComponent } from './../register-dialog/register-dialog.component';
 import { NotifierService } from 'angular-notifier';
 import { AuthService } from './../../auth/auth.service';
@@ -39,10 +40,10 @@ export class LoginComponent implements OnInit {
   }
 
   createRegisterDialog() {
-    this.dialogService.open(RegisterDialogComponent, {
-      context: {
-        
-      },
-    });
+    this.dialogService.open(RegisterDialogComponent);
+  }
+
+  createProcessDialog() {
+    this.dialogService.open(ProcessDialogComponent);
   }
 }
