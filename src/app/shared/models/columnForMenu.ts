@@ -562,7 +562,13 @@ export const ColumnForMenu = {
       immutable: true,
       required: true,
     },
-    type: {
+    comment: {
+      title: 'Comment',
+      type: 'string',
+      visibleFrom: ['detail'],
+      required: true,
+    },
+    serviceType: {
       title: 'Service type',
       type: 'string',
       options: [
@@ -637,6 +643,7 @@ export const ColumnForMenu = {
       ],
       description: 'The service type shall reflect the associated operational service type provided according to defined types',
       visibleFrom: ['detail', 'list'],
+      convertToBeArray: true,
     },
     status: {
       title: 'Status',
@@ -644,19 +651,19 @@ export const ColumnForMenu = {
       options: [
         {
           title: 'Provisional',
-          value: 'Provisional',
+          value: 'PROVISIONAL',
         },
         {
           title: 'Released',
-          value: 'Released',
+          value: 'RELEASED',
         },
         {
           title: 'Deprecated',
-          value: 'Deprecated',
+          value: 'DEPRECATED',
         },
         {
           title: 'Deleted',
-          value: 'Deleted',
+          value: 'DELETED',
         },
       ],
       visibleFrom: ['detail', 'list'],
@@ -678,6 +685,7 @@ export const ColumnForMenu = {
       title: 'Keywords',
       type: 'string',
       visibleFrom: ['detail', 'list'],
+      convertToBeArray: true,
     },
     instanceId: {
       title: 'Instance ID',
@@ -687,22 +695,20 @@ export const ColumnForMenu = {
       shortIdType: 'instance',
       required: true,
     },
-    designId: {
+    implementsServiceDesign: {
       title: 'Technical design ID',
       type: 'string',
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail'],
       shortIdType: 'design',
-      required: true,
     },
-    designVer: {
+    implementsServiceDesignVersion: {
       title: 'Technical design version',
       type: 'string',
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail'],
-      required: true,
     },
-    createdAt: {
+    publishedAt: {
       title: 'Created at',
       type: 'string',
       filter: false,
@@ -718,11 +724,57 @@ export const ColumnForMenu = {
       notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
-    doc: {
-      title: 'Doc',
-      type: 'file',
-      filter: false,
+    geometryContentType: {
+      title: 'Geometry content type',
+      type: 'string',
       visibleFrom: ['detail'],
+    },
+    unlocode: {
+      title: 'Unlocode',
+      type: 'string',
+      visibleFrom: ['detail'],
+    },
+    endpointType: {
+      title: 'Endpoint type',
+      type: 'string',
+      visibleFrom: ['detail'],
+    },
+    mmsi: {
+      title: 'MMSI',
+      type: 'string',
+      visibleFrom: ['detail'],
+    },
+    imo: {
+      title: 'IMO number',
+      type: 'string',
+      visibleFrom: ['detail'],
+    },
+    instanceAsXml: {
+      title: 'Instance as Xml',
+      type: 'string',
+      visibleFrom: ['detail'],
+    },
+    instanceAsDocId: {
+      title: 'Instance as Xml',
+      type: 'number',
+    },
+    instanceAsDocName: {
+      title: 'Instance as DocName',
+      type: 'string',
+      visibleFrom: ['detail'],
+    },
+    ledgerRequestId: {
+      title: 'Ledger Request ID',
+      type: 'number',
+    },
+    ledgerRequestStatus: {
+      title: 'Ledger Request status',
+      type: 'string',
+      visibleFrom: ['detail'],
+    },
+    docIds: {
+      title: 'Document IDs',
+      type: 'number',
     },
   },
   newOrganization: {

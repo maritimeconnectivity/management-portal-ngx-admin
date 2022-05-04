@@ -121,11 +121,29 @@ export class EditableFormComponent implements OnInit {
     if (this.formGroup.get('adminMrn')) {
       result['adminMrn'] = this.formGroup.get('adminMrn').value;
     }
+    if (this.formGroup.get('instanceId')) {
+      result['instanceId'] = this.formGroup.get('instanceId').value;
+    }
+    if (this.formGroup.get('organizationId')) {
+      result['organizationId'] = this.formGroup.get('organizationId').value;
+    }
+    if (this.formGroup.get('implementsServiceDesign')) {
+      result['implementsServiceDesign'] = this.formGroup.get('implementsServiceDesign').value;
+    }
     return result;
   }
 
   getFormValue = () => {
-    return Object.assign({}, this.formGroup.value, this.fetchMrns());
+    const data = this.convertStringToArray(this.formGroup.value);
+    return Object.assign({}, data, this.fetchMrns());
+  }
+
+  convertStringToArray = (data: any) => {
+    const relevantSections = Object.entries(data).filter( e => Object.entries(this.columnForMenu).filter( ee => ee[1][0] === e[0] && ee[1][1]['convertToBeArray']).length );
+    relevantSections.forEach( section => {
+      data[section[0]] = section[1] ? (section[1] as string).split(',') : [];
+    });
+    return data;
   }
 
   invertIsEditing = () => {
@@ -155,7 +173,6 @@ export class EditableFormComponent implements OnInit {
   addShortIdToMrn = (field: string, shortId: string) => {
     const mrn = this.mrnHelperService.mrnMask( this.getShortIdType(field), this.orgShortId) + shortId;
     this.formGroup.get(field).setValue(mrn);
-    //this.isShortIdValid = shortId.length > 0 && this.validateMrn(mrn);
     if (field === 'orgMrn') {
       this.orgShortId = !this.orgShortId ? this.formGroup.get('orgMrn').value.split(":").pop():
         this.orgShortId;
