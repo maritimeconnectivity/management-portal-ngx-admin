@@ -234,8 +234,8 @@ export class ListComponent implements OnInit {
 	}
 
   loadServiceInstances = (orgMrn?: string):Observable<InstanceDto[]> => {
-    return orgMrn ? this.searchControllerService.searchInstancesUsingGET('', '', false, 'organizationId:' + orgMrn.split(":").join("\\:") + "*") :
-      this.instanceControllerService.getInstancesUsingGET();
+    return orgMrn ? this.searchControllerService.searchInstances('organizationId:' + orgMrn.split(":").join("\\:") + "*", {}) :
+      this.instanceControllerService.getInstances({});
   }
 
   loadDataContent = (context: string, orgMrn?: string):Observable<PageEntity> => {

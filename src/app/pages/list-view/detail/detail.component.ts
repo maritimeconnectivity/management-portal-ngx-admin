@@ -308,7 +308,7 @@ export class DetailComponent implements OnInit {
     } else if (context === MenuType.Role) {
       return this.roleControllerService.createRole(body as Role, orgMrn);
     } else if (context === MenuType.Instance) {
-      return this.instanceControllerService.createInstanceUsingPOST(body as InstanceDtDto);
+      return this.instanceControllerService.createInstance(body as InstanceDtDto);
     }
     return new Observable();
   }
@@ -330,8 +330,8 @@ export class DetailComponent implements OnInit {
       return this.roleControllerService.updateRole(body as Role, orgMrn, this.numberId);
     } else if (context === MenuType.Instance) {
       console.log(body as InstanceDtDto);
-      return instanceId ? this.instanceControllerService.updateInstanceUsingPUT(instanceId, body as InstanceDtDto) :
-        this.instanceControllerService.createInstanceUsingPOST(body as InstanceDtDto);
+      return instanceId ? this.instanceControllerService.updateInstance(body as InstanceDtDto, instanceId) :
+        this.instanceControllerService.createInstance(body as InstanceDtDto);
     }
     return new Observable();
   }
@@ -352,7 +352,7 @@ export class DetailComponent implements OnInit {
     } else if (context === MenuType.Role) {
       return this.roleControllerService.deleteRole(orgMrn, this.numberId);
     } else if (context === MenuType.Instance) {
-      return this.instanceControllerService.deleteInstanceUsingDELETE(instanceId);
+      return this.instanceControllerService.deleteInstance(instanceId);
     }
     return new Observable();
   }
@@ -371,7 +371,7 @@ export class DetailComponent implements OnInit {
     } else if (context === MenuType.Organization) {
       return this.organizationControllerService.getOrganizationByMrn(entityMrn);
     } else if (context === MenuType.Instance) {
-      return this.instanceControllerService.getInstanceUsingGET(instanceId);
+      return this.instanceControllerService.getInstance(instanceId);
     }
     return new Observable();
   }
