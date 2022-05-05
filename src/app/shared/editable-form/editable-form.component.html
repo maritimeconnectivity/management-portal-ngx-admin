@@ -69,6 +69,14 @@
           <ngx-certificates [data]="revokedCertificates" [forRevoked]="true" [updateData]="refreshData"></ngx-certificates>
         </div>
       </div>
+      <div class="form-group row" *ngIf="isServiceInstance" >
+        <label for="inputRevokedCert" class="label col-sm-3 col-form-label">Coverage</label>
+      </div>
+      <div class="form-group row" *ngIf="isServiceInstance" >
+        <div class="col">
+          <ngx-leaflet-map></ngx-leaflet-map>      
+        </div>
+      </div>
   </form>    
   </nb-card-body>
 </nb-card>

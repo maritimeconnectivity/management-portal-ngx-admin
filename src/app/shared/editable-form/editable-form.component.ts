@@ -48,6 +48,7 @@ export class EditableFormComponent implements OnInit {
   menuTypeName = '';
   activeCertificates = [];
   revokedCertificates = [];
+  isServiceInstance = false;
   
   constructor(
     private mrnHelperService: MrnHelperService,
@@ -168,6 +169,7 @@ export class EditableFormComponent implements OnInit {
     this.menuTypeName = MenuTypeNames[this.menuType];
     this.isEntity = EntityTypes.includes(this.menuType);
     this.title = title;
+    this.isServiceInstance = this.menuType === MenuType.Instance || this.menuType === MenuType.InstanceOfOrg;
   }
 
   addShortIdToMrn = (field: string, shortId: string) => {
