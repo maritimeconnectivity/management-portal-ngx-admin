@@ -44,12 +44,11 @@ export class ListComponent implements OnInit {
   isLoading = false;
   settings;
   mySettings = {
-    mode: 'external',
-    edit: {
-      editButtonContent: '<i class="nb-compose"></i>',
-      saveButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>',
+    actions: {
+      edit: false,
+      position: 'right',
     },
+    mode: 'external',
     delete: {
       deleteButtonContent: '<i class="nb-trash"></i>',
       confirmDelete: true,
