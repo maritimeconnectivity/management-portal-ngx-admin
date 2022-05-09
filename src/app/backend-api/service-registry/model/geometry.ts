@@ -15,28 +15,27 @@ import { GeometryFactory } from './geometryFactory';
 import { Point } from './point';
 import { PrecisionModel } from './precisionModel';
 
-
 export interface Geometry { 
-    area?: number;
-    boundary?: Geometry;
+    envelope?: Geometry;
+    factory?: GeometryFactory;
+    userData?: any;
+    length?: number;
+    empty?: boolean;
+    valid?: boolean;
+    simple?: boolean;
     boundaryDimension?: number;
-    centroid?: Point;
+    precisionModel?: PrecisionModel;
     coordinate?: Coordinate;
     coordinates?: Array<Coordinate>;
-    dimension?: number;
-    empty?: boolean;
-    envelope?: Geometry;
-    envelopeInternal?: Envelope;
-    factory?: GeometryFactory;
-    geometryType?: string;
-    interiorPoint?: Point;
-    length?: number;
-    numGeometries?: number;
     numPoints?: number;
-    precisionModel?: PrecisionModel;
     rectangle?: boolean;
-    simple?: boolean;
+    area?: number;
+    centroid?: Point;
+    interiorPoint?: Point;
+    dimension?: number;
+    boundary?: Geometry;
+    envelopeInternal?: Envelope;
+    geometryType?: string;
     srid?: number;
-    userData?: any;
-    valid?: boolean;
+    numGeometries?: number;
 }

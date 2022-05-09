@@ -10,8 +10,7 @@
  * Do not edit the class manually.
  */
 
-
 export interface DtSearch { 
-    regexp?: string;
     value?: string;
+    regexp?: string;
 }

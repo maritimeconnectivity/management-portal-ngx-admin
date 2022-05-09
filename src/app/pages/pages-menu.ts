@@ -34,16 +34,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
-    title: 'Contact',
-    icon: 'email',
-    link: '/pages/contact',
-  },
-  {
-    title: 'Report Bug',
-    icon: 'alert-circle-outline',
-    link: '/pages/bug-report',
-  },
-  {
     title: 'About',
     icon: 'bulb-outline',
     link: '/pages/about',
@@ -52,7 +42,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
 
 export const MIR_MENU_FOR_ADMIN = {
   title: 'Approve organization',
-  link: '/pages/ir/approve-org',
+  link: '/pages/ir/orgcandidates',
 };
 
 export const MIR_MENU_FOR_ORG = {

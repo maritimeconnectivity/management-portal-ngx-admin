@@ -51,7 +51,7 @@ const routes: Routes = [
         .then(m => m.ListViewModule),
     },
     {
-      path: 'ir/approve-org',
+      path: 'ir/orgcandidates',
       loadChildren: () => import('./list-view/list-view.module')
         .then(m => m.ListViewModule),
     },

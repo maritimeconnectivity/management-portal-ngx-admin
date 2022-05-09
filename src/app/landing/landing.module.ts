@@ -4,9 +4,10 @@ import { LandingComponent } from './landing.component';
 import { LoginComponent } from './login/login.component';
 import { LandingRoutingModule } from './landing-routing.module';
 import { NgModule } from '@angular/core';
-import { NbLayoutModule, NbCardModule, NbButtonModule } from '@nebular/theme';
+import { NbLayoutModule, NbCardModule, NbButtonModule, NbStepperModule } from '@nebular/theme';
 import { RouterModule } from '@angular/router';
 import { RegisterDialogComponent } from './register-dialog/register-dialog.component';
+import { ProcessDialogComponent } from './process-dialog/process-dialog.component';
 
 
 @NgModule({
@@ -14,6 +15,7 @@ import { RegisterDialogComponent } from './register-dialog/register-dialog.compo
     LandingComponent,
     LoginComponent,
     RegisterDialogComponent,
+    ProcessDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -23,6 +25,7 @@ import { RegisterDialogComponent } from './register-dialog/register-dialog.compo
     NbButtonModule,
     NbLayoutModule,
     SharedModule,
+    NbStepperModule,
   ]
 })
 export class LandingModule { }

@@ -11,11 +11,10 @@
  */
 import { DtSearch } from './dtSearch';
 
-
 export interface DtColumn { 
     data?: string;
     name?: string;
+    searchable?: boolean;
     orderable?: boolean;
     search?: DtSearch;
-    searchable?: boolean;
 }

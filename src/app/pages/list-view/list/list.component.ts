@@ -108,7 +108,7 @@ export class ListComponent implements OnInit {
       this.isLoading = true;
 
       if (Object.values(MenuType).includes(this.menuType as MenuType)) {
-        if(this.menuType === MenuType.Organization || this.menuType === MenuType.UnapprovedOrg){
+        if(this.menuType === MenuType.Organization || this.menuType === MenuType.OrgCandidate){
           this.loadDataContent(this.menuType).subscribe(
             res => {this.source.load(this.formatResponse(res.content)); this.isLoading = false;},
             error => this.notifierService.notify('error', error.message),
@@ -123,11 +123,6 @@ export class ListComponent implements OnInit {
           );
         } else if(this.menuType === MenuType.Instance || this.menuType === MenuType.InstanceOfOrg){
           this.loadServiceInstances(this.isForServiceForOrg ? this.orgMrn : undefined).subscribe(
-            resData => {this.source.load(this.formatResponseForService(resData)); this.isLoading = false;},
-            error => this.notifierService.notify('error', error.message),
-          );
-        } else if(this.menuType === MenuType.UnapprovedSvc){
-          this.loadServiceInstances().subscribe(
             resData => {this.source.load(this.formatResponseForService(resData)); this.isLoading = false;},
             error => this.notifierService.notify('error', error.message),
           );
@@ -239,8 +234,8 @@ export class ListComponent implements OnInit {
 	}
 
   loadServiceInstances = (orgMrn?: string):Observable<InstanceDto[]> => {
-    return orgMrn ? this.searchControllerService.searchInstancesUsingGET('', '', false, 'organizationId:' + orgMrn.split(":").join("\\:") + "*") :
-      this.instanceControllerService.getInstancesUsingGET();
+    return orgMrn ? this.searchControllerService.searchInstances('organizationId:' + orgMrn.split(":").join("\\:") + "*", {}) :
+      this.instanceControllerService.getInstances({});
   }
 
   loadDataContent = (context: string, orgMrn?: string):Observable<PageEntity> => {
@@ -256,7 +251,7 @@ export class ListComponent implements OnInit {
       return this.serviceControllerService.getOrganizationServices(orgMrn);
     } else if (context === MenuType.Organization) {
       return this.organizationControllerService.getOrganization();
-    } else if (context === MenuType.UnapprovedOrg) {
+    } else if (context === MenuType.OrgCandidate) {
       return this.organizationControllerService.getUnapprovedOrganizations();
     }
     return new Observable();

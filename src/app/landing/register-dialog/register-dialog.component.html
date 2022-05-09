@@ -6,12 +6,12 @@
         <nb-card-body>
             <div *ngIf="!agreed">
                 <div class="rows">
-                    <div class="col-xxxl-3">
+                    <div class="col">
                         <strong>Terms of use</strong>
                     </div>
                 </div>
                 <div class="rows">
-                    <div class="col-xxxl-3">
+                    <div class="col">
                         {{clause}}
                     </div>
                 </div>
@@ -29,12 +29,13 @@
     
     <div *ngIf="agreed && !submitted">
         <div class="rows">
-            <div class="col-xxxl-3">
+            <div class="col">
                 <ngx-editable-form #editableForm
                 [title]="title" [hasHeader]="true" [menuType]="menuType" [isForNew]="isForNew"
                 [isAdmin]="true" [title]="title" [iconName]="iconName" [isUnapprovedorg]="isUnapprovedorg"
                 [canApproveOrg]="canApproveOrg" [entityMrn]="entityMrn" [orgMrn]="orgMrn"
                 [instanceVersion]="instanceVersion" [isLoading]="isLoading" [isLoaded]="isLoaded"
+                [showButtons]="true"
                 (onCancel)="dismiss()" (onSubmit)="submit($event)" (onDelete)="delete()"
                 ></ngx-editable-form>
             </div>
@@ -46,7 +47,11 @@
             Your information has been successfully submitted!
         </nb-card-header>
         <nb-card-body>
-            <h5 class="text-center">MIR Administrator will process the information and be in contact with you.</h5>
+            <div class="rows">
+                <div class="col">
+                    <h5 class="text-center">MIR Administrator will process the information and be in contact with you.</h5>
+                </div>
+            </div>
         </nb-card-body>
         <nb-card-footer>
             <div class="buttons-row">

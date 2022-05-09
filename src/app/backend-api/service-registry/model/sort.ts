@@ -9,12 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { DocDtDto } from './docDtDto';
 
-
-export interface DtPageOfDocDtDto { 
-    data?: Array<DocDtDto>;
-    draw?: number;
-    recordsFiltered?: number;
-    recordsTotal?: number;
+export interface Sort { 
+    empty?: boolean;
+    sorted?: boolean;
+    unsorted?: boolean;
 }

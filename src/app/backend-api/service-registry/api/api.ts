@@ -1,15 +1,11 @@
 export * from './docController.service';
 import { DocControllerService } from './docController.service';
-export * from './htmlViewerController.service';
-import { HtmlViewerControllerService } from './htmlViewerController.service';
 export * from './instanceController.service';
 import { InstanceControllerService } from './instanceController.service';
 export * from './ledgerRequestController.service';
 import { LedgerRequestControllerService } from './ledgerRequestController.service';
-export * from './msrErrorController.service';
-import { MsrErrorControllerService } from './msrErrorController.service';
 export * from './searchController.service';
 import { SearchControllerService } from './searchController.service';
 export * from './xmlController.service';
 import { XmlControllerService } from './xmlController.service';
-export const APIS = [DocControllerService, HtmlViewerControllerService, InstanceControllerService, LedgerRequestControllerService, MsrErrorControllerService, SearchControllerService, XmlControllerService];
+export const APIS = [DocControllerService, InstanceControllerService, LedgerRequestControllerService, SearchControllerService, XmlControllerService];

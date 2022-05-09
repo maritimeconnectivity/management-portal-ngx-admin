@@ -18,7 +18,7 @@
                     <div class="col text-center w-100">
                         <p class="title-font text-white p-3 w-100">MCC MCP Testbed</p>
                         <p class="subtitle-font text-white w-100">Management Portal</p>
-                        <h5 class="description-font p-1 text-white w-100">Test environment</h5>
+                        <h5 class="description-font p-1 text-white w-100">{{environmentName}} environment</h5>
                     </div>
                 </div>
                 <div class="row justify-content-center p-4">
@@ -29,9 +29,19 @@
                 </div>
                 <div class="row">
                     <div class="col text-center p-2">
-                        <p class="lead description-font text-white">A website for administrators managing resources in 
+                        <button class="text-white" nbButton type="button" (click)="createProcessDialog()" size="small" outline>I want to know more about registration</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col text-center p-2">
+                        <p class="lead description-font font-weight-bold text-white">A website for administrators who manage resources in 
                             <a class="text-white" href="https://maritimeconnectivity.net/mcp-documents/#MIR" target="_blank">Maritime Identity Registry</a> and 
                             <a class="text-white" href="https://maritimeconnectivity.net/mcp-documents/#MSR" target="_blank">Maritime Service Registry</a></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col text-center p-2">
+                        <p class="lead description-font text-white">WARNING: This version is currently under development. We recommend to use Chrome or Firefox browsers for better experience.</p>
                     </div>
                 </div>
             </nb-card-body>

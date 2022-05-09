@@ -13,51 +13,50 @@ import { DocDto } from './docDto';
 import { Geometry } from './geometry';
 import { Xml } from './xml';
 
-
 export interface InstanceDto { 
+    id?: number;
+    name: string;
+    version: string;
+    publishedAt?: Date;
+    lastUpdatedAt?: Date;
     comment: string;
-    docIds?: Array<number>;
-    endpointType?: string;
-    endpointUri?: string;
     geometry?: Geometry;
     geometryContentType?: string;
-    id?: number;
-    imo?: string;
-    implementsServiceDesign?: string;
-    implementsServiceDesignVersion?: string;
-    instanceAsDoc?: DocDto;
-    instanceAsXml?: Xml;
     instanceId: string;
     keywords?: Array<string>;
-    lastUpdatedAt?: string;
+    status: InstanceDto.StatusEnum;
+    organizationId?: string;
+    unlocode?: Array<string>;
+    endpointUri?: string;
+    endpointType?: string;
+    mmsi?: string;
+    imo?: string;
+    serviceType?: Array<string>;
+    instanceAsXml?: Xml;
+    instanceAsDoc?: DocDto;
     ledgerRequestId?: number;
     ledgerRequestStatus?: InstanceDto.LedgerRequestStatusEnum;
-    mmsi?: string;
-    name: string;
-    organizationId?: string;
-    publishedAt?: string;
-    serviceType?: Array<string>;
-    status: InstanceDto.StatusEnum;
-    unlocode?: Array<string>;
-    version: string;
+    docIds?: Array<number>;
+    implementsServiceDesign?: string;
+    implementsServiceDesignVersion?: string;
 }
 export namespace InstanceDto {
-    export type LedgerRequestStatusEnum = 'CREATED' | 'FAILED' | 'INACTIVE' | 'REJECTED' | 'REQUESTING' | 'SUCCEEDED' | 'VETTED' | 'VETTING';
+    export type StatusEnum = 'PROVISIONAL' | 'RELEASED' | 'DEPRECATED' | 'DELETED';
+    export const StatusEnum = {
+        PROVISIONAL: 'PROVISIONAL' as StatusEnum,
+        RELEASED: 'RELEASED' as StatusEnum,
+        DEPRECATED: 'DEPRECATED' as StatusEnum,
+        DELETED: 'DELETED' as StatusEnum
+    };
+    export type LedgerRequestStatusEnum = 'INACTIVE' | 'CREATED' | 'VETTING' | 'VETTED' | 'REQUESTING' | 'SUCCEEDED' | 'FAILED' | 'REJECTED';
     export const LedgerRequestStatusEnum = {
-        CREATED: 'CREATED' as LedgerRequestStatusEnum,
-        FAILED: 'FAILED' as LedgerRequestStatusEnum,
         INACTIVE: 'INACTIVE' as LedgerRequestStatusEnum,
-        REJECTED: 'REJECTED' as LedgerRequestStatusEnum,
+        CREATED: 'CREATED' as LedgerRequestStatusEnum,
+        VETTING: 'VETTING' as LedgerRequestStatusEnum,
+        VETTED: 'VETTED' as LedgerRequestStatusEnum,
         REQUESTING: 'REQUESTING' as LedgerRequestStatusEnum,
         SUCCEEDED: 'SUCCEEDED' as LedgerRequestStatusEnum,
-        VETTED: 'VETTED' as LedgerRequestStatusEnum,
-        VETTING: 'VETTING' as LedgerRequestStatusEnum
-    };
-    export type StatusEnum = 'DELETED' | 'DEPRECATED' | 'PROVISIONAL' | 'RELEASED';
-    export const StatusEnum = {
-        DELETED: 'DELETED' as StatusEnum,
-        DEPRECATED: 'DEPRECATED' as StatusEnum,
-        PROVISIONAL: 'PROVISIONAL' as StatusEnum,
-        RELEASED: 'RELEASED' as StatusEnum
+        FAILED: 'FAILED' as LedgerRequestStatusEnum,
+        REJECTED: 'REJECTED' as LedgerRequestStatusEnum
     };
 }

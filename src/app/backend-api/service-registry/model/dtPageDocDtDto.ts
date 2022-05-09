@@ -9,14 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Type } from './type';
+import { DocDtDto } from './docDtDto';
 
-
-export interface PrecisionModelRes { 
-    floating?: boolean;
-    maximumSignificantDigits?: number;
-    offsetX?: number;
-    offsetY?: number;
-    scale?: number;
-    type?: Type;
+export interface DtPageDocDtDto { 
+    data?: Array<DocDtDto>;
+    recordsFiltered?: number;
+    recordsTotal?: number;
+    draw?: number;
 }

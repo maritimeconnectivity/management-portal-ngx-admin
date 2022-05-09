@@ -28,7 +28,6 @@ import { customNotifierOptions } from '../../shared/customNotifierOption';
     NbDatepickerModule,
     Ng2SmartTableModule,
     ListViewRoutingModule,
-    NotifierModule.withConfig(customNotifierOptions),
   ],
   providers: [
     NotifierService,

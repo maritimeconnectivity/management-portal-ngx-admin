@@ -12,13 +12,14 @@
 import { DtColumn } from './dtColumn';
 import { DtOrder } from './dtOrder';
 import { DtSearch } from './dtSearch';
-
+import { Sort } from './sort';
 
 export interface DtPagingRequest { 
-    columns?: Array<DtColumn>;
-    draw?: number;
-    length?: number;
-    order?: Array<DtOrder>;
-    search?: DtSearch;
     start?: number;
+    length?: number;
+    draw?: number;
+    order?: Array<DtOrder>;
+    columns?: Array<DtColumn>;
+    search?: DtSearch;
+    springbootSort?: Sort;
 }

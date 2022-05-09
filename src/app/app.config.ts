@@ -2,7 +2,6 @@ declare const fetch: Function
 import { environment } from '../environments/environment';
 
 export class AppConfig {
-  static KEYCLOAK_JSON: string;
   static OIDC_BASE_PATH: string;
   static ENDORSEMENT_BASE_PATH: string;
   static IR_BASE_PATH: string;
@@ -11,16 +10,17 @@ export class AppConfig {
   static ENVIRONMENT_TITLE: string;
   static TERMS_OF_USE: string;
   static IDP_NAMESPACE: string;
+  static ENV_NAME: string;
 
   public static _initialize() {
     AppConfig.IR_BASE_PATH = environment.irBasePath,
-    AppConfig.SR_BASE_PATH = environment.srBasePath,
-    AppConfig.KEYCLOAK_JSON = environment.keycloakJson,
+    AppConfig.SR_BASE_PATH = environment.hasServiceRegistry ? environment.srBasePath : '',
     AppConfig.ENVIRONMENT_TITLE = environment.environmentTitle,
     AppConfig.TERMS_OF_USE = environment.termsOfUse,
     AppConfig.IDP_NAMESPACE = environment.idpNamespace;
     AppConfig.HAS_SERVICE_REGISTRY = environment.hasServiceRegistry;
     AppConfig.OIDC_BASE_PATH = environment.oidcBasePath;
+    AppConfig.ENV_NAME = environment.environmentName;
   }
 }
 AppConfig._initialize();

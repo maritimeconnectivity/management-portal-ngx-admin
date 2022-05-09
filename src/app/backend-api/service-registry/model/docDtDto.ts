@@ -10,12 +10,11 @@
  * Do not edit the class manually.
  */
 
-
 export interface DocDtDto { 
-    comment?: string;
-    filecontentContentType?: string;
     id?: number;
-    instanceId?: number;
-    mimetype: string;
     name: string;
+    comment?: string;
+    mimetype: string;
+    filecontentContentType?: string;
+    instanceId?: number;
 }

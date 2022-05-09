@@ -15,6 +15,9 @@ import { Observable } from 'rxjs/Observable';
 import { NotifierService } from 'angular-notifier';
 import { AuthService } from '../../../auth/auth.service';
 import { AuthPermission, AuthPermissionForMSR, PermissionResolver, rolesToPermission } from '../../../auth/auth.permission';
+import { ORG_ADMIN_AT_MIR } from '../../../shared/app.constants';
+
+import RoleNameEnum = Role.RoleNameEnum;
 
 @Component({
   selector: 'ngx-detail',
@@ -34,7 +37,6 @@ export class DetailComponent implements OnInit {
   menuTypeName = '';
   entityMrn = '';
   orgMrn = '';
-  isUnapprovedorg = false;
   canApproveOrg = false;
   values = {};
   activeCertificates = [];
@@ -43,12 +45,13 @@ export class DetailComponent implements OnInit {
   shortId = '';
   numberId = -1;
   isLoaded = true;
-  isShortIdValid = false;
-  data = {};
   mrnMask = '';
   isForOrgService = false;
+  orgShortId = undefined;
+  defaultPermissions = undefined;
 
   @ViewChild('editableForm') editableForm;
+  @ViewChild('supplementForm') supplementForm;
 
   ngOnInit(): void {
     if (this.isForNew) {
@@ -77,7 +80,7 @@ export class DetailComponent implements OnInit {
     private location: Location,
     ) {
       const arrays = this.router.url.split("/");
-      this.menuType = arrays[arrays.length-2];
+      this.menuType = arrays[arrays.length - 2];
       if (this.menuType === MenuType.InstanceOfOrg) {
         this.isForOrgService = true;
         this.menuType = MenuType.Instance;
@@ -103,7 +106,8 @@ export class DetailComponent implements OnInit {
       this.roleControllerService.getMyRole(this.authService.authState.orgMrn).subscribe(
         roles => {
           this.authService.authState.permission = rolesToPermission(roles);
-          if (PermissionResolver.canApproveOrg(this.authService.authState.permission)){
+          if (this.menuType === MenuType.OrgCandidate &&
+            PermissionResolver.canApproveOrg(this.authService.authState.permission)) {
             this.canApproveOrg = true;
           }
       });
@@ -125,13 +129,14 @@ export class DetailComponent implements OnInit {
         MenuType.Instance : this.menuType)) {
       this.isLoading = true;
       if (Object.values(MenuType).includes(this.menuType as MenuType)) {
-        if(this.menuType === MenuType.UnapprovedOrg){
-          this.isUnapprovedorg = true;
+        if(this.menuType === MenuType.OrgCandidate){
           this.organizationControllerService.getUnapprovedOrganizations().subscribe(
             data => {
               this.settle(true);
               this.editableForm.adjustTitle(this.menuType, this.title);
               this.editableForm.adjustData(data.content.filter(d => d.mrn === this.entityMrn).pop());
+              this.orgShortId = this.entityMrn.split(':').pop();
+              this.defaultPermissions = ORG_ADMIN_AT_MIR;
             },
             error => {
               this.notifierService.notify('error', error.message);
@@ -198,20 +203,61 @@ export class DetailComponent implements OnInit {
           this.notifierService.notify('success', this.title + ' has been successfully deleted');
           this.moveToListPage();
         },
-        err => this.notifierService.notify('error', 'There was error in deletion - ' + err.message)
+        err => this.notifierService.notify('error', 'There was error in deletion - ' + err.message),
       );
     }
   }
 
-  submit(formGroup: FormGroup) {
-    const body = { ...formGroup.value};
+  approve() {
+    if (this.menuType === MenuType.OrgCandidate) {
+      if (!this.supplementForm.formGroup.valid) {
+        this.notifierService.notify('error', 'There is missing information of administrator');
+      } else {
+        this.organizationControllerService.approveOrganization(this.entityMrn).subscribe(
+          res => {
+            this.createAdminRole().subscribe(
+              role => {
+                this.createUser(this.supplementForm.getFormValue()).subscribe(
+                  user => {
+                    this.notifierService.notify('success', 'Organization Approved');
+                    this.moveToListPage();
+                  },
+                  err => this.notifierService.notify('error', 'The organization was approved, but user creation failed. You can go to organizations and try to create the user again later - ' + err.message),
+                );
+              },
+              err => this.notifierService.notify('error', 'The organization was approved, but role creation failed - ' + err.message),
+            );
+          },
+          err => this.notifierService.notify('error', 'The organization is not approved - ' + err.message),
+        );
+      }
+    }
+  }
+
+  createAdminRole() {
+		const role: Role = {
+			permission: ORG_ADMIN_AT_MIR, // TODO is this correct? Revise when creating the new role-functionality
+			roleName: RoleNameEnum.ORGADMIN,
+		};
+
+		return this.roleControllerService.createRole(role, this.entityMrn);
+	}
+
+  createUser(user: any) {
+    if (!user) {
+      throw new Error('No user data');
+    }
+		return this.userControllerService.createUser(user, this.entityMrn);
+	}
+
+  submit(body: any) {
     if (this.menuType === 'role') {
-      this.loadOrgContent(this.orgMrn).subscribe(
+      this.organizationControllerService.getOrganizationByMrn(this.orgMrn).subscribe(
         res => this.submitDataToBackend({ ...body, idOrganization: res.id}),
         err => this.notifierService.notify('error', 'Error in fetching organization information'),
       );
     } else {
-      this.submitDataToBackend({...body, mrn: formGroup.get('mrn').value}, formGroup.get('mrn').value);
+      this.submitDataToBackend(body, body.mrn);
     }
   }
 
@@ -233,6 +279,9 @@ export class DetailComponent implements OnInit {
       this.updateData(this.menuType, body, this.authService.authState.orgMrn, mrn, this.instanceVersion).subscribe(
         res => {
           this.notifierService.notify('success', this.menuType + ' has been updated');
+          if(this.editableForm) {
+            this.editableForm.invertIsEditing();
+          }
           this.settle(true);
         },
         err => {
@@ -259,7 +308,7 @@ export class DetailComponent implements OnInit {
     } else if (context === MenuType.Role) {
       return this.roleControllerService.createRole(body as Role, orgMrn);
     } else if (context === MenuType.Instance) {
-      return this.instanceControllerService.createInstanceUsingPOST(body as InstanceDtDto);
+      return this.instanceControllerService.createInstance(body as InstanceDtDto);
     }
     return new Observable();
   }
@@ -280,7 +329,9 @@ export class DetailComponent implements OnInit {
     } else if (context === MenuType.Role) {
       return this.roleControllerService.updateRole(body as Role, orgMrn, this.numberId);
     } else if (context === MenuType.Instance) {
-      return this.instanceControllerService.updateInstanceUsingPUT(instanceId, body as InstanceDtDto);
+      console.log(body as InstanceDtDto);
+      return instanceId ? this.instanceControllerService.updateInstance(body as InstanceDtDto, instanceId) :
+        this.instanceControllerService.createInstance(body as InstanceDtDto);
     }
     return new Observable();
   }
@@ -301,7 +352,7 @@ export class DetailComponent implements OnInit {
     } else if (context === MenuType.Role) {
       return this.roleControllerService.deleteRole(orgMrn, this.numberId);
     } else if (context === MenuType.Instance) {
-      return this.instanceControllerService.deleteInstanceUsingDELETE(instanceId);
+      return this.instanceControllerService.deleteInstance(instanceId);
     }
     return new Observable();
   }
@@ -318,9 +369,9 @@ export class DetailComponent implements OnInit {
     } else if (context === MenuType.Service && version) {
       return this.serviceControllerService.getServiceVersion(orgMrn, entityMrn, version);
     } else if (context === MenuType.Organization) {
-      return this.loadOrgContent(entityMrn);
+      return this.organizationControllerService.getOrganizationByMrn(entityMrn);
     } else if (context === MenuType.Instance) {
-      return this.instanceControllerService.getInstanceUsingGET(instanceId);
+      return this.instanceControllerService.getInstance(instanceId);
     }
     return new Observable();
   }
@@ -346,10 +397,6 @@ export class DetailComponent implements OnInit {
     } else {
       return false;
     }
-  }
-
-  loadOrgContent = (orgMrn: string): Observable<Organization> => {
-    return this.organizationControllerService.getOrganizationByMrn(orgMrn);
   }
 }
 

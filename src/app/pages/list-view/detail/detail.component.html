@@ -7,14 +7,21 @@
       </button>
     </div>
     <ngx-editable-form #editableForm
-            [menuType]="menuType" [isForNew]="isForNew" [isUnapprovedorg]="isUnapprovedorg"
-            [isAdmin]="isAdmin()" [title]="title" [iconName]="iconName"
-            [canApproveOrg]="canApproveOrg" [entityMrn]="entityMrn" [orgMrn]="orgMrn"
-            [instanceVersion]="instanceVersion" [isLoading]="isLoading" [isLoaded]="isLoaded"
-            [hasHeader]="true" 
-            (onCancel)="cancel()" (onSubmit)="submit($event)" (onDelete)="delete()"
-            ></ngx-editable-form>
+      [menuType]="menuType" [isForNew]="isForNew"
+      [isAdmin]="isAdmin()" [title]="title" [iconName]="iconName"
+      [canApproveOrg]="canApproveOrg" [entityMrn]="entityMrn" [orgMrn]="orgMrn"
+      [instanceVersion]="instanceVersion" [isLoading]="isLoading" [isLoaded]="isLoaded"
+      [hasHeader]="true" [showButtons]="true" (onApprove)="approve()"
+      (onCancel)="cancel()" (onSubmit)="submit($event)" (onDelete)="delete()"
+    ></ngx-editable-form>
+    <!-- admin user form for approving org menu -->
+    <ngx-editable-form #supplementForm *ngIf="menuType === 'orgcandidate' && orgShortId"
+      [menuType]="'user'" [isForNew]="true" [orgShortId]="orgShortId" [defaultPermissions]="defaultPermissions"
+      [isAdmin]="isAdmin()" [title]="'Administrator account'" [iconName]="'user'"
+      [canApproveOrg]="canApproveOrg" [entityMrn]="" [orgMrn]="entityMrn"
+      [instanceVersion]="instanceVersion" [isLoading]="isLoading" [isLoaded]="isLoaded"
+      [hasHeader]="true" [showButtons]="false" (onApprove)="approve()"
+      (onCancel)="cancel()" (onSubmit)="submit($event)" (onDelete)="delete()"
+    ></ngx-editable-form>
   </div>
 </div>
-
-<notifier-container></notifier-container>

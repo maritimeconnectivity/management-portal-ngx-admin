@@ -7,6 +7,9 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { CertificatesComponent } from './certificates/certificates.component';
 import { CertIssueDialogComponent } from './certificates/cert-issue-dialog/cert-issue-dialog.component';
 import { CertRevokeDialogComponent } from './certificates/cert-revoke-dialog/cert-revoke-dialog.component';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { ThemeModule } from '../@theme/theme.module';
+import { LeafletMapComponent } from './leaflet-map/leaflet-map.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +17,7 @@ import { CertRevokeDialogComponent } from './certificates/cert-revoke-dialog/cer
     CertificatesComponent,
     CertIssueDialogComponent,
     CertRevokeDialogComponent,
+    LeafletMapComponent,
   ],
   imports: [
     CommonModule,
@@ -25,7 +29,10 @@ import { CertRevokeDialogComponent } from './certificates/cert-revoke-dialog/cer
     NbDatepickerModule,
     NbSelectModule,
     NbInputModule,
+    ThemeModule,
     Ng2SmartTableModule,
+    LeafletModule.forRoot(),
+    NbSelectModule,
   ],
   exports: [
     EditableFormComponent,

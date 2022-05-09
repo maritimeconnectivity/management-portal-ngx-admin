@@ -4,10 +4,8 @@ import { HttpClient } from '@angular/common/http';
 
 
 import { DocControllerService } from './api/docController.service';
-import { HtmlViewerControllerService } from './api/htmlViewerController.service';
 import { InstanceControllerService } from './api/instanceController.service';
 import { LedgerRequestControllerService } from './api/ledgerRequestController.service';
-import { MsrErrorControllerService } from './api/msrErrorController.service';
 import { SearchControllerService } from './api/searchController.service';
 import { XmlControllerService } from './api/xmlController.service';
 
@@ -17,10 +15,8 @@ import { XmlControllerService } from './api/xmlController.service';
   exports:      [],
   providers: [
     DocControllerService,
-    HtmlViewerControllerService,
     InstanceControllerService,
     LedgerRequestControllerService,
-    MsrErrorControllerService,
     SearchControllerService,
     XmlControllerService ]
 })
