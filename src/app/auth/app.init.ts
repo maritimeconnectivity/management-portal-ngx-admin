@@ -1,3 +1,4 @@
+import { AppConfig } from './../app.config';
 import { KeycloakService } from 'keycloak-angular';
 import { AuthService } from './auth.service';
 
@@ -5,7 +6,7 @@ export const initializeKeycloak = (keycloak: KeycloakService): () => Promise<boo
     return () =>
       keycloak.init({
         config: {
-          url: 'https://test-maritimeid.maritimeconnectivity.net/auth/',
+          url: AppConfig.OIDC_BASE_PATH + '/auth/',
           realm: 'MCP',
           clientId: 'MCP-Portal',
         },
