@@ -1,8 +1,0 @@
-{
-  "realm": "MCP",
-  "auth-server-url": "https://test-maritimeid.maritimeconnectivity.net/auth/",
-  "ssl-required": "external",
-  "resource": "MCP-Portal",
-  "public-client": true,
-  "confidential-port": 0
-}
