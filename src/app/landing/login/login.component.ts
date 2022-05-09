@@ -5,15 +5,18 @@ import { AuthService } from './../../auth/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NbDialogService } from '@nebular/theme';
+import { AppConfig } from '../../app.config';
 
 @Component({
   selector: 'ngx-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
+
 export class LoginComponent implements OnInit {
   version = '0.1.0';
   canJoin = true;
+  environmentName = this.capitalize(AppConfig.ENV_NAME);
 
   constructor(
     private authService: AuthService,
@@ -21,6 +24,10 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private dialogService: NbDialogService,
   ) {}
+
+  capitalize(s: string) {
+    return s[0].toUpperCase() + s.slice(1);
+  }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(e => {
