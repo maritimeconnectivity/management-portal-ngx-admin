@@ -52,6 +52,7 @@ jobs:
         uses: AhsanAyaz/angular-deploy-gh-pages-actions@v1.3.2
 
         with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
           github_access_token: ${{ secrets.ACCESS_TOKEN }} # see the Configuration section for how you can create secrets
           build_configuration: test # The build environment for the app. please look configurations in your angular.json
           base_href: test-management-portal-pages   # make sure this corresponds to https://<your_username>.github.io/<base_href>/
