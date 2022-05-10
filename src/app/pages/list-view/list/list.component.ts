@@ -170,7 +170,7 @@ export class ListComponent implements OnInit {
           this.notifierService.notify('success', this.menuTypeName + ' has been successfully deleted');
           this.fetchValues();
         },
-        err => this.notifierService.notify('error', 'There was error in deletion - ' + err.message)
+        err => this.notifierService.notify('error', 'There was error in deletion - ' + err.error.message)
       );
     }
   }

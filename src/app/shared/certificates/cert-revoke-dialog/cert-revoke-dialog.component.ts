@@ -62,7 +62,7 @@ export class CertRevokeDialogComponent implements OnInit {
             return;
           }
           this.notifierService.notify('error',
-              'Error when trying to issue new certificate', err.message);
+              'Error when trying to issue new certificate', err.error.message);
         });
   }
   ngOnInit(): void {
