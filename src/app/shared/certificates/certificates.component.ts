@@ -74,7 +74,7 @@ export class CertificatesComponent implements OnInit {
           notifierService: this.notifierService,
           fileHelper: this.fileHelper,
           certificateService: this.certificateService,
-          updateCertificate: () => this.onUpdate.emit()
+          updateCertificate: () => this.onUpdate.emit(),
         },
         closeOnBackdropClick: false,
         closeOnEsc: false,
@@ -96,7 +96,7 @@ export class CertificatesComponent implements OnInit {
           instanceVersion: this.instanceVersion,
           notifierService: this.notifierService,
           certificateService: this.certificateService,
-          updateCertificate: () => this.onUpdate.emit()
+          updateCertificate: () => this.onUpdate.emit(),
         },
         closeOnBackdropClick: false,
         closeOnEsc: false,

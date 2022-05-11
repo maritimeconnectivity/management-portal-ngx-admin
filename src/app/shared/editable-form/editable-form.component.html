@@ -66,7 +66,7 @@
       <div class="form-group row" *ngIf="isEntity && !isForNew && !isEditing" >
         <label for="inputRevokedCert" class="label col-sm-3 col-form-label">Revoked certificates</label>
         <div class="col">
-          <ngx-certificates [data]="revokedCertificates" [forRevoked]="true" [updateData]="refreshData"></ngx-certificates>
+          <ngx-certificates [data]="revokedCertificates" [forRevoked]="true" (onUpdate)="refreshData()"></ngx-certificates>
         </div>
       </div>
       <div class="form-group row" *ngIf="isServiceInstance" >

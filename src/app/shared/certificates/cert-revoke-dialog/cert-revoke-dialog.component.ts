@@ -70,6 +70,7 @@ export class CertRevokeDialogComponent implements OnInit {
 
   dismiss() {
     this.ref.close();
+    this.updateCertificate();
   }
 
   onMenuItemSelected(event) {

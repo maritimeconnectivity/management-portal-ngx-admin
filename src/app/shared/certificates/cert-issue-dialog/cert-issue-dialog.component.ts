@@ -63,9 +63,7 @@ export class CertIssueDialogComponent implements OnInit{
 
   dismiss() {
     this.ref.close();
-    if (this.certificateBundle) {
-      this.updateCertificate();
-    }
+    this.updateCertificate();
   }
 
   locallyWManualKeystore(): void {

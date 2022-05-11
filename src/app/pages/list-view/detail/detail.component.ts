@@ -281,6 +281,7 @@ export class DetailComponent implements OnInit {
         res => {
           this.notifierService.notify('success', this.menuType + ' has been updated');
           if(this.editableForm) {
+            this.editableForm.adjustData(body);
             this.editableForm.invertIsEditing();
           }
           this.settle(true);

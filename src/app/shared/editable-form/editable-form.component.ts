@@ -36,6 +36,7 @@ export class EditableFormComponent implements OnInit {
   @Output() onDelete = new EventEmitter<FormGroup>();
   @Output() onSubmit = new EventEmitter<FormGroup>();
   @Output() onApprove = new EventEmitter<FormGroup>();
+  @Output() onRefresh = new EventEmitter<FormGroup>();
 
   loadedData = {};
   isEditing = false;
@@ -96,15 +97,15 @@ export class EditableFormComponent implements OnInit {
     }
   }
 
-  cancel(){
+  cancel() {
     this.onCancel.emit();
   }
 
-  delete(){
+  delete() {
     this.onDelete.emit();
   }
 
-  approve(){
+  approve() {
     this.onApprove.emit();
   }
 
@@ -112,7 +113,11 @@ export class EditableFormComponent implements OnInit {
     this.onSubmit.emit(this.getFormValue());
   }
 
-  fetchMrns = () => {
+  refreshData() {
+    this.onRefresh.emit();
+  }
+
+  fetchMissingValuesFromForm = () => {
     const result = {};
     if (this.formGroup.get('mrn')) {
       result['mrn'] = this.formGroup.get('mrn').value;
@@ -132,12 +137,21 @@ export class EditableFormComponent implements OnInit {
     if (this.formGroup.get('implementsServiceDesign')) {
       result['implementsServiceDesign'] = this.formGroup.get('implementsServiceDesign').value;
     }
+    if (this.formGroup.get('email')) {
+      result['email'] = this.formGroup.get('email').value;
+    }
+    if (this.formGroup.get('orgEmail')) {
+      result['orgEmail'] = this.formGroup.get('orgEmail').value;
+    }
+    if (this.formGroup.get('adminEmail')) {
+      result['adminEmail'] = this.formGroup.get('adminEmail').value;
+    }
     return result;
   }
 
   getFormValue = () => {
     const data = this.convertStringToArray(this.formGroup.value);
-    return Object.assign({}, data, this.fetchMrns());
+    return Object.assign({}, data, this.fetchMissingValuesFromForm());
   }
 
   convertStringToArray = (data: any) => {
