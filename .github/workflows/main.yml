@@ -56,15 +56,14 @@ jobs:
       - name: Install dependencies
         run: npm install
         
-      - name: Prepare and deploy to test environment
+      - name: Deploy to test environment
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         run: |
           npm run ng -- deploy --repo=https://github.com/maritimeconnectivity/test-management-portal-pages.git --build-target=management-portal:build:test --cname=test-management.maritimeconnectivity.net --name="MP_REPO_BOT" --email="info@maritimeconnectivity.net" --no-silent
 
-#      - name: Prepare and deploy to public demonstrator environment
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        run: |
-#          npm run ng -- deploy --base-href=management-portal-pages --cname=management-test.maritimeconnectivity.net --name="MP_REPO" --email="info@maritimeconnectivity.net" --no-silent          
-
+      - name: Deploy to public demonstrator environment
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+        run: |
+          npm run ng -- deploy --repo=https://github.com/maritimeconnectivity/management-portal-pages.git --cname=management.maritimeconnectivity.net --name="MP_REPO_BOT" --email="info@maritimeconnectivity.net" --no-silent
