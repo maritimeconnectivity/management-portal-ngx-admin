@@ -146,6 +146,9 @@ export class EditableFormComponent implements OnInit {
     if (this.formGroup.get('adminEmail')) {
       result['adminEmail'] = this.formGroup.get('adminEmail').value;
     }
+    if (this.formGroup.get('instanceVersion')) {
+      result['instanceVersion'] = this.formGroup.get('instanceVersion').value;
+    }
     return result;
   }
 
