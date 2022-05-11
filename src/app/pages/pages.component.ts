@@ -46,8 +46,10 @@ export class PagesComponent implements OnInit {
 
   applyRoleToMenu = () => {
     this.assignOrganizationNameForMIR();
-    this.assignOrganizationNameForMSR();
     this.assignAdminMenu();
+    if (AppConfig.HAS_SERVICE_REGISTRY){
+      this.assignOrganizationNameForMSR();
+    }
   }
 
   assignOrganizationNameForMIR = () => {
@@ -95,7 +97,7 @@ export class PagesComponent implements OnInit {
       roles => {
         this.authService.authState.permission = rolesToPermission(roles);
         // add menu for admin user
-        if(PermissionResolver.canApproveOrg(this.authService.authState.permission)){
+        if(this.authService.authState.permission && PermissionResolver.canApproveOrg(this.authService.authState.permission)){
           this.menu.find(e => e.title === 'Identity Registry').children.unshift(MIR_MENU_FOR_ADMIN);
         }
     });
