@@ -175,7 +175,7 @@ export class ListComponent implements OnInit {
     message = EntityTypes.indexOf(this.menuType) >= 0 ?
       message + ' All certificates under this entity will be revoked.' : message;
     if (confirm(message)) {
-      this.deleteData(menuType, orgMrn, entityMrn, instanceVersion).subscribe(
+      this.deleteData(menuType, orgMrn, entityMrn, instanceVersion, roleId).subscribe(
         res => {
           this.notifierService.notify('success', this.menuTypeName + ' has been successfully deleted');
           this.fetchValues();
