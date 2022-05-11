@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Deploy to MCC Testbed environment
 
 # Controls when the workflow will run
 on:
@@ -48,18 +48,17 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
  
-      - name: Prepare and deploy
+      - name: Prepare and deploy to test environment
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npm install
           npm run ng -- deploy --base-href=test-management-portal-pages --build-target=management-portal:build:test --cname=test-management.maritimeconnectivity.net --no-silent
-#      - name: All things angular
-#        uses: AhsanAyaz/angular-deploy-gh-pages-actions@v1.3.2
+          
+      - name: Prepare and deploy to public demonstrator environment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm install
+          npm run ng -- deploy --base-href=management-portal-pages --cname=management-test.maritimeconnectivity.net --no-silent
 
-#        with:
-#          github_access_token: ${{ secrets.PAT }} # see the Configuration section for how you can create secrets
-#          build_configuration: test # The build environment for the app. please look configurations in your angular.json
-#          base_href: test-management-portal-pages   # make sure this corresponds to https://<your_username>.github.io/<base_href>/
-#          deploy_branch: gh-pages # The branch the action should deploy to. 
-#          angular_dist_build_folder: dist
