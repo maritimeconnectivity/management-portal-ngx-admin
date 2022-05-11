@@ -14,9 +14,9 @@ import { AppConfig } from '../../app.config';
 })
 
 export class LoginComponent implements OnInit {
-  version = '0.1.0';
+  version = AppConfig.MP_VERSION;
   canJoin = true;
-  environmentName = this.capitalize(AppConfig.ENV_NAME);
+  environmentName = this.capitalize(AppConfig.ENVIRONMENT_NAME);
 
   constructor(
     private authService: AuthService,

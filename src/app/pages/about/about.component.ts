@@ -1,4 +1,15 @@
+import { NotifierService } from 'angular-notifier';
+import { AppConfig } from './../../app.config';
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+class Info{
+  title: string;
+  version: string;
+  provider: string;
+  environmentName: string;
+  contact: string;
+}
 
 @Component({
   selector: 'ngx-about',
@@ -7,9 +18,42 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AboutComponent implements OnInit {
 
-  constructor() { }
+  hasServiceRegistry = AppConfig.HAS_SERVICE_REGISTRY;
+  ir = new Info();
+  sr = new Info();
+  mp = new Info();
+  environmentName = AppConfig.ENVIRONMENT_NAME;
+
+  constructor(private http: HttpClient,
+    private notifierService: NotifierService) { }
 
   ngOnInit(): void {
+    this.ir.title = 'Maritime Identity Registry';
+    this.ir.contact = AppConfig.IR_CONTACT;
+    this.ir.provider = AppConfig.IR_PROVIDER;
+    this.fetchVersionFromSwaggerFile(AppConfig.IR_BASE_PATH + '/v3/api-docs', 'ir');
+
+    this.mp.title = 'MCP Management Portal';
+    this.mp.contact = AppConfig.MP_CONTACT;
+    this.mp.provider = AppConfig.MP_PROVIDER;
+    this.mp.version = AppConfig.MP_VERSION;
+
+    if (this.hasServiceRegistry) {
+      this.sr.title = 'Maritime Service Registry';
+      this.sr.contact = AppConfig.SR_CONTACT;
+      this.sr.provider = AppConfig.SR_PROVIDER;
+      this.fetchVersionFromSwaggerFile(AppConfig.SR_BASE_PATH + '/v3/api-docs', 'sr');
+    }
+    
+  }
+
+  fetchVersionFromSwaggerFile(url: string, type: string){
+    this.http.get(url).subscribe( 
+      res => type === 'ir' ? this.ir.version = res['info']['version'] :
+        type = 'sr' ? this.sr.version = res['info']['version'] :
+        console.log(res),
+      err => this.notifierService.notify('error', 'There was error in fetching information - ' + err.error.message),
+    )
   }
 
 }

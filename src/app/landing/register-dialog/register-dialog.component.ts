@@ -53,7 +53,7 @@ export class RegisterDialogComponent implements OnInit {
       res => {
         this.submitted = true;
       },
-      err => {console.log(err); this.notifierService.notify('error', 'There was error in registration of information - ' + err.error.message);}
+      err => this.notifierService.notify('error', 'There was error in registration of information - ' + err.error.message),
     );
     
     

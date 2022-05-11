@@ -3,9 +3,18 @@
     <nb-card>
       <nb-card-header>Information</nb-card-header>
       <nb-card-body>
-        <ngx-ir-info></ngx-ir-info>
-        <ngx-sr-info></ngx-sr-info>
-        <ngx-portal-info></ngx-portal-info>
+        <div class="row">
+          <div class="col-sm">
+            <ngx-info [title]="ir.title" [provider]="ir.provider" [contact]="ir.contact" [environmentName]="environmentName" [version]="ir.version"></ngx-info>
+          </div>
+          <div class="col-sm">
+            <ngx-info *ngIf="hasServiceRegistry" [title]="sr.title" [provider]="sr.provider" [contact]="sr.contact" [environmentName]="environmentName" [version]="sr.version"></ngx-info>
+          </div>
+          <div class="col-sm">
+            <ngx-info [title]="mp.title" [provider]="mp.provider" [contact]="mp.contact" [environmentName]="environmentName" [version]="mp.version"></ngx-info>
+          </div>
+        </div>
+        
       </nb-card-body>
     </nb-card>
   </div>

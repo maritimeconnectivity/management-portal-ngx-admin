@@ -16,9 +16,7 @@ import { SrSearchComponent } from './service-registry/sr-search/sr-search.compon
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { MapComponent } from './service-registry/sr-search/map/map.component';
 import { SearchComponent } from './service-registry/sr-search/search/search.component';
-import { IrInfoComponent } from './about/ir-info/ir-info.component';
-import { SrInfoComponent } from './about/sr-info/sr-info.component';
-import { PortalInfoComponent } from './about/portal-info/portal-info.component';
+import { InfoComponent } from './about/info/info.component';
 
 @NgModule({
   imports: [
@@ -48,9 +46,7 @@ import { PortalInfoComponent } from './about/portal-info/portal-info.component';
     IrGuideComponent,
     SrGuideComponent,
     SrSearchComponent,
-    IrInfoComponent,
-    SrInfoComponent,
-    PortalInfoComponent,
+    InfoComponent,
   ],
 })
 export class PagesModule {
