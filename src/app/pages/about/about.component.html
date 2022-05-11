@@ -7,8 +7,8 @@
           <div class="col">
             <ngx-info [title]="ir.title" [provider]="ir.provider" [contact]="ir.contact" [environmentName]="environmentName" [version]="ir.version"></ngx-info>
           </div>
-          <div class="col">
-            <ngx-info *ngIf="hasServiceRegistry" [title]="sr.title" [provider]="sr.provider" [contact]="sr.contact" [environmentName]="environmentName" [version]="sr.version"></ngx-info>
+          <div class="col" *ngIf="hasServiceRegistry">
+            <ngx-info [title]="sr.title" [provider]="sr.provider" [contact]="sr.contact" [environmentName]="environmentName" [version]="sr.version"></ngx-info>
           </div>
           <div class="col">
             <ngx-info [title]="mp.title" [provider]="mp.provider" [contact]="mp.contact" [environmentName]="environmentName" [version]="mp.version"></ngx-info>
