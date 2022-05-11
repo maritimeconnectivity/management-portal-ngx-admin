@@ -1,4 +1,4 @@
-import { NbCardModule, NbSpinnerModule, NbButtonModule, NbIconModule, NbDatepickerModule, NbSelectModule, NbInputModule } from '@nebular/theme';
+import { NbCardModule, NbSpinnerModule, NbButtonModule, NbIconModule, NbDatepickerModule, NbSelectModule, NbInputModule, NbTabsetModule } from '@nebular/theme';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EditableFormComponent } from './editable-form/editable-form.component';
@@ -29,6 +29,7 @@ import { LeafletMapComponent } from './leaflet-map/leaflet-map.component';
     NbDatepickerModule,
     NbSelectModule,
     NbInputModule,
+    NbTabsetModule,
     ThemeModule,
     Ng2SmartTableModule,
     LeafletModule.forRoot(),
