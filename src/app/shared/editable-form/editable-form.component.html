@@ -60,13 +60,13 @@
       <div class="form-group row" *ngIf="isEntity && !isForNew && !isEditing" >
         <label for="inputActiveCert" class="label col-sm-3 col-form-label">Active certificates</label>
         <div class="col">
-          <ngx-certificates [data]="activeCertificates" [forRevoked]="false" [entityType]="menuType" [entityTitle]="name" [entityMrn]="entityMrn" [orgMrn]="orgMrn" [instanceVersion]="instanceVersion" [hasPermissionInMIR]="isAdmin" (onUpdate)="refreshData()"></ngx-certificates>
+          <ngx-certificates [data]="activeCertificates" [forRevoked]="false" [entityType]="menuType" [entityTitle]="title" [entityMrn]="entityMrn" [orgMrn]="orgMrn" [instanceVersion]="instanceVersion" [hasPermissionInMIR]="isAdmin" (onUpdate)="refreshData()"></ngx-certificates>
         </div>
       </div>
       <div class="form-group row" *ngIf="isEntity && !isForNew && !isEditing" >
         <label for="inputRevokedCert" class="label col-sm-3 col-form-label">Revoked certificates</label>
         <div class="col">
-          <ngx-certificates [data]="revokedCertificates" [forRevoked]="true" [updateData]="refreshData"></ngx-certificates>
+          <ngx-certificates [data]="revokedCertificates" [forRevoked]="true" (onUpdate)="refreshData()"></ngx-certificates>
         </div>
       </div>
       <div class="form-group row" *ngIf="isServiceInstance" >
@@ -74,7 +74,7 @@
       </div>
       <div class="form-group row" *ngIf="isServiceInstance" >
         <div class="col">
-          <ngx-leaflet-map></ngx-leaflet-map>      
+          <ngx-leaflet-map [geometry]="geometry"></ngx-leaflet-map>      
         </div>
       </div>
   </form>    

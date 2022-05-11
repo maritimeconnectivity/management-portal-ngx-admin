@@ -8,6 +8,7 @@ import { NbButtonModule, NbCardModule, NbDatepickerModule, NbIconModule, NbInput
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { NotifierModule, NotifierService } from 'angular-notifier';
 import { customNotifierOptions } from '../../shared/customNotifierOption';
+import { ThemeModule } from '../../@theme/theme.module';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { customNotifierOptions } from '../../shared/customNotifierOption';
     NbButtonModule,
     NbPopoverModule,
     NbSelectModule,
+    ThemeModule,
     NbDatepickerModule,
     Ng2SmartTableModule,
     ListViewRoutingModule,

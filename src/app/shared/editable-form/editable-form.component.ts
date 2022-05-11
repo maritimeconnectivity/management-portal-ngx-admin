@@ -36,6 +36,7 @@ export class EditableFormComponent implements OnInit {
   @Output() onDelete = new EventEmitter<FormGroup>();
   @Output() onSubmit = new EventEmitter<FormGroup>();
   @Output() onApprove = new EventEmitter<FormGroup>();
+  @Output() onRefresh = new EventEmitter<FormGroup>();
 
   loadedData = {};
   isEditing = false;
@@ -49,6 +50,7 @@ export class EditableFormComponent implements OnInit {
   activeCertificates = [];
   revokedCertificates = [];
   isServiceInstance = false;
+  geometry = {};
   
   constructor(
     private mrnHelperService: MrnHelperService,
@@ -95,15 +97,15 @@ export class EditableFormComponent implements OnInit {
     }
   }
 
-  cancel(){
+  cancel() {
     this.onCancel.emit();
   }
 
-  delete(){
+  delete() {
     this.onDelete.emit();
   }
 
-  approve(){
+  approve() {
     this.onApprove.emit();
   }
 
@@ -111,7 +113,11 @@ export class EditableFormComponent implements OnInit {
     this.onSubmit.emit(this.getFormValue());
   }
 
-  fetchMrns = () => {
+  refreshData() {
+    this.onRefresh.emit();
+  }
+
+  fetchMissingValuesFromForm = () => {
     const result = {};
     if (this.formGroup.get('mrn')) {
       result['mrn'] = this.formGroup.get('mrn').value;
@@ -131,18 +137,27 @@ export class EditableFormComponent implements OnInit {
     if (this.formGroup.get('implementsServiceDesign')) {
       result['implementsServiceDesign'] = this.formGroup.get('implementsServiceDesign').value;
     }
+    if (this.formGroup.get('email')) {
+      result['email'] = this.formGroup.get('email').value;
+    }
+    if (this.formGroup.get('orgEmail')) {
+      result['orgEmail'] = this.formGroup.get('orgEmail').value;
+    }
+    if (this.formGroup.get('adminEmail')) {
+      result['adminEmail'] = this.formGroup.get('adminEmail').value;
+    }
     return result;
   }
 
   getFormValue = () => {
     const data = this.convertStringToArray(this.formGroup.value);
-    return Object.assign({}, data, this.fetchMrns());
+    return Object.assign({}, data, this.fetchMissingValuesFromForm());
   }
 
   convertStringToArray = (data: any) => {
     const relevantSections = Object.entries(data).filter( e => Object.entries(this.columnForMenu).filter( ee => ee[1][0] === e[0] && ee[1][1]['convertToBeArray']).length );
     relevantSections.forEach( section => {
-      data[section[0]] = section[1] ? (section[1] as string).split(',') : [];
+      data[section[0]] = section[1] && typeof(section[1]) === 'string' ? (section[1] as string).split(',') : [];
     });
     return data;
   }
@@ -249,6 +264,8 @@ export class EditableFormComponent implements OnInit {
       this.activeCertificates = splited.activeCertificates;
       this.revokedCertificates = splited.revokedCertificates;
     }
+
+    this.geometry = data["geometry"];
   }
 
   setFormWithValidators = () => {

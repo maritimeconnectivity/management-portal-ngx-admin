@@ -8,7 +8,7 @@ export const ColumnForMenu = {
       description: 'identifier',
     },
     mrn: {
-      title: 'Maritime Resource Name (MRN)',
+      title: 'MRN',
       type: 'string',
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail', 'list'],
@@ -70,7 +70,7 @@ export const ColumnForMenu = {
       type: 'number',
     },
     mrn: {
-      title: 'Maritime Resource Name (MRN)',
+      title: 'MRN',
       type: 'string',
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail', 'list'],
@@ -161,7 +161,7 @@ export const ColumnForMenu = {
       type: 'number',
     },
     mrn: {
-      title: 'Maritime Resource Name (MRN)',
+      title: 'MRN',
       type: 'string',
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail', 'list'],
@@ -249,7 +249,7 @@ export const ColumnForMenu = {
       type: 'number',
     },
     mrn: {
-      title: 'Maritime Resource Name (MRN)',
+      title: 'MRN',
       type: 'string',
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail', 'list'],
@@ -324,7 +324,7 @@ export const ColumnForMenu = {
       type: 'number',
     },
     mrn: {
-      title: 'Maritime Resource Name (MRN)',
+      title: 'MRN',
       type: 'string',
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail', 'list'],
@@ -416,16 +416,58 @@ export const ColumnForMenu = {
       title: 'ID',
       type: 'number',
     },
-    roleName: {
-      title: 'Role name',
-      type: 'string',
-      visibleFrom: ['detail', 'list'],
-      required: true,
-    },
     permission: {
       title: 'Permission',
       type: 'string',
       visibleFrom: ['detail', 'list'],
+      required: true,
+    },
+    roleName: {
+      title: 'Role name',
+      type: 'string',
+      visibleFrom: ['detail', 'list'],
+      options: [
+        {
+          title: 'ROLE_SITE_ADMIN',
+          value: 'ROLE_SITE_ADMIN',
+        },
+        {
+          title: 'ROLE_ORG_ADMIN',
+          value: 'ROLE_ORG_ADMIN',
+        },
+        {
+          title: 'ROLE_USER',
+          value: 'ROLE_USER',
+        },
+        {
+          title: 'ROLE_ENTITY_ADMIN',
+          value: 'ROLE_ENTITY_ADMIN',
+        },
+        {
+          title: 'ROLE_USER_ADMIN',
+          value: 'ROLE_USER_ADMIN',
+        },
+        {
+          title: 'ROLE_VESSEL_ADMIN',
+          value: 'ROLE_VESSEL_ADMIN',
+        },
+        {
+          title: 'ROLE_SERVICE_ADMIN',
+          value: 'ROLE_SERVICE_ADMIN',
+        },
+        {
+          title: 'ROLE_APPROVE_ORG',
+          value: 'ROLE_APPROVE_ORG',
+        },
+        {
+          title: 'ROLE_DEVICE_ADMIN',
+          value: 'ROLE_DEVICE_ADMIN',
+        },
+        {
+          title: 'ROLE_MMS_ADMIN',
+          value: 'ROLE_MMS_ADMIN',
+        },
+      ],
       required: true,
     },
     createdAt: {
@@ -457,7 +499,7 @@ export const ColumnForMenu = {
       type: 'number',
     },
     mrn: {
-      title: 'Maritime Resource Name (MRN)',
+      title: 'MRN',
       type: 'string',
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail', 'list'],
@@ -728,6 +770,11 @@ export const ColumnForMenu = {
       title: 'Geometry content type',
       type: 'string',
       visibleFrom: ['detail'],
+    },
+    geometry: {
+      title: 'Geometry',
+      type: 'object',
+      visibleFrom: [],
     },
     unlocode: {
       title: 'Unlocode',

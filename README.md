@@ -19,22 +19,26 @@ npm install
 Now it can be reached at  http://localhost:4200.
 
 ### Deployment
-We would recommend to read the [instruction of Angular deployment](https://angular.io/guide/deployment).
+First, we would recommend to read the [instruction of Angular deployment](https://angular.io/guide/deployment).
 
-From our end we deploy our code to a GitHub pages through:
+From our end we deploy our Angular App to a GitHub pages through:
 
 ```bash
-ng deploy --repo=[%RepositoryGitAddress]
+ng deploy --build-target=[%AngularBuildTarget] --repo=[%GitHubRepositoryURL] --cname=[%TargetURL]
 ```
+
+*build-target* option needs to be a full name of *buildTarget* from "build", e.g., management-portal:build:test for test configuration.
+
+The deployment is powered by [angular-cli-ghpages](https://github.com/angular-schule/angular-cli-ghpages).
 
 ### Configuration
 There are examples of environment configuration in the 'src/environments' folder.
 
 Configuration parameter covers:
 
-* *production*: indicates a build for production or not
+* *production*: boolean value of whether a build for production or not
 
-* *staging*: indicates a build for staging or not
+* *staging*: boolean value of whether a build for staging or not
 
 * *irBasePath*: url of MIR API
 
@@ -48,7 +52,9 @@ Configuration parameter covers:
 
 * *termsOfUse*: terms of use using in the registration
 
-* *idpNamespace*: an identity provider short ID included in MCP MRN, e.g., 'mcc-test'
+* *idpNamespace*: identity provider short ID (*IPID* in MCP IDsec2 MCC Identity Management and Security; Identity Management) included in MCP MRN, e.g., 'mcc-test'
+
+* *environmentName*: environment name showing at the front page
 
 ## License
 This project is licensed under the Apache 2.0 License - see the [LICENSE.md](LICENSE.md) file for details.

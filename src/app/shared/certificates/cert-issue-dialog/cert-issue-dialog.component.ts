@@ -63,9 +63,7 @@ export class CertIssueDialogComponent implements OnInit{
 
   dismiss() {
     this.ref.close();
-    if (this.certificateBundle) {
-      this.updateCertificate();
-    }
+    this.updateCertificate();
   }
 
   locallyWManualKeystore(): void {
@@ -102,7 +100,7 @@ export class CertIssueDialogComponent implements OnInit{
             return;
           }
           this.notifierService.notify('error',
-              'Error when trying to issue new certificate', err.message);
+              'Error when trying to issue new certificate', err.error.message);
         });
   }
 
@@ -154,7 +152,7 @@ export class CertIssueDialogComponent implements OnInit{
                           }, err => {
                             this.isLoading = false;
                             this.notifierService.notify('error',
-                                'PKCS#12 keystore could not be generated - ' + err.message);
+                                'PKCS#12 keystore could not be generated - ' + err.error.message);
                           });
                         } else {
                           this.certificateBundle = {
@@ -170,18 +168,18 @@ export class CertIssueDialogComponent implements OnInit{
                       }, err => {
                         this.isLoading = false;
                         this.notifierService.notify('error',
-                            'Public key could not be exported - ' + err.message);
+                            'Public key could not be exported - ' + err.error.message);
                       });
                     }, err => {
                       this.isLoading = false;
                       this.notifierService.notify('error',
-                          'Private key could not be exported - ' + err.message);
+                          'Private key could not be exported - ' + err.error.message);
                     });
                   }
                 } else {
                   this.isLoading = false;
                   this.notifierService.notify('error',
-                      'Error when trying to issue new certificate - ' + err.message);
+                      'Error when trying to issue new certificate - ' + err.error.message);
                 }
               }
           );
@@ -190,7 +188,7 @@ export class CertIssueDialogComponent implements OnInit{
     }, err => {
       this.isLoading = false;
       this.notifierService.notify('error',
-          'Error when trying to issue new certificate - ' + err.message);
+          'Error when trying to issue new certificate - ' + err.error.message);
     });
   }
 

@@ -90,7 +90,8 @@ export class DetailComponent implements OnInit {
       this.entityMrn = decodeURIComponent(this.route.snapshot.paramMap.get("id"));
       this.orgMrn = this.authService.authState.orgMrn;
       this.isForNew = this.entityMrn === 'new';
-      this.numberId = this.menuType === MenuType.Instance ? parseInt(this.entityMrn) : -1;
+      this.numberId = this.menuType === MenuType.Instance || this.menuType === MenuType.InstanceOfOrg ?
+        parseInt(this.entityMrn) : -1;
       
       // preventing refresh
       this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -203,7 +204,7 @@ export class DetailComponent implements OnInit {
           this.notifierService.notify('success', this.title + ' has been successfully deleted');
           this.moveToListPage();
         },
-        err => this.notifierService.notify('error', 'There was error in deletion - ' + err.message),
+        err => this.notifierService.notify('error', 'There was error in deletion - ' + err.error.message),
       );
     }
   }
@@ -222,13 +223,13 @@ export class DetailComponent implements OnInit {
                     this.notifierService.notify('success', 'Organization Approved');
                     this.moveToListPage();
                   },
-                  err => this.notifierService.notify('error', 'The organization was approved, but user creation failed. You can go to organizations and try to create the user again later - ' + err.message),
+                  err => this.notifierService.notify('error', 'The organization was approved, but user creation failed. You can go to organizations and try to create the user again later - ' + err.error.message),
                 );
               },
-              err => this.notifierService.notify('error', 'The organization was approved, but role creation failed - ' + err.message),
+              err => this.notifierService.notify('error', 'The organization was approved, but role creation failed - ' + err.error.message),
             );
           },
-          err => this.notifierService.notify('error', 'The organization is not approved - ' + err.message),
+          err => this.notifierService.notify('error', 'The organization is not approved - ' + err.error.message),
         );
       }
     }
@@ -270,22 +271,23 @@ export class DetailComponent implements OnInit {
           this.moveToListPage();
         },
         err => {
-          this.notifierService.notify('error', 'Creation has failed - ' + err.message);
+          this.notifierService.notify('error', 'Creation has failed - ' + err.error.message);
           this.settle(true);
         }
       );
     } else {
       // editing
-      this.updateData(this.menuType, body, this.authService.authState.orgMrn, mrn, this.instanceVersion).subscribe(
+      this.updateData(this.menuType, body, this.authService.authState.orgMrn, mrn, this.instanceVersion, this.numberId).subscribe(
         res => {
           this.notifierService.notify('success', this.menuType + ' has been updated');
           if(this.editableForm) {
+            this.editableForm.adjustData(body);
             this.editableForm.invertIsEditing();
           }
           this.settle(true);
         },
         err => {
-          this.notifierService.notify('error', 'Update has failed - ' + err.message);
+          this.notifierService.notify('error', 'Update has failed - ' + err.error.message);
           this.settle(true);
         }
       );
@@ -328,10 +330,9 @@ export class DetailComponent implements OnInit {
       return this.organizationControllerService.updateOrganization(body as Organization, entityMrn);
     } else if (context === MenuType.Role) {
       return this.roleControllerService.updateRole(body as Role, orgMrn, this.numberId);
-    } else if (context === MenuType.Instance) {
-      console.log(body as InstanceDtDto);
-      return instanceId ? this.instanceControllerService.updateInstance(body as InstanceDtDto, instanceId) :
-        this.instanceControllerService.createInstance(body as InstanceDtDto);
+    } else if (context === MenuType.Instance || context === MenuType.InstanceOfOrg) {
+      console.log(Object.assign({}, body, {id: instanceId}) as InstanceDtDto);
+      return this.instanceControllerService.updateInstance(Object.assign({}, body, {id: instanceId}) as InstanceDtDto, instanceId);
     }
     return new Observable();
   }
