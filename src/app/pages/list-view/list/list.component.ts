@@ -109,26 +109,26 @@ export class ListComponent implements OnInit {
       if (Object.values(MenuType).includes(this.menuType as MenuType)) {
         if(this.menuType === MenuType.Organization || this.menuType === MenuType.OrgCandidate){
           this.loadDataContent(this.menuType).subscribe(
-            res => {this.source.load(this.formatResponse(res.content)); this.isLoading = false;},
+            res => {this.refreshData(this.formatResponse(res.content)); this.isLoading = false;},
             error => this.notifierService.notify('error', error.message),
           );
         } else if(this.menuType === MenuType.Role){
           this.loadMyOrganization().subscribe(
             resOrg => this.loadRoles(resOrg.mrn).subscribe(
-              resData => {this.source.load(resData); this.isLoading = false;},
+              resData => {this.refreshData(resData); this.isLoading = false;},
               error => this.notifierService.notify('error', error.message),
             ),
             error => this.notifierService.notify('error', error.message),
           );
         } else if(this.menuType === MenuType.Instance || this.menuType === MenuType.InstanceOfOrg){
           this.loadServiceInstances(this.isForServiceForOrg ? this.orgMrn : undefined).subscribe(
-            resData => {this.source.load(this.formatResponseForService(resData)); this.isLoading = false;},
+            resData => {this.refreshData(this.formatResponseForService(resData)); this.isLoading = false;},
             error => this.notifierService.notify('error', error.message),
           );
         } else {
           this.loadMyOrganization().subscribe(
             resOrg => this.loadDataContent(this.menuType, resOrg.mrn).subscribe(
-              res => {this.source.load(this.formatResponse(res.content)); this.isLoading = false;},
+              res => {this.refreshData(this.formatResponse(res.content)); this.isLoading = false;},
               error => this.notifierService.notify('error', error.message),
             ),
             error => this.notifierService.notify('error', error.message),
@@ -141,6 +141,16 @@ export class ListComponent implements OnInit {
     } else {
       this.isLoading = false;
       throw new Error(`There's no '${this.menuType}DataService' in ColumnForMenu`);
+    }
+  }
+
+  refreshData(data?: any) {
+    if (data) {
+      this.source.load(data);
+      this.data = data;
+    }
+    else {
+      this.source.load(this.data);
     }
   }
 
@@ -209,22 +219,28 @@ export class ListComponent implements OnInit {
     this.router.navigate([this.router.url, 'new']);
   }
 
-  onSearch(query: string = '') {
-    this.source.setFilter([
-      // fields we want to include in the search
-      {
-        field: 'id',
-        search: query,
-      },
-      {
-        field: 'name',
-        search: query,
-      },
-      {
-        field: 'mrn',
-        search: query,
-      },
-    ], false);
+  onSearch(event: any) {
+    const query = event.srcElement.value;
+    if (event && event.srcElement && query.length > 0) {
+      this.source.setFilter([
+        // fields we want to include in the search
+        {
+          field: 'id',
+          search: query,
+        },
+        {
+          field: 'name',
+          search: query,
+        },
+        {
+          field: 'mrn',
+          search: query,
+        },
+      ], false);
+    } else {
+      this.source.reset();
+      this.refreshData();
+    }
   }
 
   loadMyOrganization = ():Observable<Organization> => {
