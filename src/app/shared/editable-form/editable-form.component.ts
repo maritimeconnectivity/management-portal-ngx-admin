@@ -49,6 +49,7 @@ export class EditableFormComponent implements OnInit {
   activeCertificates = [];
   revokedCertificates = [];
   isServiceInstance = false;
+  geometry = {};
   
   constructor(
     private mrnHelperService: MrnHelperService,
@@ -142,7 +143,7 @@ export class EditableFormComponent implements OnInit {
   convertStringToArray = (data: any) => {
     const relevantSections = Object.entries(data).filter( e => Object.entries(this.columnForMenu).filter( ee => ee[1][0] === e[0] && ee[1][1]['convertToBeArray']).length );
     relevantSections.forEach( section => {
-      data[section[0]] = section[1] ? (section[1] as string).split(',') : [];
+      data[section[0]] = section[1] && typeof(section[1]) === 'string' ? (section[1] as string).split(',') : [];
     });
     return data;
   }
@@ -249,6 +250,8 @@ export class EditableFormComponent implements OnInit {
       this.activeCertificates = splited.activeCertificates;
       this.revokedCertificates = splited.revokedCertificates;
     }
+
+    this.geometry = data["geometry"];
   }
 
   setFormWithValidators = () => {

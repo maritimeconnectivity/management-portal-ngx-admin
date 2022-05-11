@@ -8,7 +8,7 @@ export const ColumnForMenu = {
       description: 'identifier',
     },
     mrn: {
-      title: 'Maritime Resource Name (MRN)',
+      title: 'MRN',
       type: 'string',
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail', 'list'],
@@ -70,7 +70,7 @@ export const ColumnForMenu = {
       type: 'number',
     },
     mrn: {
-      title: 'Maritime Resource Name (MRN)',
+      title: 'MRN',
       type: 'string',
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail', 'list'],
@@ -161,7 +161,7 @@ export const ColumnForMenu = {
       type: 'number',
     },
     mrn: {
-      title: 'Maritime Resource Name (MRN)',
+      title: 'MRN',
       type: 'string',
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail', 'list'],
@@ -249,7 +249,7 @@ export const ColumnForMenu = {
       type: 'number',
     },
     mrn: {
-      title: 'Maritime Resource Name (MRN)',
+      title: 'MRN',
       type: 'string',
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail', 'list'],
@@ -324,7 +324,7 @@ export const ColumnForMenu = {
       type: 'number',
     },
     mrn: {
-      title: 'Maritime Resource Name (MRN)',
+      title: 'MRN',
       type: 'string',
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail', 'list'],
@@ -457,7 +457,7 @@ export const ColumnForMenu = {
       type: 'number',
     },
     mrn: {
-      title: 'Maritime Resource Name (MRN)',
+      title: 'MRN',
       type: 'string',
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail', 'list'],
@@ -728,6 +728,11 @@ export const ColumnForMenu = {
       title: 'Geometry content type',
       type: 'string',
       visibleFrom: ['detail'],
+    },
+    geometry: {
+      title: 'Geometry',
+      type: 'object',
+      visibleFrom: [],
     },
     unlocode: {
       title: 'Unlocode',
