@@ -66,4 +66,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         run: |
-          npm run ng -- deploy --repo=https://github.com/maritimeconnectivity/management-portal-pages.git --cname=management.maritimeconnectivity.net --name="MP_REPO_BOT" --email="info@maritimeconnectivity.net" --no-silent
+          npm run ng -- deploy --repo=https://github.com/maritimeconnectivity/management-portal-pages.git --build-target=management-portal:build:production --cname=management.maritimeconnectivity.net --name="MP_REPO_BOT" --email="info@maritimeconnectivity.net" --no-silent
