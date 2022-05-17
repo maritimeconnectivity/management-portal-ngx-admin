@@ -39,6 +39,7 @@ export class EditableFormComponent implements OnInit {
   @Output() onRefresh = new EventEmitter<FormGroup>();
 
   loadedData = {};
+  fetchList = ['mrn', 'orgMrn', 'adminMrn', 'instanceId', 'organizationId', 'implementsServiceDesign', 'email', 'orgEmail', 'adminEmail', 'instanceVersion'];
   isEditing = false;
   isEntity = false;
   columnForMenu: any;
@@ -119,35 +120,10 @@ export class EditableFormComponent implements OnInit {
 
   fetchMissingValuesFromForm = () => {
     const result = {};
-    if (this.formGroup.get('mrn')) {
-      result['mrn'] = this.formGroup.get('mrn').value;
-    }
-    if (this.formGroup.get('orgMrn')) {
-      result['orgMrn'] = this.formGroup.get('orgMrn').value;
-    }
-    if (this.formGroup.get('adminMrn')) {
-      result['adminMrn'] = this.formGroup.get('adminMrn').value;
-    }
-    if (this.formGroup.get('instanceId')) {
-      result['instanceId'] = this.formGroup.get('instanceId').value;
-    }
-    if (this.formGroup.get('organizationId')) {
-      result['organizationId'] = this.formGroup.get('organizationId').value;
-    }
-    if (this.formGroup.get('implementsServiceDesign')) {
-      result['implementsServiceDesign'] = this.formGroup.get('implementsServiceDesign').value;
-    }
-    if (this.formGroup.get('email')) {
-      result['email'] = this.formGroup.get('email').value;
-    }
-    if (this.formGroup.get('orgEmail')) {
-      result['orgEmail'] = this.formGroup.get('orgEmail').value;
-    }
-    if (this.formGroup.get('adminEmail')) {
-      result['adminEmail'] = this.formGroup.get('adminEmail').value;
-    }
-    if (this.formGroup.get('instanceVersion')) {
-      result['instanceVersion'] = this.formGroup.get('instanceVersion').value;
+    for (const item of this.fetchList) {
+      if (this.formGroup.get(item)) {
+        result[item] = this.formGroup.get(item).value;
+      }
     }
     return result;
   }
