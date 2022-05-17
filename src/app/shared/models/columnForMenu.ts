@@ -750,22 +750,6 @@ export const ColumnForMenu = {
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail'],
     },
-    publishedAt: {
-      title: 'Created at',
-      type: 'string',
-      filter: false,
-      immutable: true,
-      notShowOnEdit: true,
-      visibleFrom: ['detail'],
-    },
-    lastUpdatedAt: {
-      title: 'Updated at',
-      type: 'string',
-      filter: false,
-      immutable: true,
-      notShowOnEdit: true,
-      visibleFrom: ['detail'],
-    },
     geometryContentType: {
       title: 'Geometry content type',
       type: 'string',
@@ -798,11 +782,12 @@ export const ColumnForMenu = {
     },
     instanceAsXml: {
       title: 'Instance as Xml',
-      type: 'string',
+      type: 'xml',
+      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     instanceAsDocId: {
-      title: 'Instance as Xml',
+      title: 'Instance as DocId',
       type: 'number',
     },
     instanceAsDocName: {
@@ -822,6 +807,22 @@ export const ColumnForMenu = {
     docIds: {
       title: 'Document IDs',
       type: 'number',
+    },
+    publishedAt: {
+      title: 'Created at',
+      type: 'string',
+      filter: false,
+      immutable: true,
+      notShowOnEdit: true,
+      visibleFrom: ['detail'],
+    },
+    lastUpdatedAt: {
+      title: 'Updated at',
+      type: 'string',
+      filter: false,
+      immutable: true,
+      notShowOnEdit: true,
+      visibleFrom: ['detail'],
     },
   },
   newOrganization: {

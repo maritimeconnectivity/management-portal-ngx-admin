@@ -1,3 +1,4 @@
+import { XmlEditDialogComponent } from './../xml-edit-dialog/xml-edit-dialog.component';
 import { AuthService } from './../../auth/auth.service';
 import { OrganizationControllerService } from './../../backend-api/identity-registry/api/organizationController.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
@@ -6,7 +7,7 @@ import { formatData } from '../../util/dataFormatter';
 import { MrnHelperService } from '../../util/mrn-helper.service';
 import { ColumnForMenu } from '../models/columnForMenu';
 import { EntityTypes, MenuType, MenuTypeNames } from '../models/menuType';
-import { NbIconLibraries } from '@nebular/theme';
+import { NbDialogService, NbIconLibraries } from '@nebular/theme';
 import { CertificateService } from '../certificate.service';
 
 @Component({
@@ -58,6 +59,7 @@ export class EditableFormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private iconsLibrary: NbIconLibraries,
     private certificateService: CertificateService,
+    private dialogService: NbDialogService
   ) {
     iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
   }
@@ -257,5 +259,13 @@ export class EditableFormComponent implements OnInit {
 
   onMenuItemSelected = (event: any, field: any) => {
     this.formGroup.get(field).setValue(event);
+  }
+
+  openXmlDialog = (xml: any) => {
+    this.dialogService.open(XmlEditDialogComponent, {
+      context: {
+        xml: xml,
+      },
+    });
   }
 }
