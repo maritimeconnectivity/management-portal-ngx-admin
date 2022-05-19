@@ -800,6 +800,40 @@ export const ColumnForMenu = {
     ledgerRequestStatus: {
       title: 'Ledger Request status',
       type: 'string',
+      options: [
+        {
+          title: 'Inactive',
+          value: 'INACTIVE',
+        },
+        {
+          title: 'Created',
+          value: 'CREATED',
+        },
+        {
+          title: 'Vetting',
+          value: 'VETTING',
+        },
+        {
+          title: 'Vetted',
+          value: 'VETTED',
+        },
+        {
+          title: 'Requesting',
+          value: 'REQUESTING',
+        },
+        {
+          title: 'Succeeded',
+          value: 'SUCCEEDED',
+        },
+        {
+          title: 'Failed',
+          value: 'FAILED',
+        },
+        {
+          title: 'Rejected',
+          value: 'REJECTED',
+        },
+      ],
       visibleFrom: ['detail'],
     },
     docIds: {
