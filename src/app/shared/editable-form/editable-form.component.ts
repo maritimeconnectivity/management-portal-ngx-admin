@@ -9,6 +9,7 @@ import { ColumnForMenu } from '../models/columnForMenu';
 import { EntityTypes, MenuType, MenuTypeNames } from '../models/menuType';
 import { NbDialogService, NbIconLibraries } from '@nebular/theme';
 import { CertificateService } from '../certificate.service';
+import { XmlDto } from '../../backend-api/service-registry';
 
 @Component({
   selector: 'ngx-editable-form',
@@ -40,7 +41,7 @@ export class EditableFormComponent implements OnInit {
   @Output() onRefresh = new EventEmitter<FormGroup>();
 
   loadedData = {};
-  fetchList = ['mrn', 'orgMrn', 'adminMrn', 'instanceId', 'organizationId', 'implementsServiceDesign', 'email', 'orgEmail', 'adminEmail', 'instanceVersion'];
+  fetchList = ['mrn', 'version', 'orgMrn', 'adminMrn', 'instanceId', 'organizationId', 'implementsServiceDesign', 'email', 'orgEmail', 'adminEmail', 'instanceVersion'];
   isEditing = false;
   isEntity = false;
   columnForMenu: any;
@@ -270,6 +271,7 @@ export class EditableFormComponent implements OnInit {
       context: {
         xml: xml,
         isEditing: isEditing,
+        onUpdate: (xml: XmlDto) => this.loadedData['xml'] = xml,
       },
     });
   }

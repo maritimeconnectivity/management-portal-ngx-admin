@@ -60,9 +60,9 @@
     </nb-card-body>
     <nb-card-footer>
         <div class="buttons-row">
+            <button nbButton *ngIf="isEditing" status="success" (click)="dismiss()">Create from Instance</button>
             <button nbButton *ngIf="isEditing" status="primary" (click)="validate()">Validate</button>
-            <button nbButton *ngIf="isEditing" status="success" disabled="isValidated" (click)="dismiss()">Save</button>
-            <button nbButton *ngIf="isEditing" status="success" disabled="isValidated" (click)="dismiss()">Load</button>
+            <button nbButton *ngIf="isEditing" status="success" [disabled]="!isValidated" (click)="save()">Save and apply</button>
             <button nbButton status="danger" (click)="dismiss()">Close</button>
         </div>
     </nb-card-footer>

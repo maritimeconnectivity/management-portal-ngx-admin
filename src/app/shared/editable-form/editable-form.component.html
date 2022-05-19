@@ -42,7 +42,7 @@
           <div class="col-sm-9 my-auto">
             <div class="my-auto" *ngIf="!isEditing">
               <span *ngIf="attribute[1].type === 'string'" id="keyword.name">{{ formGroup.get(attribute[0]).value }}</span>
-              <button type='button' nbButton fullWidth (click)="openXmlDialog(formGroup.get(attribute[0]).value)" *ngIf="attribute[1].type === 'xml'">Read XML</button>
+              <button type='button' nbButton fullWidth (click)="openXmlDialog(formGroup.get(attribute[0]).value, isEditing)" *ngIf="attribute[1].type === 'xml'">Read XML</button>
             </div>
             <div *ngIf="isEditing && !attribute[1].notShowOnEdit" >
               <input *ngIf="!attribute[1].options" type="text" nbInput fullWidth id="input_{{attribute[0]}}" class="form-control"
@@ -54,9 +54,12 @@
               status="{{formGroup.get(attribute[0]).value ? formGroup.get(attribute[0]).valid ? 'success' : 'danger' : attribute[1].required? 'danger' : ''}}"
               formControlName="{{attribute[0]}}" hidden
               required="{{attribute[1].required === true}}"> 
-              <nb-select *ngIf="attribute[1].options" (selectedChange)="onMenuItemSelected($event, attribute[0])" fullWidth required="attribute[1].required === true">
+              <nb-select *ngIf="attribute[1].options" (selectedChange)="onMenuItemSelected($event, attribute[0])"
+              status="{{formGroup.get(attribute[0]).value ? formGroup.get(attribute[0]).valid ? 'success' : 'danger' : attribute[1].required? 'danger' : ''}}"
+              fullWidth required="attribute[1].required === true">
                 <nb-option *ngFor="let option of attribute[1].options" value="{{option.value}}">{{option.title}}</nb-option>
               </nb-select>
+              <button type='button' nbButton fullWidth (click)="openXmlDialog(formGroup.get(attribute[0]).value, isEditing)" *ngIf="attribute[1].type === 'xml'">Edit XML</button>
             </div>
           </div>
         </div>
