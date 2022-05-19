@@ -10,6 +10,7 @@ import { CertRevokeDialogComponent } from './certificates/cert-revoke-dialog/cer
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { ThemeModule } from '../@theme/theme.module';
 import { LeafletMapComponent } from './leaflet-map/leaflet-map.component';
+import { XmlEditDialogComponent } from './xml-edit-dialog/xml-edit-dialog.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { LeafletMapComponent } from './leaflet-map/leaflet-map.component';
     CertIssueDialogComponent,
     CertRevokeDialogComponent,
     LeafletMapComponent,
+    XmlEditDialogComponent,
   ],
   imports: [
     CommonModule,

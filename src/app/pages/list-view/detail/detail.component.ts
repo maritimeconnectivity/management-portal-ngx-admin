@@ -54,16 +54,6 @@ export class DetailComponent implements OnInit {
   @ViewChild('supplementForm') supplementForm;
 
   ngOnInit(): void {
-    if (this.isForNew) {
-      this.isEditing = true;
-    }
-
-    this.iconName = MenuTypeIconNames[this.menuType];
-    if (this.isForNew) {
-      this.title = 'New ' + this.menuType;
-    } else {
-      this.fetchFieldValues();
-    }
   }
 
   constructor(private route: ActivatedRoute, private router: Router,
@@ -80,17 +70,17 @@ export class DetailComponent implements OnInit {
     private location: Location,
     ) {
       const arrays = this.router.url.split("/");
-      this.menuType = arrays[arrays.length - 2];
-      if (this.menuType === MenuType.InstanceOfOrg) {
+      const menuType = arrays[arrays.length - 2];
+      if (menuType === MenuType.InstanceOfOrg) {
         this.isForOrgService = true;
         this.menuType = MenuType.Instance;
       } else {
-        this.menuType = this.menuType.replace('-', '').substr(0, this.menuType.length - 1);
+        this.menuType = menuType.replace('-', '').substr(0, menuType.length - 1);
       }
       this.entityMrn = decodeURIComponent(this.route.snapshot.paramMap.get("id"));
       this.orgMrn = this.authService.authState.orgMrn;
       this.isForNew = this.entityMrn === 'new';
-      this.numberId = this.menuType === MenuType.Instance || this.menuType === MenuType.InstanceOfOrg ?
+      this.numberId = this.menuType === MenuType.Instance ?
         parseInt(this.entityMrn) : -1;
       
       // preventing refresh
@@ -112,6 +102,15 @@ export class DetailComponent implements OnInit {
             this.canApproveOrg = true;
           }
       });
+
+      this.iconName = MenuTypeIconNames[this.menuType];
+
+      if (this.isForNew) {
+        this.isEditing = true;
+        this.title = 'New ' + this.menuType;
+      } else {
+        this.fetchFieldValues();
+      }
   }
 
   cancel() {
@@ -330,8 +329,7 @@ export class DetailComponent implements OnInit {
       return this.organizationControllerService.updateOrganization(body as Organization, entityMrn);
     } else if (context === MenuType.Role) {
       return this.roleControllerService.updateRole(body as Role, orgMrn, this.numberId);
-    } else if (context === MenuType.Instance || context === MenuType.InstanceOfOrg) {
-      console.log(Object.assign({}, body, {id: instanceId}) as InstanceDtDto);
+    } else if (context === MenuType.Instance) {
       return this.instanceControllerService.updateInstance(Object.assign({}, body, {id: instanceId}) as InstanceDtDto, instanceId);
     }
     return new Observable();
@@ -353,7 +351,7 @@ export class DetailComponent implements OnInit {
     } else if (context === MenuType.Role) {
       return this.roleControllerService.deleteRole(orgMrn, this.numberId);
     } else if (context === MenuType.Instance) {
-      return this.instanceControllerService.deleteInstance(instanceId);
+      return this.instanceControllerService.deleteInstance(this.numberId);
     }
     return new Observable();
   }
@@ -392,9 +390,15 @@ export class DetailComponent implements OnInit {
     } else if (context === MenuType.Organization || context === MenuTypeNames.role) {
       return this.authService.authState.hasPermissionInMIR(AuthPermission.OrgAdmin);
     } else if (context === MenuType.Instance) {
-      return this.isForOrgService ?
-        this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.OrgServiceAdmin) :
-        this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.MSRAdmin);
+      return this.isForNew ? // if it is for new one
+          this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.OrgServiceAdmin) ||
+          this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.MSRAdmin) :
+          this.editableForm ? // when it is not initiated
+          // when it is for editing
+          this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.MSRAdmin) ||
+            (this.editableForm && this.editableForm.isOurServiceInstance() &&
+            this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.OrgServiceAdmin)) :
+          this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.MSRAdmin);
     } else {
       return false;
     }

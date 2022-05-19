@@ -1,3 +1,4 @@
+import { XmlEditDialogComponent } from './../xml-edit-dialog/xml-edit-dialog.component';
 import { AuthService } from './../../auth/auth.service';
 import { OrganizationControllerService } from './../../backend-api/identity-registry/api/organizationController.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
@@ -6,8 +7,9 @@ import { formatData } from '../../util/dataFormatter';
 import { MrnHelperService } from '../../util/mrn-helper.service';
 import { ColumnForMenu } from '../models/columnForMenu';
 import { EntityTypes, MenuType, MenuTypeNames } from '../models/menuType';
-import { NbIconLibraries } from '@nebular/theme';
+import { NbDialogService, NbIconLibraries } from '@nebular/theme';
 import { CertificateService } from '../certificate.service';
+import { XmlDto } from '../../backend-api/service-registry';
 
 @Component({
   selector: 'ngx-editable-form',
@@ -39,6 +41,7 @@ export class EditableFormComponent implements OnInit {
   @Output() onRefresh = new EventEmitter<FormGroup>();
 
   loadedData = {};
+  fetchList = ['mrn', 'version', 'orgMrn', 'adminMrn', 'instanceId', 'organizationId', 'implementsServiceDesign', 'email', 'orgEmail', 'adminEmail', 'instanceVersion'];
   isEditing = false;
   isEntity = false;
   columnForMenu: any;
@@ -57,8 +60,12 @@ export class EditableFormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private iconsLibrary: NbIconLibraries,
     private certificateService: CertificateService,
+    private dialogService: NbDialogService
   ) {
     iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
+    if (this.isForNew) {
+      this.isEditing = true;
+    }
   }
 
   needShortId = (field: string) => {
@@ -79,7 +86,6 @@ export class EditableFormComponent implements OnInit {
     this.setFormWithValidators();
 
     if (this.isForNew) {
-      this.isEditing = true;
       Object.keys(this.formGroup.controls).forEach(field => {
         if (this.needShortId(field)) {
           this.formGroup.get(field).setValue( this.mrnHelperService.mrnMask( this.getShortIdType(field), this.orgShortId) );
@@ -119,39 +125,21 @@ export class EditableFormComponent implements OnInit {
 
   fetchMissingValuesFromForm = () => {
     const result = {};
-    if (this.formGroup.get('mrn')) {
-      result['mrn'] = this.formGroup.get('mrn').value;
-    }
-    if (this.formGroup.get('orgMrn')) {
-      result['orgMrn'] = this.formGroup.get('orgMrn').value;
-    }
-    if (this.formGroup.get('adminMrn')) {
-      result['adminMrn'] = this.formGroup.get('adminMrn').value;
-    }
-    if (this.formGroup.get('instanceId')) {
-      result['instanceId'] = this.formGroup.get('instanceId').value;
-    }
-    if (this.formGroup.get('organizationId')) {
-      result['organizationId'] = this.formGroup.get('organizationId').value;
-    }
-    if (this.formGroup.get('implementsServiceDesign')) {
-      result['implementsServiceDesign'] = this.formGroup.get('implementsServiceDesign').value;
-    }
-    if (this.formGroup.get('email')) {
-      result['email'] = this.formGroup.get('email').value;
-    }
-    if (this.formGroup.get('orgEmail')) {
-      result['orgEmail'] = this.formGroup.get('orgEmail').value;
-    }
-    if (this.formGroup.get('adminEmail')) {
-      result['adminEmail'] = this.formGroup.get('adminEmail').value;
+    for (const item of this.fetchList) {
+      if (this.formGroup.get(item)) {
+        result[item] = this.formGroup.get(item).value;
+      }
     }
     return result;
   }
 
   getFormValue = () => {
     const data = this.convertStringToArray(this.formGroup.value);
-    return Object.assign({}, data, this.fetchMissingValuesFromForm());
+    return Object.assign(this.loadedData, data, this.fetchMissingValuesFromForm());
+  }
+
+  isOurServiceInstance = () => {
+    return this.orgMrn === this.loadedData['organizationId'];
   }
 
   convertStringToArray = (data: any) => {
@@ -278,5 +266,15 @@ export class EditableFormComponent implements OnInit {
 
   onMenuItemSelected = (event: any, field: any) => {
     this.formGroup.get(field).setValue(event);
+  }
+
+  openXmlDialog = (xml: any, isEditing: boolean = false) => {
+    this.dialogService.open(XmlEditDialogComponent, {
+      context: {
+        xml: xml,
+        isEditing: isEditing,
+        onUpdate: (xml: XmlDto) => this.loadedData['xml'] = xml,
+      },
+    });
   }
 }

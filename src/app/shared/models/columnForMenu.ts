@@ -601,7 +601,6 @@ export const ColumnForMenu = {
       type: 'string',
       description: 'Version of service instance',
       visibleFrom: ['detail', 'list'],
-      immutable: true,
       required: true,
     },
     comment: {
@@ -750,22 +749,6 @@ export const ColumnForMenu = {
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail'],
     },
-    publishedAt: {
-      title: 'Created at',
-      type: 'string',
-      filter: false,
-      immutable: true,
-      notShowOnEdit: true,
-      visibleFrom: ['detail'],
-    },
-    lastUpdatedAt: {
-      title: 'Updated at',
-      type: 'string',
-      filter: false,
-      immutable: true,
-      notShowOnEdit: true,
-      visibleFrom: ['detail'],
-    },
     geometryContentType: {
       title: 'Geometry content type',
       type: 'string',
@@ -798,11 +781,12 @@ export const ColumnForMenu = {
     },
     instanceAsXml: {
       title: 'Instance as Xml',
-      type: 'string',
+      type: 'xml',
+      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     instanceAsDocId: {
-      title: 'Instance as Xml',
+      title: 'Instance as DocId',
       type: 'number',
     },
     instanceAsDocName: {
@@ -817,11 +801,61 @@ export const ColumnForMenu = {
     ledgerRequestStatus: {
       title: 'Ledger Request status',
       type: 'string',
+      options: [
+        {
+          title: 'Inactive',
+          value: 'INACTIVE',
+        },
+        {
+          title: 'Created',
+          value: 'CREATED',
+        },
+        {
+          title: 'Vetting',
+          value: 'VETTING',
+        },
+        {
+          title: 'Vetted',
+          value: 'VETTED',
+        },
+        {
+          title: 'Requesting',
+          value: 'REQUESTING',
+        },
+        {
+          title: 'Succeeded',
+          value: 'SUCCEEDED',
+        },
+        {
+          title: 'Failed',
+          value: 'FAILED',
+        },
+        {
+          title: 'Rejected',
+          value: 'REJECTED',
+        },
+      ],
       visibleFrom: ['detail'],
     },
     docIds: {
       title: 'Document IDs',
       type: 'number',
+    },
+    publishedAt: {
+      title: 'Created at',
+      type: 'string',
+      filter: false,
+      immutable: true,
+      notShowOnEdit: true,
+      visibleFrom: ['detail'],
+    },
+    lastUpdatedAt: {
+      title: 'Updated at',
+      type: 'string',
+      filter: false,
+      immutable: true,
+      notShowOnEdit: true,
+      visibleFrom: ['detail'],
     },
   },
   newOrganization: {
