@@ -170,12 +170,12 @@ export class ListComponent implements OnInit {
     }
   }
 
-  delete(menuType: string, orgMrn: string, entityMrn: string, instanceVersion?: string, roleId?: number) {
+  delete(menuType: string, orgMrn: string, entityMrn: string, instanceVersion?: string, numberId?: number) {
     let message = 'Are you sure you want to delete?';
     message = EntityTypes.indexOf(this.menuType) >= 0 ?
       message + ' All certificates under this entity will be revoked.' : message;
     if (confirm(message)) {
-      this.deleteData(menuType, orgMrn, entityMrn, instanceVersion, roleId).subscribe(
+      this.deleteData(menuType, orgMrn, entityMrn, instanceVersion, numberId).subscribe(
         res => {
           this.notifierService.notify('success', this.menuTypeName + ' has been successfully deleted');
           this.fetchValues();
@@ -185,7 +185,7 @@ export class ListComponent implements OnInit {
     }
   }
 
-  deleteData = (context: string, orgMrn: string, entityMrn: string, version?: string, roleId?: number): Observable<Entity> => {
+  deleteData = (context: string, orgMrn: string, entityMrn: string, version?: string, numberId?: number): Observable<Entity> => {
     if (context === MenuTypeNames.user) {
       return this.userControllerService.deleteUser(orgMrn, entityMrn);
     } else if (context === MenuTypeNames.device) {
@@ -198,8 +198,10 @@ export class ListComponent implements OnInit {
       return this.serviceControllerService.deleteService(orgMrn, entityMrn, version);
     } else if (context === MenuTypeNames.organization) {
       return this.organizationControllerService.deleteOrg(entityMrn);
-    } else if (context === MenuTypeNames.role && roleId) {
-      return this.roleControllerService.deleteRole(orgMrn, roleId);
+    } else if (context === MenuTypeNames.role && numberId) {
+      return this.roleControllerService.deleteRole(orgMrn, numberId);
+    } else if (context === MenuType.Instance || context === MenuType.InstanceOfOrg) {
+      return this.instanceControllerService.deleteInstance(numberId);
     }
     return new Observable();
   }
