@@ -1,51 +1,68 @@
 <nb-card class="modal-window">
     <nb-card-header>
-        <div *ngIf="isEditing">
-            <input nbInput value="{{this.xml['name']}}">
-        </div>
-        <div *ngIf="!isEditing">
-            <b>{{this.xml['name']}}</b>
+        <div class="row">
+            <div class="col">
+                G1128 XML editor
+            </div>
+            <div class="col-md-auto">
+                <a href="https://www.iala-aism.org/product/g1128-specification-of-e-nav-technical-service-fillable-annex-f-service-instance-description/" target="_blank">What is G1128?</a>
+            </div>
         </div>
     </nb-card-header>
     <nb-card-body>
-        <div class="row">
-            <div class="col">
-                <span class="label">Content</span>
-                <textarea rows="20" nbInput fullWidth placeholder="Text Area">{{ this.xml["content"] }}</textarea>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <span class="label">Comment</span>
-            </div>
-            <div class="col-sm-10">
-                <div *ngIf="isEditing">
-                    <input nbInput value="{{this.xml['comment']}}">
+        <form [formGroup]="formGroup">
+            <div class="row">
+                <div class="col">
+                    <span class="label">Name</span>
                 </div>
-                <div *ngIf="!isEditing">
-                    <span >{{ this.xml["comment"] }}</span>
+                <div class="col-sm-10">
+                    <div *ngIf="isEditing">
+                        <input nbInput fullWidth formControlName="name" placeholder='Enter name' value="{{ this.xml ? this.xml['name'] : '' }}">
+                    </div>
+                    <div *ngIf="!isEditing">
+                        <span>{{ this.xml ? this.xml['name'] : 'No name' }}</span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <span class="label">ContentType</span>
-            </div>
-            <div class="col-sm-10">
-                <div *ngIf="isEditing">
-                    <input nbInput value="{{this.xml['contentContentType']}}">
-                </div>
-                <div *ngIf="!isEditing">
-                    <span>{{ this.xml["contentContentType"] }}</span>
+            <div class="row">
+                <div class="col">
+                    <span class="label">Content</span>
+                    <textarea rows="20" nbInput formControlName="content" fullWidth placeholder="G1128 Service Instance XML">{{ this.xml ? this.xml["content"] : '' }}</textarea>
                 </div>
             </div>
-        </div>
+            <div class="row">
+                <div class="col">
+                    <span class="label">Comment</span>
+                </div>
+                <div class="col-sm-10">
+                    <div *ngIf="isEditing">
+                        <input nbInput fullWidth formControlName="comment" value="{{ this.xml ? this.xml['comment'] : '' }}" placeholder="Enter comment">
+                    </div>
+                    <div *ngIf="!isEditing">
+                        <span >{{ this.xml ? this.xml["comment"] : '' }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <span class="label">ContentType</span>
+                </div>
+                <div class="col-sm-10">
+                    <div *ngIf="isEditing">
+                        <input nbInput formControlName="contentContentType" fullWidth value="{{ this.xml ? this.xml['contentContentType'] : '' }}">
+                    </div>
+                    <div *ngIf="!isEditing">
+                        <span>{{ this.xml ? this.xml["contentContentType"] : '' }}</span>
+                    </div>
+                </div>
+            </div>
+        </form>
     </nb-card-body>
     <nb-card-footer>
         <div class="buttons-row">
-            <button nbButton status="primary" (click)="dismiss()">Validate</button>
-            <button nbButton status="success" disabled="isValidated" (click)="dismiss()">Save</button>
-            <button nbButton status="success" disabled="isValidated" (click)="dismiss()">Load</button>
+            <button nbButton *ngIf="isEditing" status="primary" (click)="validate()">Validate</button>
+            <button nbButton *ngIf="isEditing" status="success" disabled="isValidated" (click)="dismiss()">Save</button>
+            <button nbButton *ngIf="isEditing" status="success" disabled="isValidated" (click)="dismiss()">Load</button>
             <button nbButton status="danger" (click)="dismiss()">Close</button>
         </div>
     </nb-card-footer>

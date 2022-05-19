@@ -261,10 +261,11 @@ export class EditableFormComponent implements OnInit {
     this.formGroup.get(field).setValue(event);
   }
 
-  openXmlDialog = (xml: any) => {
+  openXmlDialog = (xml: any, isEditing: boolean = false) => {
     this.dialogService.open(XmlEditDialogComponent, {
       context: {
         xml: xml,
+        isEditing: isEditing,
       },
     });
   }

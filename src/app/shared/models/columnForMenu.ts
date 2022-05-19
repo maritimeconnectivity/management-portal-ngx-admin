@@ -608,7 +608,6 @@ export const ColumnForMenu = {
       title: 'Comment',
       type: 'string',
       visibleFrom: ['detail'],
-      required: true,
     },
     serviceType: {
       title: 'Service type',

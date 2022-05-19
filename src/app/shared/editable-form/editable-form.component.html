@@ -10,6 +10,7 @@
           <button type="button" nbButton status="danger" *ngIf="isForNew" (click)="cancel()">Cancel</button>
           <button type="button" nbButton status="primary" *ngIf="!isEditing && !isForNew" (click)="invertIsEditing()" >Edit</button>
           <button type="button" nbButton status="danger" *ngIf="!isEditing && !isForNew" (click)="delete()" >Delete</button>
+          <button type="button" nbButton status="success" *ngIf="isEditing && isServiceInstance" (click)="openXmlDialog(loadedData['instanceAsXml'], true)" >Edit By XML</button>
           <button type="submit" nbButton status="primary" *ngIf="isEditing && !isForNew && menuType === 'service'" (click)="updateForNewVer()" [disabled]="!formGroup.valid">New version</button>
           <button type="submit" nbButton status="primary" *ngIf="isEditing && !isForNew" (click)="submit()" [disabled]="!formGroup.valid">Update</button>
           <button type="button" nbButton status="danger" *ngIf="isEditing && !isForNew" (click)="invertIsEditing()" >Cancel</button>
@@ -41,7 +42,7 @@
           <div class="col-sm-9 my-auto">
             <div class="my-auto" *ngIf="!isEditing">
               <span *ngIf="attribute[1].type === 'string'" id="keyword.name">{{ formGroup.get(attribute[0]).value }}</span>
-              <button type='button' nbButton fullWidth (click)="openXmlDialog(formGroup.get(attribute[0]).value)" *ngIf="attribute[1].type === 'xml'">Open XML editor</button>
+              <button type='button' nbButton fullWidth (click)="openXmlDialog(formGroup.get(attribute[0]).value)" *ngIf="attribute[1].type === 'xml'">Read XML</button>
             </div>
             <div *ngIf="isEditing && !attribute[1].notShowOnEdit" >
               <input *ngIf="!attribute[1].options" type="text" nbInput fullWidth id="input_{{attribute[0]}}" class="form-control"
