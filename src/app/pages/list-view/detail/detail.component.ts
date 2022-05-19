@@ -392,9 +392,11 @@ export class DetailComponent implements OnInit {
     } else if (context === MenuType.Organization || context === MenuTypeNames.role) {
       return this.authService.authState.hasPermissionInMIR(AuthPermission.OrgAdmin);
     } else if (context === MenuType.Instance) {
-      return this.isForOrgService ?
-        this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.OrgServiceAdmin) :
-        this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.MSRAdmin);
+      return this.editableForm ? 
+          this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.MSRAdmin) ||
+            (this.editableForm && this.editableForm.isOurServiceInstance() &&
+            this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.OrgServiceAdmin)) :
+          this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.MSRAdmin);
     } else {
       return false;
     }

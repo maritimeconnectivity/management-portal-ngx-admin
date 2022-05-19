@@ -135,6 +135,10 @@ export class EditableFormComponent implements OnInit {
     return Object.assign({}, data, this.fetchMissingValuesFromForm());
   }
 
+  isOurServiceInstance = () => {
+    return this.orgMrn === this.loadedData['organizationId'];
+  }
+
   convertStringToArray = (data: any) => {
     const relevantSections = Object.entries(data).filter( e => Object.entries(this.columnForMenu).filter( ee => ee[1][0] === e[0] && ee[1][1]['convertToBeArray']).length );
     relevantSections.forEach( section => {
