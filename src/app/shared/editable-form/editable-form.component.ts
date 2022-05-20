@@ -10,6 +10,7 @@ import { EntityTypes, MenuType, MenuTypeNames } from '../models/menuType';
 import { NbDialogService, NbIconLibraries } from '@nebular/theme';
 import { CertificateService } from '../certificate.service';
 import { XmlDto } from '../../backend-api/service-registry';
+import { Any } from 'asn1js';
 
 @Component({
   selector: 'ngx-editable-form',
@@ -121,6 +122,22 @@ export class EditableFormComponent implements OnInit {
 
   refreshData() {
     this.onRefresh.emit();
+  }
+
+  downloadFile = (event: Any) => {
+    if (event["filecontent"]) {
+      const data = event["filecontent"];
+      const binary = atob(data.replace(/\s/g, ''));
+      const len = binary.length;
+      const buffer = new ArrayBuffer(len);
+      const view = new Uint8Array(buffer);
+      for (var i = 0; i < len; i++) {
+          view[i] = binary.charCodeAt(i);
+      }
+      const blob = new Blob([view], { type: event["filecontentContentType"] });
+      const url = window.URL.createObjectURL(blob);
+      window.open(url);
+    }
   }
 
   fetchMissingValuesFromForm = () => {

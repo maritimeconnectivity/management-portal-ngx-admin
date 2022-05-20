@@ -794,6 +794,11 @@ export const ColumnForMenu = {
       type: 'string',
       visibleFrom: ['detail'],
     },
+    instanceAsDoc: {
+      title: 'Document file',
+      type: 'file',
+      visibleFrom: ['detail'],
+    },
     ledgerRequestId: {
       title: 'Ledger Request ID',
       type: 'number',

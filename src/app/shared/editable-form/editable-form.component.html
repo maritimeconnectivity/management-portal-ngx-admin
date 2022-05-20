@@ -43,6 +43,7 @@
             <div class="my-auto" *ngIf="!isEditing">
               <span *ngIf="attribute[1].type === 'string'" id="keyword.name">{{ formGroup.get(attribute[0]).value }}</span>
               <button type='button' nbButton fullWidth (click)="openXmlDialog(formGroup.get(attribute[0]).value, isEditing)" *ngIf="attribute[1].type === 'xml'">Read XML</button>
+              <button type='button' nbButton fullWidth (click)="downloadFile(loadedData[attribute[0]])" *ngIf="attribute[1].type === 'file' && loadedData[attribute[0]]">Download</button>
             </div>
             <div *ngIf="isEditing && !attribute[1].notShowOnEdit" >
               <input *ngIf="!attribute[1].options" type="text" nbInput fullWidth id="input_{{attribute[0]}}" class="form-control"
@@ -61,6 +62,8 @@
                 <nb-option *ngFor="let option of attribute[1].options" value="{{option.value}}">{{option.title}}</nb-option>
               </nb-select>
               <button type='button' nbButton fullWidth (click)="openXmlDialog(formGroup.get(attribute[0]).value, isEditing)" *ngIf="attribute[1].type === 'xml'">Edit XML</button>
+              <input *ngIf="attribute[1].type === 'file'" type="file" nbInput fullWidth id="input_{{attribute[0]}}" class="form-control"
+              formControlName="{{attribute[0]}}" required="{{attribute[1].required === true}}"> 
             </div>
           </div>
         </div>
