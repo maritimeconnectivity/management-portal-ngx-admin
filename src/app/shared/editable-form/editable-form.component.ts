@@ -125,8 +125,8 @@ export class EditableFormComponent implements OnInit {
   }
 
   downloadFile = (event: Any) => {
-    if (event["filecontent"]) {
-      const data = event["filecontent"];
+    if (event['filecontent']) {
+      const data = event['filecontent'];
       const binary = atob(data.replace(/\s/g, ''));
       const len = binary.length;
       const buffer = new ArrayBuffer(len);
@@ -134,7 +134,7 @@ export class EditableFormComponent implements OnInit {
       for (var i = 0; i < len; i++) {
           view[i] = binary.charCodeAt(i);
       }
-      const blob = new Blob([view], { type: event["filecontentContentType"] });
+      const blob = new Blob([view], { type: event['filecontentContentType'] });
       const url = window.URL.createObjectURL(blob);
       window.open(url);
     }
@@ -159,18 +159,11 @@ export class EditableFormComponent implements OnInit {
     return this.orgMrn === this.loadedData['organizationId'];
   }
 
-  convertStringToArray = (data: any) => {
-    const relevantSections = Object.entries(data).filter( e => Object.entries(this.columnForMenu).filter( ee => ee[1][0] === e[0] && ee[1][1]['convertToBeArray']).length );
-    relevantSections.forEach( section => {
-      data[section[0]] = section[1] && typeof(section[1]) === 'string' ? (section[1] as string).split(',') : [];
-    });
-    return data;
-  }
-
   invertIsEditing = () => {
     this.isEditing = !this.isEditing;
     if (!this.isEditing){
-      this.formGroup.reset(this.loadedData);
+      this.formGroup.reset();
+      this.adjustData(this.loadedData);
     }
   }
 
@@ -244,6 +237,18 @@ export class EditableFormComponent implements OnInit {
     return validators;
   }
 
+  isThisForMCPMRN(menyType: string, fieldName: string) {
+    return menyType !== 'role' && fieldName === 'mrn';
+  }
+
+  convertStringToArray = (data: any) => {
+    const relevantSections = Object.entries(data).filter( e => Object.entries(this.columnForMenu).filter( ee => ee[1][0] === e[0] && ee[1][1]['convertToBeArray']).length );
+    relevantSections.forEach( section => {
+      data[section[0]] = section[1] && typeof(section[1]) === 'string' ? (section[1] as string).split(',') : [];
+    });
+    return data;
+  }
+
   adjustData = (rawData: object) => {
     const data = formatData(rawData);
     this.loadedData = data;
@@ -253,13 +258,14 @@ export class EditableFormComponent implements OnInit {
         if (relevant[1].immutable === true) {
           this.formGroup.get(relevant[0]).disable();
         }
-        if (this.menuType !== 'role' && relevant[0] === 'mrn') {
+        if (this.isThisForMCPMRN(this.menuType, relevant[0])) {
           this.shortId = this.mrnHelperService.shortIdFromMrn(data[key]);
           const mrn = this.mrnHelperService.mrnMask(this.menuType, this.orgShortId) + this.shortId;
-          //this.isShortIdValid = this.validateMrn(mrn);
           this.formGroup.get(relevant[0]).setValue(mrn);
         } else {
-          this.formGroup.get(relevant[0]).setValue(data[key]);
+          if (relevant[1].type === 'string') {
+            this.formGroup.get(relevant[0]).setValue(data[key]);
+          }
         }
       }
     }
@@ -281,8 +287,10 @@ export class EditableFormComponent implements OnInit {
     this.formGroup = this.formBuilder.group(group);
   }
 
-  onMenuItemSelected = (event: any, field: any) => {
-    this.formGroup.get(field).setValue(event);
+  onMenuItemSelected = (event: any, field: any, type: string) => {
+    if (type === 'string') {
+      this.formGroup.get(field).setValue(event);
+    }
   }
 
   openXmlDialog = (xml: any, isEditing: boolean = false) => {

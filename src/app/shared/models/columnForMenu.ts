@@ -611,7 +611,7 @@ export const ColumnForMenu = {
     },
     serviceType: {
       title: 'Service type',
-      type: 'string',
+      type: 'stringArray',
       options: [
         {
           title: 'MS 1 - VTS Information service (INS)',
@@ -684,7 +684,6 @@ export const ColumnForMenu = {
       ],
       description: 'The service type shall reflect the associated operational service type provided according to defined types',
       visibleFrom: ['detail', 'list'],
-      convertToBeArray: true,
     },
     status: {
       title: 'Status',
@@ -724,9 +723,8 @@ export const ColumnForMenu = {
     },
     keywords: {
       title: 'Keywords',
-      type: 'string',
+      type: 'stringArray',
       visibleFrom: ['detail', 'list'],
-      convertToBeArray: true,
     },
     instanceId: {
       title: 'Instance ID',
@@ -761,7 +759,7 @@ export const ColumnForMenu = {
     },
     unlocode: {
       title: 'Unlocode',
-      type: 'string',
+      type: 'stringArray',
       visibleFrom: ['detail'],
     },
     endpointType: {
