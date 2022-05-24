@@ -99,6 +99,11 @@ export class EditableFormComponent implements OnInit {
       if (this.menuType === MenuType.Instance) {
         this.formGroup.get('organizationId').setValue(AuthService.staticAuthInfo.orgMrn);
         this.formGroup.get('organizationId').disable();
+        for(const menu of this.columnForMenu) {
+          if (menu[1].type === 'stringArray') {
+            this.loadedData[menu[0]] = [];
+          }
+        }
       }
       this.settled(true);
     }
@@ -303,9 +308,9 @@ export class EditableFormComponent implements OnInit {
     this.formGroup = this.formBuilder.group(group);
   }
 
-  onMenuItemSelected = (event: any, field: any, type: string) => {
-    if (type === 'string') {
-      this.formGroup.get(field).setValue(event);
+  onMenuItemSelected = (event: any) => {
+    if (event.type === 'string') {
+      this.formGroup.get(event.key).setValue(event.value);
     }
   }
 
