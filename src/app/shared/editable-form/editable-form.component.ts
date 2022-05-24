@@ -65,9 +65,6 @@ export class EditableFormComponent implements OnInit {
     private dialogService: NbDialogService
   ) {
     iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
-    if (this.isForNew) {
-      this.isEditing = true;
-    }
   }
 
   needShortId = (field: string) => {
@@ -88,6 +85,7 @@ export class EditableFormComponent implements OnInit {
     this.setFormWithValidators();
 
     if (this.isForNew) {
+      this.isEditing = true;
       Object.keys(this.formGroup.controls).forEach(field => {
         if (this.needShortId(field)) {
           this.formGroup.get(field).setValue( this.mrnHelperService.mrnMask( this.getShortIdType(field), this.orgShortId) );
@@ -168,13 +166,12 @@ export class EditableFormComponent implements OnInit {
     }
 
     if (this.loadedData['createdAt']) {
-      delete this.loadedData['createdAt'];
+      this.loadedData['createdAt'] = null;
     }
 
     if (this.loadedData['updatedAt']) {
-      delete this.loadedData['updatedAt'];
+      this.loadedData['updatedAt'] = null;
     }
-    
     return Object.assign(this.loadedData, this.formGroup.value, this.fetchMissingValuesFromForm());
   }
 
