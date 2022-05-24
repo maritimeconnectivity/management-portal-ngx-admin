@@ -206,6 +206,20 @@ export const ColumnForMenu = {
       title: 'Access type',
       type: 'string',
       description: 'OpenID Connect access type',
+      options: [
+        {
+          title: 'public',
+          value: 'public',
+        },
+        {
+          title: 'bearer-only',
+          value: 'bearer-only',
+        },
+        {
+          title: 'confidential',
+          value: 'confidential',
+        },
+      ],
       visibleFrom: ['detail'],
     },
     oidcClientId: {
