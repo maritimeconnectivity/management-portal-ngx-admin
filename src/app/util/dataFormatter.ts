@@ -19,7 +19,7 @@ export const formatData = (data: object): object => {
         }
       }
     } else {
-      menuData[key] = key.endsWith("At")
+      menuData[key] = key.endsWith("At") && !isNaN(Number(data[key]))
         ? convertTime(parseInt(data[key]))
         : data[key];
     }

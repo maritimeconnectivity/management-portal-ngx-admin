@@ -787,11 +787,6 @@ export const ColumnForMenu = {
       title: 'Instance as DocId',
       type: 'number',
     },
-    instanceAsDocName: {
-      title: 'Instance as DocName',
-      type: 'string',
-      visibleFrom: ['detail'],
-    },
     instanceAsDoc: {
       title: 'Document file',
       type: 'file',
