@@ -10,6 +10,7 @@ import { EntityTypes, MenuType, MenuTypeNames } from '../models/menuType';
 import { NbDialogService, NbIconLibraries } from '@nebular/theme';
 import { CertificateService } from '../certificate.service';
 import { XmlDto } from '../../backend-api/service-registry';
+import { Any } from 'asn1js';
 
 @Component({
   selector: 'ngx-editable-form',
@@ -41,6 +42,7 @@ export class EditableFormComponent implements OnInit {
   @Output() onRefresh = new EventEmitter<FormGroup>();
 
   loadedData = {};
+  nonStringForm = {};
   fetchList = ['mrn', 'version', 'orgMrn', 'adminMrn', 'instanceId', 'organizationId', 'implementsServiceDesign', 'email', 'orgEmail', 'adminEmail', 'instanceVersion'];
   isEditing = false;
   isEntity = false;
@@ -63,9 +65,6 @@ export class EditableFormComponent implements OnInit {
     private dialogService: NbDialogService
   ) {
     iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
-    if (this.isForNew) {
-      this.isEditing = true;
-    }
   }
 
   needShortId = (field: string) => {
@@ -86,6 +85,7 @@ export class EditableFormComponent implements OnInit {
     this.setFormWithValidators();
 
     if (this.isForNew) {
+      this.isEditing = true;
       Object.keys(this.formGroup.controls).forEach(field => {
         if (this.needShortId(field)) {
           this.formGroup.get(field).setValue( this.mrnHelperService.mrnMask( this.getShortIdType(field), this.orgShortId) );
@@ -123,6 +123,22 @@ export class EditableFormComponent implements OnInit {
     this.onRefresh.emit();
   }
 
+  downloadFile = (event: Any) => {
+    if (event['filecontent']) {
+      const data = event['filecontent'];
+      const binary = atob(data.replace(/\s/g, ''));
+      const len = binary.length;
+      const buffer = new ArrayBuffer(len);
+      const view = new Uint8Array(buffer);
+      for (var i = 0; i < len; i++) {
+          view[i] = binary.charCodeAt(i);
+      }
+      const blob = new Blob([view], { type: event['filecontentContentType'] });
+      const url = window.URL.createObjectURL(blob);
+      window.open(url);
+    }
+  }
+
   fetchMissingValuesFromForm = () => {
     const result = {};
     for (const item of this.fetchList) {
@@ -134,26 +150,40 @@ export class EditableFormComponent implements OnInit {
   }
 
   getFormValue = () => {
-    const data = this.convertStringToArray(this.formGroup.value);
-    return Object.assign(this.loadedData, data, this.fetchMissingValuesFromForm());
+    // TEMPORARY: just to make it work
+    if (this.menuType === MenuType.Instance) {
+      if (!this.loadedData['instanceAsDocId'] && this.loadedData['instanceAsDoc']) {
+        this.loadedData['instanceAsDocId'] = this.loadedData['instanceAsDoc']['id'];
+      }
+      if (!this.loadedData['instanceAsDocName'] && this.loadedData['instanceAsDoc']) {
+        this.loadedData['instanceAsDocName'] = this.loadedData['instanceAsDoc']['name'];
+      }
+
+      if (this.loadedData['instanceAsDocId']) {
+        delete this.loadedData['instanceAsDoc'];
+        Object.assign(this.loadedData, {instanceAsDoc: {id : this.loadedData['instanceAsDocId']}});
+      }
+    }
+
+    if (this.loadedData['createdAt']) {
+      this.loadedData['createdAt'] = null;
+    }
+
+    if (this.loadedData['updatedAt']) {
+      this.loadedData['updatedAt'] = null;
+    }
+    return Object.assign(this.loadedData, this.formGroup.value, this.fetchMissingValuesFromForm());
   }
 
   isOurServiceInstance = () => {
     return this.orgMrn === this.loadedData['organizationId'];
   }
 
-  convertStringToArray = (data: any) => {
-    const relevantSections = Object.entries(data).filter( e => Object.entries(this.columnForMenu).filter( ee => ee[1][0] === e[0] && ee[1][1]['convertToBeArray']).length );
-    relevantSections.forEach( section => {
-      data[section[0]] = section[1] && typeof(section[1]) === 'string' ? (section[1] as string).split(',') : [];
-    });
-    return data;
-  }
-
   invertIsEditing = () => {
     this.isEditing = !this.isEditing;
     if (!this.isEditing){
-      this.formGroup.reset(this.loadedData);
+      this.formGroup.reset();
+      this.adjustData(this.loadedData);
     }
   }
 
@@ -227,6 +257,10 @@ export class EditableFormComponent implements OnInit {
     return validators;
   }
 
+  isThisForMCPMRN(menyType: string, fieldName: string) {
+    return menyType !== 'role' && fieldName === 'mrn';
+  }
+
   adjustData = (rawData: object) => {
     const data = formatData(rawData);
     this.loadedData = data;
@@ -236,13 +270,14 @@ export class EditableFormComponent implements OnInit {
         if (relevant[1].immutable === true) {
           this.formGroup.get(relevant[0]).disable();
         }
-        if (this.menuType !== 'role' && relevant[0] === 'mrn') {
+        if (this.isThisForMCPMRN(this.menuType, relevant[0])) {
           this.shortId = this.mrnHelperService.shortIdFromMrn(data[key]);
           const mrn = this.mrnHelperService.mrnMask(this.menuType, this.orgShortId) + this.shortId;
-          //this.isShortIdValid = this.validateMrn(mrn);
           this.formGroup.get(relevant[0]).setValue(mrn);
         } else {
-          this.formGroup.get(relevant[0]).setValue(data[key]);
+          if (relevant[1].type === 'string') {
+            this.formGroup.get(relevant[0]).setValue(data[key]);
+          }
         }
       }
     }
@@ -258,14 +293,25 @@ export class EditableFormComponent implements OnInit {
 
   setFormWithValidators = () => {
     const group = {};
-    for (const key in this.columnForMenu) {
-      group[this.columnForMenu[key][0]] = [null, this.getValidators(this.columnForMenu[key])];
+    for (const menu of this.columnForMenu) {
+      if (menu[1].type === 'string') {
+        group[menu[0]] = [null, this.getValidators(menu)];
+      }
     }
     this.formGroup = this.formBuilder.group(group);
   }
 
-  onMenuItemSelected = (event: any, field: any) => {
-    this.formGroup.get(field).setValue(event);
+  onMenuItemSelected = (event: any, field: any, type: string) => {
+    if (type === 'string') {
+      this.formGroup.get(field).setValue(event);
+    }
+  }
+
+  onListChanged = (event: any) => {
+    if (event['data'] && event['fieldName']) {
+      this.loadedData[event['fieldName']] = event['data'];
+      this.loadedData = Object.assign(this.loadedData, {[event['fieldName']]: event['data']});
+    }
   }
 
   openXmlDialog = (xml: any, isEditing: boolean = false) => {

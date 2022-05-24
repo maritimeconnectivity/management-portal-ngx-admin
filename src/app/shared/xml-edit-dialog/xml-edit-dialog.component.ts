@@ -55,7 +55,7 @@ export class XmlEditDialogComponent implements OnInit {
 
   dismiss() {
     if (this.isEditing && this.isThereAnyDifference(this.initialXml, this.formGroup.value)) {
-      
+      this.ref.close();
     } else {
       this.ref.close();
     }

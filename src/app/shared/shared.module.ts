@@ -11,6 +11,7 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { ThemeModule } from '../@theme/theme.module';
 import { LeafletMapComponent } from './leaflet-map/leaflet-map.component';
 import { XmlEditDialogComponent } from './xml-edit-dialog/xml-edit-dialog.component';
+import { InputButtonListComponent } from './input-button-list/input-button-list.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { XmlEditDialogComponent } from './xml-edit-dialog/xml-edit-dialog.compon
     CertRevokeDialogComponent,
     LeafletMapComponent,
     XmlEditDialogComponent,
+    InputButtonListComponent,
   ],
   imports: [
     CommonModule,
