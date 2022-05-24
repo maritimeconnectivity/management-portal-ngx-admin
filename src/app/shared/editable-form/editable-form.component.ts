@@ -1,3 +1,4 @@
+import { convertTime } from './../../util/timeConverter';
 import { XmlEditDialogComponent } from './../xml-edit-dialog/xml-edit-dialog.component';
 import { AuthService } from './../../auth/auth.service';
 import { OrganizationControllerService } from './../../backend-api/identity-registry/api/organizationController.service';
@@ -165,18 +166,19 @@ export class EditableFormComponent implements OnInit {
       }
     }
 
-    if (this.loadedData['createdAt']) {
-      this.loadedData['createdAt'] = null;
-    }
-
-    if (this.loadedData['updatedAt']) {
-      this.loadedData['updatedAt'] = null;
-    }
     return Object.assign(this.loadedData, this.formGroup.value, this.fetchMissingValuesFromForm());
   }
 
   isOurServiceInstance = () => {
     return this.orgMrn === this.loadedData['organizationId'];
+  }
+
+  isForTime = (fieldName: string) => {
+    return fieldName.endsWith('At') || fieldName === 'end' || fieldName === 'start';
+  }
+
+  convertTimeString = (timeString: string) => {
+    return convertTime(timeString);
   }
 
   invertIsEditing = () => {

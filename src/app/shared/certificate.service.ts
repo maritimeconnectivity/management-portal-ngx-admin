@@ -34,8 +34,7 @@ export class CertificateService {
     for(const key_certs in certificates) {
       const cert = certificates[key_certs];
       for (const key in cert) {
-        certificates[key_certs][key] = key.endsWith('At') || key === 'end' || key === 'start' ?
-        convertTime(parseInt(cert[key])) : cert[key];
+        certificates[key_certs][key] = cert[key];
       }
       if (cert['revoked']) {
         cert["revokeInfo"] = cert["revokedAt"];
