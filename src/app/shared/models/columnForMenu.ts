@@ -746,6 +746,7 @@ export const ColumnForMenu = {
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail'],
       shortIdType: 'instance',
+      immutable: true,
       required: true,
     },
     implementsServiceDesign: {
@@ -754,6 +755,7 @@ export const ColumnForMenu = {
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail'],
       shortIdType: 'design',
+      immutable: true,
     },
     implementsServiceDesignVersion: {
       title: 'Technical design version',
