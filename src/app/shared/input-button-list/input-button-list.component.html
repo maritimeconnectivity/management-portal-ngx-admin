@@ -1,5 +1,5 @@
 <div>
-    <div class="container">
+    <div class="button_container">
         <div *ngFor="let item of items" class="bg-primary align-baseline rounded p-1">
             <span class="text-white">{{item}}</span>
             <button *ngIf="isEditing" [size]="tiny" value="{{item}}" class="rounded-circle bg-primary text-white border-0" (click)="onRemoveItem($event)" nbButton>X</button>

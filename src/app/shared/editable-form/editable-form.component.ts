@@ -36,11 +36,11 @@ export class EditableFormComponent implements OnInit {
   @Input() orgShortId: string;
   @Input() defaultPermissions: string;
 
-  @Output() onCancel = new EventEmitter<FormGroup>();
-  @Output() onDelete = new EventEmitter<FormGroup>();
-  @Output() onSubmit = new EventEmitter<FormGroup>();
-  @Output() onApprove = new EventEmitter<FormGroup>();
-  @Output() onRefresh = new EventEmitter<FormGroup>();
+  @Output() onCancel = new EventEmitter<any>();
+  @Output() onDelete = new EventEmitter<any>();
+  @Output() onSubmit = new EventEmitter<any>();
+  @Output() onApprove = new EventEmitter<any>();
+  @Output() onRefresh = new EventEmitter<any>();
 
   loadedData = {};
   nonStringForm = {};
@@ -171,7 +171,21 @@ export class EditableFormComponent implements OnInit {
       }
     }
 
-    return Object.assign(this.loadedData, this.formGroup.value, this.fetchMissingValuesFromForm());
+    const filtered = this.filterUnselected(this.formGroup.value, this.columnForMenu.filter( e=> e[1].options));
+    return Object.assign(this.loadedData, filtered, this.fetchMissingValuesFromForm());
+  }
+
+  // filter unselected (empty) options from the form value
+  filterUnselected = (formValue: object, menuWithOptions: object[]): {} => {
+    const unfiltered = Object.assign({}, formValue);
+
+    Object.keys(unfiltered).forEach(field => {
+      if (menuWithOptions.filter(e => e[0] === field).length &&
+      (!unfiltered[field] || unfiltered[field].length === 0)) {
+        delete unfiltered[field];
+      }
+    });
+    return unfiltered;
   }
 
   isOurServiceInstance = () => {

@@ -206,6 +206,20 @@ export const ColumnForMenu = {
       title: 'Access type',
       type: 'string',
       description: 'OpenID Connect access type',
+      options: [
+        {
+          title: 'public',
+          value: 'public',
+        },
+        {
+          title: 'bearer-only',
+          value: 'bearer-only',
+        },
+        {
+          title: 'confidential',
+          value: 'confidential',
+        },
+      ],
       visibleFrom: ['detail'],
     },
     oidcClientId: {
@@ -732,6 +746,7 @@ export const ColumnForMenu = {
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail'],
       shortIdType: 'instance',
+      immutable: true,
       required: true,
     },
     implementsServiceDesign: {
@@ -740,6 +755,7 @@ export const ColumnForMenu = {
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail'],
       shortIdType: 'design',
+      immutable: true,
     },
     implementsServiceDesignVersion: {
       title: 'Technical design version',
