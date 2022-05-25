@@ -227,6 +227,26 @@ export const ColumnForMenu = {
       type: 'string',
       description: 'OpenID Connect client ID',
       visibleFrom: ['detail'],
+      notShowOnEdit: true,
+    },
+    oidcClientSecret: {
+      title: 'OIDC client secret',
+      type: 'string',
+      description: 'OpenID Connect client secret',
+      visibleFrom: ['detail'],
+      notShowOnEdit: true,
+    },
+    certDomainName: {
+      title: 'Certificate domain name',
+      type: 'string',
+      description: 'The domain name the service will be available on. Used in the issued certificates for the service.',
+      visibleFrom: ['detail'],
+    },
+    oidcRedirectUri: {
+      title: 'OIDC redirect URI',
+      type: 'string',
+      description: 'OpenID Connect client redirect URI',
+      visibleFrom: ['detail'],
     },
     vessel: {
       title: 'Vessel',
