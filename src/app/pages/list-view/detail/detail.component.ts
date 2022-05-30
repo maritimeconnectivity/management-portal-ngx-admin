@@ -1,5 +1,4 @@
 import { InstanceDtDto } from './../../../backend-api/service-registry/model/instanceDtDto';
-import { FormGroup } from '@angular/forms';
 import { InstanceControllerService } from './../../../backend-api/service-registry/api/instanceController.service';
 import { formatVesselToUpload } from '../../../util/dataFormatter';
 import { Device } from './../../../backend-api/identity-registry/model/device';
@@ -18,6 +17,7 @@ import { AuthPermission, AuthPermissionForMSR, PermissionResolver, rolesToPermis
 import { ORG_ADMIN_AT_MIR } from '../../../shared/app.constants';
 
 import RoleNameEnum = Role.RoleNameEnum;
+import { hasPermission } from '../../../util/permissionResolver';
 
 @Component({
   selector: 'ngx-detail',
@@ -27,7 +27,7 @@ import RoleNameEnum = Role.RoleNameEnum;
 export class DetailComponent implements OnInit {
   title = '';
   isLoading = false;
-  menuType = 'device';
+  menuType: MenuType = MenuType.Device;
   iconName = 'circle';
   instanceVersion = '';
   noBacklink = false;
@@ -46,7 +46,7 @@ export class DetailComponent implements OnInit {
   numberId = -1;
   isLoaded = true;
   mrnMask = '';
-  isForOrgService = false;
+  isForServiceForOrg = false;
   orgShortId = undefined;
   defaultPermissions = undefined;
 
@@ -69,13 +69,14 @@ export class DetailComponent implements OnInit {
     private authService: AuthService,
     private location: Location,
     ) {
-      const arrays = this.router.url.split("/");
-      const menuType = arrays[arrays.length - 2];
-      if (menuType === MenuType.InstanceOfOrg) {
-        this.isForOrgService = true;
+      const array = this.router.url.split('/');
+      const entityId = array.pop();
+      const menuTypeString = array.pop();
+      if (menuTypeString === MenuType.InstanceOfOrg) {
+        this.isForServiceForOrg = true;
         this.menuType = MenuType.Instance;
       } else {
-        this.menuType = menuType.replace('-', '').substr(0, menuType.length - 1);
+        this.menuType = menuTypeString.replace('-', '').substr(0, menuTypeString.length - 1) as MenuType;
       }
       this.entityMrn = decodeURIComponent(this.route.snapshot.paramMap.get("id"));
       this.orgMrn = this.authService.authState.orgMrn;
@@ -103,11 +104,11 @@ export class DetailComponent implements OnInit {
           }
       });
 
-      this.iconName = MenuTypeIconNames[this.menuType];
+      this.iconName = MenuTypeIconNames[this.menuType.toString()];
 
       if (this.isForNew) {
         this.isEditing = true;
-        this.title = 'New ' + this.menuType;
+        this.title = 'New ' + this.menuType.toString();
       } else {
         this.fetchFieldValues();
       }
@@ -251,7 +252,7 @@ export class DetailComponent implements OnInit {
 	}
 
   submit(body: any) {
-    if (this.menuType === 'role') {
+    if (this.menuType === MenuType.Role) {
       this.organizationControllerService.getOrganizationByMrn(this.orgMrn).subscribe(
         res => this.submitDataToBackend({ ...body, idOrganization: res.id}),
         err => this.notifierService.notify('error', 'Error in fetching organization information'),
@@ -293,7 +294,7 @@ export class DetailComponent implements OnInit {
     }
   }
 
-  registerData = (context: string, body: object, orgMrn: string): Observable<Entity> => {
+  registerData = (context: MenuType, body: object, orgMrn: string): Observable<Entity> => {
     if (context === MenuType.User) {
       return this.userControllerService.createUser(body as User, orgMrn);
     } else if (context === MenuType.Device) {
@@ -314,7 +315,7 @@ export class DetailComponent implements OnInit {
     return new Observable();
   }
 
-  updateData = (context: string, body: object, orgMrn: string, entityMrn: string, version?: string, instanceId?: number): Observable<Entity> => {
+  updateData = (context: MenuType, body: object, orgMrn: string, entityMrn: string, version?: string, instanceId?: number): Observable<Entity> => {
     if (context === MenuType.User) {
       return this.userControllerService.updateUser(body as User, orgMrn, entityMrn);
     } else if (context === MenuType.Device) {
@@ -335,7 +336,7 @@ export class DetailComponent implements OnInit {
     return new Observable();
   }
 
-  deleteData = (context: string, orgMrn: string, entityMrn: string, version?: string, instanceId?: number): Observable<Entity> => {
+  deleteData = (context: MenuType, orgMrn: string, entityMrn: string, version?: string, instanceId?: number): Observable<Entity> => {
     if (context === MenuType.User) {
       return this.userControllerService.deleteUser(orgMrn, entityMrn);
     } else if (context === MenuType.Device) {
@@ -356,7 +357,7 @@ export class DetailComponent implements OnInit {
     return new Observable();
   }
 
-  loadDataContent = (context: string, orgMrn: string, entityMrn: string, version?: string, instanceId?: number): Observable<Entity> => {
+  loadDataContent = (context: MenuType, orgMrn: string, entityMrn: string, version?: string, instanceId?: number): Observable<Entity> => {
     if (context === MenuType.User) {
       return this.userControllerService.getUser(orgMrn, entityMrn);
     } else if (context === MenuType.Device) {
@@ -375,36 +376,7 @@ export class DetailComponent implements OnInit {
     return new Observable();
   }
 
-  isAdmin = (): boolean => {
-    const context = this.menuType;
-    // MIR
-    if (context !== MenuType.Instance) {
-      if (this.authService.authState.hasPermissionInMIR(AuthPermission.SiteAdmin)) { // super admin
-        return true;
-      } else if (context === MenuType.User) {
-        return this.authService.authState.hasPermissionInMIR(AuthPermission.UserAdmin);
-      } else if (context === MenuType.Device) {
-        return this.authService.authState.hasPermissionInMIR(AuthPermission.DeviceAdmin);
-      } else if (context === MenuType.Vessel) {
-        return this.authService.authState.hasPermissionInMIR(AuthPermission.VesselAdmin);
-      } else if (context === MenuType.MMS) {
-        return this.authService.authState.hasPermissionInMIR(AuthPermission.MMSAdmin);
-      } else if (context === MenuType.Service) {
-        return this.authService.authState.hasPermissionInMIR(AuthPermission.ServiceAdmin);
-      } else if (context === MenuType.Organization || context === MenuTypeNames.role) {
-        return this.authService.authState.hasPermissionInMIR(AuthPermission.OrgAdmin);
-      }
-    } else {
-    // MSR
-      return this.isForNew ? // if it is for new one
-        this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.OrgServiceAdmin) ||
-        this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.MSRAdmin) :
-        this.editableForm ? // when it is not initiated
-        // when it is for editing
-        this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.MSRAdmin) ||
-          (this.editableForm && this.editableForm.isOurServiceInstance() &&
-          this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.OrgServiceAdmin)) :
-        this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.MSRAdmin);
-    }
+  isAdmin = ():boolean => {
+    return hasPermission(this.menuType, this.authService, this.editableForm);
   }
 }

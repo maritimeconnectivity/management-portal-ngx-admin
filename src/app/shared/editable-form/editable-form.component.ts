@@ -10,7 +10,7 @@ import { ColumnForMenu } from '../models/columnForMenu';
 import { EntityTypes, MenuType, MenuTypeNames } from '../models/menuType';
 import { NbDialogService, NbIconLibraries } from '@nebular/theme';
 import { CertificateService } from '../certificate.service';
-import { XmlDto } from '../../backend-api/service-registry';
+import { InstanceDto, XmlDto } from '../../backend-api/service-registry';
 import { Any } from 'asn1js';
 
 @Component({
@@ -104,6 +104,7 @@ export class EditableFormComponent implements OnInit {
             this.loadedData[menu[0]] = [];
           }
         }
+        this.formGroup.get('ledgerRequestStatus').setValue(InstanceDto.LedgerRequestStatusEnum.INACTIVE);
       }
       this.settled(true);
     }
