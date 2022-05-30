@@ -49,11 +49,55 @@ export class DetailComponent implements OnInit {
   isForServiceForOrg = false;
   orgShortId = undefined;
   defaultPermissionForAdminUser = undefined;
+  isAdmin: boolean = false;
 
   @ViewChild('editableForm') editableForm;
   @ViewChild('supplementForm') supplementForm;
 
   ngOnInit(): void {
+    const array = this.router.url.split('/');
+    const entityId = array.pop();
+    const menuTypeString = array.pop();
+    if (menuTypeString === MenuType.InstanceOfOrg) {
+      this.isForServiceForOrg = true;
+      this.menuType = MenuType.Instance;
+    } else {
+      this.menuType = menuTypeString.replace('-', '').substr(0, menuTypeString.length - 1) as MenuType;
+    }
+    this.entityMrn = decodeURIComponent(this.route.snapshot.paramMap.get("id"));
+    this.orgMrn = this.authService.authState.orgMrn;
+    this.isForNew = this.entityMrn === 'new';
+    this.numberId = this.menuType === MenuType.Instance || this.menuType === MenuType.Role ?
+      parseInt(this.entityMrn) : -1;
+
+    // preventing refresh
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+
+    //this is my organization page when it comes with no name
+    this.route.queryParams.subscribe(e =>
+      {
+        this.noBacklink = e.name === undefined;
+        this.title = e.name;
+        this.instanceVersion = e.version;
+      });
+
+    this.roleControllerService.getMyRole(this.authService.authState.orgMrn).subscribe(
+      roles => {
+        this.authService.authState.permission = rolesToPermission(roles);
+        if (this.menuType === MenuType.OrgCandidate &&
+          PermissionResolver.canApproveOrg(this.authService.authState.permission)) {
+          this.canApproveOrg = true;
+        }
+    });
+
+    this.iconName = MenuTypeIconNames[this.menuType.toString()];
+
+    if (this.isForNew) {
+      this.isEditing = true;
+      this.title = 'New ' + MenuTypeNames[this.menuType];
+    } else {
+      this.fetchFieldValues();
+    }
   }
 
   constructor(private route: ActivatedRoute, private router: Router,
@@ -69,49 +113,6 @@ export class DetailComponent implements OnInit {
     private authService: AuthService,
     private location: Location,
     ) {
-      const array = this.router.url.split('/');
-      const entityId = array.pop();
-      const menuTypeString = array.pop();
-      if (menuTypeString === MenuType.InstanceOfOrg) {
-        this.isForServiceForOrg = true;
-        this.menuType = MenuType.Instance;
-      } else {
-        this.menuType = menuTypeString.replace('-', '').substr(0, menuTypeString.length - 1) as MenuType;
-      }
-      this.entityMrn = decodeURIComponent(this.route.snapshot.paramMap.get("id"));
-      this.orgMrn = this.authService.authState.orgMrn;
-      this.isForNew = this.entityMrn === 'new';
-      this.numberId = this.menuType === MenuType.Instance ?
-        parseInt(this.entityMrn) : -1;
-      
-      // preventing refresh
-      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-
-      //this is my organization page when it comes with no name
-      this.route.queryParams.subscribe(e =>
-        {
-          this.noBacklink = e.name === undefined;
-          this.title = e.name;
-          this.instanceVersion = e.version;
-        });
-
-      this.roleControllerService.getMyRole(this.authService.authState.orgMrn).subscribe(
-        roles => {
-          this.authService.authState.permission = rolesToPermission(roles);
-          if (this.menuType === MenuType.OrgCandidate &&
-            PermissionResolver.canApproveOrg(this.authService.authState.permission)) {
-            this.canApproveOrg = true;
-          }
-      });
-
-      this.iconName = MenuTypeIconNames[this.menuType.toString()];
-
-      if (this.isForNew) {
-        this.isEditing = true;
-        this.title = 'New ' + this.menuType.toString();
-      } else {
-        this.fetchFieldValues();
-      }
   }
 
   cancel() {
@@ -126,8 +127,7 @@ export class DetailComponent implements OnInit {
   }
 
   fetchFieldValues() {
-    if(ColumnForMenu.hasOwnProperty(this.menuType === MenuType.InstanceOfOrg ?
-        MenuType.Instance : this.menuType)) {
+    if(ColumnForMenu.hasOwnProperty(this.menuType)) {
       this.isLoading = true;
       if (Object.values(MenuType).includes(this.menuType as MenuType)) {
         if(this.menuType === MenuType.OrgCandidate){
@@ -374,9 +374,5 @@ export class DetailComponent implements OnInit {
       return this.instanceControllerService.getInstance(instanceId);
     }
     return new Observable();
-  }
-
-  isAdmin = ():boolean => {
-    return hasPermission(this.menuType, this.authService, this.editableForm);
   }
 }

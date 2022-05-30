@@ -8,7 +8,7 @@
           <ngx-search-input (search)="onSearch($event)"></ngx-search-input>
         </div>
         <div class="col-md-auto">
-          <button type="button" nbButton status="primary" (click)="onAddNew()" *ngIf="isAdmin()">Add new</button>
+          <button type="button" nbButton status="primary" (click)="onAddNew()" *ngIf="isAdmin">Add new</button>
         </div>
       </div>
     </nb-card-header>

@@ -202,24 +202,10 @@ export const ColumnForMenu = {
       immutable: true,
       required: true,
     },
-    oidcAccessType: {
-      title: 'Access type',
+    certDomainName: {
+      title: 'Certificate domain name',
       type: 'string',
-      description: 'OpenID Connect access type',
-      options: [
-        {
-          title: 'public',
-          value: 'public',
-        },
-        {
-          title: 'bearer-only',
-          value: 'bearer-only',
-        },
-        {
-          title: 'confidential',
-          value: 'confidential',
-        },
-      ],
+      description: 'The domain name the service will be available on. Used in the issued certificates for the service.',
       visibleFrom: ['detail'],
     },
     oidcClientId: {
@@ -236,10 +222,36 @@ export const ColumnForMenu = {
       visibleFrom: ['detail'],
       notShowOnEdit: true,
     },
-    certDomainName: {
-      title: 'Certificate domain name',
+    oidcAccessType: {
+      title: 'Access type',
       type: 'string',
-      description: 'The domain name the service will be available on. Used in the issued certificates for the service.',
+      description: 'OpenID Connect access type',
+      options: [
+        {
+          title: 'public',
+          value: 'public',
+          showField: {
+            key: 'oidcRedirectUri',
+            value: true,
+          },
+        },
+        {
+          title: 'bearer-only',
+          value: 'bearer-only',
+          showField: {
+            key: 'oidcRedirectUri',
+            value: false,
+          },
+        },
+        {
+          title: 'confidential',
+          value: 'confidential',
+          showField: {
+            key: 'oidcRedirectUri',
+            value: true,
+          },
+        },
+      ],
       visibleFrom: ['detail'],
     },
     oidcRedirectUri: {
@@ -247,6 +259,8 @@ export const ColumnForMenu = {
       type: 'string',
       description: 'OpenID Connect client redirect URI',
       visibleFrom: ['detail'],
+      notShowOnEdit: true,
+      required: true,
     },
     vessel: {
       title: 'Vessel',
@@ -623,6 +637,15 @@ export const ColumnForMenu = {
       title: 'ID',
       type: 'number',
     },
+    instanceId: {
+      title: 'Instance ID',
+      type: 'string',
+      description: 'MCP MRN as unique identifer',
+      visibleFrom: ['detail'],
+      shortIdType: 'instance',
+      immutable: true,
+      required: true,
+    },
     name: {
       title: 'Name',
       type: 'string',
@@ -764,15 +787,6 @@ export const ColumnForMenu = {
       title: 'Keywords',
       type: 'stringArray',
       visibleFrom: ['detail', 'list'],
-    },
-    instanceId: {
-      title: 'Instance ID',
-      type: 'string',
-      description: 'MCP MRN as unique identifer',
-      visibleFrom: ['detail'],
-      shortIdType: 'instance',
-      immutable: true,
-      required: true,
     },
     implementsServiceDesign: {
       title: 'Technical design ID',
