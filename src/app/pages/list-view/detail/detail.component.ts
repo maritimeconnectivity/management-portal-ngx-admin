@@ -48,7 +48,7 @@ export class DetailComponent implements OnInit {
   mrnMask = '';
   isForServiceForOrg = false;
   orgShortId = undefined;
-  defaultPermissions = undefined;
+  defaultPermissionForAdminUser = undefined;
 
   @ViewChild('editableForm') editableForm;
   @ViewChild('supplementForm') supplementForm;
@@ -137,7 +137,7 @@ export class DetailComponent implements OnInit {
               this.editableForm.adjustTitle(this.menuType, this.title);
               this.editableForm.adjustData(data.content.filter(d => d.mrn === this.entityMrn).pop());
               this.orgShortId = this.entityMrn.split(':').pop();
-              this.defaultPermissions = ORG_ADMIN_AT_MIR;
+              this.defaultPermissionForAdminUser = ORG_ADMIN_AT_MIR;
             },
             error => {
               this.notifierService.notify('error', error.message);
@@ -326,7 +326,7 @@ export class DetailComponent implements OnInit {
       return this.mmsControllerService.updateMMS(body as MMS, orgMrn, entityMrn);
     } else if (context === MenuType.Service && version) {
       return this.serviceControllerService.updateService(body as Service, orgMrn, entityMrn, version);
-    } else if (context === MenuType.Organization) {
+    } else if (context === MenuType.Organization || context === MenuType.OrgCandidate) {
       return this.organizationControllerService.updateOrganization(body as Organization, entityMrn);
     } else if (context === MenuType.Role) {
       return this.roleControllerService.updateRole(body as Role, orgMrn, this.numberId);
@@ -347,7 +347,7 @@ export class DetailComponent implements OnInit {
       return this.mmsControllerService.deleteMMS(orgMrn, entityMrn);
     } else if (context === MenuType.Service && version) {
       return this.serviceControllerService.deleteService(orgMrn, entityMrn, version);
-    } else if (context === MenuType.Organization) {
+    } else if (context === MenuType.Organization || context === MenuType.OrgCandidate) {
       return this.organizationControllerService.deleteOrg(entityMrn);
     } else if (context === MenuType.Role) {
       return this.roleControllerService.deleteRole(orgMrn, this.numberId);

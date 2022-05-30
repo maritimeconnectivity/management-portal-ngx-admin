@@ -17,7 +17,7 @@
         </div>
         <div *ngIf="canApproveOrg">
           <button type="button" nbButton status="primary" (click)="approve()">Approve</button>
-          <button type="button" nbButton status="danger">Reject</button>
+          <button type="button" nbButton status="danger" (click)="reject()">Reject</button>
         </div>
       </div>
     </div>

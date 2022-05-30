@@ -118,6 +118,10 @@ export class EditableFormComponent implements OnInit {
     this.onDelete.emit();
   }
 
+  reject() {
+    this.onDelete.emit();
+  }
+
   approve() {
     this.onApprove.emit();
   }
