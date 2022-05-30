@@ -60,7 +60,6 @@ export class EditableFormComponent implements OnInit {
   revokedCertificates = [];
   isServiceInstance = false;
   geometry = {};
-  isOurServiceInstance = false;
   
   constructor(
     private mrnHelperService: MrnHelperService,
@@ -106,7 +105,7 @@ export class EditableFormComponent implements OnInit {
           }
         });
       }
-      this.setServiceOwnership();
+      this.setIsAdmin();
       this.settled(true);
     }
   }
@@ -228,10 +227,14 @@ export class EditableFormComponent implements OnInit {
     return unfiltered;
   }
 
-  setServiceOwnership = () => {
-    this.isOurServiceInstance =  this.isEditing ? AuthService.staticAuthInfo.orgMrn === this.formGroup.get('organizationId').value :
+  setIsAdmin = () => {
+    if (this.menuType === MenuType.Instance) {
+      const isOurServiceInstance =  this.isEditing ? AuthService.staticAuthInfo.orgMrn === this.formGroup.get('organizationId').value :
       AuthService.staticAuthInfo.orgMrn === this.loadedData['organizationId'];
-    this.isAdmin = hasPermission(this.menuType, this.authService, true, this.isOurServiceInstance);
+      this.isAdmin = hasPermission(this.menuType, this.authService, true, isOurServiceInstance);
+    } else {
+      this.isAdmin = hasPermission(this.menuType, this.authService, true, false);
+    }
   }
 
   isForTime = (fieldName: string) => {
@@ -352,7 +355,7 @@ export class EditableFormComponent implements OnInit {
     this.geometry = data["geometry"];
 
     this.setFormFieldVisibility(data);
-    this.setServiceOwnership();
+    this.setIsAdmin();
   }
 
   setFormWithValidators = () => {
