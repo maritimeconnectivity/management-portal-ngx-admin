@@ -49,11 +49,15 @@ export class DetailComponent implements OnInit {
   isForServiceForOrg = false;
   orgShortId = undefined;
   defaultPermissionForAdminUser = undefined;
+  isAdmin: boolean = false;
 
   @ViewChild('editableForm') editableForm;
   @ViewChild('supplementForm') supplementForm;
 
   ngOnInit(): void {
+    if (!this.isForNew) {
+      this.fetchFieldValues();
+    }
   }
 
   constructor(private route: ActivatedRoute, private router: Router,
@@ -81,9 +85,9 @@ export class DetailComponent implements OnInit {
       this.entityMrn = decodeURIComponent(this.route.snapshot.paramMap.get("id"));
       this.orgMrn = this.authService.authState.orgMrn;
       this.isForNew = this.entityMrn === 'new';
-      this.numberId = this.menuType === MenuType.Instance ?
+      this.numberId = this.menuType === MenuType.Instance || this.menuType === MenuType.Role ?
         parseInt(this.entityMrn) : -1;
-      
+
       // preventing refresh
       this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
@@ -108,10 +112,9 @@ export class DetailComponent implements OnInit {
 
       if (this.isForNew) {
         this.isEditing = true;
-        this.title = 'New ' + this.menuType.toString();
-      } else {
-        this.fetchFieldValues();
+        this.title = 'New ' + MenuTypeNames[this.menuType];
       }
+      this.isAdmin = hasPermission(this.menuType, this.authService, this.editableForm);
   }
 
   cancel() {
@@ -126,8 +129,7 @@ export class DetailComponent implements OnInit {
   }
 
   fetchFieldValues() {
-    if(ColumnForMenu.hasOwnProperty(this.menuType === MenuType.InstanceOfOrg ?
-        MenuType.Instance : this.menuType)) {
+    if(ColumnForMenu.hasOwnProperty(this.menuType)) {
       this.isLoading = true;
       if (Object.values(MenuType).includes(this.menuType as MenuType)) {
         if(this.menuType === MenuType.OrgCandidate){
@@ -374,9 +376,5 @@ export class DetailComponent implements OnInit {
       return this.instanceControllerService.getInstance(instanceId);
     }
     return new Observable();
-  }
-
-  isAdmin = ():boolean => {
-    return hasPermission(this.menuType, this.authService, this.editableForm);
   }
 }

@@ -61,6 +61,7 @@ export class ListComponent implements OnInit {
   showTables = true;
   source: LocalDataSource = new LocalDataSource();
   isForServiceForOrg = false;
+  isAdmin: boolean = false;
 
   constructor(private router: Router,
     iconsLibrary: NbIconLibraries,
@@ -91,6 +92,8 @@ export class ListComponent implements OnInit {
     } else {
       this.router.navigate(['**']);
     }
+
+    this.isAdmin = hasPermission(this.menuType, this.authService);
   }
 
   ngOnInit(): void {
@@ -165,7 +168,7 @@ export class ListComponent implements OnInit {
   }
   
   onDelete(event): void {
-    if (!this.isAdmin()) {
+    if (!this.isAdmin) {
       this.notifierService.notify('error', 'You don\'t have right permission');
     } else {
       this.delete(this.menuType, this.orgMrn, event.data.mrn, event.data.instanceVersion, event.data.id);
@@ -276,11 +279,7 @@ export class ListComponent implements OnInit {
     return new Observable();
   }
 
-  loadRoles = (orgMrn: string):Observable<Role[]> => {
+  loadRoles = (orgMrn: string): Observable<Role[]> => {
     return this.roleControllerService.getRoles(orgMrn);
-  }
-
-  isAdmin = ():boolean => {
-    return hasPermission(this.menuType, this.authService);
   }
 }

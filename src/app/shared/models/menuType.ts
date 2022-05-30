@@ -36,8 +36,8 @@ export const MenuTypeNames = {
   role: 'role',
   agent: 'agent',
   mms: 'mms',
-  instance: 'instance',
-  instanceorg: 'instance',
+  instance: 'service instance',
+  instanceorg: 'service instance',
   orgcandidate: 'unapproved organization',
   orgsvc: 'owned service',
 }

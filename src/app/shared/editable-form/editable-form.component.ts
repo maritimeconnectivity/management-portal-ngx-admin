@@ -81,8 +81,8 @@ export class EditableFormComponent implements OnInit {
     this.columnForMenu = Object.entries(ColumnForMenu[this.menuType]).filter(([k,v]) => 
       Array.isArray(v['visibleFrom']) && // array type checking
       v['visibleFrom'].includes(this.contextForAttributes) && // context filtering, either detail or list
-      (!this.isEditing || (this.isForNew && v['notShowOnEdit'] !== true))); 
-      
+      (!this.isEditing || (this.isForNew && v['notShowOnEdit'] !== true)));
+
     this.setFormWithValidators();
 
     if (this.isForNew) {
@@ -104,7 +104,6 @@ export class EditableFormComponent implements OnInit {
             this.loadedData[menu[0]] = [];
           }
         }
-        this.formGroup.get('ledgerRequestStatus').setValue(InstanceDto.LedgerRequestStatusEnum.INACTIVE);
       }
       this.settled(true);
     }
