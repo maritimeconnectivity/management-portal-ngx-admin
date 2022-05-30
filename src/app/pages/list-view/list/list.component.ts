@@ -1,3 +1,4 @@
+import { MenuTypeNames } from './../../../shared/models/menuType';
 import { AuthService } from './../../../auth/auth.service';
 import { InstanceControllerService } from './../../../backend-api/service-registry/api/instanceController.service';
 import { ServiceControllerService } from './../../../backend-api/identity-registry/api/serviceController.service';
@@ -11,7 +12,7 @@ import { ColumnForMenu } from '../../../shared/models/columnForMenu';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
-import { MenuType, MenuTypeIconNames, MenuTypeNames, EntityTypes } from '../../../shared/models/menuType';
+import { MenuType, MenuTypeIconNames, EntityTypes } from '../../../shared/models/menuType';
 import { NbIconLibraries } from '@nebular/theme';
 import { NotifierService } from 'angular-notifier';
 import { MmsControllerService, Role, VesselControllerService } from '../../../backend-api/identity-registry';
@@ -20,6 +21,7 @@ import { InstanceDto, SearchControllerService } from '../../../backend-api/servi
 import { AuthPermission, AuthPermissionForMSR } from '../../../auth/auth.permission';
 import { formatData, formatServiceData } from '../../../util/dataFormatter';
 import { Entity } from '../../../backend-api/identity-registry/model/entity';
+import { hasPermission } from '../../../util/permissionResolver';
 
 const capitalize = (s): string => {
   if (typeof s !== 'string') return ''
@@ -33,7 +35,7 @@ const capitalize = (s): string => {
 
 export class ListComponent implements OnInit {
 
-  menuType: string = 'device';
+  menuType: MenuType = MenuType.Device;
   title = ' for ';
   contextForAttributes = 'list';
   orgName = 'MCC';
@@ -74,16 +76,16 @@ export class ListComponent implements OnInit {
     private notifierService: NotifierService,
     private authService: AuthService,
     ) {
-    this.menuType = this.router.url.split("/").pop();
-    this.menuType = this.menuType.endsWith('s') ? this.menuType.replace('-', '').substr(0,this.menuType.length-1) :
-      this.menuType.replace('-', '');
-    if (this.menuType === MenuType.InstanceOfOrg) {
+    const menuTypeString = this.router.url.split('/').pop();
+    if (menuTypeString === MenuType.InstanceOfOrg) {
       this.isForServiceForOrg = true;
       this.menuType = MenuType.Instance;
+    } else {
+      this.menuType = menuTypeString.replace('-', '').substr(0, menuTypeString.length - 1) as MenuType;
     }
-    if (Object.values(MenuType).includes(this.menuType as MenuType)) {
-      this.menuTypeName = MenuTypeNames[this.menuType];
-      this.iconName = MenuTypeIconNames[this.menuType];
+    if (Object.values(MenuType).includes(this.menuType)) {
+      this.menuTypeName = MenuTypeNames[this.menuType.toString()];
+      this.iconName = MenuTypeIconNames[this.menuType.toString()];
       this.orgMrn = this.authService.authState.orgMrn;
       iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
     } else {
@@ -97,16 +99,16 @@ export class ListComponent implements OnInit {
 
   fetchValues() {
     // filtered with context
-    if(ColumnForMenu.hasOwnProperty(this.menuType)) {
+    if(ColumnForMenu.hasOwnProperty(this.menuType.toString())) {
       this.mySettings.columns = Object.assign({}, ...
-        Object.entries(ColumnForMenu[this.menuType]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes)).map(([k,v]) => ({[k]:v}))
+        Object.entries(ColumnForMenu[this.menuType.toString()]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes)).map(([k,v]) => ({[k]:v}))
       );
       this.settings = Object.assign({}, this.mySettings);
       // Not-approved organization list
       this.title = `${capitalize(this.menuTypeName)} list`;
       this.isLoading = true;
 
-      if (Object.values(MenuType).includes(this.menuType as MenuType)) {
+      if (Object.values(MenuType).includes(this.menuType)) {
         if(this.menuType === MenuType.Organization || this.menuType === MenuType.OrgCandidate){
           this.loadDataContent(this.menuType).subscribe(
             res => {this.refreshData(this.formatResponse(res.content)); this.isLoading = false;},
@@ -170,7 +172,7 @@ export class ListComponent implements OnInit {
     }
   }
 
-  delete(menuType: string, orgMrn: string, entityMrn: string, instanceVersion?: string, numberId?: number) {
+  delete(menuType: MenuType, orgMrn: string, entityMrn: string, instanceVersion?: string, numberId?: number) {
     let message = 'Are you sure you want to delete?';
     message = EntityTypes.indexOf(this.menuType) >= 0 ?
       message + ' All certificates under this entity will be revoked.' : message;
@@ -185,20 +187,20 @@ export class ListComponent implements OnInit {
     }
   }
 
-  deleteData = (context: string, orgMrn: string, entityMrn: string, version?: string, numberId?: number): Observable<Entity> => {
-    if (context === MenuTypeNames.user) {
+  deleteData = (context: MenuType, orgMrn: string, entityMrn: string, version?: string, numberId?: number): Observable<Entity> => {
+    if (context === MenuType.User) {
       return this.userControllerService.deleteUser(orgMrn, entityMrn);
-    } else if (context === MenuTypeNames.device) {
+    } else if (context === MenuType.Device) {
       return this.deviceControllerService.deleteDevice(orgMrn, entityMrn);
-    } else if (context === MenuTypeNames.vessel) {
+    } else if (context === MenuType.Vessel) {
       return this.vesselControllerService.deleteVessel(orgMrn, entityMrn);
-    } else if (context === MenuTypeNames.mms) {
+    } else if (context === MenuType.MMS) {
       return this.mmsControllerService.deleteMMS(orgMrn, entityMrn);
-    } else if (context === MenuTypeNames.service && version) {
+    } else if (context === MenuType.Service && version) {
       return this.serviceControllerService.deleteService(orgMrn, entityMrn, version);
-    } else if (context === MenuTypeNames.organization) {
+    } else if (context === MenuType.Organization) {
       return this.organizationControllerService.deleteOrg(entityMrn);
-    } else if (context === MenuTypeNames.role && numberId) {
+    } else if (context === MenuType.Role && numberId) {
       return this.roleControllerService.deleteRole(orgMrn, numberId);
     } else if (context === MenuType.Instance || context === MenuType.InstanceOfOrg) {
       return this.instanceControllerService.deleteInstance(numberId);
@@ -255,7 +257,7 @@ export class ListComponent implements OnInit {
       this.instanceControllerService.getInstances({});
   }
 
-  loadDataContent = (context: string, orgMrn?: string):Observable<PageEntity> => {
+  loadDataContent = (context: MenuType, orgMrn?: string):Observable<PageEntity> => {
     if (context === MenuType.User) {
       return this.userControllerService.getOrganizationUsers(orgMrn);
     } else if (context === MenuType.Device) {
@@ -278,26 +280,7 @@ export class ListComponent implements OnInit {
     return this.roleControllerService.getRoles(orgMrn);
   }
 
-  isAdmin = () => {
-    const context = this.menuType;
-    if (context === MenuTypeNames.user) {
-      return this.authService.authState.hasPermissionInMIR(AuthPermission.UserAdmin);
-    } else if (context === MenuTypeNames.device) {
-      return this.authService.authState.hasPermissionInMIR(AuthPermission.DeviceAdmin);
-    } else if (context === MenuTypeNames.vessel) {
-      return this.authService.authState.hasPermissionInMIR(AuthPermission.VesselAdmin);
-    } else if (context === MenuTypeNames.mms) {
-      return this.authService.authState.hasPermissionInMIR(AuthPermission.MMSAdmin);
-    } else if (context === MenuTypeNames.service) {
-      return this.authService.authState.hasPermissionInMIR(AuthPermission.ServiceAdmin);
-    } else if (context === MenuTypeNames.organization || context === MenuTypeNames.role) {
-      return this.authService.authState.hasPermissionInMIR(AuthPermission.OrgAdmin);
-    } else if (context === MenuTypeNames.instance) {
-      return this.isForServiceForOrg ?
-        this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.OrgServiceAdmin) :
-        this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.MSRAdmin);
-    } else {
-      return false;
-    }
+  isAdmin = ():boolean => {
+    return hasPermission(this.menuType, this.authService);
   }
 }
