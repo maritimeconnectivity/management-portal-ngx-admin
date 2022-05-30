@@ -198,7 +198,7 @@ export class ListComponent implements OnInit {
       return this.mmsControllerService.deleteMMS(orgMrn, entityMrn);
     } else if (context === MenuType.Service && version) {
       return this.serviceControllerService.deleteService(orgMrn, entityMrn, version);
-    } else if (context === MenuType.Organization) {
+    } else if (context === MenuType.Organization || context === MenuType.OrgCandidate) {
       return this.organizationControllerService.deleteOrg(entityMrn);
     } else if (context === MenuType.Role && numberId) {
       return this.roleControllerService.deleteRole(orgMrn, numberId);
