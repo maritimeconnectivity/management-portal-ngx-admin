@@ -749,6 +749,11 @@ export const ColumnForMenu = {
       visibleFrom: ['detail'],
       required: true,
     },
+    endpointType: {
+      title: 'Endpoint type',
+      type: 'string',
+      visibleFrom: ['detail'],
+    },
     organizationId: {
       title: 'Organization ID',
       type: 'string',
@@ -796,11 +801,6 @@ export const ColumnForMenu = {
     unlocode: {
       title: 'Unlocode',
       type: 'stringArray',
-      visibleFrom: ['detail'],
-    },
-    endpointType: {
-      title: 'Endpoint type',
-      type: 'string',
       visibleFrom: ['detail'],
     },
     mmsi: {
