@@ -377,31 +377,34 @@ export class DetailComponent implements OnInit {
 
   isAdmin = (): boolean => {
     const context = this.menuType;
-    if (context === MenuType.User) {
-      return this.authService.authState.hasPermissionInMIR(AuthPermission.UserAdmin);
-    } else if (context === MenuType.Device) {
-      return this.authService.authState.hasPermissionInMIR(AuthPermission.DeviceAdmin);
-    } else if (context === MenuType.Vessel) {
-      return this.authService.authState.hasPermissionInMIR(AuthPermission.VesselAdmin);
-    } else if (context === MenuType.MMS) {
-      return this.authService.authState.hasPermissionInMIR(AuthPermission.MMSAdmin);
-    } else if (context === MenuType.Service) {
-      return this.authService.authState.hasPermissionInMIR(AuthPermission.ServiceAdmin);
-    } else if (context === MenuType.Organization || context === MenuTypeNames.role) {
-      return this.authService.authState.hasPermissionInMIR(AuthPermission.OrgAdmin);
-    } else if (context === MenuType.Instance) {
-      return this.isForNew ? // if it is for new one
-          this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.OrgServiceAdmin) ||
-          this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.MSRAdmin) :
-          this.editableForm ? // when it is not initiated
-          // when it is for editing
-          this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.MSRAdmin) ||
-            (this.editableForm && this.editableForm.isOurServiceInstance() &&
-            this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.OrgServiceAdmin)) :
-          this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.MSRAdmin);
+    // MIR
+    if (context !== MenuType.Instance) {
+      if (this.authService.authState.hasPermissionInMIR(AuthPermission.SiteAdmin)) { // super admin
+        return true;
+      } else if (context === MenuType.User) {
+        return this.authService.authState.hasPermissionInMIR(AuthPermission.UserAdmin);
+      } else if (context === MenuType.Device) {
+        return this.authService.authState.hasPermissionInMIR(AuthPermission.DeviceAdmin);
+      } else if (context === MenuType.Vessel) {
+        return this.authService.authState.hasPermissionInMIR(AuthPermission.VesselAdmin);
+      } else if (context === MenuType.MMS) {
+        return this.authService.authState.hasPermissionInMIR(AuthPermission.MMSAdmin);
+      } else if (context === MenuType.Service) {
+        return this.authService.authState.hasPermissionInMIR(AuthPermission.ServiceAdmin);
+      } else if (context === MenuType.Organization || context === MenuTypeNames.role) {
+        return this.authService.authState.hasPermissionInMIR(AuthPermission.OrgAdmin);
+      }
     } else {
-      return false;
+    // MSR
+      return this.isForNew ? // if it is for new one
+        this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.OrgServiceAdmin) ||
+        this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.MSRAdmin) :
+        this.editableForm ? // when it is not initiated
+        // when it is for editing
+        this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.MSRAdmin) ||
+          (this.editableForm && this.editableForm.isOurServiceInstance() &&
+          this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.OrgServiceAdmin)) :
+        this.authService.authState.hasPermissionInMSR(AuthPermissionForMSR.MSRAdmin);
     }
   }
 }
-
