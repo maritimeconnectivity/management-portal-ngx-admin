@@ -55,7 +55,47 @@ export class DetailComponent implements OnInit {
   @ViewChild('supplementForm') supplementForm;
 
   ngOnInit(): void {
-    if (!this.isForNew) {
+    const array = this.router.url.split('/');
+    const entityId = array.pop();
+    const menuTypeString = array.pop();
+    if (menuTypeString === MenuType.InstanceOfOrg) {
+      this.isForServiceForOrg = true;
+      this.menuType = MenuType.Instance;
+    } else {
+      this.menuType = menuTypeString.replace('-', '').substr(0, menuTypeString.length - 1) as MenuType;
+    }
+    this.entityMrn = decodeURIComponent(this.route.snapshot.paramMap.get("id"));
+    this.orgMrn = this.authService.authState.orgMrn;
+    this.isForNew = this.entityMrn === 'new';
+    this.numberId = this.menuType === MenuType.Instance || this.menuType === MenuType.Role ?
+      parseInt(this.entityMrn) : -1;
+
+    // preventing refresh
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+
+    //this is my organization page when it comes with no name
+    this.route.queryParams.subscribe(e =>
+      {
+        this.noBacklink = e.name === undefined;
+        this.title = e.name;
+        this.instanceVersion = e.version;
+      });
+
+    this.roleControllerService.getMyRole(this.authService.authState.orgMrn).subscribe(
+      roles => {
+        this.authService.authState.permission = rolesToPermission(roles);
+        if (this.menuType === MenuType.OrgCandidate &&
+          PermissionResolver.canApproveOrg(this.authService.authState.permission)) {
+          this.canApproveOrg = true;
+        }
+    });
+
+    this.iconName = MenuTypeIconNames[this.menuType.toString()];
+
+    if (this.isForNew) {
+      this.isEditing = true;
+      this.title = 'New ' + MenuTypeNames[this.menuType];
+    } else {
       this.fetchFieldValues();
     }
   }
@@ -73,48 +113,6 @@ export class DetailComponent implements OnInit {
     private authService: AuthService,
     private location: Location,
     ) {
-      const array = this.router.url.split('/');
-      const entityId = array.pop();
-      const menuTypeString = array.pop();
-      if (menuTypeString === MenuType.InstanceOfOrg) {
-        this.isForServiceForOrg = true;
-        this.menuType = MenuType.Instance;
-      } else {
-        this.menuType = menuTypeString.replace('-', '').substr(0, menuTypeString.length - 1) as MenuType;
-      }
-      this.entityMrn = decodeURIComponent(this.route.snapshot.paramMap.get("id"));
-      this.orgMrn = this.authService.authState.orgMrn;
-      this.isForNew = this.entityMrn === 'new';
-      this.numberId = this.menuType === MenuType.Instance || this.menuType === MenuType.Role ?
-        parseInt(this.entityMrn) : -1;
-
-      // preventing refresh
-      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-
-      //this is my organization page when it comes with no name
-      this.route.queryParams.subscribe(e =>
-        {
-          this.noBacklink = e.name === undefined;
-          this.title = e.name;
-          this.instanceVersion = e.version;
-        });
-
-      this.roleControllerService.getMyRole(this.authService.authState.orgMrn).subscribe(
-        roles => {
-          this.authService.authState.permission = rolesToPermission(roles);
-          if (this.menuType === MenuType.OrgCandidate &&
-            PermissionResolver.canApproveOrg(this.authService.authState.permission)) {
-            this.canApproveOrg = true;
-          }
-      });
-
-      this.iconName = MenuTypeIconNames[this.menuType.toString()];
-
-      if (this.isForNew) {
-        this.isEditing = true;
-        this.title = 'New ' + MenuTypeNames[this.menuType];
-      }
-      this.isAdmin = hasPermission(this.menuType, this.authService, this.editableForm);
   }
 
   cancel() {

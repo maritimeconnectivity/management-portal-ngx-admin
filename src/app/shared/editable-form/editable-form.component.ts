@@ -12,7 +12,9 @@ import { NbDialogService, NbIconLibraries } from '@nebular/theme';
 import { CertificateService } from '../certificate.service';
 import { InstanceDto, XmlDto } from '../../backend-api/service-registry';
 import { Any } from 'asn1js';
+import { hasPermission } from '../../util/permissionResolver';
 
+const notUndefined = (anyValue: any) => typeof anyValue !== 'undefined';
 @Component({
   selector: 'ngx-editable-form',
   templateUrl: './editable-form.component.html',
@@ -20,13 +22,12 @@ import { Any } from 'asn1js';
 })
 export class EditableFormComponent implements OnInit {
 
-  @Input() menuType: string;
+  @Input() menuType: MenuType;
   @Input() instanceVersion: string;
   @Input() isForNew: boolean;
   @Input() canApproveOrg: boolean;
   @Input() entityMrn: string;
   @Input() orgMrn: string;
-  @Input() isAdmin: boolean;
   @Input() title: string;
   @Input() iconName: string;
   @Input() isLoading: boolean;
@@ -42,12 +43,14 @@ export class EditableFormComponent implements OnInit {
   @Output() onApprove = new EventEmitter<any>();
   @Output() onRefresh = new EventEmitter<any>();
 
+  isAdmin = false;
   loadedData = {};
   nonStringForm = {};
   fetchList = ['mrn', 'version', 'orgMrn', 'adminMrn', 'instanceId', 'organizationId', 'implementsServiceDesign', 'email', 'orgEmail', 'adminEmail', 'instanceVersion'];
   isEditing = false;
   isEntity = false;
   columnForMenu: any;
+  fieldVisibility = {};
   formGroup: FormGroup;
   shortId = '';
   roleId = -1;
@@ -57,13 +60,15 @@ export class EditableFormComponent implements OnInit {
   revokedCertificates = [];
   isServiceInstance = false;
   geometry = {};
+  isOurServiceInstance = false;
   
   constructor(
     private mrnHelperService: MrnHelperService,
     private formBuilder: FormBuilder,
     private iconsLibrary: NbIconLibraries,
     private certificateService: CertificateService,
-    private dialogService: NbDialogService
+    private dialogService: NbDialogService,
+    private authService: AuthService,
   ) {
     iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
   }
@@ -73,20 +78,15 @@ export class EditableFormComponent implements OnInit {
   }
 
   getShortIdType = (field: string) => {
-    return this.columnForMenu.filter(e => e[0] === field).pop()[1].shortIdType;
+    return this.columnForMenu[field] ? this.columnForMenu[field].shortIdType : undefined;
   }
 
   ngOnInit(): void {
-    // filtered with context
-    this.columnForMenu = Object.entries(ColumnForMenu[this.menuType]).filter(([k,v]) => 
-      Array.isArray(v['visibleFrom']) && // array type checking
-      v['visibleFrom'].includes(this.contextForAttributes) && // context filtering, either detail or list
-      (!this.isEditing || (this.isForNew && v['notShowOnEdit'] !== true)));
-
-    this.setFormWithValidators();
+    this.setForm();
 
     if (this.isForNew) {
       this.isEditing = true;
+      this.setFormFieldVisibility();
       Object.keys(this.formGroup.controls).forEach(field => {
         if (this.needShortId(field)) {
           this.formGroup.get(field).setValue( this.mrnHelperService.mrnMask( this.getShortIdType(field), this.orgShortId) );
@@ -99,14 +99,50 @@ export class EditableFormComponent implements OnInit {
       if (this.menuType === MenuType.Instance) {
         this.formGroup.get('organizationId').setValue(AuthService.staticAuthInfo.orgMrn);
         this.formGroup.get('organizationId').disable();
-        for(const menu of this.columnForMenu) {
-          if (menu[1].type === 'stringArray') {
-            this.loadedData[menu[0]] = [];
+        Object.entries(ColumnForMenu[this.menuType]).map(([key, value]) => 
+        {
+          if ((value as any).type === 'stringArray') {
+            this.loadedData[key] = [];
           }
-        }
+        });
       }
+      this.setServiceOwnership();
       this.settled(true);
     }
+  }
+
+  setForm = () => {
+    // filtered with context
+    this.columnForMenu = {};
+    Object.entries(ColumnForMenu[this.menuType]).map(([k,v]) => 
+      {if (Array.isArray(v['visibleFrom']) && // array type checking
+      v['visibleFrom'].includes(this.contextForAttributes) && // context filtering, either detail or list
+      (!this.isEditing || (this.isForNew && v['notShowOnEdit'] !== true)))
+        this.columnForMenu[k] = v;}
+      );
+
+    this.setFormWithValidators();
+  }
+
+  setFormFieldVisibility = (data?: any) => {
+    const menuWithOptions = [];
+    Object.entries(this.columnForMenu).forEach(([key, menu]) =>
+    {
+      this.fieldVisibility[key] = (menu as any).notShowOnEdit ? !(menu as any).notShowOnEdit : true;
+      if ((menu as any).options) {
+        menuWithOptions.push({key: key, value: (menu as any).options});
+      }
+    });
+    // matched data with preset activates corresponding field in menu
+    if (data) {
+      menuWithOptions.forEach((e) =>
+        e.value.map(v => v.value === data[e.key] ? v.showField: undefined)
+          .filter(notUndefined).forEach(f => this.setFieldVisible(f.key, f.value)));
+    }
+  }
+
+  isFieldVisible(key: string) {
+    return this.fieldVisibility[key];
   }
 
   cancel() {
@@ -175,7 +211,7 @@ export class EditableFormComponent implements OnInit {
       }
     }
 
-    const filtered = this.filterUnselected(this.formGroup.value, this.columnForMenu.filter( e=> e[1].options));
+    const filtered = this.filterUnselected(this.formGroup.value, Object.entries(this.columnForMenu).filter((e: any) => e[1].options));
     return Object.assign(this.loadedData, filtered, this.fetchMissingValuesFromForm());
   }
 
@@ -192,8 +228,10 @@ export class EditableFormComponent implements OnInit {
     return unfiltered;
   }
 
-  isOurServiceInstance = () => {
-    return this.orgMrn === this.loadedData['organizationId'];
+  setServiceOwnership = () => {
+    this.isOurServiceInstance =  this.isEditing ? AuthService.staticAuthInfo.orgMrn === this.formGroup.get('organizationId').value :
+      AuthService.staticAuthInfo.orgMrn === this.loadedData['organizationId'];
+    this.isAdmin = hasPermission(this.menuType, this.authService, true, this.isOurServiceInstance);
   }
 
   isForTime = (fieldName: string) => {
@@ -223,7 +261,7 @@ export class EditableFormComponent implements OnInit {
   }
 
   adjustTitle = (menuType: string, title: string) => {
-    this.menuType = menuType;
+    this.menuType = menuType as MenuType;
     this.menuTypeName = MenuTypeNames[this.menuType];
     this.isEntity = EntityTypes.includes(this.menuType);
     this.title = title;
@@ -264,15 +302,15 @@ export class EditableFormComponent implements OnInit {
       this.orgMrn.split(':').pop();
   }
 
-  getValidators = (field: any) => {
+  getValidators = (key: string, value: any) => {
     const validators = [];
-    if (field[1].required) {
+    if (value.required) {
       validators.push(Validators.required);
     }
-    if (field[0].includes('email') || field[0].includes('Email')) {
+    if (key.includes('email') || key.includes('Email')) {
       validators.push(Validators.email);
     }
-    if (field[0] !== 'mrnSubsidiary' && (field[0].includes('mrn') || field[0].includes('Mrn'))) {
+    if (key !== 'mrnSubsidiary' && (key.includes('mrn') || key.includes('Mrn'))) {
       if (this.menuType === MenuType.Organization || this.menuType === MenuType.OrgCandidate) {
         validators.push(Validators.pattern(this.mrnHelperService.mrnMcpIdpRegexForOrg()));
       } else {
@@ -289,23 +327,21 @@ export class EditableFormComponent implements OnInit {
   adjustData = (rawData: object) => {
     const data = formatData(rawData);
     this.loadedData = data;
-    for(const key in data) {
-      const relevant = this.columnForMenu.filter(e => e[0] === key)[0];
-      if (relevant) {
-        if (relevant[1].immutable === true) {
-          this.formGroup.get(relevant[0]).disable();
-        }
-        if (this.isThisForMCPMRN(this.menuType, relevant[0])) {
-          this.shortId = this.mrnHelperService.shortIdFromMrn(data[key]);
-          const mrn = this.mrnHelperService.mrnMask(this.menuType, this.orgShortId) + this.shortId;
-          this.formGroup.get(relevant[0]).setValue(mrn);
-        } else {
-          if (relevant[1].type === 'string') {
-            this.formGroup.get(relevant[0]).setValue(data[key]);
-          }
+    Object.entries(this.columnForMenu).forEach(([key, menu]) => {
+      if ((menu as any).immutable === true) {
+        this.formGroup.get(key).disable();
+      }
+      if (this.isThisForMCPMRN(this.menuType, key)) {
+        this.shortId = this.mrnHelperService.shortIdFromMrn(data[key]);
+        const mrn = this.mrnHelperService.mrnMask(this.menuType, this.orgShortId) + this.shortId;
+        this.formGroup.get(key).setValue(mrn);
+      } else {
+        if ((menu as any).type === 'string') {
+          this.formGroup.get(key).setValue(data[key]);
         }
       }
-    }
+    });
+
     const hasCertificate = data["certificates"] && data["certificates"].length > 0;
     if (hasCertificate) {
       const splited = this.certificateService.splitByRevokeStatus(data["certificates"]);
@@ -314,21 +350,44 @@ export class EditableFormComponent implements OnInit {
     }
 
     this.geometry = data["geometry"];
+
+    this.setFormFieldVisibility(data);
+    this.setServiceOwnership();
   }
 
   setFormWithValidators = () => {
     const group = {};
-    for (const menu of this.columnForMenu) {
-      if (menu[1].type === 'string') {
-        group[menu[0]] = [null, this.getValidators(menu)];
+    Object.entries(this.columnForMenu).forEach(([key, menu]) =>
+    {
+      if ((menu as any).type === 'string') {
+        group[key] = [null, this.getValidators(key, menu)];
       }
-    }
+    });
     this.formGroup = this.formBuilder.group(group);
   }
 
   onMenuItemSelected = (event: any) => {
     if (event.type === 'string') {
       this.formGroup.get(event.key).setValue(event.value);
+      this.updateFieldVisibility(event.key, event.value);
+    }
+  }
+
+  updateFieldVisibility = (key: string, value: string) => {
+    const fieldInfo = this.columnForMenu[key].options?.filter(v => v.value === value);
+    if (fieldInfo[0].showField) {
+      this.setFieldVisible(fieldInfo[0].showField.key, fieldInfo[0].showField.value);
+    }
+  }
+
+  setFieldVisible = (key: string, value: any) => {
+    if (value) {
+      this.fieldVisibility[key] = value;
+      this.formGroup.get(key).enable();
+    } else {
+      this.loadedData[key] = undefined; // delete existing value
+      this.fieldVisibility[key] = value;
+      this.formGroup.get(key).disable();
     }
   }
 
@@ -347,5 +406,9 @@ export class EditableFormComponent implements OnInit {
         onUpdate: (xml: XmlDto) => this.loadedData['xml'] = xml,
       },
     });
+  }
+
+  sortColumnForMenu = (a, b) => {
+    return a.order > b.order ? -1 : 1;
   }
 }

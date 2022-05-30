@@ -93,7 +93,7 @@ export class ListComponent implements OnInit {
       this.router.navigate(['**']);
     }
 
-    this.isAdmin = hasPermission(this.menuType, this.authService);
+    this.isAdmin = hasPermission(this.menuType, this.authService, false);
   }
 
   ngOnInit(): void {

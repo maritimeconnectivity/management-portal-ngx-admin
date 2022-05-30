@@ -4,7 +4,7 @@ import { MenuType } from './../shared/models/menuType';
 import { AuthPermission, AuthPermissionForMSR } from '../auth/auth.permission';
 
 export const hasPermission = (context: MenuType, authService: AuthService,
-        editableForm?: EditableFormComponent): boolean => {
+        isEditing: boolean, isOurServiceInstance?: boolean): boolean => {
     // MIR
     if (context !== MenuType.Instance) {
       if (authService.authState.hasPermissionInMIR(AuthPermission.SiteAdmin)) { // super admin
@@ -24,10 +24,10 @@ export const hasPermission = (context: MenuType, authService: AuthService,
       }
     } else {
     // MSR
-      return editableForm ? // for editing
+      return isEditing ? // for editing
         // when it is for editing
         authService.authState.hasPermissionInMSR(AuthPermissionForMSR.MSRAdmin) ||
-          (editableForm && editableForm.isOurServiceInstance() &&
+          (isOurServiceInstance &&
           authService.authState.hasPermissionInMSR(AuthPermissionForMSR.OrgServiceAdmin)) :
         // for creating
         authService.authState.hasPermissionInMSR(AuthPermissionForMSR.OrgServiceAdmin) ||
