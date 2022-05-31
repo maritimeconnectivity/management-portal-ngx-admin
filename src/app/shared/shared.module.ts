@@ -12,6 +12,7 @@ import { ThemeModule } from '../@theme/theme.module';
 import { LeafletMapComponent } from './leaflet-map/leaflet-map.component';
 import { XmlEditDialogComponent } from './xml-edit-dialog/xml-edit-dialog.component';
 import { InputButtonListComponent } from './input-button-list/input-button-list.component';
+import { InputImageComponent } from './input-image/input-image.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { InputButtonListComponent } from './input-button-list/input-button-list.
     LeafletMapComponent,
     XmlEditDialogComponent,
     InputButtonListComponent,
+    InputImageComponent,
   ],
   imports: [
     CommonModule,
