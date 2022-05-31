@@ -270,7 +270,7 @@ export const ColumnForMenu = {
     },
     vessel: {
       title: 'Vessel',
-      type: 'string',
+      type: 'vessel',
       description: 'Correlated vessel',
       visibleFrom: ['detail'],
     },
