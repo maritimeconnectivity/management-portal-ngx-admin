@@ -273,13 +273,14 @@ export class LogoControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/logo`,
+        return this.httpClient.request('get',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/logo`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
-                reportProgress: reportProgress
-            }
+                reportProgress: reportProgress,
+                responseType: 'blob',
+            },
         );
     }
 
@@ -333,10 +334,10 @@ export class LogoControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateLogoPut(body: Array<string>, orgMrn: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public updateLogoPut(body: Array<string>, orgMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public updateLogoPut(body: Array<string>, orgMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public updateLogoPut(body: Array<string>, orgMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public updateLogoPut(body: Array<string>, orgMrn: string, mediaType: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public updateLogoPut(body: Array<string>, orgMrn: string, mediaType: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public updateLogoPut(body: Array<string>, orgMrn: string, mediaType: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public updateLogoPut(body: Array<string>, orgMrn: string, mediaType: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling updateLogoPut.');
@@ -347,6 +348,8 @@ export class LogoControllerService {
         }
 
         let headers = this.defaultHeaders;
+
+        headers.set('Content-Type', mediaType);
 
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [

@@ -69,6 +69,12 @@ export const ColumnForMenu = {
       title: 'ID',
       type: 'number',
     },
+    logo: {
+      title: 'Logo',
+      type: 'image',
+      allowedExtensions: ['.jpg', '.png'],
+      visibleFrom: ['detail'],
+    },
     mrn: {
       title: 'MRN',
       type: 'string',
@@ -371,6 +377,12 @@ export const ColumnForMenu = {
       title: 'ID',
       type: 'number',
     },
+    logo: {
+      title: 'Logo',
+      type: 'image',
+      allowedExtensions: ['.jpg', '.png'],
+      visibleFrom: ['detail'],
+    },
     mrn: {
       title: 'MRN',
       type: 'string',
@@ -398,31 +410,37 @@ export const ColumnForMenu = {
       title: 'IMO number',
       type: 'string',
       visibleFrom: ['detail', 'list'],
+      required: true,
     },
     mmsiNumber: {
       title: 'MMSI number',
       type: 'string',
       visibleFrom: ['detail', 'list'],
+      required: true,
     },
     callsign: {
       title: 'Call sign',
       type: 'string',
       visibleFrom: ['detail', 'list'],
+      required: true,
     },
     flagstate: {
       title: 'Flag state',
       type: 'string',
       visibleFrom: ['detail', 'list'],
+      required: true,
     },
     aisClass: {
       title: 'AIS class',
       type: 'string',
       visibleFrom: ['detail', 'list'],
+      required: true,
     },
     portOfRegister: {
       title: 'Port of register',
       type: 'string',
       visibleFrom: ['detail', 'list'],
+      required: true,
     },
     mrnSubsidiary: {
       title: 'Subsidiary MRN',
@@ -786,6 +804,7 @@ export const ColumnForMenu = {
     keywords: {
       title: 'Keywords',
       type: 'stringArray',
+      placeholder: 'Please enter keyword',
       visibleFrom: ['detail', 'list'],
     },
     implementsServiceDesign: {
@@ -815,6 +834,7 @@ export const ColumnForMenu = {
     unlocode: {
       title: 'Unlocode',
       type: 'stringArray',
+      placeholder: 'Please enter UN/LOCODE',
       visibleFrom: ['detail'],
     },
     mmsi: {

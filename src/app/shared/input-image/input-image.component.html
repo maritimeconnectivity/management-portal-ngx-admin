@@ -1,0 +1,11 @@
+<div>
+    <div class="image_container" *ngIf="image" [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary">
+        <img class="mh-100" [attr.src]="image">
+    </div>
+    <div class="image_container" *ngIf="!image" [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary">
+        <div class="row h-100 justify-content-center align-items-center bg-light">
+            <span class="text-secondary font-weight-bold">No image</span>
+        </div>
+    </div>
+    <input *ngIf="isEditing" type="file" accept="{{accept}}" (change)="changeFile($event)"/>
+</div>

@@ -298,12 +298,13 @@ export class VesselImageControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/vessel/${encodeURIComponent(String(vesselMrn))}/vesselImage`,
+        return this.httpClient.request('get',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/vessel/${encodeURIComponent(String(vesselMrn))}/vesselImage`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
-                reportProgress: reportProgress
+                reportProgress: reportProgress,
+                responseType: 'blob',
             }
         );
     }
@@ -364,10 +365,10 @@ export class VesselImageControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateVesselImagePut(body: Array<string>, orgMrn: string, vesselMrn: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public updateVesselImagePut(body: Array<string>, orgMrn: string, vesselMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public updateVesselImagePut(body: Array<string>, orgMrn: string, vesselMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public updateVesselImagePut(body: Array<string>, orgMrn: string, vesselMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public updateVesselImagePut(body: Array<string>, orgMrn: string, vesselMrn: string, mediaType: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public updateVesselImagePut(body: Array<string>, orgMrn: string, vesselMrn: string, mediaType: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public updateVesselImagePut(body: Array<string>, orgMrn: string, vesselMrn: string, mediaType: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public updateVesselImagePut(body: Array<string>, orgMrn: string, vesselMrn: string, mediaType: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling updateVesselImagePut.');
@@ -382,6 +383,8 @@ export class VesselImageControllerService {
         }
 
         let headers = this.defaultHeaders;
+
+        headers.set('Content-Type', mediaType);
 
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [

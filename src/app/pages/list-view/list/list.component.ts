@@ -21,7 +21,7 @@ import { InstanceDto, SearchControllerService } from '../../../backend-api/servi
 import { AuthPermission, AuthPermissionForMSR } from '../../../auth/auth.permission';
 import { formatData, formatServiceData } from '../../../util/dataFormatter';
 import { Entity } from '../../../backend-api/identity-registry/model/entity';
-import { hasPermission } from '../../../util/permissionResolver';
+import { hasAdminPermission } from '../../../util/adminPermissionResolver';
 
 const capitalize = (s): string => {
   if (typeof s !== 'string') return ''
@@ -77,6 +77,10 @@ export class ListComponent implements OnInit {
     private notifierService: NotifierService,
     private authService: AuthService,
     ) {
+      iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
+  }
+
+  ngOnInit(): void {
     const menuTypeString = this.router.url.split('/').pop();
     if (menuTypeString === MenuType.InstanceOfOrg) {
       this.isForServiceForOrg = true;
@@ -88,15 +92,17 @@ export class ListComponent implements OnInit {
       this.menuTypeName = MenuTypeNames[this.menuType.toString()];
       this.iconName = MenuTypeIconNames[this.menuType.toString()];
       this.orgMrn = this.authService.authState.orgMrn;
-      iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
     } else {
       this.router.navigate(['**']);
     }
 
-    this.isAdmin = hasPermission(this.menuType, this.authService, false);
-  }
-
-  ngOnInit(): void {
+    if (this.authService.authState.rolesLoaded) {
+      this.isAdmin = hasAdminPermission(this.menuType, this.authService, false);
+    } else {
+      this.authService.rolesLoaded.subscribe((mode)=> {
+        this.isAdmin = hasAdminPermission(this.menuType, this.authService, false);
+      });
+    }
     this.fetchValues();
   }
 
