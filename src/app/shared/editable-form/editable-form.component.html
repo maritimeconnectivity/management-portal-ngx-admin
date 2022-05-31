@@ -13,7 +13,7 @@
           <button type="button" nbButton status="success" *ngIf="isEditing && isServiceInstance" (click)="openXmlDialog(loadedData['instanceAsXml'], true)" >Edit By XML</button>
           <button type="submit" nbButton status="primary" *ngIf="isEditing && !isForNew && menuType === 'service'" (click)="updateForNewVer()" [disabled]="!formGroup.valid">New version</button>
           <button type="submit" nbButton status="primary" *ngIf="isEditing && !isForNew" (click)="submit()" [disabled]="!formGroup.valid">Update</button>
-          <button type="button" nbButton status="danger" *ngIf="isEditing && !isForNew" (click)="invertIsEditing()" >Cancel</button>
+          <button type="button" nbButton status="danger" *ngIf="isEditing && !isForNew" (click)="cancelEdit()" >Cancel</button>
         </div>
         <div *ngIf="canApproveOrg">
           <button type="button" nbButton status="primary" (click)="approve()">Approve</button>

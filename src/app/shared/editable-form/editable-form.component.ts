@@ -175,6 +175,11 @@ export class EditableFormComponent implements OnInit {
     this.onRefresh.emit();
   }
 
+  cancelEdit() {
+    this.invertIsEditing();
+    this.refreshData();
+  }
+
   downloadFile = (event: Any) => {
     if (event['filecontent']) {
       const data = event['filecontent'];
