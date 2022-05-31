@@ -12,7 +12,7 @@ import { NbDialogService, NbIconLibraries } from '@nebular/theme';
 import { CertificateService } from '../certificate.service';
 import { InstanceDto, XmlDto } from '../../backend-api/service-registry';
 import { Any } from 'asn1js';
-import { hasPermission } from '../../util/permissionResolver';
+import { hasAdminPermission } from '../../util/adminPermissionResolver';
 
 const notUndefined = (anyValue: any) => typeof anyValue !== 'undefined';
 @Component({
@@ -105,7 +105,14 @@ export class EditableFormComponent implements OnInit {
           }
         });
       }
-      this.setIsAdmin();
+      // check admin permission
+      if (this.authService.authState.rolesLoaded) {
+        this.setIsAdmin();
+      } else {
+        this.authService.rolesLoaded.subscribe((mode)=> {
+          this.setIsAdmin();
+        });
+      }
       this.settled(true);
     }
   }
@@ -231,9 +238,9 @@ export class EditableFormComponent implements OnInit {
     if (this.menuType === MenuType.Instance) {
       const isOurServiceInstance =  this.isEditing ? AuthService.staticAuthInfo.orgMrn === this.formGroup.get('organizationId').value :
       AuthService.staticAuthInfo.orgMrn === this.loadedData['organizationId'];
-      this.isAdmin = hasPermission(this.menuType, this.authService, true, isOurServiceInstance);
+      this.isAdmin = hasAdminPermission(this.menuType, this.authService, true, isOurServiceInstance);
     } else {
-      this.isAdmin = hasPermission(this.menuType, this.authService, true, false);
+      this.isAdmin = hasAdminPermission(this.menuType, this.authService, true, false);
     }
   }
 
@@ -355,7 +362,15 @@ export class EditableFormComponent implements OnInit {
     this.geometry = data["geometry"];
 
     this.setFormFieldVisibility(data);
-    this.setIsAdmin();
+    // check admin permission
+    if (this.authService.authState.rolesLoaded) {
+      this.setIsAdmin();
+    } else {
+      this.authService.rolesLoaded.subscribe((mode)=> {
+        this.setIsAdmin();
+      });
+    }
+    
   }
 
   setFormWithValidators = () => {

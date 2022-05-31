@@ -87,79 +87,41 @@ export class AuthService {
   }
 }
 private createAuthState(): AuthState {
-    return {
-      loggedIn: AuthService.staticAuthInfo.loggedIn,
-      permission: AuthPermission.User,
-      orgMrn: AuthService.staticAuthInfo.orgMrn,
-      orgName: AuthService.staticAuthInfo.orgName,
-	    user: AuthService.staticAuthInfo.user,
-      rolesLoaded: false,
-		acting: false,
-		hasPermissionInMIR(permissionRole: AuthPermission): boolean {
-			switch (permissionRole) {
-				case AuthPermission.User:
-					return true;
-				case AuthPermission.SiteAdmin:
-					return PermissionResolver.isSiteAdmin(this.permission);
-				case AuthPermission.OrgAdmin:
-					return PermissionResolver.isOrgAdmin(this.permission);
-				case AuthPermission.ApproveOrg:
-					return PermissionResolver.canApproveOrg(this.permission);
-				case AuthPermission.EntityAdmin:
-					return PermissionResolver.isEntityAdmin(this.permission);
-				case AuthPermission.ServiceAdmin:
-					return PermissionResolver.isServiceAdmin(this.permission);
-				case AuthPermission.DeviceAdmin:
-					return PermissionResolver.isDeviceAdmin(this.permission);
-				case AuthPermission.VesselAdmin:
-					return PermissionResolver.isVesselAdmin(this.permission);
-				case AuthPermission.UserAdmin:
-					return PermissionResolver.isUserAdmin(this.permission);
-				default:
-					return false;
-            }
-		},
-    hasPermissionInMSR(permissionRole: AuthPermissionForMSR): boolean {
-      switch (permissionRole) {
-				case AuthPermissionForMSR.User:
-					return true;
-				case AuthPermissionForMSR.OrgServiceAdmin:
-					return PermissionResolver.isOrgServiceAdmin(this.user.keycloakMSRPermissions);
-        case AuthPermissionForMSR.LedgerAdmin:
-          return PermissionResolver.isLedgerAdmin(this.user.keycloakMSRPermissions);
-        case AuthPermissionForMSR.MSRAdmin:
-          return PermissionResolver.isMSRAdmin(this.user.keycloakMSRPermissions);
-        default:
-          return false;
-            }
-      }
-    };
-  }
+  return {
+    loggedIn: AuthService.staticAuthInfo.loggedIn,
+    permission: AuthPermission.User,
+    orgMrn: AuthService.staticAuthInfo.orgMrn,
+    orgName: AuthService.staticAuthInfo.orgName,
+    user: AuthService.staticAuthInfo.user,
+    rolesLoaded: false,
+    acting: false,
+  };
+}
 
   public static parseAuthInfo(keycloakToken: any) {
     if (!keycloakToken) {
-      throw new Error("Keycloak token parse error: Token not present");
+      throw new Error('Keycloak token parse error: Token not present');
     }
     if (!keycloakToken.org) {
-      throw new Error("Keycloak token parse error: 'org' not present");
+      throw new Error('Keycloak token parse error: \'org\' not present');
     }
     if (!keycloakToken.mrn) {
-      throw new Error("Keycloak token parse error: 'mrn' not present");
+      throw new Error('Keycloak token parse error: \'mrn\' not present');
     }
     if (!keycloakToken.email) {
-      throw new Error("Keycloak token parse error: 'email' not present");
+      throw new Error('Keycloak token parse error: \'email\' not present');
     }
 
     AuthService.staticAuthInfo.orgMrn = keycloakToken.org;
-    const firstname = keycloakToken.given_name ? keycloakToken.given_name : "";
-    const lastname = keycloakToken.family_name ? keycloakToken.family_name : "";
+    const firstname = keycloakToken.given_name ? keycloakToken.given_name : '';
+    const lastname = keycloakToken.family_name ? keycloakToken.family_name : '';
     const permissions = keycloakToken.permissions ? keycloakToken.permissions : '';
-    const rolesInMSR = keycloakToken["resource_access"] && keycloakToken["resource_access"]["service-registry"] && keycloakToken["resource_access"]["service-registry"]["roles"] ? keycloakToken["resource_access"]["service-registry"]["roles"] : [];
+    const rolesInMSR = keycloakToken['resource_access'] && keycloakToken['resource_access']['service-registry'] && keycloakToken['resource_access']['service-registry']['roles'] ? keycloakToken['resource_access']['service-registry']['roles'] : [];
     const mrn = keycloakToken.mrn;
     const email = keycloakToken.email;
     const preferredUsername = keycloakToken.preferred_username
     ? keycloakToken.preferred_username
-    : "";
+    : '';
     const authUser: AuthUser = {
         firstName: firstname,
         lastName: lastname,
@@ -178,19 +140,19 @@ private createAuthState(): AuthState {
   }
 
   loginUrl(): string {
-    return "/login";
+    return '/login';
   }
 
   login() {
   	const url = window.location;
-    AuthService.staticAuthInfo.authz.login({redirectUri:  url.protocol + "//" + url.host + "/pages/ir/users/"});
+    AuthService.staticAuthInfo.authz.login({redirectUri:  url.protocol + '//' + url.host + '/pages/ir/users/'});
   }
 
   logout() {
 	  try {
       this.authState.loggedIn = false;
       const url = window.location;
-      const loginPage = url.protocol + "//" + url.host + '/login';
+      const loginPage = url.protocol + '//' + url.host + '/login';
 		  AuthService.staticAuthInfo.authz.logout(loginPage);
 		  AuthService.staticAuthInfo.authz = null;
 	  } catch (err) { // State is somehow lost. Just do nothing.
@@ -199,7 +161,7 @@ private createAuthState(): AuthState {
 
   public getLogoutUrl(): string {
     const url = window.location;
-    const loginPage = url.protocol + "//" + url.host + '/login';
+    const loginPage = url.protocol + '//' + url.host + '/login';
     return AppConfig.OIDC_BASE_PATH + '/auth/realms/'+this.realmName+'/protocol/openid-connect/logout?redirect_uri=' + loginPage;
   }
 

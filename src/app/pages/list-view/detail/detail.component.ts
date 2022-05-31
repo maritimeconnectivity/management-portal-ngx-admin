@@ -17,7 +17,7 @@ import { AuthPermission, AuthPermissionForMSR, PermissionResolver, rolesToPermis
 import { ORG_ADMIN_AT_MIR } from '../../../shared/app.constants';
 
 import RoleNameEnum = Role.RoleNameEnum;
-import { hasPermission } from '../../../util/permissionResolver';
+import { hasAdminPermission } from '../../../util/adminPermissionResolver';
 
 @Component({
   selector: 'ngx-detail',
@@ -49,7 +49,6 @@ export class DetailComponent implements OnInit {
   isForServiceForOrg = false;
   orgShortId = undefined;
   defaultPermissionForAdminUser = undefined;
-  isAdmin: boolean = false;
 
   @ViewChild('editableForm') editableForm;
   @ViewChild('supplementForm') supplementForm;

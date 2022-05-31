@@ -9,6 +9,4 @@ export interface AuthState {
   user: AuthUser;
   rolesLoaded: boolean;
   acting: boolean;
-  hasPermissionInMIR(permissionRole: AuthPermission): boolean;
-  hasPermissionInMSR(permissionRole: AuthPermissionForMSR): boolean;
 }
