@@ -1,12 +1,15 @@
 <div>
-    <div class="button_container">
+    <div class="button_container pb-2">
         <div *ngFor="let item of items" class="bg-primary align-baseline rounded p-1">
             <span class="text-white">{{item}}</span>
             <button *ngIf="isEditing" [size]="tiny" value="{{item}}" class="rounded-circle bg-primary text-white border-0" (click)="onRemoveItem($event)" nbButton>X</button>
         </div>
+        <div *ngIf="isEditing && items && items.length === 0" class="bg-light align-baseline p-1 w-100 text-center">
+            <span class="text-secondary font-weight-bold">No item</span>
+        </div>
     </div>
     <input *ngIf="isEditing && !options" type="text" nbInput fullWidth id="input_{{fieldName}}" class="form-control"
-        placeholder="{{placeholder !== undefined ? placeholder : ''}}" (keyup.enter)="onAddItem($event.target.value)" (focusout)="onFocusOut($event.target.value)"
+        placeholder="{{placeholder !== undefined ? placeholder : ''}}" (keyup.enter)="onAddItem($event.target.value)" (focusout)="onFocusOut($event)"
         required="{{required === true}}" #stringInput>
     <nb-select *ngIf="isEditing && options" (selectedChange)="onAddItem($event)"
     fullWidth required="required === true" #selectInput>

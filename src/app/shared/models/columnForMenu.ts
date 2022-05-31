@@ -786,6 +786,7 @@ export const ColumnForMenu = {
     keywords: {
       title: 'Keywords',
       type: 'stringArray',
+      placeholder: 'Please enter keyword',
       visibleFrom: ['detail', 'list'],
     },
     implementsServiceDesign: {
@@ -815,6 +816,7 @@ export const ColumnForMenu = {
     unlocode: {
       title: 'Unlocode',
       type: 'stringArray',
+      placeholder: 'Please enter UN/LOCODE',
       visibleFrom: ['detail'],
     },
     mmsi: {

@@ -26,9 +26,9 @@ export class InputButtonListComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onAddItem = (event: any) => {
-    if (event && event.length > 0 && this.items.indexOf(event) < 0) {
-      this.items.push(event);
+  onAddItem = (item: any) => {
+    if (item && item.length > 0 && this.items.indexOf(item) < 0) {
+      this.items.push(item);
       this.cleanInput();
     }
     this.update();
@@ -43,6 +43,15 @@ export class InputButtonListComponent implements OnInit {
     }
   }
 
+  forceFocusIn = () => {
+    if (this.selectInput) {
+      this.selectInput.nativeElement.focus();
+    }
+    if (this.stringInput) {
+      this.stringInput.nativeElement.focus();
+    }
+  }
+
   onRemoveItem = (event: any) => {
     if (event.pointerType === 'mouse' && event.target.value) {
       const index = this.items.indexOf(event.target.value, 0);
@@ -54,8 +63,9 @@ export class InputButtonListComponent implements OnInit {
   }
 
   onFocusOut = (event: any) => {
-    if (event.length > 0) {
-      alert('Please press Enter key to register the value');
+    if (event.target.value.length > 0 && event.relatedTarget) {
+      alert('Please press Enter key to register the value or erase it');
+      this.forceFocusIn();
     }
   }
 
