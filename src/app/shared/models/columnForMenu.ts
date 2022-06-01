@@ -1,4 +1,5 @@
 import { convertTime } from '../../util/timeConverter';
+import { countryOptions } from './countryOptions';
 
 export const ColumnForMenu = {
   device: {
@@ -129,6 +130,7 @@ export const ColumnForMenu = {
       type: 'string',
       description: 'Country that organization belongs to',
       visibleFrom: ['detail', 'list'],
+      options: countryOptions,
       required: true,
     },
     federationType: {
@@ -618,6 +620,7 @@ export const ColumnForMenu = {
       type: 'string',
       description: 'Country that organization belongs to',
       visibleFrom: ['detail', 'list'],
+      options: countryOptions,
       required: true,
     },
     federationType: {
@@ -969,6 +972,7 @@ export const ColumnForMenu = {
       type: 'string',
       description: 'Country that organization belongs to',
       visibleFrom: ['detail'],
+      options: countryOptions,
       required: true,
     },
     /*
