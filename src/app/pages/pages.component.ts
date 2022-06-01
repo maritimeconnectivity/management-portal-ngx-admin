@@ -17,13 +17,18 @@ import { AppConfig } from '../app.config';
   styleUrls: ['pages.component.scss'],
   template: `
     <ngx-one-column-layout>
-      <nb-menu [items]="menu" autoCollapse="true"></nb-menu>
+      <nb-menu [items]="menu"></nb-menu>
       <router-outlet></router-outlet>
     </ngx-one-column-layout>
   `,
 })
 export class PagesComponent implements OnInit {
   menu = MENU_ITEMS;
+
+  myOrganizationName: string;
+  myOrganizationMrn: string;
+  keycloakMSRPermissions: any;
+  MIRPermission: any;
 
   constructor(
     private roleControllerService: RoleControllerService,
@@ -37,14 +42,27 @@ export class PagesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.authService.rolesLoaded) {
-      this.applyRoleToMenu();
-    } else {
-      this.authService.rolesLoaded.subscribe( () => this.applyRoleToMenu());
+    if (!this.myOrganizationName) {
+      this.organizationControllerService.getOrganizationByMrn(this.authService.authState.orgMrn).subscribe(
+        (org: Organization) => {
+          this.authService.updateOrgName(org.name);
+          this.myOrganizationName = org.name;
+          this.myOrganizationMrn = org.mrn;
+
+          if (this.authService.authState.rolesLoaded) {
+            this.applyRoleToMenu();
+          } else {
+            this.authService.rolesLoaded.subscribe( () => this.applyRoleToMenu());
+          }
+        },
+        (error: HttpErrorResponse) => this.notifierService.notify('error', error.message),
+      )
     }
   }
 
   applyRoleToMenu = () => {
+    this.keycloakMSRPermissions = this.authService.authState.user ? this.authService.authState.user.keycloakMSRPermissions : undefined;
+    this.MIRPermission = this.authService.authState.permission ? this.authService.authState.permission : undefined;
     this.assignOrganizationNameForMIR();
     this.assignAdminMenu();
     if (AppConfig.HAS_SERVICE_REGISTRY){
@@ -56,19 +74,13 @@ export class PagesComponent implements OnInit {
     if (this.menu.find(e => e.title === 'Identity Registry').children.find(e => e.title === MIR_MENU_FOR_ORG.title)) {
       return ;
     }
-    if (this.authService.authState.orgMrn) {
-      this.organizationControllerService.getOrganizationByMrn(this.authService.authState.orgMrn).subscribe(
-        (org: Organization) => {
-          this.authService.updateOrgName(org.name);
-          MIR_MENU_FOR_ORG.title = this.authService.authState.orgName;
-          MIR_MENU_FOR_ORG.children.unshift({
-            title: 'Info',
-            link: 'ir/organizations/' + encodeURIComponent(this.authService.authState.orgMrn),
-          });
-        },
-        (error: HttpErrorResponse) => this.notifierService.notify('error', error.message),
-      )
-    this.menu.find(e => e.title === 'Identity Registry').children.unshift(MIR_MENU_FOR_ORG);
+    if (this.myOrganizationName && this.myOrganizationMrn) {
+      MIR_MENU_FOR_ORG.title = this.myOrganizationName;
+      MIR_MENU_FOR_ORG.children.unshift({
+        title: 'Info',
+        link: 'ir/organizations/' + encodeURIComponent(this.myOrganizationMrn),
+      });
+      this.menu.find(e => e.title === 'Identity Registry').children.unshift(MIR_MENU_FOR_ORG);
     }
   }
 
@@ -76,15 +88,10 @@ export class PagesComponent implements OnInit {
     if (this.menu.find(e => e.title === 'Service Registry').children.find(e => e.title === MSR_MENU_FOR_ORG.title)) {
       return ;
     }
-    if (this.authService.authState.user) {
-      if (PermissionResolver.isOrgServiceAdmin(this.authService.authState.user.keycloakMSRPermissions)) {
-        this.organizationControllerService.getOrganizationByMrn(this.authService.authState.orgMrn).subscribe(
-          (org: Organization) => {
-            MSR_MENU_FOR_ORG.title = this.authService.authState.orgName;
-          },
-          (error: HttpErrorResponse) => this.notifierService.notify('error', error.message),
-        )
-      this.menu.find(e => e.title === 'Service Registry').children.unshift(MSR_MENU_FOR_ORG);
+    if (this.myOrganizationName && this.keycloakMSRPermissions) {
+      if (PermissionResolver.isOrgServiceAdmin(this.keycloakMSRPermissions)) {
+        MSR_MENU_FOR_ORG.title = this.myOrganizationName;
+        this.menu.find(e => e.title === 'Service Registry').children.unshift(MSR_MENU_FOR_ORG);
       }
     }
   }
@@ -93,13 +100,8 @@ export class PagesComponent implements OnInit {
     if (this.menu.find(e => e.title === 'Identity Registry').children.find(e => e.title === MIR_MENU_FOR_ADMIN.title)) {
       return ;
     }
-    this.roleControllerService.getMyRole(this.authService.authState.orgMrn).subscribe(
-      roles => {
-        this.authService.authState.permission = rolesToPermission(roles);
-        // add menu for admin user
-        if(this.authService.authState.permission && PermissionResolver.canApproveOrg(this.authService.authState.permission)){
-          this.menu.find(e => e.title === 'Identity Registry').children.unshift(MIR_MENU_FOR_ADMIN);
-        }
-    });
+    if (this.MIRPermission && PermissionResolver.canApproveOrg(this.MIRPermission)) {
+      this.menu.find(e => e.title === 'Identity Registry').children.unshift(MIR_MENU_FOR_ADMIN);
+    }
   }
 }
