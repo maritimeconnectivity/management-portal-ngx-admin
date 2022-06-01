@@ -1,18 +1,18 @@
 <div>
-    <div class="container" *ngIf="entity && !isEditing" [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary">
+    <div class="container" *ngIf="entity && !isEditing" [nbSpinner]="isLoading" nbSpinnerStatus="primary">
         <div class="row justify-content-center align-items-center bg-light">
-            <nb-icon [icon]="'ship'" pack="fas"></nb-icon><span class="p-2">{{assignedEntityTitle}}</span>
+            <nb-icon [icon]="'ship'" pack="fas"></nb-icon><span class="font-weight-bold p-2">{{getTitle(entity.mrn, entity.name)}}</span>
         </div>
     </div>
-    <div class="container" *ngIf="!entity && !isEditing" [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary">
+    <div class="container" *ngIf="!entity && !isEditing" [nbSpinner]="isLoading" nbSpinnerStatus="primary">
         <div class="row justify-content-center align-items-center bg-light">
             <nb-icon class="text-secondary" [icon]="'ship'" pack="fas"></nb-icon><span class="text-secondary font-weight-bold p-2"> No {{menuType}} assigned</span>
         </div>
     </div>
     <nb-select *ngIf="isEditing" type="string" (selectedChange)="onMenuItemSelected({value: $event})"
-        [(selected)]="initialCandidate"
+        [(selected)]="selectedEntityMrn"
         status="{{!entity && required? 'danger' : ''}}"
         fullWidth required="required === true">
-        <nb-option *ngFor="let option of candidates" value="{{option.value}}">{{option.title}}</nb-option>
+        <nb-option *ngFor="let option of options" value="{{option.value}}">{{option.title}}</nb-option>
     </nb-select>
 </div>

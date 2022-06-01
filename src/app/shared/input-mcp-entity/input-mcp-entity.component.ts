@@ -1,5 +1,5 @@
 import { VesselControllerService } from './../../backend-api/identity-registry/api/vesselController.service';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MenuType } from '../models/menuType';
 import { NbIconLibraries } from '@nebular/theme';
 import { NotifierService } from 'angular-notifier';
@@ -14,13 +14,13 @@ export class InputMcpEntityComponent implements OnInit {
   @Input() menuType: MenuType;
   @Input() isEditing: boolean;
   @Input() orgMrn: string;
-  @Input() initialCandidate: any;
+  @Input() entity: any;
   @Input() required: boolean;
+  @Output() onUpdate: EventEmitter<any> = new EventEmitter();
 
-  entity: any = undefined;
-  candidates: any[] = [];
-  assignedEntityTitle = '';
+  options: any[] = [];
   isLoading: boolean = false;
+  selectedEntityMrn: string = '';
   
   constructor(
     private vesselControllerService: VesselControllerService,
@@ -32,15 +32,43 @@ export class InputMcpEntityComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.menuType === MenuType.Vessel) {
+      this.isLoading = true;
       this.vesselControllerService.getOrganizationVessels(this.orgMrn).subscribe(
-        data => data.content.forEach(e=> this.candidates.push({title: e.name + ' (' + e.mrn + ')', value: e.mrn})),
+        data => {
+          this.isLoading = false;
+          data.content.forEach(e => this.options.push(this.getOption(e.mrn, e.name)));
+          // if there is a given entity, that will become the selected option
+          if (this.entity) {
+            this.options.forEach(e => {
+              if (e.value === this.entity.mrn) {
+                this.selectedEntityMrn = this.entity.mrn;
+              }
+            });
+          }
+        },
         err => this.notifierService.notify('error', 'There was error in fetching ' + this.menuType + ' - ' + err.error.message),
       );
     }
   }
 
+  getTitle = (mrn: string, name: string) => {
+    if (name.includes(mrn)) {
+      return name;
+    } else {
+      return name + ' (' + mrn + ')';
+    }
+  }
+
+  getOption = (mrn: string, name: string) => {
+    return {title: this.getTitle(mrn, name), value: mrn};
+  }
+
+  onUpdateEntity = (mrn: string, name: string) => {
+    this.entity = { mrn: mrn, name: name };
+  }
+
   onMenuItemSelected = (event: any) => {
-    this.entity = { mrn: event.value };
-    this.assignedEntityTitle = this.candidates.filter(e => e.value === event.value).pop().title;
+    this.onUpdateEntity(event.value, this.options.filter(e => e.value === event.value).pop().title);
+    this.onUpdate.emit({fieldName: this.menuType, value: this.entity});
   }
 }
