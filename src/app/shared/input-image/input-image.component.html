@@ -1,11 +1,15 @@
 <div>
     <div class="image_container" *ngIf="image" [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary">
-        <img class="mh-100" [attr.src]="image">
-    </div>
-    <div class="image_container" *ngIf="!image" [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary">
-        <div class="row h-100 justify-content-center align-items-center bg-light">
-            <span class="text-secondary font-weight-bold">No image</span>
+        <img *ngIf="!isEditing" class="mh-100" [attr.src]="image">
+        <div *ngIf="isEditing" class="h-100 image_text" (click)="clickToRemoveImage()">
+            <div class="container">
+                <span class="text-white font-weight-bold">click to remove</span>
+            </div>
         </div>
+        <img *ngIf="isEditing" class="mh-100" [attr.src]="image">
+    </div>
+    <div *ngIf="!image" [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary" class="row h-100 justify-content-center align-items-center bg-light">
+        <span class="text-secondary font-weight-bold">No image</span>
     </div>
     <input *ngIf="isEditing" type="file" accept="{{accept}}" (change)="changeFile($event)"/>
 </div>

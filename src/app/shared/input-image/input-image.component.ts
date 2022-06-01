@@ -45,6 +45,24 @@ export class InputImageComponent implements OnInit {
     }
   }
 
+  clickToRemoveImage = () => {
+    let message = 'Are you sure you want to delete?';
+    if (confirm(message)) {
+      this.isLoading = true;
+      this.deleteImage(this.menuType, this.entityMrn, this.orgMrn).subscribe(
+        res => {
+          this.notifierService.notify('success', 'Uploaded image has been successfully deleted');
+          this.isLoading = false;
+          this.image = undefined;
+        },
+        err => {
+          this.notifierService.notify('error', 'There was error in deletion - ' + err.error.message);
+          this.isLoading = false;
+        },
+      );
+    }
+  }
+
   changeFile = (event: any) => {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -78,6 +96,14 @@ export class InputImageComponent implements OnInit {
         this.logoControllerService.getLogo(entityMrn) :
       menuType === MenuType.Vessel ?
         this.vesselImageControllerService.getVesselImage(orgMrn, entityMrn) :
+        new Observable<any>();
+  }
+
+  deleteImage(menuType: MenuType, entityMrn: string, orgMrn: string): Observable<any> {
+    return menuType === MenuType.Organization ?
+        this.logoControllerService.deleteLogo(entityMrn) :
+      menuType === MenuType.Vessel ?
+        this.vesselImageControllerService.deleteVesselImage(orgMrn, entityMrn) :
         new Observable<any>();
   }
 }
