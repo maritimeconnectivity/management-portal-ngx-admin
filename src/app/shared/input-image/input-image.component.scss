@@ -1,3 +1,11 @@
 .image_container{
     height: 100px;
+    position: relative;
+	display: inline-block;
+}
+
+.image_text{
+    position: absolute;
+    background-color: rgba(20, 20, 20, 0.378);
+    display:block;
 }

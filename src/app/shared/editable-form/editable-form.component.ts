@@ -141,9 +141,24 @@ export class EditableFormComponent implements OnInit {
     });
     // matched data with preset activates corresponding field in menu
     if (data) {
+      let hasChosen = false;
+      const keys = new Set();
       menuWithOptions.forEach((e) =>
         e.value.map(v => v.value === data[e.key] ? v.showField: undefined)
-          .filter(notUndefined).forEach(f => this.setFieldVisible(f.key, f.value)));
+          .filter(notUndefined).forEach(f => {
+            this.setFieldVisible(f.key, f.value);
+            keys.add(f.key);
+            hasChosen = true;
+          }));
+      // if none of options has chosen, the formGroup validation needs to be updated according to
+      if (!hasChosen) {
+        menuWithOptions.forEach((e) =>
+          e.value.forEach( k => {
+              if (k.showField && k.showField.key && !this.columnForMenu[e.key].required) {
+                this.formGroup.get(k.showField.key).disable();
+              }
+            }));
+      }
     }
   }
 
@@ -375,7 +390,6 @@ export class EditableFormComponent implements OnInit {
         this.setIsAdmin();
       });
     }
-    
   }
 
   setFormWithValidators = () => {
@@ -418,6 +432,12 @@ export class EditableFormComponent implements OnInit {
     if (event['data'] && event['fieldName']) {
       this.loadedData[event['fieldName']] = event['data'];
       this.loadedData = Object.assign(this.loadedData, {[event['fieldName']]: event['data']});
+    }
+  }
+
+  onLinkChanged = (event: any) => {
+    if (event.fieldName && event.value) {
+      this.loadedData[event.fieldName] = event.value;
     }
   }
 

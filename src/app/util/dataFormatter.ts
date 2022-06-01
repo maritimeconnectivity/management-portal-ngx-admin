@@ -28,9 +28,7 @@ export const formatData = (data: object): object => {
 export const formatServiceData = (data: object): object => {
   let menuData = {};
   for (const key in data) {
-    menuData[key] = key.endsWith("At")
-      ? convertTime(new Date(data[key]))
-      : data[key];
+    menuData[key] = data[key];
   }
   return menuData;
 };

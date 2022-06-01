@@ -3,7 +3,7 @@ import { RoleControllerService } from './../backend-api/identity-registry/api/ro
 import { EventEmitter, Injectable } from '@angular/core';
 import { AuthState } from './model/AuthState';
 import { StaticAuthInfo } from './model/StaticAuthInfo';
-import { AuthPermission, AuthPermissionForMSR, PermissionResolver } from './auth.permission';
+import { AuthPermission, rolesToPermission } from './auth.permission';
 import { AuthUser } from './model/AuthUser';
 import { Role } from '../backend-api/identity-registry/model/role';
 
@@ -35,45 +35,7 @@ export class AuthService {
   if (this.authState.loggedIn) {
     this.roleControllerService.getMyRole(this.authState.orgMrn).subscribe(
       roles => {
-        for (const roleString of roles) {
-          const role = RoleNameEnum[roleString];
-          switch (role) {
-      case RoleNameEnum[RoleNameEnum.ORGADMIN]: {
-                  this.authState.permission = this.authState.permission | AuthPermission.OrgAdmin;
-                  break;
-              }
-      case RoleNameEnum[RoleNameEnum.SITEADMIN]: {
-                  this.authState.permission = this.authState.permission | AuthPermission.SiteAdmin;
-                  break;
-              }
-      case RoleNameEnum[RoleNameEnum.USERADMIN]: {
-                  this.authState.permission = this.authState.permission | AuthPermission.UserAdmin;
-                  break;
-              }
-      case RoleNameEnum[RoleNameEnum.DEVICEADMIN]: {
-                  this.authState.permission = this.authState.permission | AuthPermission.DeviceAdmin;
-                  break;
-              }
-      case RoleNameEnum[RoleNameEnum.VESSELADMIN]: {
-                  this.authState.permission = this.authState.permission | AuthPermission.VesselAdmin;
-                  break;
-              }
-      case RoleNameEnum[RoleNameEnum.SERVICEADMIN]: {
-                  this.authState.permission = this.authState.permission | AuthPermission.ServiceAdmin;
-                  break;
-              }
-      case RoleNameEnum[RoleNameEnum.ENTITYADMIN]: {
-                  this.authState.permission = this.authState.permission | AuthPermission.EntityAdmin;
-                  break;
-              }
-      case RoleNameEnum[RoleNameEnum.APPROVEORG]: {
-                  this.authState.permission = this.authState.permission | AuthPermission.ApproveOrg;
-                break;
-      }
-      default:
-        this.authState.permission = this.authState.permission | AuthPermission.User;
-          }
-        }
+        this.authState.permission = rolesToPermission(roles);
         this.authState.rolesLoaded = true;
         this.rolesLoaded.emit('');
       },

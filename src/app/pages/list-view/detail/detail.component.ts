@@ -80,14 +80,11 @@ export class DetailComponent implements OnInit {
         this.instanceVersion = e.version;
       });
 
-    this.roleControllerService.getMyRole(this.authService.authState.orgMrn).subscribe(
-      roles => {
-        this.authService.authState.permission = rolesToPermission(roles);
-        if (this.menuType === MenuType.OrgCandidate &&
-          PermissionResolver.canApproveOrg(this.authService.authState.permission)) {
-          this.canApproveOrg = true;
-        }
-    });
+      if (this.menuType === MenuType.OrgCandidate &&
+        this.authService.authState.permission &&
+        PermissionResolver.canApproveOrg(this.authService.authState.permission)) {
+        this.canApproveOrg = true;
+      }
 
     this.iconName = MenuTypeIconNames[this.menuType.toString()];
 

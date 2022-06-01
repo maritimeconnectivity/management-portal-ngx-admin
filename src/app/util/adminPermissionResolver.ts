@@ -5,7 +5,7 @@ import { AuthPermission, AuthPermissionForMSR, PermissionResolver } from '../aut
 
 export const hasAdminPermission = (context: MenuType, authService: AuthService,
       isEditing: boolean, isOurServiceInstance?: boolean): boolean => {
-  if (!authService.rolesLoaded) {
+  if (!authService.authState.rolesLoaded) {
     console.log('Role hasn\'t been loaded!');
     return false;
   }

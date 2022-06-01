@@ -44,8 +44,10 @@
               [options]="menu.value.options" [fieldName]="menu.key" [placeholder]="menu.value.placeholder" [required]="menu.value.required" (onUpdate)="onListChanged($event)"></ngx-input-button-list>
             <ngx-input-image *ngIf="!isForNew && menu.value.type === 'image'" [isEditing]="isEditing" [orgMrn]="orgMrn" [entityMrn]="entityMrn"
               [menuType]="menuType" [allowedExtensions]="menu.value.allowedExtensions"></ngx-input-image>
+            <ngx-input-mcp-entity *ngIf="menu.value.type === 'vessel'" [entity]="loadedData[menu.key]" [isEditing]="isEditing" [orgMrn]="orgMrn"
+            [menuType]="'vessel'" [required]="menu.value.required" (onUpdate)="onLinkChanged($event)"></ngx-input-mcp-entity>
             <div *ngIf="!isEditing">
-              <span *ngIf="menu.value.type === 'string'" id="keyword.name">{{ isForTime(menu.key) ? convertTimeString(formGroup.get(menu.key).value) : formGroup.get(menu.key).value }}</span>
+              <span *ngIf="menu.value.type === 'string'" id="keyword.name">{{ menuType !== 'instance' && isForTime(menu.key) ? convertTimeString(formGroup.get(menu.key).value) : formGroup.get(menu.key).value }}</span>
               <button type='button' nbButton fullWidth (click)="openXmlDialog(formGroup.get(menu.key).value, isEditing)" *ngIf="menu.value.type === 'xml'">Read XML</button>
               <button type='button' nbButton fullWidth (click)="downloadFile(loadedData[menu.key])" *ngIf="menu.value.type === 'file' && loadedData[menu.key]">Download</button>
             </div>

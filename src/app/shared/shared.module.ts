@@ -13,6 +13,7 @@ import { LeafletMapComponent } from './leaflet-map/leaflet-map.component';
 import { XmlEditDialogComponent } from './xml-edit-dialog/xml-edit-dialog.component';
 import { InputButtonListComponent } from './input-button-list/input-button-list.component';
 import { InputImageComponent } from './input-image/input-image.component';
+import { InputMcpEntityComponent } from './input-mcp-entity/input-mcp-entity.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { InputImageComponent } from './input-image/input-image.component';
     XmlEditDialogComponent,
     InputButtonListComponent,
     InputImageComponent,
+    InputMcpEntityComponent,
   ],
   imports: [
     CommonModule,

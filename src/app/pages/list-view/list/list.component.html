@@ -12,7 +12,6 @@
         </div>
       </div>
     </nb-card-header>
-  
     <nb-card-body [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary">
       <ng2-smart-table *ngIf="showTables" [settings]="settings" [source]="source" (userRowSelect)="onEdit($event)" (delete)="onDelete($event)">
       </ng2-smart-table>
