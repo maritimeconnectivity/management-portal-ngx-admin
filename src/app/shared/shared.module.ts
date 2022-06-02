@@ -9,11 +9,12 @@ import { CertIssueDialogComponent } from './certificates/cert-issue-dialog/cert-
 import { CertRevokeDialogComponent } from './certificates/cert-revoke-dialog/cert-revoke-dialog.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { ThemeModule } from '../@theme/theme.module';
-import { LeafletMapComponent } from './leaflet-map/leaflet-map.component';
 import { XmlEditDialogComponent } from './xml-edit-dialog/xml-edit-dialog.component';
 import { InputButtonListComponent } from './input-button-list/input-button-list.component';
 import { InputImageComponent } from './input-image/input-image.component';
 import { InputMcpEntityComponent } from './input-mcp-entity/input-mcp-entity.component';
+import { InputFileListComponent } from './input-file-list/input-file-list.component';
+import { InputGeometryComponent } from './input-geometry/input-geometry.component';
 
 @NgModule({
   declarations: [
@@ -21,11 +22,12 @@ import { InputMcpEntityComponent } from './input-mcp-entity/input-mcp-entity.com
     CertificatesComponent,
     CertIssueDialogComponent,
     CertRevokeDialogComponent,
-    LeafletMapComponent,
     XmlEditDialogComponent,
     InputButtonListComponent,
     InputImageComponent,
     InputMcpEntityComponent,
+    InputFileListComponent,
+    InputGeometryComponent,
   ],
   imports: [
     CommonModule,

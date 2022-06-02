@@ -851,7 +851,7 @@ export const ColumnForMenu = {
       visibleFrom: ['detail'],
     },
     instanceAsXml: {
-      title: 'Instance as Xml',
+      title: 'Instance as XML',
       type: 'xml',
       notShowOnEdit: true,
       visibleFrom: ['detail'],
@@ -861,7 +861,7 @@ export const ColumnForMenu = {
       type: 'number',
     },
     instanceAsDoc: {
-      title: 'Document file',
+      title: 'Instance as document',
       type: 'file',
       visibleFrom: ['detail'],
     },
@@ -909,8 +909,10 @@ export const ColumnForMenu = {
       visibleFrom: ['detail'],
     },
     docIds: {
-      title: 'Document IDs',
-      type: 'number',
+      title: 'Related documents',
+      type: 'fileArray',
+      filter: false,
+      visibleFrom: ['detail'],
     },
     publishedAt: {
       title: 'Created at',

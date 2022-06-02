@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LeafletMapComponent } from './leaflet-map.component';
+import { InputFileListComponent } from './input-file-list.component';
 
-describe('LeafletMapComponent', () => {
-  let component: LeafletMapComponent;
-  let fixture: ComponentFixture<LeafletMapComponent>;
+describe('InputFileListComponent', () => {
+  let component: InputFileListComponent;
+  let fixture: ComponentFixture<InputFileListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LeafletMapComponent ]
+      declarations: [ InputFileListComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LeafletMapComponent);
+    fixture = TestBed.createComponent(InputFileListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

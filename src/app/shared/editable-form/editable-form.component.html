@@ -41,15 +41,20 @@
           <label for="input{{menu.key}}" class="label col-sm-3 col-form-label" nbPopover="{{menu.value.description}}" nbPopoverTrigger="hint" nbPopoverPlacement="top">{{menu.value.title}}</label>
           <div class="col-sm-9 my-auto">
             <ngx-input-button-list *ngIf="menu.value.type === 'stringArray'" [items]="loadedData[menu.key]" [isEditing]="isEditing"
-              [options]="menu.value.options" [fieldName]="menu.key" [placeholder]="menu.value.placeholder" [required]="menu.value.required" (onUpdate)="onListChanged($event)"></ngx-input-button-list>
+              [options]="menu.value.options" [fieldName]="menu.key" [placeholder]="menu.value.placeholder" [required]="menu.value.required" (onUpdate)="onDataChanged($event)"></ngx-input-button-list>
             <ngx-input-image *ngIf="!isForNew && menu.value.type === 'image'" [isEditing]="isEditing" [orgMrn]="orgMrn" [entityMrn]="entityMrn"
               [menuType]="menuType" [allowedExtensions]="menu.value.allowedExtensions"></ngx-input-image>
             <ngx-input-mcp-entity *ngIf="menu.value.type === 'vessel'" [entity]="loadedData[menu.key]" [isEditing]="isEditing" [orgMrn]="orgMrn"
             [menuType]="'vessel'" [required]="menu.value.required" (onUpdate)="onLinkChanged($event)"></ngx-input-mcp-entity>
+            <ngx-input-file-list *ngIf="menu.value.type === 'fileArray'" [fieldName]="menu.key" [docIds]="loadedData[menu.key]" [isEditing]="isEditing" [instanceId]="numberId"
+              [fieldName]="menu.key" [placeholder]="menu.value.placeholder" [required]="menu.value.required" (onUpdate)="onDataChanged($event)"
+              (onDelete)="onFileDeleted($event)"></ngx-input-file-list>
+            <ngx-input-file-list *ngIf="menu.value.type === 'file'" [fieldName]="menu.key" [file]="loadedData[menu.key]" [isEditing]="isEditing" [instanceId]="numberId"
+              [fieldName]="menu.key" [placeholder]="menu.value.placeholder" [required]="menu.value.required" (onUpdate)="onDataChanged($event)"
+              (onDelete)="onFileDeleted($event)"></ngx-input-file-list>
             <div *ngIf="!isEditing">
               <span *ngIf="menu.value.type === 'string'" id="keyword.name">{{ menuType !== 'instance' && isForTime(menu.key) ? convertTimeString(formGroup.get(menu.key).value) : formGroup.get(menu.key).value }}</span>
-              <button type='button' nbButton fullWidth (click)="openXmlDialog(formGroup.get(menu.key).value, isEditing)" *ngIf="menu.value.type === 'xml'">Read XML</button>
-              <button type='button' nbButton fullWidth (click)="downloadFile(loadedData[menu.key])" *ngIf="menu.value.type === 'file' && loadedData[menu.key]">Download</button>
+              <button type='button' nbButton fullWidth (click)="openXmlDialog(loadedData[menu.key], isEditing)" *ngIf="menu.value.type === 'xml'">Read XML</button>
             </div>
             <div *ngIf="isEditing" >
               <input *ngIf="menu.value.type === 'string' && !menu.value.options" type="text" nbInput fullWidth id="input_{{menu.key}}" class="form-control"
@@ -68,9 +73,6 @@
                 <nb-option *ngFor="let option of menu.value.options" value="{{option.value}}">{{option.title}}</nb-option>
               </nb-select>
               <button type='button' nbButton fullWidth (click)="openXmlDialog(formGroup.get(menu.key).value, isEditing)" *ngIf="menu.value.type === 'xml'">Edit XML</button>
-              <button type='button' nbButton fullWidth (click)="downloadFile(loadedData[menu.key])" *ngIf="menu.value.type === 'file' && loadedData[menu.key]">Download</button>
-              <input *ngIf="menu.value.type === 'file'" type="file" nbInput fullWidth id="input_{{menu.key}}" class="form-control"
-              required="{{menu.value.required === true}}">
             </div>
           </div>
         </div>
@@ -92,7 +94,7 @@
       </div>
       <div class="form-group row" *ngIf="isServiceInstance" >
         <div class="col">
-          <ngx-leaflet-map [geometry]="geometry"></ngx-leaflet-map>      
+          <ngx-input-geometry [geometry]="geometry"></ngx-input-geometry>
         </div>
       </div>
   </form>    

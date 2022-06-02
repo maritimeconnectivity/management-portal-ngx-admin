@@ -8,7 +8,7 @@
     </div>
     <ngx-editable-form #editableForm
       [menuType]="menuType" [isForNew]="isForNew" [title]="title" [iconName]="iconName"
-      [canApproveOrg]="canApproveOrg" [entityMrn]="entityMrn" [orgMrn]="orgMrn"
+      [canApproveOrg]="canApproveOrg" [entityMrn]="entityMrn" [orgMrn]="orgMrn" [numberId]="numberId"
       [instanceVersion]="instanceVersion" [isLoading]="isLoading" [isLoaded]="isLoaded"
       [hasHeader]="true" [showButtons]="true" (onApprove)="approve()"
       (onCancel)="cancel()" (onSubmit)="submit($event)" (onDelete)="delete()" (onRefresh)="refreshData()"
@@ -16,10 +16,10 @@
     <!-- admin user form for approving org menu -->
     <ngx-editable-form #supplementForm *ngIf="menuType === 'orgcandidate' && orgShortId"
       [menuType]="'user'" [isForNew]="true" [orgShortId]="orgShortId" [defaultPermissions]="defaultPermissions"
-      [title]="'Administrator account of ' + title" [iconName]="'user'"
+      [title]="'Administrator account of ' + title" [iconName]="'user'" [numberId]="numberId"
       [canApproveOrg]="canApproveOrg" [entityMrn]="" [orgMrn]="entityMrn"
       [instanceVersion]="instanceVersion" [isLoading]="isLoading" [isLoaded]="isLoaded"
-      [hasHeader]="true" [showButtons]="false" (onApprove)="approve()"
+      [hasHeader]="true" [showButtons]="false" (onApprove)="approve()" 
       (onCancel)="cancel()" (onSubmit)="submit($event)" (onDelete)="delete()" (onRefresh)="refreshData()"
     ></ngx-editable-form>
   </div>
