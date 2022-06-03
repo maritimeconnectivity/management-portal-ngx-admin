@@ -49,7 +49,10 @@ export class InputFileListComponent implements OnInit {
       }
       const blob = new Blob([view], { type: this.file['filecontentContentType'] });
       const url = window.URL.createObjectURL(blob);
-      window.open(url);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.setAttribute("download", this.file['name']);
+      anchor.click();
     }
   }
 
@@ -69,7 +72,6 @@ export class InputFileListComponent implements OnInit {
   }
 
   deleteFileFromBackend = (docId: number) => {
-    console.log(docId);
     this.docControllerService.deleteDoc(docId).subscribe(
       res => {
         this.notifierService.notify('success', 'File has been successfully deleted');
