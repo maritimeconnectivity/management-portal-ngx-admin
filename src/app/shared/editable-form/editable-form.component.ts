@@ -423,6 +423,13 @@ export class EditableFormComponent implements OnInit {
     }
   }
 
+  onUpdateGeometry = (event: any) => {
+    if (event['data'] && event['fieldName']) {
+      //this.loadedData[event['fieldName']] = event['data'];
+      this.loadedData = Object.assign(this.loadedData, {[event['fieldName']]: event['data']});
+    }
+  }
+
   openXmlDialog = (xml: any, isEditing: boolean = false) => {
     this.dialogService.open(XmlEditDialogComponent, {
       context: {

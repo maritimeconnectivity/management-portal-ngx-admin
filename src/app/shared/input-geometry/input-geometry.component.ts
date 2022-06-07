@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as L from 'leaflet';
 import * as geojson from 'geojson';
 
@@ -12,6 +12,8 @@ import { getGeometryCollectionFromMap, getSingleGeometryFromMap, populateWKTText
 export class InputGeometryComponent implements OnInit {
   @Input() isEditing: boolean;
   @Input() geometry: object;
+
+  @Output() onUpdate = new EventEmitter<any>();
 
   geoSpatialSearchMode = 'geoJson';
   options = {};
@@ -37,60 +39,25 @@ export class InputGeometryComponent implements OnInit {
     const searchMap = this.initMap('searchMap');
 
     // FeatureGroup is to store editable layers
-    const drawnItems = new L.FeatureGroup();
-    searchMap.addLayer(drawnItems);
+    this.drawnItems = new L.FeatureGroup();
+    searchMap.addLayer(this.drawnItems);
     const instanceItems = new L.FeatureGroup();
     searchMap.addLayer(instanceItems);
 
     // Initialise the draw controls
     if (this.isEditing) {
-      searchMap.addControl(this.initDrawControlFull(drawnItems));
+      searchMap.addControl(this.initDrawControlFull(this.drawnItems));
     } else {
-      searchMap.addControl(this.initDrawControlFull(drawnItems));
+      searchMap.addControl(this.initDrawControlEditOnly(this.drawnItems));
     }
-    //searchMap.addControl(this.initDrawControlEditOnly(drawnItems));
 
-    searchMap.on(L.Draw.Event.CREATED, function (e: any) {
-      // Do whatever else you need to. (save to db, add to map etc)
-      const type = e.layerType;
-      const layer = e.layer;
-      drawnItems.addLayer(layer);
-
-
-      console.log(getGeometryCollectionFromMap(drawnItems));
-      //console.log(populateWKTTextArea(drawnItems));
-      /*
-      // Restrict new shapes, only allow edit
-      drawControlFull.remove(searchMap);
-      drawControlEditOnly.addTo(searchMap)
-      */
-
-      // Convert the geometry to WKT if the search mode is enabled
-      if(this.geoSpatialSearchMode === "WKT") {
-          populateWKTTextArea(drawnItems);
-      }
-    });
+    searchMap.on(L.Draw.Event.CREATED, this.handleCreation );
 
     if (this.geometry) {
-      this.geoObject = L.geoJSON(this.geometry as geojson.GeoJsonObject);
-      this.layers = [this.geoObject];
-      this.fitBounds = this.geoObject.getBounds();
+      this.loadGeometryOnMap(this.geometry, searchMap, this.drawnItems, true);
     }
-    
-    /*
-    // Also link the instance search button with the enter key
-    $("#queryString").keypress(function(event) {
-      if (event.keyCode === 13) {
-          $("#instanceSearchButton").click();
-      }
-    });
-    */
 
     /*
-    
-
-    
-
     // Monitor the WKT string to update the selected area in the map
     $('#geometryWKT').on("input propertychange", function() {
         // For valid text inputs, try to parse the WKT string
@@ -115,21 +82,28 @@ export class InputGeometryComponent implements OnInit {
     */
   }
 
-  loadGeometryOnMap(geometry, map, drawnItems, fitBounds=true) {
-    // Recreate the drawn items feature group
-    drawnItems.clearLayers();
-    if(geometry) {
-        const geomLayer = L.geoJSON(geometry as geojson.GeoJsonObject);
-        this.addNonGroupLayers(geomLayer, drawnItems);
-        if(fitBounds) {
-            setTimeout(() => map.fitBounds(geomLayer.getBounds()), 50);
-        } else {
-            map.setView(geomLayer.getBounds().getCenter());
-        }
+  handleCreation = (e: any) => {
+    // Do whatever else you need to. (save to db, add to map etc)
+    const type = e.layerType;
+    const layer = e.layer;
+    this.drawnItems.addLayer(layer);
+
+    this.onUpdate.emit({ fieldName: 'geometry', data: getGeometryCollectionFromMap(this.drawnItems)});
+    //console.log(populateWKTTextArea(drawnItems));
+    /*
+    // Restrict new shapes, only allow edit
+    drawControlFull.remove(searchMap);
+    drawControlEditOnly.addTo(searchMap)
+    */
+
+    // Convert the geometry to WKT if the search mode is enabled
+    if(this.geoSpatialSearchMode === "WKT") {
+        populateWKTTextArea(this.drawnItems);
     }
   }
 
-  addNonGroupLayers(sourceLayer, targetGroup) {
+  /*
+  addNonGroupLayers(sourceLayer: any, targetGroup: any) {
     if (sourceLayer instanceof L.LayerGroup) {
         sourceLayer.eachLayer(function(layer) {
             this.addNonGroupLayers(layer, targetGroup);
@@ -138,14 +112,30 @@ export class InputGeometryComponent implements OnInit {
         targetGroup.addLayer(sourceLayer);
     }
   }
+  */
+
+  loadGeometryOnMap(geometry, map, drawnItems, fitBounds=true) {
+    // Recreate the drawn items feature group
+    drawnItems.clearLayers();
+    if(geometry) {
+        const geomLayer = L.geoJSON(geometry as geojson.GeoJsonObject);
+        drawnItems.addLayer(geomLayer);
+        if(fitBounds) {
+            setTimeout(() => map.fitBounds(geomLayer.getBounds()), 50);
+        } else {
+            map.setView(geomLayer.getBounds().getCenter());
+        }
+    }
+  }
 
   initDrawControlEditOnly(drawnItems) {
     return new L.Control.Draw({
         edit: {
             featureGroup: drawnItems,
             remove: false,
+            edit: false,
         },
-        draw: {},
+        draw: undefined,
     });
   }
 
