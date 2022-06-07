@@ -9,8 +9,17 @@ export const getGeometryCollectionFromMap = (drawnItems: any) => {
     drawnItems.toGeoJSON().features.forEach(feature => {
         geometry.geometries.push(feature.geometry);
     });
+
+    const crs = {
+        crs: {
+          type: "name",
+          properties: {
+              name: "EPSG:4326"
+          }
+      }
+    };
     // And return
-    return geometry;
+    return {...geometry, ...crs};
 }
 
 export const getSingleGeometryFromMap = (drawnItems: any) => {
