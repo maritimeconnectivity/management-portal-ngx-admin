@@ -3,17 +3,13 @@ import { NbMenuModule, NbCardModule, NbButtonModule, NbSelectModule, NbTabsetMod
 
 import { ThemeModule } from '../@theme/theme.module';
 import { PagesComponent } from './pages.component';
-import { DashboardModule } from './dashboard/dashboard.module';
-import { ECommerceModule } from './e-commerce/e-commerce.module';
 import { pagesRoutingComponents, PagesRoutingModule } from './pages-routing.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-import { BugReportComponent } from './bug-report/bug-report.component';
 import { ListViewComponent } from './list-view/list-view.component';
 import { IrGuideComponent } from './identity-registry/ir-guide/ir-guide.component';
 import { SrGuideComponent } from './service-registry/sr-guide/sr-guide.component';
 import { SrSearchComponent } from './service-registry/sr-search/sr-search.component';
-import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { MapComponent } from './service-registry/sr-search/map/map.component';
 import { SearchComponent } from './service-registry/sr-search/search/search.component';
 import { InfoComponent } from './about/info/info.component';
@@ -29,9 +25,6 @@ import { InfoComponent } from './about/info/info.component';
     NbTabsetModule,
     NbStepperModule,
     NbInputModule,
-    DashboardModule,
-    ECommerceModule,
-    LeafletModule.forRoot(),
     MiscellaneousModule,
     Ng2SmartTableModule,
     NbSpinnerModule,
@@ -39,7 +32,6 @@ import { InfoComponent } from './about/info/info.component';
   declarations: [
     PagesComponent,
     pagesRoutingComponents,
-    BugReportComponent,
     ListViewComponent,
     MapComponent,
     SearchComponent,

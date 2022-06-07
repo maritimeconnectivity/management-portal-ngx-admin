@@ -1,16 +1,19 @@
 import { Component, Input, OnInit } from '@angular/core';
 import * as L from 'leaflet';
 import * as geojson from 'geojson';
-import { wktToGeoJSON, geojsonToWKT } from "@terraformer/wkt"
 
+import 'leaflet-draw';
+import { getGeometryCollectionFromMap, getSingleGeometryFromMap, populateWKTTextArea } from '../../util/mapToGeometry';
 @Component({
   selector: 'ngx-input-geometry',
   templateUrl: './input-geometry.component.html',
   styleUrls: ['./input-geometry.component.scss']
 })
 export class InputGeometryComponent implements OnInit {
+  @Input() isEditing: boolean;
   @Input() geometry: object;
 
+  geoSpatialSearchMode = 'geoJson';
   options = {};
   geoObject: any;
   layers = [];
@@ -20,34 +23,96 @@ export class InputGeometryComponent implements OnInit {
   layersControl: any;
   
   constructor() { }
+  
+  initMap = (container: any) => {
+    // Initialise the map before we need it
+    const map = L.map(container).setView([55.692864, 12.599246], 5);
+    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      { maxZoom: 18, minZoom: 3, attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>' })
+      .addTo(map);
+    return map;
+  }
 
   ngOnInit(): void {
-    this.options = {
-      layers: [
-        L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        { maxZoom: 18, minZoom: 3, attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>' }),
-      ],
-      controls: {
-        draw: {
-          marker: false,
-          polyline: true,
-          polygon: true,
-          rectangle: true,
-          circle: false,
-          circlemarker: false,
-        },
-      },
-      zoom: 5,
-      center: L.latLng({ lat: 55.692864, lng: 12.599246 }),
-    };
+    const searchMap = this.initMap('searchMap');
 
-    
+    // FeatureGroup is to store editable layers
+    const drawnItems = new L.FeatureGroup();
+    searchMap.addLayer(drawnItems);
+    const instanceItems = new L.FeatureGroup();
+    searchMap.addLayer(instanceItems);
+
+    // Initialise the draw controls
+    if (this.isEditing) {
+      searchMap.addControl(this.initDrawControlFull(drawnItems));
+    } else {
+      searchMap.addControl(this.initDrawControlFull(drawnItems));
+    }
+    //searchMap.addControl(this.initDrawControlEditOnly(drawnItems));
+
+    searchMap.on(L.Draw.Event.CREATED, function (e: any) {
+      // Do whatever else you need to. (save to db, add to map etc)
+      const type = e.layerType;
+      const layer = e.layer;
+      drawnItems.addLayer(layer);
+
+
+      console.log(getGeometryCollectionFromMap(drawnItems));
+      //console.log(populateWKTTextArea(drawnItems));
+      /*
+      // Restrict new shapes, only allow edit
+      drawControlFull.remove(searchMap);
+      drawControlEditOnly.addTo(searchMap)
+      */
+
+      // Convert the geometry to WKT if the search mode is enabled
+      if(this.geoSpatialSearchMode === "WKT") {
+          populateWKTTextArea(drawnItems);
+      }
+    });
 
     if (this.geometry) {
       this.geoObject = L.geoJSON(this.geometry as geojson.GeoJsonObject);
       this.layers = [this.geoObject];
       this.fitBounds = this.geoObject.getBounds();
     }
+    
+    /*
+    // Also link the instance search button with the enter key
+    $("#queryString").keypress(function(event) {
+      if (event.keyCode === 13) {
+          $("#instanceSearchButton").click();
+      }
+    });
+    */
+
+    /*
+    
+
+    
+
+    // Monitor the WKT string to update the selected area in the map
+    $('#geometryWKT').on("input propertychange", function() {
+        // For valid text inputs, try to parse the WKT string
+        if(this.value && this.value.trim().length>0) {
+            var parsedGeoJson = undefined;
+            try {
+                parsedGeoJson = Terraformer.WKT.parse(this.value);
+            } catch(ex) {
+                // Nothing to do
+            }
+
+            // If a valid GeoJSON object was parsed, replace it in the map
+            if(parsedGeoJson) {
+                drawnItems.clearLayers();
+                addNonGroupLayers(L.geoJson(parsedGeoJson), drawnItems);
+            }
+        }
+    });
+
+    // Initialise the instance edit panel as read-only
+    initInstanceEditPanel($('#instanceViewPanel'));
+    */
   }
 
   loadGeometryOnMap(geometry, map, drawnItems, fitBounds=true) {
@@ -74,66 +139,44 @@ export class InputGeometryComponent implements OnInit {
     }
   }
 
-  populateWKTTextArea = () => {
-    const geometry = this.getSingleGeometryFromMap(this.drawnItems);
-    if(geometry) {
-        console.log(geojsonToWKT(geometry));
-    } else {
-        this.wktText = '';
-    }
-  }
-
-  getSingleGeometryFromMap= (drawnItems) => {
-    // Initialise a single geometry object
-    var geometry = undefined;
-    console.log(drawnItems.toGeoJSON());
-    drawnItems.toGeoJSON().features.forEach(feature => {
-        geometry = feature.geometry;
-    });
-    // And return
-    return geometry;
-  }
-
-  getGeometryCollectionFromMap(drawnItems) {
-    // Initialise a geometry collection
-    var geometry = {
-        type: "GeometryCollection",
-        geometries: []
-    };
-    drawnItems.toGeoJSON().features.forEach(feature => {
-        geometry.geometries.push(feature.geometry);
-    });
-    // And return
-    return geometry;
-  }
-
   initDrawControlEditOnly(drawnItems) {
-    /*
-    drawControlEditOnly = new L.Control.Draw({
+    return new L.Control.Draw({
         edit: {
             featureGroup: drawnItems,
-            remove: true
+            remove: false,
         },
-        draw: false
+        draw: {},
     });
-    */
   }
 
   initDrawControlFull(drawnItems) {
-    /*
-    drawControlFull = new L.Control.Draw({
+    return new L.Control.Draw({
         draw: {
             marker: false,
-            polyline: true,
-            polygon: true,
-            rectangle: true,
+            polyline: {
+              shapeOptions: {
+                color: '#f357a1',
+                weight: 10,
+              },
+            },
+            polygon: {
+              shapeOptions: {
+                color: '#f357a1',
+                weight: 10,
+              },
+            },
+            rectangle: {
+              shapeOptions: {
+                color: '#f357a1',
+                weight: 10,
+              },
+            },
             circle: false,
             circlemarker: false,
         },
         edit: {
-            featureGroup: drawnItems
+            featureGroup: drawnItems,
         }
     });
-    */
   }
 }
