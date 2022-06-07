@@ -1,8 +1,9 @@
+import { geojsonToWKT } from '@terraformer/wkt';
+import { InputGeometryComponent } from './../input-geometry/input-geometry.component';
 import { convertTime } from './../../util/timeConverter';
 import { XmlEditDialogComponent } from './../xml-edit-dialog/xml-edit-dialog.component';
 import { AuthService } from './../../auth/auth.service';
-import { OrganizationControllerService } from './../../backend-api/identity-registry/api/organizationController.service';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { formatData } from '../../util/dataFormatter';
 import { MrnHelperService } from '../../util/mrn-helper.service';
@@ -10,7 +11,7 @@ import { ColumnForMenu } from '../models/columnForMenu';
 import { EntityTypes, MenuType, MenuTypeNames } from '../models/menuType';
 import { NbDialogService, NbIconLibraries } from '@nebular/theme';
 import { CertificateService } from '../certificate.service';
-import { InstanceDto, XmlDto } from '../../backend-api/service-registry';
+import { XmlDto } from '../../backend-api/service-registry';
 import { hasAdminPermission } from '../../util/adminPermissionResolver';
 
 const notUndefined = (anyValue: any) => typeof anyValue !== 'undefined';
@@ -43,6 +44,8 @@ export class EditableFormComponent implements OnInit {
   @Output() onApprove = new EventEmitter<any>();
   @Output() onRefresh = new EventEmitter<any>();
 
+  @ViewChild('map') geometryMap: InputGeometryComponent;
+  
   isAdmin = false;
   loadedData = {};
   nonStringForm = {};
@@ -260,6 +263,9 @@ export class EditableFormComponent implements OnInit {
       this.formGroup.reset();
       this.adjustData(this.loadedData);
     }
+    if (this.geometryMap && this.geometryMap.applyEditingToMap) {
+      this.geometryMap.applyEditingToMap(this.isEditing);
+    }
   }
 
   settled = (value: boolean) => {
@@ -425,8 +431,8 @@ export class EditableFormComponent implements OnInit {
 
   onUpdateGeometry = (event: any) => {
     if (event['data'] && event['fieldName']) {
-      //this.loadedData[event['fieldName']] = event['data'];
       this.loadedData = Object.assign(this.loadedData, {[event['fieldName']]: event['data']});
+      console.log(geojsonToWKT(event['data']));
     }
   }
 
@@ -435,9 +441,13 @@ export class EditableFormComponent implements OnInit {
       context: {
         xml: xml,
         isEditing: isEditing,
-        onUpdate: (xml: XmlDto) => this.loadedData['instanceAsXml'] = xml,
+        onUpdate: (xml: XmlDto) => this.updateXml(xml),
       },
     });
+  }
+
+  updateXml = (xml: XmlDto) => {
+    this.loadedData['instanceAsXml'] = xml;
   }
 
   onFileDeleted = (event: any) => {

@@ -15,14 +15,11 @@ export class InputGeometryComponent implements OnInit {
 
   @Output() onUpdate = new EventEmitter<any>();
 
-  geoSpatialSearchMode = 'geoJson';
-  options = {};
-  geoObject: any;
-  layers = [];
-  fitBounds: any = null;
   drawnItems: L.FeatureGroup;
-  wktText: string;
   layersControl: any;
+  controlWithEdit: any;
+  controlWithoutEdit: any;
+  map: any;
   
   constructor() { }
   
@@ -36,25 +33,23 @@ export class InputGeometryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const searchMap = this.initMap('searchMap');
+    this.map = this.initMap('searchMap');
 
     // FeatureGroup is to store editable layers
     this.drawnItems = new L.FeatureGroup();
-    searchMap.addLayer(this.drawnItems);
+    this.map.addLayer(this.drawnItems);
     const instanceItems = new L.FeatureGroup();
-    searchMap.addLayer(instanceItems);
+    this.map.addLayer(instanceItems);
 
     // Initialise the draw controls
-    if (this.isEditing) {
-      searchMap.addControl(this.initDrawControlFull(this.drawnItems));
-    } else {
-      searchMap.addControl(this.initDrawControlEditOnly(this.drawnItems));
-    }
+    this.controlWithEdit = this.initDrawControlWithEdit(this.drawnItems);
+    this.controlWithoutEdit = this.initDrawControlWithoutEdit(this.drawnItems);
+    this.applyEditingToMap(this.isEditing, this.map);
 
-    searchMap.on(L.Draw.Event.CREATED, this.handleCreation );
+    this.map.on(L.Draw.Event.CREATED, this.handleCreation );
 
     if (this.geometry) {
-      this.loadGeometryOnMap(this.geometry, searchMap, this.drawnItems, true);
+      this.loadGeometryOnMap(this.geometry, this.map, this.drawnItems, true);
     }
 
     /*
@@ -82,6 +77,17 @@ export class InputGeometryComponent implements OnInit {
     */
   }
 
+  applyEditingToMap = (isEditing: boolean, searchMap: any = this.map) => {
+    // Initialise the draw controls
+    if (isEditing) {
+      searchMap.removeControl(this.controlWithoutEdit);
+      searchMap.addControl(this.controlWithEdit);
+    } else {
+      searchMap.removeControl(this.controlWithEdit);
+      searchMap.addControl(this.controlWithoutEdit);
+    }
+  }
+
   handleCreation = (e: any) => {
     // Do whatever else you need to. (save to db, add to map etc)
     const type = e.layerType;
@@ -89,17 +95,11 @@ export class InputGeometryComponent implements OnInit {
     this.drawnItems.addLayer(layer);
 
     this.onUpdate.emit({ fieldName: 'geometry', data: getGeometryCollectionFromMap(this.drawnItems)});
-    //console.log(populateWKTTextArea(drawnItems));
     /*
     // Restrict new shapes, only allow edit
     drawControlFull.remove(searchMap);
     drawControlEditOnly.addTo(searchMap)
     */
-
-    // Convert the geometry to WKT if the search mode is enabled
-    if(this.geoSpatialSearchMode === "WKT") {
-        populateWKTTextArea(this.drawnItems);
-    }
   }
 
   /*
@@ -114,7 +114,11 @@ export class InputGeometryComponent implements OnInit {
   }
   */
 
-  loadGeometryOnMap(geometry, map, drawnItems, fitBounds=true) {
+  clearMap = () => {
+    this.drawnItems.clearLayers();
+  }
+
+  loadGeometryOnMap = (geometry, map, drawnItems, fitBounds = true) => {
     // Recreate the drawn items feature group
     drawnItems.clearLayers();
     if(geometry) {
@@ -128,7 +132,7 @@ export class InputGeometryComponent implements OnInit {
     }
   }
 
-  initDrawControlEditOnly(drawnItems) {
+  initDrawControlWithoutEdit = (drawnItems) => {
     return new L.Control.Draw({
         edit: {
             featureGroup: drawnItems,
@@ -139,7 +143,7 @@ export class InputGeometryComponent implements OnInit {
     });
   }
 
-  initDrawControlFull(drawnItems) {
+  initDrawControlWithEdit = (drawnItems) => {
     return new L.Control.Draw({
         draw: {
             marker: false,
