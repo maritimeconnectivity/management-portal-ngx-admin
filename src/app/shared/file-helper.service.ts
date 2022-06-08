@@ -1,5 +1,5 @@
-import { DocDto } from './../backend-api/service-registry/model/docDto';
-import { XmlDto } from './../backend-api/service-registry/model/xmlDto';
+import { DocDto } from '../backend-api/service-registry';
+import { XmlDto } from '../backend-api/service-registry';
 import { Injectable } from '@angular/core';
 import { NotifierService } from 'angular-notifier';
 import * as fileSaver from "file-saver";
@@ -24,8 +24,8 @@ export class FileHelperService {
           certificateBundle.pemCertificate.publicKey = this.replaceNewLines(certificateBundle.pemCertificate.publicKey);
         if (certificateBundle.pemCertificate.privateKey)
           certificateBundle.pemCertificate.privateKey = this.replaceNewLines(certificateBundle.pemCertificate.privateKey);
-        if (certificateBundle.pkcs12Keystore)
-          certificateBundle.pkcs12Keystore = this.convertBase64ToByteArray(certificateBundle.pkcs12Keystore as string).toString();
+        if (certificateBundle.pkcs12Keystore && typeof(certificateBundle.pkcs12Keystore) === 'string')
+          certificateBundle.pkcs12Keystore = this.convertBase64ToByteArray(certificateBundle.pkcs12Keystore) as ArrayBuffer;
       }
       let zip = new JSZip();
       zip.file("Certificate_" + nameNoSpaces + ".pem", certificateBundle.pemCertificate.certificate);

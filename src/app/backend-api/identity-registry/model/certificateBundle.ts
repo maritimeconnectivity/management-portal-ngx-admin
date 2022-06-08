@@ -14,7 +14,7 @@ import { PemCertificate } from './pemCertificate';
 /**
  * Represents a bundle containing an PEM encoded certificate, keystores in JKS and PKCS#12 format and a password for the keystores. Will be removed in the future
  */
-export interface CertificateBundle { 
+export interface CertificateBundle {
     pemCertificate?: PemCertificate;
     /**
      * JKS keystore containing certificate and private key
@@ -23,7 +23,7 @@ export interface CertificateBundle {
     /**
      * PKCS#12 keystore containing certificate and private key
      */
-    pkcs12Keystore?: string;
+    pkcs12Keystore?: string | ArrayBuffer;
     /**
      * The password for the keystores
      */
