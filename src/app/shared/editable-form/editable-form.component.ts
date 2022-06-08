@@ -436,6 +436,7 @@ export class EditableFormComponent implements OnInit {
   onUpdateGeometry = (event: any) => {
     if (event['data'] && event['fieldName']) {
       this.loadedData = { ...this.loadedData, ...{[event['fieldName']]: event['data']}};
+      console.log(geojsonToWKT(event['data']));
     }
   }
 
