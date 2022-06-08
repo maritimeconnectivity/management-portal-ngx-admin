@@ -1,12 +1,8 @@
 import { SrSearchComponent } from './service-registry/sr-search/sr-search.component';
 import { IrGuideComponent } from './identity-registry/ir-guide/ir-guide.component';
-import { BugReportComponent } from './bug-report/bug-report.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-
 import { PagesComponent } from './pages.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { ECommerceComponent } from './e-commerce/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import {AboutComponent} from './about/about.component';
 import {ContactComponent} from './contact/contact.component';
@@ -107,16 +103,8 @@ const routes: Routes = [
       component: ContactComponent,
     },
     {
-      path: 'bug-report',
-      component: BugReportComponent,
-    },
-    {
-      path: 'dashboard',
-      component: ECommerceComponent,
-    },
-    {
       path: '',
-      redirectTo: 'dashboard',
+      redirectTo: 'ir/guide',
       pathMatch: 'full',
     },
     {

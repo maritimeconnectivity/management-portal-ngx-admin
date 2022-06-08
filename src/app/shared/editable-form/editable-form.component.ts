@@ -1,8 +1,9 @@
+import { geojsonToWKT } from '@terraformer/wkt';
+import { InputGeometryComponent } from './../input-geometry/input-geometry.component';
 import { convertTime } from './../../util/timeConverter';
 import { XmlEditDialogComponent } from './../xml-edit-dialog/xml-edit-dialog.component';
 import { AuthService } from './../../auth/auth.service';
-import { OrganizationControllerService } from './../../backend-api/identity-registry/api/organizationController.service';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { formatData } from '../../util/dataFormatter';
 import { MrnHelperService } from '../../util/mrn-helper.service';
@@ -10,8 +11,7 @@ import { ColumnForMenu } from '../models/columnForMenu';
 import { EntityTypes, MenuType, MenuTypeNames } from '../models/menuType';
 import { NbDialogService, NbIconLibraries } from '@nebular/theme';
 import { CertificateService } from '../certificate.service';
-import { InstanceDto, XmlDto } from '../../backend-api/service-registry';
-import { Any } from 'asn1js';
+import { XmlDto } from '../../backend-api/service-registry';
 import { hasAdminPermission } from '../../util/adminPermissionResolver';
 
 const notUndefined = (anyValue: any) => typeof anyValue !== 'undefined';
@@ -34,6 +34,7 @@ export class EditableFormComponent implements OnInit {
   @Input() isLoaded: boolean;
   @Input() showButtons: boolean;
   @Input() hasHeader: boolean;
+  @Input() numberId: number;
   @Input() orgShortId: string;
   @Input() defaultPermissions: string;
 
@@ -43,6 +44,8 @@ export class EditableFormComponent implements OnInit {
   @Output() onApprove = new EventEmitter<any>();
   @Output() onRefresh = new EventEmitter<any>();
 
+  @ViewChild('map') geometryMap: InputGeometryComponent;
+  
   isAdmin = false;
   loadedData = {};
   nonStringForm = {};
@@ -195,22 +198,6 @@ export class EditableFormComponent implements OnInit {
     this.refreshData();
   }
 
-  downloadFile = (event: Any) => {
-    if (event['filecontent']) {
-      const data = event['filecontent'];
-      const binary = atob(data.replace(/\s/g, ''));
-      const len = binary.length;
-      const buffer = new ArrayBuffer(len);
-      const view = new Uint8Array(buffer);
-      for (var i = 0; i < len; i++) {
-          view[i] = binary.charCodeAt(i);
-      }
-      const blob = new Blob([view], { type: event['filecontentContentType'] });
-      const url = window.URL.createObjectURL(blob);
-      window.open(url);
-    }
-  }
-
   fetchMissingValuesFromForm = () => {
     const result = {};
     for (const item of this.fetchList) {
@@ -224,10 +211,8 @@ export class EditableFormComponent implements OnInit {
   getFormValue = () => {
     // TEMPORARY: just to make it work
     if (this.menuType === MenuType.Instance) {
-      if (!this.loadedData['instanceAsDocId'] && this.loadedData['instanceAsDoc']) {
+      if (this.loadedData['instanceAsDoc']) {
         this.loadedData['instanceAsDocId'] = this.loadedData['instanceAsDoc']['id'];
-      }
-      if (!this.loadedData['instanceAsDocName'] && this.loadedData['instanceAsDoc']) {
         this.loadedData['instanceAsDocName'] = this.loadedData['instanceAsDoc']['name'];
       }
 
@@ -277,6 +262,9 @@ export class EditableFormComponent implements OnInit {
     if (!this.isEditing){
       this.formGroup.reset();
       this.adjustData(this.loadedData);
+    }
+    if (this.geometryMap && this.geometryMap.applyEditingToMap) {
+      this.geometryMap.applyEditingToMap(this.isEditing);
     }
   }
 
@@ -380,6 +368,10 @@ export class EditableFormComponent implements OnInit {
     }
 
     this.geometry = data["geometry"];
+    // refresh the geometry map when the data from both sides are not coincidence
+    if (this.geometryMap && (this.geometry !== this.geometryMap.geometry)) {
+      this.geometryMap.loadGeometry(this.geometry);
+    }
 
     this.setFormFieldVisibility(data);
     // check admin permission
@@ -428,9 +420,9 @@ export class EditableFormComponent implements OnInit {
     }
   }
 
-  onListChanged = (event: any) => {
+  onDataChanged = (event: any) => {
     if (event['data'] && event['fieldName']) {
-      this.loadedData[event['fieldName']] = event['data'];
+      //this.loadedData[event['fieldName']] = event['data'];
       this.loadedData = Object.assign(this.loadedData, {[event['fieldName']]: event['data']});
     }
   }
@@ -441,14 +433,31 @@ export class EditableFormComponent implements OnInit {
     }
   }
 
+  onUpdateGeometry = (event: any) => {
+    if (event['data'] && event['fieldName']) {
+      this.loadedData = { ...this.loadedData, ...{[event['fieldName']]: event['data']}};
+      console.log(geojsonToWKT(event['data']));
+    }
+  }
+
   openXmlDialog = (xml: any, isEditing: boolean = false) => {
     this.dialogService.open(XmlEditDialogComponent, {
       context: {
         xml: xml,
         isEditing: isEditing,
-        onUpdate: (xml: XmlDto) => this.loadedData['xml'] = xml,
+        onUpdate: (xml: XmlDto) => this.updateXml(xml),
       },
     });
+  }
+
+  updateXml = (xml: XmlDto) => {
+    this.loadedData['instanceAsXml'] = xml;
+  }
+
+  onFileDeleted = (event: any) => {
+    if (event.fieldName === 'instanceAsDoc') {
+      this.loadedData['instanceAsDoc'] = undefined;
+    }
   }
 
   sortColumnForMenu = (a, b) => {

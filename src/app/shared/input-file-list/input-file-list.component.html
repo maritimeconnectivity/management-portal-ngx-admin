@@ -1,0 +1,18 @@
+<div>
+    <div class="button_container pb-2">
+        <div *ngFor="let item of docDtoList" class="bg-info align-baseline rounded p-1 w-100" value="{{item.id}}" (click)="downloadFile($event)">
+            <span class="text-white">{{item.name}}</span>
+            <button *ngIf="isEditing" [size]="tiny" value="{{item.id}}" class="rounded-circle bg-info text-white border-0" (click)="deleteFile($event)" nbButton>X</button>
+        </div>
+        <div *ngIf="file" class="bg-info align-baseline rounded p-1 w-100">
+            <div class="d-flex">
+                <div class="mr-auto p-2" value="{{file.id}}" (click)="downloadFile($event)"><span class="text-white">{{file.name}}</span></div>
+                <div class="p-2" ><button *ngIf="isEditing" [size]="tiny" value="{{file.id}}" class="rounded-circle bg-info text-white border-0" (click)="deleteFile($event)" nbButton>X</button></div>
+            </div>            
+        </div>
+        <div *ngIf="docDtoList.length === 0 && !file" class="bg-light align-baseline p-1 w-100 text-center">
+            <span class="text-secondary font-weight-bold">No file</span>
+        </div>
+    </div>
+    <input *ngIf="isEditing" type="file" (change)="changeFile($event)"/>
+</div>

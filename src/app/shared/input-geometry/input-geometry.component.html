@@ -1,0 +1,8 @@
+<nb-card>
+    <nb-card-body>
+        <div id="searchMap" class="leaflet-container border shadow"></div>
+        <div *ngIf="isEditing">
+            <button nbButton class="w-100" (click)="clearMap()">Clear</button>
+        </div>
+    </nb-card-body>
+</nb-card>

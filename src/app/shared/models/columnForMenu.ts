@@ -1,4 +1,5 @@
 import { convertTime } from '../../util/timeConverter';
+import { countryOptions } from './countryOptions';
 
 export const ColumnForMenu = {
   device: {
@@ -129,6 +130,7 @@ export const ColumnForMenu = {
       type: 'string',
       description: 'Country that organization belongs to',
       visibleFrom: ['detail', 'list'],
+      options: countryOptions,
       required: true,
     },
     federationType: {
@@ -618,6 +620,7 @@ export const ColumnForMenu = {
       type: 'string',
       description: 'Country that organization belongs to',
       visibleFrom: ['detail', 'list'],
+      options: countryOptions,
       required: true,
     },
     federationType: {
@@ -848,7 +851,7 @@ export const ColumnForMenu = {
       visibleFrom: ['detail'],
     },
     instanceAsXml: {
-      title: 'Instance as Xml',
+      title: 'Instance as XML',
       type: 'xml',
       notShowOnEdit: true,
       visibleFrom: ['detail'],
@@ -858,7 +861,7 @@ export const ColumnForMenu = {
       type: 'number',
     },
     instanceAsDoc: {
-      title: 'Document file',
+      title: 'Instance as document',
       type: 'file',
       visibleFrom: ['detail'],
     },
@@ -906,8 +909,10 @@ export const ColumnForMenu = {
       visibleFrom: ['detail'],
     },
     docIds: {
-      title: 'Document IDs',
-      type: 'number',
+      title: 'Related documents',
+      type: 'fileArray',
+      filter: false,
+      visibleFrom: ['detail'],
     },
     publishedAt: {
       title: 'Created at',
@@ -969,6 +974,7 @@ export const ColumnForMenu = {
       type: 'string',
       description: 'Country that organization belongs to',
       visibleFrom: ['detail'],
+      options: countryOptions,
       required: true,
     },
     /*

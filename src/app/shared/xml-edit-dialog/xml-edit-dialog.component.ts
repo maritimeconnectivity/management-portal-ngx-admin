@@ -33,7 +33,7 @@ export class XmlEditDialogComponent implements OnInit {
     private dialogService: NbDialogService) { }
 
   ngOnInit(): void {
-    if (this.xml !== null) {
+    if (this.xml) {
       this.initialXml = this.xml;
     }
 
@@ -43,10 +43,13 @@ export class XmlEditDialogComponent implements OnInit {
       comment: new FormControl(),
       contentContentType: new FormControl(),
     });
-    this.formGroup.get('name').setValue(this.xml.name);
-    this.formGroup.get('content').setValue(this.xml.content);
-    this.formGroup.get('comment').setValue(this.xml.comment);
-    this.formGroup.get('contentContentType').setValue(this.xml.contentContentType);
+    
+    if (this.xml) {
+      this.formGroup.get('name').setValue(this.xml.name);
+      this.formGroup.get('content').setValue(this.xml.content);
+      this.formGroup.get('comment').setValue(this.xml.comment);
+      this.formGroup.get('contentContentType').setValue(this.xml.contentContentType);
+    }
   }
 
   isThereAnyDifference(initial: XmlDto, current: XmlDto) {

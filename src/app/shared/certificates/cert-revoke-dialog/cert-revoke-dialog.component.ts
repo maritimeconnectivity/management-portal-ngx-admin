@@ -3,9 +3,9 @@ import { CertificateService } from '../../certificate.service';
 import { RevokationReasonEnum } from '../../../backend-api/identity-registry/model/certificateRevocation';
 import { Component, Input, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
-import { DayCellComponent } from '../../../pages/extra-components/calendar/day-cell/day-cell.component';
 import { getReasonOptionFromRevocationReason } from '../../../util/certRevokeInfo';
 import { EntityType } from '../../models/menuType';
+import { DayCellComponent } from '../../calendar/day-cell/day-cell.component';
 
 @Component({
   selector: 'ngx-cert-revoke-dialog',
