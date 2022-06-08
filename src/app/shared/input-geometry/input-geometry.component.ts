@@ -3,7 +3,7 @@ import * as L from 'leaflet';
 import * as geojson from 'geojson';
 
 import 'leaflet-draw';
-import { getGeometryCollectionFromMap, getSingleGeometryFromMap, populateWKTTextArea } from '../../util/mapToGeometry';
+import { addNonGroupLayers, getGeometryCollectionFromMap, removeLayers } from '../../util/mapToGeometry';
 @Component({
   selector: 'ngx-input-geometry',
   templateUrl: './input-geometry.component.html',
@@ -47,34 +47,9 @@ export class InputGeometryComponent implements OnInit {
     this.applyEditingToMap(this.isEditing, this.map);
 
     this.map.on(L.Draw.Event.CREATED, this.handleCreation );
+    this.map.on(L.Draw.Event.DELETED, this.handleDeletion );
 
-    if (this.geometry) {
-      this.loadGeometryOnMap(this.geometry, this.map, this.drawnItems, true);
-    }
-
-    /*
-    // Monitor the WKT string to update the selected area in the map
-    $('#geometryWKT').on("input propertychange", function() {
-        // For valid text inputs, try to parse the WKT string
-        if(this.value && this.value.trim().length>0) {
-            var parsedGeoJson = undefined;
-            try {
-                parsedGeoJson = Terraformer.WKT.parse(this.value);
-            } catch(ex) {
-                // Nothing to do
-            }
-
-            // If a valid GeoJSON object was parsed, replace it in the map
-            if(parsedGeoJson) {
-                drawnItems.clearLayers();
-                addNonGroupLayers(L.geoJson(parsedGeoJson), drawnItems);
-            }
-        }
-    });
-
-    // Initialise the instance edit panel as read-only
-    initInstanceEditPanel($('#instanceViewPanel'));
-    */
+    this.loadGeometry();
   }
 
   applyEditingToMap = (isEditing: boolean, searchMap: any = this.map) => {
@@ -89,46 +64,38 @@ export class InputGeometryComponent implements OnInit {
   }
 
   handleCreation = (e: any) => {
-    // Do whatever else you need to. (save to db, add to map etc)
-    const type = e.layerType;
     const layer = e.layer;
-    this.drawnItems.addLayer(layer);
-
+    addNonGroupLayers(layer, this.drawnItems);
     this.onUpdate.emit({ fieldName: 'geometry', data: getGeometryCollectionFromMap(this.drawnItems)});
-    /*
-    // Restrict new shapes, only allow edit
-    drawControlFull.remove(searchMap);
-    drawControlEditOnly.addTo(searchMap)
-    */
   }
 
-  /*
-  addNonGroupLayers(sourceLayer: any, targetGroup: any) {
-    if (sourceLayer instanceof L.LayerGroup) {
-        sourceLayer.eachLayer(function(layer) {
-            this.addNonGroupLayers(layer, targetGroup);
-        });
-    } else {
-        targetGroup.addLayer(sourceLayer);
-    }
+  handleDeletion = (e: any) => {
+    const layer = e.layer;
+    removeLayers(layer, this.drawnItems);
+    this.onUpdate.emit({ fieldName: 'geometry', data: getGeometryCollectionFromMap(this.drawnItems)});
   }
-  */
 
   clearMap = () => {
     this.drawnItems.clearLayers();
   }
 
+  loadGeometry = (geometry: any = this.geometry) => {
+    if (geometry) {
+      this.loadGeometryOnMap(geometry, this.map, this.drawnItems, true);
+    }
+  }
+
   loadGeometryOnMap = (geometry, map, drawnItems, fitBounds = true) => {
     // Recreate the drawn items feature group
     drawnItems.clearLayers();
-    if(geometry) {
-        const geomLayer = L.geoJSON(geometry as geojson.GeoJsonObject);
-        drawnItems.addLayer(geomLayer);
-        if(fitBounds) {
-            setTimeout(() => map.fitBounds(geomLayer.getBounds()), 50);
-        } else {
-            map.setView(geomLayer.getBounds().getCenter());
-        }
+    if (geometry) {
+      const geomLayer = L.geoJSON(geometry as geojson.GeoJsonObject);
+      addNonGroupLayers(geomLayer, drawnItems);
+      if(fitBounds) {
+          setTimeout(() => map.fitBounds(geomLayer.getBounds()), 50);
+      } else {
+          map.setView(geomLayer.getBounds().getCenter());
+      }
     }
   }
 
