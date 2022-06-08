@@ -368,6 +368,10 @@ export class EditableFormComponent implements OnInit {
     }
 
     this.geometry = data["geometry"];
+    // refresh the geometry map when the data from both sides are not coincidence
+    if (this.geometryMap && (this.geometry !== this.geometryMap.geometry)) {
+      this.geometryMap.loadGeometry(this.geometry);
+    }
 
     this.setFormFieldVisibility(data);
     // check admin permission
@@ -431,8 +435,7 @@ export class EditableFormComponent implements OnInit {
 
   onUpdateGeometry = (event: any) => {
     if (event['data'] && event['fieldName']) {
-      this.loadedData = Object.assign(this.loadedData, {[event['fieldName']]: event['data']});
-      console.log(geojsonToWKT(event['data']));
+      this.loadedData = { ...this.loadedData, ...{[event['fieldName']]: event['data']}};
     }
   }
 
