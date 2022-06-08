@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import * as L from 'leaflet';
 import * as geojson from 'geojson';
-
 import 'leaflet-draw';
 import { addNonGroupLayers, getGeometryCollectionFromMap, removeLayers } from '../../util/mapToGeometry';
 const iconRetinaUrl = 'assets/leaflet/marker-icon-2x.png';
@@ -40,12 +39,13 @@ L.Marker.prototype.options.icon = iconDefault;
   templateUrl: './input-geometry.component.html',
   styleUrls: ['./input-geometry.component.scss']
 })
-export class InputGeometryComponent implements OnInit {
+export class InputGeometryComponent implements OnInit, OnDestroy {
   @Input() isEditing: boolean;
   @Input() isForSearch: boolean;
   @Input() geometry: object;
 
   @Output() onUpdate = new EventEmitter<any>();
+  @ViewChild('map') mapDiv: ElementRef;
 
   drawnItems: L.FeatureGroup;
   drawnItemsForSearch: L.FeatureGroup;
@@ -57,7 +57,6 @@ export class InputGeometryComponent implements OnInit {
   constructor() { }
   
   initMap = (container: any) => {
-    // Initialise the map before we need it
     const map = L.map(container).setView([55.692864, 12.599246], 5);
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       { maxZoom: 18, minZoom: 3, attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>' })
@@ -66,7 +65,8 @@ export class InputGeometryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.map = this.initMap('searchMap');
+    // Initialise the map before we need it
+    this.map = this.initMap('map');
 
     // FeatureGroup is to store editable layers
     this.drawnItems = new L.FeatureGroup();
@@ -83,6 +83,26 @@ export class InputGeometryComponent implements OnInit {
     this.map.on(L.Draw.Event.DELETED, this.handleDeletion );
 
     this.loadGeometry();
+  }
+
+  @HostListener('window:beforeunload')
+  async ngOnDestroy() {
+    // say good bye to leaflet map before leaving
+    this.destroyMap();
+  }
+
+  destroyMap = () => {
+    if (this.map) {
+      // remove leaflet element
+      this.map.off();
+      this.map = this.map.remove();
+
+      // remove leaflet element from DOM
+      const container = L.DomUtil.get('map');
+      if(container){
+        this.mapDiv.nativeElement.remove();
+      }
+    }
   }
 
   applyEditingToMap = (isEditing: boolean, searchMap: any = this.map) => {
@@ -105,7 +125,6 @@ export class InputGeometryComponent implements OnInit {
       addNonGroupLayers(layer, this.drawnItems);
     this.onUpdate.emit({ fieldName: 'geometry', data: getGeometryCollectionFromMap(this.drawnItems)});
     }
-    
   }
 
   handleDeletion = (e: any) => {
