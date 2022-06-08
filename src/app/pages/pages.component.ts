@@ -1,14 +1,28 @@
-import { NbMenuService } from '@nebular/theme';
+/*
+ * Copyright (c) 2022 Maritime Connectivity Platform Consortium
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { AuthService } from './../auth/auth.service';
 import { NotifierService } from 'angular-notifier';
 import { Organization } from './../backend-api/identity-registry/model/organization';
 import { OrganizationControllerService } from './../backend-api/identity-registry/api/organizationController.service';
 import { RoleControllerService } from './../backend-api/identity-registry/api/roleController.service';
-import { KeycloakService } from 'keycloak-angular';
 import { Component, OnInit } from '@angular/core';
 
 import { MENU_ITEMS, MIR_MENU_FOR_ADMIN, MIR_MENU_FOR_ORG, MSR_MENU_FOR_ORG} from './pages-menu';
-import { AuthPermission, PermissionResolver, rolesToPermission } from '../auth/auth.permission';
+import { PermissionResolver } from '../auth/auth.permission';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AppConfig } from '../app.config';
 
@@ -61,7 +75,8 @@ export class PagesComponent implements OnInit {
   }
 
   applyRoleToMenu = () => {
-    this.keycloakMSRPermissions = this.authService.authState.user ? this.authService.authState.user.keycloakMSRPermissions : undefined;
+    this.keycloakMSRPermissions =
+      this.authService.authState.user ? this.authService.authState.user.keycloakMSRPermissions : undefined;
     this.MIRPermission = this.authService.authState.permission ? this.authService.authState.permission : undefined;
     this.assignOrganizationNameForMIR();
     this.assignAdminMenu();

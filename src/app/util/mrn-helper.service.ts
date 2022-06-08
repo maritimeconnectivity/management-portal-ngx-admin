@@ -1,5 +1,21 @@
+/*
+ * Copyright (c) 2022 Maritime Connectivity Platform Consortium
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { AuthService } from './../auth/auth.service';
-import { MenuType, MenuTypeNames } from "../shared/models/menuType";
+import { MenuType } from "../shared/models/menuType";
 import { Injectable } from "@angular/core";
 import { AppConfig } from "../app.config";
 
@@ -14,7 +30,7 @@ export class MrnHelperService {
   }
 
   public shortIdFromMrn(mrn: string) {
-    let split = mrn.split(":");
+    const split = mrn.split(":");
     return split[split.length - 1];
   }
 
@@ -23,7 +39,7 @@ export class MrnHelperService {
   }
 
   private mrnPreFixForOrg(orgMrn: string): string {
-    let orgSplit = orgMrn.split(":org:");
+    const orgSplit = orgMrn.split(":org:");
     return orgSplit[0] + ":";
   }
 
@@ -184,9 +200,9 @@ export class MrnHelperService {
 
   public checkMrnForSpecification(specificationMrn: string): boolean {
     // TODO Temp check until mrn-service is ready
-    let rawRegex = `^${this.mrnMaskForSpecification()}((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)|\/)*)$`;
+    const rawRegex = `^${this.mrnMaskForSpecification()}((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)|\/)*)$`;
     console.log(rawRegex);
-    let regex = new RegExp(rawRegex);
+    const regex = new RegExp(rawRegex);
     return regex.test(specificationMrn);
     //return specificationMrn.indexOf(':service:specification:' + this.orgShortId() + ':') >= 0 && specificationMrn.startsWith('urn:mrn:');
     //return this.checkMrn(specificationMrn, this.mrnMaskForSpecification());
@@ -194,8 +210,8 @@ export class MrnHelperService {
 
   public checkMrnForDesign(designMrn: string): boolean {
     // TODO Temp check until mrn-service is ready
-    let rawRegex = `^${this.mrnMaskForDesign()}((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)|\/)*)$`;
-    let regex = new RegExp(rawRegex);
+    const rawRegex = `^${this.mrnMaskForDesign()}((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)|\/)*)$`;
+    const regex = new RegExp(rawRegex);
     return regex.test(designMrn);
     //return designMrn.indexOf(':service:design:' + this.orgShortId() + ':') >= 0 && designMrn.startsWith('urn:mrn:');
     //	return this.checkMrn(designMrn, this.mrnMaskForDesign());
@@ -203,8 +219,8 @@ export class MrnHelperService {
 
   public checkMrnForInstance(instanceMrn: string): boolean {
     // TODO Temp check until mrn-service is ready
-    let rawRegex = `^${this.mrnMaskForInstance()}((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)|\/)*)$`;
-    let regex = new RegExp(rawRegex, "g");
+    const rawRegex = `^${this.mrnMaskForInstance()}((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)|\/)*)$`;
+    const regex = new RegExp(rawRegex, "g");
     return regex.test(instanceMrn);
     //return instanceMrn.indexOf(':service:instance:' + this.orgShortId() + ':') >= 0 && instanceMrn.startsWith('urn:mrn:');
     //return this.checkMrn(instanceMrn, this.mrnMaskForInstance());
@@ -212,12 +228,12 @@ export class MrnHelperService {
 
   public checkMrn(mrn: string, validMrnMask: string): boolean {
     try {
-      let elementIdIndex = mrn.indexOf(validMrnMask);
+      const elementIdIndex = mrn.indexOf(validMrnMask);
       if (elementIdIndex < 0) {
         return false;
       }
       var valid = true;
-      let idSplit = mrn.substring(elementIdIndex).split(":");
+      const idSplit = mrn.substring(elementIdIndex).split(":");
       idSplit.forEach((idElement) => {
         if (!idElement.toLowerCase().match(this.mrnPattern())) {
           valid = false;

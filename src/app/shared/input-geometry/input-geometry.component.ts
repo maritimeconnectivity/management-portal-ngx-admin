@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2022 Maritime Connectivity Platform Consortium
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as L from 'leaflet';
 import * as geojson from 'geojson';
@@ -11,11 +27,13 @@ import { addNonGroupLayers, getGeometryCollectionFromMap, removeLayers } from '.
 })
 export class InputGeometryComponent implements OnInit {
   @Input() isEditing: boolean;
+  @Input() isForSearch: boolean;
   @Input() geometry: object;
 
   @Output() onUpdate = new EventEmitter<any>();
 
   drawnItems: L.FeatureGroup;
+  drawnItemsForSearch: L.FeatureGroup;
   layersControl: any;
   controlWithEdit: any;
   controlWithoutEdit: any;
@@ -38,8 +56,8 @@ export class InputGeometryComponent implements OnInit {
     // FeatureGroup is to store editable layers
     this.drawnItems = new L.FeatureGroup();
     this.map.addLayer(this.drawnItems);
-    const instanceItems = new L.FeatureGroup();
-    this.map.addLayer(instanceItems);
+    this.drawnItemsForSearch = new L.FeatureGroup();
+    this.map.addLayer(this.drawnItemsForSearch);
 
     // Initialise the draw controls
     this.controlWithEdit = this.initDrawControlWithEdit(this.drawnItems);
@@ -65,8 +83,14 @@ export class InputGeometryComponent implements OnInit {
 
   handleCreation = (e: any) => {
     const layer = e.layer;
-    addNonGroupLayers(layer, this.drawnItems);
+    if(this.isForSearch) {
+      addNonGroupLayers(layer, this.drawnItemsForSearch);
+    this.onUpdate.emit({ fieldName: 'geometry', data: getGeometryCollectionFromMap(this.drawnItemsForSearch)});
+    } else {
+      addNonGroupLayers(layer, this.drawnItems);
     this.onUpdate.emit({ fieldName: 'geometry', data: getGeometryCollectionFromMap(this.drawnItems)});
+    }
+    
   }
 
   handleDeletion = (e: any) => {
@@ -77,6 +101,7 @@ export class InputGeometryComponent implements OnInit {
 
   clearMap = () => {
     this.drawnItems.clearLayers();
+    this.drawnItemsForSearch.clearLayers();
   }
 
   loadGeometry = (geometry: any = this.geometry) => {
