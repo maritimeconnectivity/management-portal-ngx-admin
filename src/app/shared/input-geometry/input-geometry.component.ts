@@ -180,7 +180,7 @@ export class InputGeometryComponent implements OnInit, OnDestroy {
       if (tooltipString.length > 0) {
         if (geometry.type === 'Point') {
           const coordinate = geometry.coordinates;
-          this.setToolTip(tooltipString, coordinate[0], coordinate[1]);
+          this.setToolTip(tooltipString, coordinate[1], coordinate[0]);
         } else {
           const coordinate = geomLayer.getBounds().getCenter();
           this.setToolTip(tooltipString, coordinate.lat, coordinate.lng);

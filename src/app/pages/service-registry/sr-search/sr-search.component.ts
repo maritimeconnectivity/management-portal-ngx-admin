@@ -21,7 +21,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { InstanceDto } from '../../../backend-api/service-registry';
 import { InputGeometryComponent } from '../../../shared/input-geometry/input-geometry.component';
 import { ColumnForMenu } from '../../../shared/models/columnForMenu';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
 
 @Component({
@@ -35,6 +35,7 @@ export class SrSearchComponent implements OnInit {
 
   testOrgMrn = 'urn:mrn:mcp:org:mcc-test:core';
   geometry = undefined;
+  queryString = '';
   instances: InstanceDto[] = [];
   showTables = true;
   contextForAttributes = 'list';
@@ -52,7 +53,6 @@ export class SrSearchComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private activatedRoute: ActivatedRoute,
     private searchControllerService: SearchControllerService,
   ) { }
 
@@ -69,9 +69,15 @@ export class SrSearchComponent implements OnInit {
     if (this.instances.length > 0) {
       this.clearMap();
     }
+    this.geometry = event['data'];
+    this.geometryMap.loadGeometry(this.geometry);
+    this.search(this.queryString, geojsonToWKT(event['data']));
+  }
+
+  search = (queryString: string, wktString: string) => {
     this.isLoading = true;
     // send a query with given geometry, converted to WKT
-    this.searchControllerService.searchInstances('', {}, undefined, geojsonToWKT(event['data']))
+    this.searchControllerService.searchInstances(queryString, {}, undefined, wktString)
       .subscribe(res => {
         this.instances = res;
         this.refreshData(this.instances);
@@ -81,6 +87,14 @@ export class SrSearchComponent implements OnInit {
           geometries.push(i.geometry));
         this.geometryMap.loadGeometries(geometries, this.instances.map(i => i.name));
       });
+  }
+
+  onSearch = () => {
+    this.search(this.queryString, this.geometry);
+  }
+
+  onQueryStringChanged = (event: any) => {
+    this.queryString = event.target.value;
   }
 
   onClear = () => {
