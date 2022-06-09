@@ -1,8 +1,27 @@
 <nb-card>
     <nb-card-header>Service search</nb-card-header>
     <nb-card-body>
-      <ngx-search ></ngx-search>
-      <ngx-map></ngx-map>
+      <div class="container">
+        <div class="row">
+          <span>
+            You can use this facility to search for instances in the Service Registry. Please note that the query format should follow the <a href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html" target="_blank">Lucene query format</a>.
+          </span>
+        </div>
+        <div class="row">
+          <input nbInput fullWidth placeholder="field1:value1 AND/OR field2:value2" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
+                  class="form-control search-location" #search (change)="onQueryStringChanged($event)">
+        </div>
+        <div class="row">
+          <button fullWidth status="primary" nbButton (click)="onSearch()">Search</button>
+        </div>
+        <div class="row">
+          <button fullWidth nbButton (click)="onClear()">Clear search result</button>
+        </div>
+      </div>
+      <hr />
+      <ngx-input-geometry #map [isEditing]="false" isForSearch="true" [geometry]="geometry" (onUpdate)="onUpdateGeometry($event)" (onClear)="onClear()"></ngx-input-geometry>
+      <ng2-smart-table *ngIf="showTables" [settings]="settings" [source]="source" (userRowSelect)="onEdit($event)"
+        [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary"></ng2-smart-table>
     </nb-card-body>
   </nb-card>
   

@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2022 Maritime Connectivity Platform Consortium
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { MenuTypeNames } from './../../../shared/models/menuType';
 import { AuthService } from './../../../auth/auth.service';
 import { InstanceControllerService } from './../../../backend-api/service-registry/api/instanceController.service';
@@ -18,7 +34,6 @@ import { NotifierService } from 'angular-notifier';
 import { MmsControllerService, Role, VesselControllerService } from '../../../backend-api/identity-registry';
 import { PageEntity } from '../../../backend-api/identity-registry/model/pageEntity';
 import { InstanceDto, SearchControllerService } from '../../../backend-api/service-registry';
-import { AuthPermission, AuthPermissionForMSR } from '../../../auth/auth.permission';
 import { formatData, formatServiceData } from '../../../util/dataFormatter';
 import { Entity } from '../../../backend-api/identity-registry/model/entity';
 import { hasAdminPermission } from '../../../util/adminPermissionResolver';
@@ -64,7 +79,7 @@ export class ListComponent implements OnInit {
   isAdmin: boolean = false;
 
   constructor(private router: Router,
-    iconsLibrary: NbIconLibraries,
+    private iconsLibrary: NbIconLibraries,
     private userControllerService: UserControllerService,
     private deviceControllerService: DeviceControllerService,
     private roleControllerService: RoleControllerService,
@@ -161,7 +176,7 @@ export class ListComponent implements OnInit {
       this.data = data;
     }
     else {
-      this.source.load(this.data);
+      this.source.load([]);
     }
   }
 
