@@ -52,10 +52,11 @@ export class InputGeometryComponent implements OnInit, OnDestroy {
   layersControl: any;
   controlWithEdit: any;
   controlWithoutEdit: any;
+  controlForSearch: any;
   map: any;
-  
+
   constructor() { }
-  
+
   initMap = (container: any) => {
     const map = L.map(container).setView([55.692864, 12.599246], 5);
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -77,7 +78,14 @@ export class InputGeometryComponent implements OnInit, OnDestroy {
     // Initialise the draw controls
     this.controlWithEdit = this.initDrawControlWithEdit(this.drawnItems);
     this.controlWithoutEdit = this.initDrawControlWithoutEdit(this.drawnItems);
-    this.applyEditingToMap(this.isEditing, this.map);
+    this.controlForSearch = this.initDrawControlForSearch(this.drawnItemsForSearch);
+
+    // apply draw controls
+    if (this.isForSearch) {
+      this.applySearchToMap(this.map);
+    } else {
+      this.applyEditingToMap(this.isEditing, this.map);
+    }
 
     this.map.on(L.Draw.Event.CREATED, this.handleCreation );
     this.map.on(L.Draw.Event.DELETED, this.handleDeletion );
@@ -116,6 +124,11 @@ export class InputGeometryComponent implements OnInit, OnDestroy {
     }
   }
 
+  applySearchToMap = (searchMap: any = this.map) => {
+    // Initialise the draw controls
+    searchMap.addControl(this.controlForSearch);
+  }
+
   handleCreation = (e: any) => {
     const layer = e.layer;
     if(this.isForSearch) {
@@ -138,24 +151,48 @@ export class InputGeometryComponent implements OnInit, OnDestroy {
     this.drawnItemsForSearch.clearLayers();
   }
 
-  loadGeometry = (geometry: any = this.geometry) => {
+  loadGeometry = (geometry: any = this.geometry, fitBounds = true, clearMapFromBeginning = true, tooltipString = '') => {
     if (geometry) {
-      this.loadGeometryOnMap(geometry, this.map, this.drawnItems, true);
+      this.loadGeometryOnMap(geometry, this.map, this.drawnItems, fitBounds, clearMapFromBeginning, tooltipString);
     }
   }
 
-  loadGeometryOnMap = (geometry, map, drawnItems, fitBounds = true) => {
+  loadGeometries = (geometries: any[], names: any[]) => {
+    this.drawnItems.clearLayers();
+    if (names) {
+      geometries?.forEach((g, i) => this.loadGeometry(g, false, false, names[i]));
+    } else {
+      geometries?.forEach((g, i) => this.loadGeometry(g, false, false));
+    }
+  }
+
+  loadGeometryOnMap = (geometry, map, drawnItems, fitBounds = true, clearMapFromBeginning = true, tooltipString = '') => {
     // Recreate the drawn items feature group
-    drawnItems.clearLayers();
+    if (clearMapFromBeginning) {
+      drawnItems.clearLayers();
+    }
     if (geometry) {
       const geomLayer = L.geoJSON(geometry as geojson.GeoJsonObject);
       addNonGroupLayers(geomLayer, drawnItems);
       if(fitBounds) {
-          setTimeout(() => map.fitBounds(geomLayer.getBounds()), 50);
-      } else {
-          map.setView(geomLayer.getBounds().getCenter());
+        setTimeout(() => map.fitBounds(geomLayer.getBounds()), 50);
+      }
+      if (tooltipString.length > 0) {
+        if (geometry.type === 'Point') {
+          const coordinate = geometry.coordinates;
+          this.setToolTip(tooltipString, coordinate[0], coordinate[1]);
+        } else {
+          const coordinate = geomLayer.getBounds().getCenter();
+          this.setToolTip(tooltipString, coordinate.lat, coordinate.lng);
+        }
       }
     }
+  }
+
+  setToolTip = (tooltipString: string, lat: number, lng: number) => {
+    const marker = L.marker([lat, lng], { opacity: 0.01 }); //opacity may be set to zero
+    marker.bindTooltip(tooltipString, {permanent: true, className: "my-label", offset: [0, 0] });
+    marker.addTo(this.drawnItems);
   }
 
   initDrawControlWithoutEdit = (drawnItems) => {
@@ -175,19 +212,19 @@ export class InputGeometryComponent implements OnInit, OnDestroy {
             marker: false,
             polyline: {
               shapeOptions: {
-                color: '#f357a1',
+                color: '#f35f57',
                 weight: 10,
               },
             },
             polygon: {
               shapeOptions: {
-                color: '#f357a1',
+                color: '#f35f57',
                 weight: 10,
               },
             },
             rectangle: {
               shapeOptions: {
-                color: '#f357a1',
+                color: '#f35f57',
                 weight: 10,
               },
             },
@@ -198,5 +235,38 @@ export class InputGeometryComponent implements OnInit, OnDestroy {
             featureGroup: drawnItems,
         }
     });
+  }
+
+  initDrawControlForSearch = (drawnItems) => {
+    return new L.Control.Draw({
+      draw: {
+          marker: {
+            icon: iconDefault,
+          },
+          polyline: {
+            shapeOptions: {
+              color: '#f35f57',
+              weight: 10,
+            },
+          },
+          polygon: {
+            shapeOptions: {
+              color: '#f35f57',
+              weight: 10,
+            },
+          },
+          rectangle: {
+            shapeOptions: {
+              color: '#f35f57',
+              weight: 10,
+            },
+          },
+          circle: false,
+          circlemarker: false,
+      },
+      edit: {
+          featureGroup: drawnItems,
+      }
+  });
   }
 }

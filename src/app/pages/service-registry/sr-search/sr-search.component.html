@@ -1,8 +1,15 @@
 <nb-card>
     <nb-card-header>Service search</nb-card-header>
     <nb-card-body>
-      <ngx-search ></ngx-search>
-      <ngx-map></ngx-map>
+      <div class="form-group">
+        <ngx-search ></ngx-search>
+        <button fullWidth nbButton (click)="onClear()">Clear search result</button>
+      </div>
+      <ngx-input-geometry #map [isEditing]="false" isForSearch="true" [geometry]="geometry" (onUpdate)="onUpdateGeometry($event)" (onClear)="onClear()"></ngx-input-geometry>
+      <ng2-smart-table *ngIf="showTables" [settings]="settings" [source]="source" (userRowSelect)="onEdit($event)"
+        [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary"
+      >
+      </ng2-smart-table>
     </nb-card-body>
   </nb-card>
   

@@ -26,7 +26,6 @@ import { ListViewComponent } from './list-view/list-view.component';
 import { IrGuideComponent } from './identity-registry/ir-guide/ir-guide.component';
 import { SrGuideComponent } from './service-registry/sr-guide/sr-guide.component';
 import { SrSearchComponent } from './service-registry/sr-search/sr-search.component';
-import { MapComponent } from './service-registry/sr-search/map/map.component';
 import { SearchComponent } from './service-registry/sr-search/search/search.component';
 import { InfoComponent } from './about/info/info.component';
 
@@ -50,7 +49,6 @@ import { InfoComponent } from './about/info/info.component';
     PagesComponent,
     pagesRoutingComponents,
     ListViewComponent,
-    MapComponent,
     SearchComponent,
     IrGuideComponent,
     SrGuideComponent,

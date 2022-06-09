@@ -34,7 +34,6 @@ import { NotifierService } from 'angular-notifier';
 import { MmsControllerService, Role, VesselControllerService } from '../../../backend-api/identity-registry';
 import { PageEntity } from '../../../backend-api/identity-registry/model/pageEntity';
 import { InstanceDto, SearchControllerService } from '../../../backend-api/service-registry';
-import { AuthPermission, AuthPermissionForMSR } from '../../../auth/auth.permission';
 import { formatData, formatServiceData } from '../../../util/dataFormatter';
 import { Entity } from '../../../backend-api/identity-registry/model/entity';
 import { hasAdminPermission } from '../../../util/adminPermissionResolver';
@@ -80,7 +79,7 @@ export class ListComponent implements OnInit {
   isAdmin: boolean = false;
 
   constructor(private router: Router,
-    iconsLibrary: NbIconLibraries,
+    private iconsLibrary: NbIconLibraries,
     private userControllerService: UserControllerService,
     private deviceControllerService: DeviceControllerService,
     private roleControllerService: RoleControllerService,
@@ -177,7 +176,7 @@ export class ListComponent implements OnInit {
       this.data = data;
     }
     else {
-      this.source.load(this.data);
+      this.source.load([]);
     }
   }
 
