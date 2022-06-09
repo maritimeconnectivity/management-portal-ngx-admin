@@ -14,29 +14,34 @@
  * limitations under the License.
  */
 
-import { Component, Input, OnInit } from '@angular/core';
-import { NbDialogRef } from '@nebular/theme';
-import { CertificateBundle } from '../../../backend-api/identity-registry';
-import { TOKEN_DELIMITER } from '../../app.constants';
-import { EntityType } from '../../models/menuType';
-import { Convert } from 'pvtsutils';
-import PrivateKeyInfo from 'pkijs/build/PrivateKeyInfo';
-import Certificate from 'pkijs/build/Certificate';
-import PFX from 'pkijs/build/PFX';
-import SafeBag from 'pkijs/build/SafeBag';
-import AuthenticatedSafe from 'pkijs/build/AuthenticatedSafe';
-import CertBag from 'pkijs/build/CertBag';
-import CertificationRequest from 'pkijs/build/CertificationRequest';
-import AttributeTypeAndValue from 'pkijs/build/AttributeTypeAndValue';
-import { stringToArrayBuffer } from 'pvutils';
-import SafeContents from 'pkijs/build/SafeContents';
-import PKCS8ShroudedKeyBag from 'pkijs/build/PKCS8ShroudedKeyBag';
-import Attribute from 'pkijs/build/Attribute';
-import { getRandomValues } from 'pkijs/build/common';
-import { BitString, BmpString, fromBER, OctetString, PrintableString } from 'asn1js';
-import { CertificateService } from '../../certificate.service';
-import { FileHelperService } from '../../file-helper.service';
-import { NotifierService } from 'angular-notifier';
+import {Component, Input, OnInit} from '@angular/core';
+import {NbDialogRef} from '@nebular/theme';
+import {CertificateBundle} from '../../../backend-api/identity-registry';
+import {TOKEN_DELIMITER} from '../../app.constants';
+import {EntityType} from '../../models/menuType';
+import {Convert} from 'pvtsutils';
+
+import {stringToArrayBuffer} from 'pvutils';
+
+import {BitString, BmpString, fromBER, OctetString, PrintableString} from 'asn1js';
+import {CertificateService} from '../../certificate.service';
+import {FileHelperService} from '../../file-helper.service';
+import {NotifierService} from 'angular-notifier';
+import {
+  Attribute,
+  AttributeTypeAndValue,
+  AuthenticatedSafe,
+  CertBag,
+  Certificate,
+  CertificationRequest,
+  getRandomValues,
+  PFX,
+  PKCS8ShroudedKeyBag,
+  PrivateKeyInfo,
+  SafeBag,
+  SafeContents
+} from 'pkijs';
+
 export interface LabelValueModel {
   label:string;
   valueHtml:string;
@@ -60,13 +65,13 @@ export class CertIssueDialogComponent implements OnInit{
   @Input() fileHelper: FileHelperService;
   @Input() certificateService: CertificateService;
   @Input() updateCertificate: () => void;
-  
+
   nameNoSpaces: string;
   isLoading: boolean;
   certificateBundle: CertificateBundle;
   labelValues: Array<LabelValueModel>;
   serverGeneratedKeys: boolean = false;
-  
+
   constructor(protected ref: NbDialogRef<CertIssueDialogComponent>) {}
 
   ngOnInit(): void {
@@ -122,7 +127,7 @@ export class CertIssueDialogComponent implements OnInit{
 
   public issueNewWithLocalKeys(generatePkcs12: boolean) {
     this.isLoading = true;
-    let ecKeyGenParams = {name: 'ECDSA', namedCurve: 'P-384', typedCurve: ''};
+    const ecKeyGenParams = {name: 'ECDSA', namedCurve: 'P-384', typedCurve: ''};
     let keyResult = crypto.subtle.generateKey(ecKeyGenParams, true, ['sign', 'verify']);
     keyResult.then(keyPair => {
       let csr = new CertificationRequest();
@@ -134,7 +139,8 @@ export class CertIssueDialogComponent implements OnInit{
         csr.sign(keyPair.privateKey, 'SHA-384').then(() => {
           let csrBytes = csr.toSchema().toBER(false);
           let pemCsr = this.toPem(csrBytes, 'CERTIFICATE REQUEST');
-          this.certificateService.issueNewCertificate(pemCsr, this.entityType as EntityType, this.entityMrn, this.orgMrn, this.instanceVersion)
+          this.certificateService.issueNewCertificate(pemCsr, this.entityType as EntityType, this.entityMrn,
+            this.orgMrn, this.instanceVersion)
               .subscribe((certificate) => {
               },
               err => {
@@ -145,22 +151,21 @@ export class CertIssueDialogComponent implements OnInit{
                     crypto.subtle.exportKey('pkcs8', keyPair.privateKey).then(rawPrivateKey => {
                       crypto.subtle.exportKey('spki', keyPair.publicKey).then(rawPublicKey => {
                         let privateKey = new PrivateKeyInfo({schema: fromBER(rawPrivateKey).result});
-    
+
                         if (generatePkcs12) {
                           let rawCerts = this.convertCertChain(certificate);
                           let certs = rawCerts.map(cert =>
                               new Certificate({schema: fromBER(cert).result}));
                           let password = this.generatePassword();
-    
-                          Promise.resolve().then(() =>
-                              this.generatePKCS12(privateKey, certs, password)).then(result => {
+
+                          this.generatePKCS12(privateKey, certs, password).then(result => {
                             this.certificateBundle = {
                               pemCertificate: {
                                 privateKey: this.toPem(rawPrivateKey, 'PRIVATE KEY'),
                                 publicKey: this.toPem(rawPublicKey, 'PUBLIC KEY'),
                                 certificate: certificate
                               },
-                              pkcs12Keystore: new TextDecoder("utf-8").decode(result),
+                              pkcs12Keystore: result,
                               keystorePassword: password
                             };
                             this.isLoading = false;
@@ -236,13 +241,14 @@ export class CertIssueDialogComponent implements OnInit{
     let values = new Uint32Array(26);
     crypto.getRandomValues(values);
     let result = '';
-    for (let i = 0; i < values.length; i++) {
-      result += charset[values[i] % charset.length];
+    for (const element of values) {
+      result += charset[element % charset.length];
     }
     return result;
   }
 
-  private generatePKCS12(privateKey: PrivateKeyInfo, certs: Array<Certificate>, password: string): Promise<ArrayBuffer> {
+  private async generatePKCS12(privateKey: PrivateKeyInfo, certs: Array<Certificate>, password: string)
+    : Promise<ArrayBuffer> {
     const keyLocalIDBuffer = new ArrayBuffer(4);
     const keyLocalIDView = new Uint8Array(keyLocalIDBuffer);
     getRandomValues(keyLocalIDView);
@@ -393,50 +399,43 @@ export class CertIssueDialogComponent implements OnInit{
       }
     });
 
-    let passwordConverted = stringToArrayBuffer(password);
-    let sequence = Promise.resolve();
+    const passwordConverted = stringToArrayBuffer(password);
 
-    sequence = sequence.then(
-        () => pfx.parsedValue.authenticatedSafe.parsedValue.safeContents[0].value
-            .safeBags[0].bagValue.makeInternalValues({
+    await pfx.parsedValue.authenticatedSafe.parsedValue.safeContents[0].value
+      .safeBags[0].bagValue.makeInternalValues({
+      password: passwordConverted,
+      contentEncryptionAlgorithm: {
+        name: 'AES-CBC', // OpenSSL can handle AES-CBC only
+        length: 128
+      },
+      hmacHashAlgorithm: 'SHA-1',
+      iterationCount: 100000
+    });
+
+    await pfx.parsedValue.authenticatedSafe.makeInternalValues({
+      safeContents: [
+        {
+          // Empty parameters for first SafeContent since "No Privacy" protection mode there
+        },
+        {
           password: passwordConverted,
           contentEncryptionAlgorithm: {
             name: 'AES-CBC', // OpenSSL can handle AES-CBC only
             length: 128
           },
-          hmacHashAlgorithm: 'SHA-256',
+          hmacHashAlgorithm: 'SHA-1',
           iterationCount: 100000
-        })
-    );
+        }
+      ]
+    });
 
-    sequence = sequence.then(
-        () => pfx.parsedValue.authenticatedSafe.makeInternalValues({
-          safeContents: [
-            {
-              // Empty parameters for first SafeContent since "No Privacy" protection mode there
-            },
-            {
-              password: passwordConverted,
-              contentEncryptionAlgorithm: {
-                name: 'AES-CBC', // OpenSSL can handle AES-CBC only
-                length: 128
-              },
-              hmacHashAlgorithm: 'SHA-256',
-              iterationCount: 100000
-            }
-          ]
-        })
-    );
+    await pfx.makeInternalValues({
+      password: passwordConverted,
+      iterations: 100000,
+      pbkdf2HashAlgorithm: 'SHA-256',
+      hmacHashAlgorithm: 'SHA-256'
+    })
 
-    sequence = sequence.then(
-        () => pfx.makeInternalValues({
-          password: passwordConverted,
-          iterations: 100000,
-          pbkdf2HashAlgorithm: 'SHA-256',
-          hmacHashAlgorithm: 'SHA-256'
-        })
-    );
-
-    return sequence.then(() => pfx.toSchema().toBER(false));
+    return pfx.toSchema().toBER(false);
   }
 }
