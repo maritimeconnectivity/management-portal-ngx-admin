@@ -29,7 +29,14 @@ import { AppConfig } from '../../app.config';
   styleUrls: ['./login.component.scss'],
 })
 
+/**
+ * a main landing page for login
+ */
 export class LoginComponent implements OnInit {
+
+  /**
+   * value for version
+   */
   version = AppConfig.MP_VERSION;
   canJoin = true;
   environmentName = this.capitalize(AppConfig.ENVIRONMENT_NAME);
@@ -62,6 +69,9 @@ export class LoginComponent implements OnInit {
     this.authService.login();
   }
 
+  /**
+   * it triggers opening the registration dialog up
+   */
   createRegisterDialog() {
     this.dialogService.open(RegisterDialogComponent);
   }

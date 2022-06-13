@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+/**
+ * country information collection for the country select menu
+ */
 export const countryOptions = [
     { code: "AF", code3: "AFG", title: "Afghanistan", value: "Afghanistan" },
     { code: "AL", code3: "ALB", title: "Albania", value: "Albania" },
