@@ -1,0 +1,1 @@
+var ROUTES_INDEX = {"name":"<root>","kind":"module","className":"AppModule","children":[{"name":"routes","filename":"src/app/landing/landing-routing.module.ts","module":"LandingRoutingModule","children":[{"path":"","component":"LandingComponent","children":[{"path":"login","component":"LoginComponent"},{"path":"","redirectTo":"login","pathMatch":"full"}]}],"kind":"module"}]}
