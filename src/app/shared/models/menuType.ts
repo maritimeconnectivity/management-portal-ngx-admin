@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-export const EntityTypes = ['device', 'vessel', 'user', 'service', 'organization', 'mms'];
-
-export enum EntityType {
-  Device = 'device',
-  Organization = 'organization',
-  Service = 'service',
-  User = 'user',
-  Vessel = 'vessel',
-  MMS = 'mms'
-}
-
-export enum MenuType {
+/**
+ * enum for menu types being used for routing
+ */
+export enum ResourceType {
   Device = 'device',
   Organization = 'organization',
   Service = 'service',
@@ -41,8 +33,33 @@ export enum MenuType {
   NewOrganization = 'newOrganization',
 }
 
-export const ResourceType = ['device', 'vessel', 'user', 'service', 'role', 'agent'];
+/**
+ * scope of resource type in MIR
+ */
+export const MIRResourceType: string[] = [ ResourceType.Device, ResourceType.Vessel, ResourceType.User,
+  ResourceType.Service, ResourceType.Role, ResourceType.Agent ];
 
+/**
+ * enum of MCP entity types. Entity is a subset of resource.
+ */
+ export enum EntityType {
+  Device = 'device',
+  Organization = 'organization',
+  Service = 'service',
+  User = 'user',
+  Vessel = 'vessel',
+  MMS = 'mms',
+}
+
+/**
+ * scope of MCP entity types
+ */
+ export const EntityTypes: string[] = [ EntityType.Device, EntityType.Organization,
+  EntityType.Service, EntityType.User, EntityType.Vessel, EntityType.MMS ];
+
+/**
+ * readable names for MenuTypes
+ */
 export const MenuTypeNames = {
   vessel: 'vessel',
   device: 'device',
@@ -56,8 +73,11 @@ export const MenuTypeNames = {
   instanceorg: 'service instance',
   orgcandidate: 'unapproved organization',
   orgsvc: 'owned service',
-}
+};
 
+/**
+ * icon names for each MenuType
+ */
 export const MenuTypeIconNames = {
   vessel: 'ship',
   device: 'hdd',
@@ -70,4 +90,4 @@ export const MenuTypeIconNames = {
   instance: 'compass',
   instanceorg: 'compass',
   orgcandidate: 'clipboard',
-}
+};

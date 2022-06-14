@@ -15,30 +15,30 @@
  */
 
 import { AuthService } from '../auth/auth.service';
-import { MenuType } from '../shared/models/menuType';
+import { ResourceType } from '../shared/models/menuType';
 import { AuthPermission, AuthPermissionForMSR, PermissionResolver } from '../auth/auth.permission';
 
-export const hasAdminPermission = (context: MenuType, authService: AuthService,
+export const hasAdminPermission = (context: ResourceType, authService: AuthService,
       isEditing: boolean, isOurServiceInstance?: boolean): boolean => {
   if (!authService.authState.rolesLoaded) {
     console.log('Role hasn\'t been loaded!');
     return false;
   }
   // MIR
-  if (context !== MenuType.Instance) {
+  if (context !== ResourceType.Instance) {
     if (hasAdminPermissionInMIR(authService.authState.permission, AuthPermission.SiteAdmin)) { // super admin
       return true;
-    } else if (context === MenuType.User) {
+    } else if (context === ResourceType.User) {
       return hasAdminPermissionInMIR(authService.authState.permission, AuthPermission.UserAdmin);
-    } else if (context === MenuType.Device) {
+    } else if (context === ResourceType.Device) {
       return hasAdminPermissionInMIR(authService.authState.permission, AuthPermission.DeviceAdmin);
-    } else if (context === MenuType.Vessel) {
+    } else if (context === ResourceType.Vessel) {
       return hasAdminPermissionInMIR(authService.authState.permission, AuthPermission.VesselAdmin);
-    } else if (context === MenuType.MMS) {
+    } else if (context === ResourceType.MMS) {
       return hasAdminPermissionInMIR(authService.authState.permission, AuthPermission.MMSAdmin);
-    } else if (context === MenuType.Service) {
+    } else if (context === ResourceType.Service) {
       return hasAdminPermissionInMIR(authService.authState.permission, AuthPermission.ServiceAdmin);
-    } else if (context === MenuType.Organization || context === MenuType.Role) {
+    } else if (context === ResourceType.Organization || context === ResourceType.Role) {
       return hasAdminPermissionInMIR(authService.authState.permission, AuthPermission.OrgAdmin);
     } else {
       return false;

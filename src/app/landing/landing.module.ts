@@ -25,7 +25,9 @@ import { RouterModule } from '@angular/router';
 import { RegisterDialogComponent } from './register-dialog/register-dialog.component';
 import { ProcessDialogComponent } from './process-dialog/process-dialog.component';
 
-
+/**
+ * a module for landing process
+ */
 @NgModule({
   declarations: [
     LandingComponent,

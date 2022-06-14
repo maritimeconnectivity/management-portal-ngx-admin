@@ -1,4 +1,4 @@
-import { MenuType } from './../../../shared/models/menuType';
+import { ResourceType } from './../../../shared/models/menuType';
 import { geojsonToWKT } from '@terraformer/wkt';
 import { SearchControllerService } from './../../../backend-api/service-registry/api/searchController.service';
 /*
@@ -39,7 +39,7 @@ export class SrSearchComponent implements OnInit {
   instances: InstanceDto[] = [];
   showTables = true;
   contextForAttributes = 'list';
-  menuType = MenuType.Instance;
+  menuType = ResourceType.Instance;
   isLoading = false;
   settings;
   mySettings = {
@@ -117,7 +117,7 @@ export class SrSearchComponent implements OnInit {
   }
 
   onEdit(event): void {
-    const mrn = this.menuType === MenuType.Instance ? event.data.id : event.data.mrn;
+    const mrn = this.menuType === ResourceType.Instance ? event.data.id : event.data.mrn;
     this.router.navigate(['/pages/sr/instances',
       mrn ? encodeURIComponent(mrn) : event.data.id],
         { queryParams: { name: event.data.roleName ? event.data.roleName :

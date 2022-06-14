@@ -17,6 +17,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 
+/**
+ * a component for showing information of an MCP components or Management Portal
+ */
 @Component({
   selector: 'ngx-info',
   templateUrl: './info.component.html',

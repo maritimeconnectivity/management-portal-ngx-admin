@@ -15,7 +15,7 @@
  */
 
 import { AuthService } from './../auth/auth.service';
-import { MenuType } from "../shared/models/menuType";
+import { ResourceType } from "../shared/models/menuType";
 import { Injectable } from "@angular/core";
 import { AppConfig } from "../app.config";
 
@@ -73,21 +73,21 @@ export class MrnHelperService {
 
   public mrnMask(menuType: string, orgShortId? : string) {
     switch (menuType) {
-      case MenuType.Device:
+      case ResourceType.Device:
         return this.mrnMaskForDevice(orgShortId);
-      case MenuType.User:
+      case ResourceType.User:
         return this.mrnMaskForUser(orgShortId);
-      case MenuType.Organization:
+      case ResourceType.Organization:
         return this.mrnMaskForOrganization();
-      case MenuType.Vessel:
+      case ResourceType.Vessel:
         return this.mrnMaskForVessel(orgShortId);
-      case MenuType.Instance:
+      case ResourceType.Instance:
         return this.mrnMaskForInstance(orgShortId);
-      case MenuType.Design:
+      case ResourceType.Design:
         return this.mrnMaskForDesign(orgShortId);
-      case MenuType.Service:
+      case ResourceType.Service:
         return this.mrnMaskForInstance(orgShortId);
-      case MenuType.MMS:
+      case ResourceType.MMS:
         return this.mrnMaskForMms(orgShortId);
       default:
         return this.mrnMaskForOrganization();

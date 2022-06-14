@@ -24,13 +24,22 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { formatData } from '../../util/dataFormatter';
 import { MrnHelperService } from '../../util/mrn-helper.service';
 import { ColumnForMenu } from '../models/columnForMenu';
-import { EntityTypes, MenuType, MenuTypeNames } from '../models/menuType';
+import { EntityTypes, ResourceType, MenuTypeNames } from '../models/menuType';
 import { NbDialogService, NbIconLibraries } from '@nebular/theme';
 import { CertificateService } from '../certificate.service';
 import { XmlDto } from '../../backend-api/service-registry';
 import { hasAdminPermission } from '../../util/adminPermissionResolver';
 
+/**
+ * a simple function filtering undefined
+ * @param anyValue value to be validated
+ * @returns boolean of whether undefined or not
+ */
 const notUndefined = (anyValue: any) => typeof anyValue !== 'undefined';
+
+/**
+ * a component providing an input form according to ColumnFor*.json
+ */
 @Component({
   selector: 'ngx-editable-form',
   templateUrl: './editable-form.component.html',
@@ -38,28 +47,95 @@ const notUndefined = (anyValue: any) => typeof anyValue !== 'undefined';
 })
 export class EditableFormComponent implements OnInit {
 
-  @Input() menuType: MenuType;
+  /**
+   * menu type of an active page
+   */
+  @Input() menuType: ResourceType;
+  /**
+   * service instance version (only for service instance)
+   */
   @Input() instanceVersion: string;
+  /**
+   * a boolean indicating the page is for creating entity
+   */
   @Input() isForNew: boolean;
+  /**
+   * a boolean of MIR admin permission
+   */
   @Input() canApproveOrg: boolean;
+  /**
+   * an mrn of chosen entity for this form
+   */
   @Input() entityMrn: string;
+  /**
+   * an mrn of organization owning the chosen entity
+   */
   @Input() orgMrn: string;
+  /**
+   * a human readable name of the chosen entity
+   */
   @Input() title: string;
+  /**
+   * an icon name for the entity
+   */
   @Input() iconName: string;
+  /**
+   * an indicator of API call status
+   */
   @Input() isLoading: boolean;
+  /**
+   * an indicator of API call settlement
+   */
   @Input() isLoaded: boolean;
+  /**
+   * an indicator of showing buttons at header
+   */
   @Input() showButtons: boolean;
+  /**
+   * an indicator of having header
+   */
   @Input() hasHeader: boolean;
+  /**
+   * an ID number converted from string for the cases when it is needed, like roles
+   */
   @Input() numberId: number;
+  /**
+   * a short ID of organization for the sake of MRN
+   */
   @Input() orgShortId: string;
+  /**
+   * a permission string for the form
+   */
   @Input() defaultPermissions: string;
 
+  /**
+   * a cancel event callback
+   */
   @Output() onCancel = new EventEmitter<any>();
+  /**
+   * a deletion event callback
+   */
   @Output() onDelete = new EventEmitter<any>();
+  /**
+   * a submission event callback
+   */
   @Output() onSubmit = new EventEmitter<any>();
+  /**
+   * an approval event callback
+   */
   @Output() onApprove = new EventEmitter<any>();
+  /**
+   * an rejection event callback
+   */
+   @Output() onReject = new EventEmitter<any>();
+  /**
+   * a refresh event callback
+   */
   @Output() onRefresh = new EventEmitter<any>();
 
+  /**
+   * a link to geometry map component, mainly for consistency
+   */
   @ViewChild('map') geometryMap: InputGeometryComponent;
   
   isAdmin = false;
@@ -91,12 +167,22 @@ export class EditableFormComponent implements OnInit {
     iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
   }
 
-  needShortId = (field: string) => {
-    return this.getShortIdType(field) !== undefined;
+  /**
+   * a function returning whether the resource type requires short ID or not
+   * @param resourceType type of resource
+   * @returns whether the resource type requires short ID or not
+   */
+  needShortId = (resourceType: string) => {
+    return this.getShortIdType(resourceType) !== undefined;
   }
 
-  getShortIdType = (field: string) => {
-    return this.columnForMenu[field] ? this.columnForMenu[field].shortIdType : undefined;
+  /**
+   * a function returning whether the resource type requires short ID or not
+   * @param resourceType type of resource
+   * @returns whether the resource type requires short ID or not
+   */
+  getShortIdType = (resourceType: string) => {
+    return this.columnForMenu[resourceType] ? this.columnForMenu[resourceType].shortIdType : undefined;
   }
 
   ngOnInit(): void {
@@ -107,14 +193,15 @@ export class EditableFormComponent implements OnInit {
       this.setFormFieldVisibility();
       Object.keys(this.formGroup.controls).forEach(field => {
         if (this.needShortId(field)) {
-          this.formGroup.get(field).setValue( this.mrnHelperService.mrnMask( this.getShortIdType(field), this.orgShortId) );
+          this.formGroup.get(field).setValue(
+            this.mrnHelperService.mrnMask( this.getShortIdType(field), this.orgShortId) );
           this.formGroup.get(field).disable();
         }
       });
       if (this.defaultPermissions) {
         this.formGroup.get('permissions').setValue(this.defaultPermissions);
       }
-      if (this.menuType === MenuType.Instance) {
+      if (this.menuType === ResourceType.Instance) {
         this.formGroup.get('organizationId').setValue(AuthService.staticAuthInfo.orgMrn);
         this.formGroup.get('organizationId').disable();
         Object.entries(ColumnForMenu[this.menuType]).map(([key, value]) => 
@@ -185,26 +272,44 @@ export class EditableFormComponent implements OnInit {
     return this.fieldVisibility[key];
   }
 
+  /**
+   * executing the onCancel callback function
+   */
   cancel() {
     this.onCancel.emit();
   }
 
+  /**
+   * executing the onDelete callback function
+   */
   delete() {
     this.onDelete.emit();
   }
 
+  /**
+   * executing the onReject callback function
+   */
   reject() {
-    this.onDelete.emit();
+    this.onReject.emit();
   }
 
+  /**
+   * executing the onApprove callback function
+   */
   approve() {
     this.onApprove.emit();
   }
 
+  /**
+   * executing the onSubmit callback function
+   */
   submit() {
     this.onSubmit.emit(this.getFormValue());
   }
 
+  /**
+   * executing the onCancel callback function
+   */
   refreshData() {
     this.onRefresh.emit();
   }
@@ -226,7 +331,7 @@ export class EditableFormComponent implements OnInit {
 
   getFormValue = () => {
     // TEMPORARY: just to make it work
-    if (this.menuType === MenuType.Instance) {
+    if (this.menuType === ResourceType.Instance) {
       if (this.loadedData['instanceAsDoc']) {
         this.loadedData['instanceAsDocId'] = this.loadedData['instanceAsDoc']['id'];
         this.loadedData['instanceAsDocName'] = this.loadedData['instanceAsDoc']['name'];
@@ -256,7 +361,7 @@ export class EditableFormComponent implements OnInit {
   }
 
   setIsAdmin = () => {
-    if (this.menuType === MenuType.Instance) {
+    if (this.menuType === ResourceType.Instance) {
       const isOurServiceInstance =  this.isEditing ? AuthService.staticAuthInfo.orgMrn === this.formGroup.get('organizationId').value :
       AuthService.staticAuthInfo.orgMrn === this.loadedData['organizationId'];
       this.isAdmin = hasAdminPermission(this.menuType, this.authService, true, isOurServiceInstance);
@@ -295,11 +400,11 @@ export class EditableFormComponent implements OnInit {
   }
 
   adjustTitle = (menuType: string, title: string) => {
-    this.menuType = menuType as MenuType;
+    this.menuType = menuType as ResourceType;
     this.menuTypeName = MenuTypeNames[this.menuType];
     this.isEntity = EntityTypes.includes(this.menuType);
     this.title = title;
-    this.isServiceInstance = this.menuType === MenuType.Instance || this.menuType === MenuType.InstanceOfOrg;
+    this.isServiceInstance = this.menuType === ResourceType.Instance || this.menuType === ResourceType.InstanceOfOrg;
   }
 
   addShortIdToMrn = (field: string, shortId: string) => {
@@ -327,7 +432,7 @@ export class EditableFormComponent implements OnInit {
     } else {
       return new RegExp(this.mrnHelperService.mrnMcpIdpRegex(
         this.orgShortId ? this.orgShortId :
-        this.menuType === MenuType.NewOrganization ? this.getOrgShortId() : undefined)).test(mrn);
+        this.menuType === ResourceType.NewOrganization ? this.getOrgShortId() : undefined)).test(mrn);
     }
   }
 
@@ -345,7 +450,7 @@ export class EditableFormComponent implements OnInit {
       validators.push(Validators.email);
     }
     if (key !== 'mrnSubsidiary' && (key.includes('mrn') || key.includes('Mrn'))) {
-      if (this.menuType === MenuType.Organization || this.menuType === MenuType.OrgCandidate) {
+      if (this.menuType === ResourceType.Organization || this.menuType === ResourceType.OrgCandidate) {
         validators.push(Validators.pattern(this.mrnHelperService.mrnMcpIdpRegexForOrg()));
       } else {
         validators.push(Validators.pattern(this.mrnHelperService.mrnMcpIdpRegex(this.orgShortId)));

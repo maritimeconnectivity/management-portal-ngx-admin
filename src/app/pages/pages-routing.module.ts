@@ -21,10 +21,12 @@ import { NgModule } from '@angular/core';
 import { PagesComponent } from './pages.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import {AboutComponent} from './about/about.component';
-import {ContactComponent} from './contact/contact.component';
 import { SrGuideComponent } from './service-registry/sr-guide/sr-guide.component';
 import { AuthGuard } from '../auth/app.guard';
 
+/**
+ * routes for pages
+ */
 const routes: Routes = [
   {
   path: '',
@@ -115,10 +117,6 @@ const routes: Routes = [
       component: AboutComponent,
     },
     {
-      path: 'contact',
-      component: ContactComponent,
-    },
-    {
       path: '',
       redirectTo: 'ir/guide',
       pathMatch: 'full',
@@ -138,5 +136,4 @@ export class PagesRoutingModule {
 }
 export const pagesRoutingComponents = [
   AboutComponent,
-  ContactComponent,
 ];

@@ -16,6 +16,9 @@
 
 import { NbMenuItem } from '@nebular/theme';
 
+/**
+ * menu for pages
+ */
 export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Identity Registry',

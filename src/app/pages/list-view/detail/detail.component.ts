@@ -21,7 +21,7 @@ import { Device } from './../../../backend-api/identity-registry/model/device';
 import { Location } from '@angular/common';
 import { Organization } from './../../../backend-api/identity-registry/model/organization';
 import { Entity } from './../../../backend-api/identity-registry/model/entity';
-import { EntityTypes, MenuType, MenuTypeIconNames, MenuTypeNames } from '../../../shared/models/menuType';
+import { EntityTypes, ResourceType, MenuTypeIconNames, MenuTypeNames } from '../../../shared/models/menuType';
 import { ColumnForMenu } from '../../../shared/models/columnForMenu';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -43,7 +43,7 @@ import { hasAdminPermission } from '../../../util/adminPermissionResolver';
 export class DetailComponent implements OnInit {
   title = '';
   isLoading = false;
-  menuType: MenuType = MenuType.Device;
+  menuType: ResourceType = ResourceType.Device;
   iconName = 'circle';
   instanceVersion = '';
   noBacklink = false;
@@ -73,16 +73,16 @@ export class DetailComponent implements OnInit {
     const array = this.router.url.split('/');
     const entityId = array.pop();
     const menuTypeString = array.pop();
-    if (menuTypeString === MenuType.InstanceOfOrg) {
+    if (menuTypeString === ResourceType.InstanceOfOrg) {
       this.isForServiceForOrg = true;
-      this.menuType = MenuType.Instance;
+      this.menuType = ResourceType.Instance;
     } else {
-      this.menuType = menuTypeString.replace('-', '').substr(0, menuTypeString.length - 1) as MenuType;
+      this.menuType = menuTypeString.replace('-', '').substr(0, menuTypeString.length - 1) as ResourceType;
     }
     this.entityMrn = decodeURIComponent(this.route.snapshot.paramMap.get("id"));
     this.orgMrn = this.authService.authState.orgMrn;
     this.isForNew = this.entityMrn === 'new';
-    this.numberId = this.menuType === MenuType.Instance || this.menuType === MenuType.Role ?
+    this.numberId = this.menuType === ResourceType.Instance || this.menuType === ResourceType.Role ?
       parseInt(this.entityMrn) : -1;
 
     // preventing refresh
@@ -96,7 +96,7 @@ export class DetailComponent implements OnInit {
         this.instanceVersion = e.version;
       });
 
-      if (this.menuType === MenuType.OrgCandidate &&
+      if (this.menuType === ResourceType.OrgCandidate &&
         this.authService.authState.permission &&
         PermissionResolver.canApproveOrg(this.authService.authState.permission)) {
         this.canApproveOrg = true;
@@ -141,8 +141,8 @@ export class DetailComponent implements OnInit {
   fetchFieldValues() {
     if(ColumnForMenu.hasOwnProperty(this.menuType)) {
       this.isLoading = true;
-      if (Object.values(MenuType).includes(this.menuType as MenuType)) {
-        if(this.menuType === MenuType.OrgCandidate){
+      if (Object.values(ResourceType).includes(this.menuType as ResourceType)) {
+        if(this.menuType === ResourceType.OrgCandidate){
           this.organizationControllerService.getUnapprovedOrganizations().subscribe(
             data => {
               this.settle(true);
@@ -156,7 +156,7 @@ export class DetailComponent implements OnInit {
               this.router.navigateByUrl('/pages/404');
             },
           );
-        } else if(this.menuType === MenuType.Role) {
+        } else if(this.menuType === ResourceType.Role) {
           const id = parseInt(this.entityMrn);
           this.roleControllerService.getRole(this.orgMrn, id).subscribe(
             data => {
@@ -174,9 +174,9 @@ export class DetailComponent implements OnInit {
           this.route.queryParams.subscribe(e => this.loadDataContent(this.menuType, this.authService.authState.user.organization, this.entityMrn, e.version, this.numberId).subscribe(
             data => {
               this.settle(true);
-              if (this.menuType === MenuType.User) {
+              if (this.menuType === ResourceType.User) {
                 this.title = (data as User).firstName + " " + (data as User).lastName;
-              } else if (this.menuType === MenuType.Organization) {
+              } else if (this.menuType === ResourceType.Organization) {
                 this.title = (data as Organization).name;
               }
               this.editableForm.adjustTitle(this.menuType, this.title);
@@ -222,7 +222,7 @@ export class DetailComponent implements OnInit {
   }
 
   approve() {
-    if (this.menuType === MenuType.OrgCandidate) {
+    if (this.menuType === ResourceType.OrgCandidate) {
       if (!this.supplementForm.formGroup.valid) {
         this.notifierService.notify('error', 'There is missing information of administrator');
       } else {
@@ -264,7 +264,7 @@ export class DetailComponent implements OnInit {
 	}
 
   submit(body: any) {
-    if (this.menuType === MenuType.Role) {
+    if (this.menuType === ResourceType.Role) {
       this.organizationControllerService.getOrganizationByMrn(this.orgMrn).subscribe(
         res => this.submitDataToBackend({ ...body, idOrganization: res.id}),
         err => this.notifierService.notify('error', 'Error in fetching organization information'),
@@ -306,83 +306,83 @@ export class DetailComponent implements OnInit {
     }
   }
 
-  registerData = (context: MenuType, body: object, orgMrn: string): Observable<Entity> => {
-    if (context === MenuType.User) {
+  registerData = (context: ResourceType, body: object, orgMrn: string): Observable<Entity> => {
+    if (context === ResourceType.User) {
       return this.userControllerService.createUser(body as User, orgMrn);
-    } else if (context === MenuType.Device) {
+    } else if (context === ResourceType.Device) {
       return this.deviceControllerService.createDevice(body as Device, orgMrn);
-    } else if (context === MenuType.Vessel) {
+    } else if (context === ResourceType.Vessel) {
       return this.vesselControllerService.createVessel(body as Vessel, orgMrn);
-    } else if (context === MenuType.MMS) {
+    } else if (context === ResourceType.MMS) {
       return this.mmsControllerService.createMMS(body as MMS, orgMrn);
-    } else if (context === MenuType.Service) {
+    } else if (context === ResourceType.Service) {
       return this.serviceControllerService.createService(body as Service, orgMrn);
-    } else if (context === MenuType.Organization) {
+    } else if (context === ResourceType.Organization) {
       return this.organizationControllerService.applyOrganization(body as Organization);
-    } else if (context === MenuType.Role) {
+    } else if (context === ResourceType.Role) {
       return this.roleControllerService.createRole(body as Role, orgMrn);
-    } else if (context === MenuType.Instance) {
+    } else if (context === ResourceType.Instance) {
       return this.instanceControllerService.createInstance(body as InstanceDtDto);
     }
     return new Observable();
   }
 
-  updateData = (context: MenuType, body: object, orgMrn: string, entityMrn: string, version?: string, instanceId?: number): Observable<Entity> => {
-    if (context === MenuType.User) {
+  updateData = (context: ResourceType, body: object, orgMrn: string, entityMrn: string, version?: string, instanceId?: number): Observable<Entity> => {
+    if (context === ResourceType.User) {
       return this.userControllerService.updateUser(body as User, orgMrn, entityMrn);
-    } else if (context === MenuType.Device) {
+    } else if (context === ResourceType.Device) {
       return this.deviceControllerService.updateDevice(body as Device, orgMrn, entityMrn);
-    } else if (context === MenuType.Vessel) {
+    } else if (context === ResourceType.Vessel) {
       return this.vesselControllerService.updateVessel(formatVesselToUpload(body) as Vessel, orgMrn, entityMrn);
-    } else if (context === MenuType.MMS) {
+    } else if (context === ResourceType.MMS) {
       return this.mmsControllerService.updateMMS(body as MMS, orgMrn, entityMrn);
-    } else if (context === MenuType.Service && version) {
+    } else if (context === ResourceType.Service && version) {
       return this.serviceControllerService.updateService(body as Service, orgMrn, entityMrn, version);
-    } else if (context === MenuType.Organization || context === MenuType.OrgCandidate) {
+    } else if (context === ResourceType.Organization || context === ResourceType.OrgCandidate) {
       return this.organizationControllerService.updateOrganization(body as Organization, entityMrn);
-    } else if (context === MenuType.Role) {
+    } else if (context === ResourceType.Role) {
       return this.roleControllerService.updateRole(body as Role, orgMrn, this.numberId);
-    } else if (context === MenuType.Instance) {
+    } else if (context === ResourceType.Instance) {
       return this.instanceControllerService.updateInstance(Object.assign({}, body, {id: instanceId}) as InstanceDtDto, instanceId);
     }
     return new Observable();
   }
 
-  deleteData = (context: MenuType, orgMrn: string, entityMrn: string, version?: string, instanceId?: number): Observable<Entity> => {
-    if (context === MenuType.User) {
+  deleteData = (context: ResourceType, orgMrn: string, entityMrn: string, version?: string, instanceId?: number): Observable<Entity> => {
+    if (context === ResourceType.User) {
       return this.userControllerService.deleteUser(orgMrn, entityMrn);
-    } else if (context === MenuType.Device) {
+    } else if (context === ResourceType.Device) {
       return this.deviceControllerService.deleteDevice(orgMrn, entityMrn);
-    } else if (context === MenuType.Vessel) {
+    } else if (context === ResourceType.Vessel) {
       return this.vesselControllerService.deleteVessel(orgMrn, entityMrn);
-    } else if (context === MenuType.MMS) {
+    } else if (context === ResourceType.MMS) {
       return this.mmsControllerService.deleteMMS(orgMrn, entityMrn);
-    } else if (context === MenuType.Service && version) {
+    } else if (context === ResourceType.Service && version) {
       return this.serviceControllerService.deleteService(orgMrn, entityMrn, version);
-    } else if (context === MenuType.Organization || context === MenuType.OrgCandidate) {
+    } else if (context === ResourceType.Organization || context === ResourceType.OrgCandidate) {
       return this.organizationControllerService.deleteOrg(entityMrn);
-    } else if (context === MenuType.Role) {
+    } else if (context === ResourceType.Role) {
       return this.roleControllerService.deleteRole(orgMrn, this.numberId);
-    } else if (context === MenuType.Instance) {
+    } else if (context === ResourceType.Instance) {
       return this.instanceControllerService.deleteInstance(this.numberId);
     }
     return new Observable();
   }
 
-  loadDataContent = (context: MenuType, orgMrn: string, entityMrn: string, version?: string, instanceId?: number): Observable<Entity> => {
-    if (context === MenuType.User) {
+  loadDataContent = (context: ResourceType, orgMrn: string, entityMrn: string, version?: string, instanceId?: number): Observable<Entity> => {
+    if (context === ResourceType.User) {
       return this.userControllerService.getUser(orgMrn, entityMrn);
-    } else if (context === MenuType.Device) {
+    } else if (context === ResourceType.Device) {
       return this.deviceControllerService.getDevice(orgMrn, entityMrn);
-    } else if (context === MenuType.Vessel) {
+    } else if (context === ResourceType.Vessel) {
       return this.vesselControllerService.getVessel(orgMrn, entityMrn);
-    } else if (context === MenuType.MMS) {
+    } else if (context === ResourceType.MMS) {
       return this.mmsControllerService.getMMS(orgMrn, entityMrn);
-    } else if (context === MenuType.Service && version) {
+    } else if (context === ResourceType.Service && version) {
       return this.serviceControllerService.getServiceVersion(orgMrn, entityMrn, version);
-    } else if (context === MenuType.Organization) {
+    } else if (context === ResourceType.Organization) {
       return this.organizationControllerService.getOrganizationByMrn(entityMrn);
-    } else if (context === MenuType.Instance) {
+    } else if (context === ResourceType.Instance) {
       return this.instanceControllerService.getInstance(instanceId);
     }
     return new Observable();

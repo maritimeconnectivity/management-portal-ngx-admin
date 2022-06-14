@@ -16,6 +16,9 @@
 
 import { convertTime } from "../../util/timeConverter";
 
+/**
+ * a json format for active certificates articulating how the corresponding interface should work
+ */
 export const ActiveCertificatesColumn = {
     start: {
       title: 'Valid from',
@@ -31,8 +34,11 @@ export const ActiveCertificatesColumn = {
         return convertTime(timestamp);
       },
     },
-}
+};
 
+/**
+ * a json format for revoked certificates articulating how the corresponding interface should work
+ */
 export const RevokedCertificatesColumn = {
   revokeInfo: {
     title: 'Revoked from',
@@ -45,4 +51,4 @@ export const RevokedCertificatesColumn = {
     title: 'Reason',
     type: 'string',
   },
-}
+};

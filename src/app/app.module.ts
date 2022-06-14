@@ -15,7 +15,7 @@
  */
 
 import { LandingModule } from './landing/landing.module';
-import { ApiModule as MIRApiModule } from './backend-api/identity-registry/api.module';
+import { ApiModule as MIRApiModule } from './backend-api/identity-registry';
 import { ApiModule as MSRApiModule } from './backend-api/service-registry';
 /**
  * @license
