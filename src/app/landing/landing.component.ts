@@ -16,6 +16,9 @@
 
 import { Component } from '@angular/core';
 
+/**
+ * a component for landing module
+ */
 @Component({
   selector: 'ngx-landing',
   template: '<router-outlet></router-outlet>',

@@ -27,6 +27,9 @@ class Info{
   contact: string;
 }
 
+/**
+ * a component for showing overall information of relavant MCP components and Management Portal
+ */
 @Component({
   selector: 'ngx-about',
   templateUrl: './about.component.html',

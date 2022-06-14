@@ -18,7 +18,6 @@ import { AuthService } from './../auth/auth.service';
 import { NotifierService } from 'angular-notifier';
 import { Organization } from './../backend-api/identity-registry/model/organization';
 import { OrganizationControllerService } from './../backend-api/identity-registry/api/organizationController.service';
-import { RoleControllerService } from './../backend-api/identity-registry/api/roleController.service';
 import { Component, OnInit } from '@angular/core';
 
 import { MENU_ITEMS, MIR_MENU_FOR_ADMIN, MIR_MENU_FOR_ORG, MSR_MENU_FOR_ORG} from './pages-menu';
@@ -26,6 +25,9 @@ import { PermissionResolver } from '../auth/auth.permission';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AppConfig } from '../app.config';
 
+/**
+ * a core components for showing pages
+ */
 @Component({
   selector: 'ngx-pages',
   styleUrls: ['pages.component.scss'],
@@ -45,7 +47,6 @@ export class PagesComponent implements OnInit {
   MIRPermission: any;
 
   constructor(
-    private roleControllerService: RoleControllerService,
     private organizationControllerService: OrganizationControllerService,
     private notifierService: NotifierService,
     private authService: AuthService,

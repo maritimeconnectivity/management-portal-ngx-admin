@@ -16,10 +16,14 @@
 
 import { VesselControllerService } from './../../backend-api/identity-registry/api/vesselController.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MenuType } from '../models/menuType';
+import { ResourceType } from '../models/menuType';
 import { NbIconLibraries } from '@nebular/theme';
 import { NotifierService } from 'angular-notifier';
 
+/**
+ * 
+ * 
+ */
 @Component({
   selector: 'ngx-input-mcp-entity',
   templateUrl: './input-mcp-entity.component.html',
@@ -27,7 +31,7 @@ import { NotifierService } from 'angular-notifier';
 })
 export class InputMcpEntityComponent implements OnInit {
 
-  @Input() menuType: MenuType;
+  @Input() menuType: ResourceType;
   @Input() isEditing: boolean;
   @Input() orgMrn: string;
   @Input() entity: any;
@@ -47,7 +51,7 @@ export class InputMcpEntityComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    if (this.menuType === MenuType.Vessel) {
+    if (this.menuType === ResourceType.Vessel) {
       this.isLoading = true;
       this.vesselControllerService.getOrganizationVessels(this.orgMrn).subscribe(
         data => {

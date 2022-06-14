@@ -16,6 +16,9 @@
 
 import { Component, OnInit } from '@angular/core';
 
+/**
+ * a process component for explaining joining process
+ */
 @Component({
   selector: 'ngx-process-dialog',
   templateUrl: './process-dialog.component.html',

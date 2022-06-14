@@ -35,8 +35,6 @@ The deployment is powered by [angular-cli-ghpages](https://github.com/angular-sc
 #### Deployment to GitHub Pages through GitHub Action
 You can also take [our GitHub Action script](https://github.com/maritimeconnectivity/ManagementPortal/blob/main/.github/workflows/main.yml) to deploy your own management portal to GitHub Pages.
 
-
-
 ### Configuration
 There are examples of environment configuration in the 'src/environments' folder.
 
@@ -74,7 +72,10 @@ Configuration parameter covers:
 
 * *environmentName*: environment name showing at the front page
 
-### Configurable interface through ColumnFor*.json file
+#### Client generation for backend integration with MIR and MSR
+The client for MIR and MSR was auto-generated from the corresponding swagger files with [Swagger Editor](https://editor.swagger.io/).
+
+#### Configurable interface through ColumnFor*.json file
 The main idea of making the Management Portal configurable has done by JSON formulation of interface capability for each attribute.
 
 We have [ColumnForMenu.json](https://github.com/maritimeconnectivity/ManagementPortal/blob/main/src/app/shared/models/columnForMenu.ts) and [ColumnForCert.json](https://github.com/maritimeconnectivity/ManagementPortal/blob/main/src/app/shared/models/columnForCertificate.ts) as examples on how it depicts functional interfaces for MCP entities and certificate respectively.

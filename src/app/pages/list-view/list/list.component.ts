@@ -28,7 +28,7 @@ import { ColumnForMenu } from '../../../shared/models/columnForMenu';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
-import { MenuType, MenuTypeIconNames, EntityTypes } from '../../../shared/models/menuType';
+import { ResourceType, MenuTypeIconNames, EntityTypes } from '../../../shared/models/menuType';
 import { NbIconLibraries } from '@nebular/theme';
 import { NotifierService } from 'angular-notifier';
 import { MmsControllerService, Role, VesselControllerService } from '../../../backend-api/identity-registry';
@@ -50,7 +50,7 @@ const capitalize = (s): string => {
 
 export class ListComponent implements OnInit {
 
-  menuType: MenuType = MenuType.Device;
+  menuType: ResourceType = ResourceType.Device;
   title = ' for ';
   contextForAttributes = 'list';
   orgName = 'MCC';
@@ -97,13 +97,13 @@ export class ListComponent implements OnInit {
 
   ngOnInit(): void {
     const menuTypeString = this.router.url.split('/').pop();
-    if (menuTypeString === MenuType.InstanceOfOrg) {
+    if (menuTypeString === ResourceType.InstanceOfOrg) {
       this.isForServiceForOrg = true;
-      this.menuType = MenuType.Instance;
+      this.menuType = ResourceType.Instance;
     } else {
-      this.menuType = menuTypeString.replace('-', '').substr(0, menuTypeString.length - 1) as MenuType;
+      this.menuType = menuTypeString.replace('-', '').substr(0, menuTypeString.length - 1) as ResourceType;
     }
-    if (Object.values(MenuType).includes(this.menuType)) {
+    if (Object.values(ResourceType).includes(this.menuType)) {
       this.menuTypeName = MenuTypeNames[this.menuType.toString()];
       this.iconName = MenuTypeIconNames[this.menuType.toString()];
       this.orgMrn = this.authService.authState.orgMrn;
@@ -132,13 +132,13 @@ export class ListComponent implements OnInit {
       this.title = `${capitalize(this.menuTypeName)} list`;
       this.isLoading = true;
 
-      if (Object.values(MenuType).includes(this.menuType)) {
-        if(this.menuType === MenuType.Organization || this.menuType === MenuType.OrgCandidate){
+      if (Object.values(ResourceType).includes(this.menuType)) {
+        if(this.menuType === ResourceType.Organization || this.menuType === ResourceType.OrgCandidate){
           this.loadDataContent(this.menuType).subscribe(
             res => {this.refreshData(this.formatResponse(res.content)); this.isLoading = false;},
             error => this.notifierService.notify('error', error.message),
           );
-        } else if(this.menuType === MenuType.Role){
+        } else if(this.menuType === ResourceType.Role){
           this.loadMyOrganization().subscribe(
             resOrg => this.loadRoles(resOrg.mrn).subscribe(
               resData => {this.refreshData(resData); this.isLoading = false;},
@@ -146,7 +146,7 @@ export class ListComponent implements OnInit {
             ),
             error => this.notifierService.notify('error', error.message),
           );
-        } else if(this.menuType === MenuType.Instance || this.menuType === MenuType.InstanceOfOrg){
+        } else if(this.menuType === ResourceType.Instance || this.menuType === ResourceType.InstanceOfOrg){
           this.loadServiceInstances(this.isForServiceForOrg ? this.orgMrn : undefined).subscribe(
             resData => {this.refreshData(this.formatResponseForService(resData)); this.isLoading = false;},
             error => this.notifierService.notify('error', error.message),
@@ -196,7 +196,7 @@ export class ListComponent implements OnInit {
     }
   }
 
-  delete(menuType: MenuType, orgMrn: string, entityMrn: string, instanceVersion?: string, numberId?: number) {
+  delete(menuType: ResourceType, orgMrn: string, entityMrn: string, instanceVersion?: string, numberId?: number) {
     let message = 'Are you sure you want to delete?';
     message = EntityTypes.indexOf(this.menuType) >= 0 ?
       message + ' All certificates under this entity will be revoked.' : message;
@@ -211,29 +211,29 @@ export class ListComponent implements OnInit {
     }
   }
 
-  deleteData = (context: MenuType, orgMrn: string, entityMrn: string, version?: string, numberId?: number): Observable<Entity> => {
-    if (context === MenuType.User) {
+  deleteData = (context: ResourceType, orgMrn: string, entityMrn: string, version?: string, numberId?: number): Observable<Entity> => {
+    if (context === ResourceType.User) {
       return this.userControllerService.deleteUser(orgMrn, entityMrn);
-    } else if (context === MenuType.Device) {
+    } else if (context === ResourceType.Device) {
       return this.deviceControllerService.deleteDevice(orgMrn, entityMrn);
-    } else if (context === MenuType.Vessel) {
+    } else if (context === ResourceType.Vessel) {
       return this.vesselControllerService.deleteVessel(orgMrn, entityMrn);
-    } else if (context === MenuType.MMS) {
+    } else if (context === ResourceType.MMS) {
       return this.mmsControllerService.deleteMMS(orgMrn, entityMrn);
-    } else if (context === MenuType.Service && version) {
+    } else if (context === ResourceType.Service && version) {
       return this.serviceControllerService.deleteService(orgMrn, entityMrn, version);
-    } else if (context === MenuType.Organization || context === MenuType.OrgCandidate) {
+    } else if (context === ResourceType.Organization || context === ResourceType.OrgCandidate) {
       return this.organizationControllerService.deleteOrg(entityMrn);
-    } else if (context === MenuType.Role && numberId) {
+    } else if (context === ResourceType.Role && numberId) {
       return this.roleControllerService.deleteRole(orgMrn, numberId);
-    } else if (context === MenuType.Instance || context === MenuType.InstanceOfOrg) {
+    } else if (context === ResourceType.Instance || context === ResourceType.InstanceOfOrg) {
       return this.instanceControllerService.deleteInstance(numberId);
     }
     return new Observable();
   }
 
   onEdit(event): void {
-    const mrn = this.menuType === MenuType.Instance ? event.data.id : event.data.mrn;
+    const mrn = this.menuType === ResourceType.Instance ? event.data.id : event.data.mrn;
     this.router.navigate([this.router.url,
       mrn ? encodeURIComponent(mrn) : event.data.id],
         { queryParams: { name: event.data.roleName ? event.data.roleName :
@@ -281,20 +281,20 @@ export class ListComponent implements OnInit {
       this.instanceControllerService.getInstances({});
   }
 
-  loadDataContent = (context: MenuType, orgMrn?: string):Observable<PageEntity> => {
-    if (context === MenuType.User) {
+  loadDataContent = (context: ResourceType, orgMrn?: string):Observable<PageEntity> => {
+    if (context === ResourceType.User) {
       return this.userControllerService.getOrganizationUsers(orgMrn);
-    } else if (context === MenuType.Device) {
+    } else if (context === ResourceType.Device) {
       return this.deviceControllerService.getOrganizationDevices(orgMrn);
-    } else if (context === MenuType.Vessel) {
+    } else if (context === ResourceType.Vessel) {
       return this.vesselControllerService.getOrganizationVessels(orgMrn);
-    } else if (context === MenuType.MMS) {
+    } else if (context === ResourceType.MMS) {
       return this.mmsControllerService.getOrganizationMMSes(orgMrn);
-    } else if (context === MenuType.Service) {
+    } else if (context === ResourceType.Service) {
       return this.serviceControllerService.getOrganizationServices(orgMrn);
-    } else if (context === MenuType.Organization) {
+    } else if (context === ResourceType.Organization) {
       return this.organizationControllerService.getOrganization();
-    } else if (context === MenuType.OrgCandidate) {
+    } else if (context === ResourceType.OrgCandidate) {
       return this.organizationControllerService.getUnapprovedOrganizations();
     }
     return new Observable();

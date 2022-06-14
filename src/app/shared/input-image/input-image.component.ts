@@ -15,7 +15,7 @@
  */
 
 import { Observable } from 'rxjs';
-import { MenuType } from './../models/menuType';
+import { ResourceType } from './../models/menuType';
 import { VesselImageControllerService } from './../../backend-api/identity-registry/api/vesselImageController.service';
 import { LogoControllerService } from './../../backend-api/identity-registry/api/logoController.service';
 import { Component, Input, OnInit } from '@angular/core';
@@ -32,7 +32,7 @@ type FileInfo = any;
 })
 export class InputImageComponent implements OnInit {
 
-  @Input() menuType: MenuType;
+  @Input() menuType: ResourceType;
   @Input() isEditing: boolean;
   @Input() orgMrn: string;
   @Input() entityMrn: string;
@@ -99,26 +99,26 @@ export class InputImageComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
-  updatePut(menuType: MenuType, file: any, entityMrn: string, orgMrn: string, mediaType: string): Observable<any> {
-    return menuType === MenuType.Organization ?
+  updatePut(menuType: ResourceType, file: any, entityMrn: string, orgMrn: string, mediaType: string): Observable<any> {
+    return menuType === ResourceType.Organization ?
         this.logoControllerService.updateLogoPut(file, entityMrn, mediaType) :
-      menuType === MenuType.Vessel ?
+      menuType === ResourceType.Vessel ?
         this.vesselImageControllerService.updateVesselImagePut(file, orgMrn, entityMrn, mediaType) :
         new Observable<any>();
   }
 
-  getImage(menuType: MenuType, entityMrn: string, orgMrn: string): Observable<any> {
-    return menuType === MenuType.Organization ?
+  getImage(menuType: ResourceType, entityMrn: string, orgMrn: string): Observable<any> {
+    return menuType === ResourceType.Organization ?
         this.logoControllerService.getLogo(entityMrn) :
-      menuType === MenuType.Vessel ?
+      menuType === ResourceType.Vessel ?
         this.vesselImageControllerService.getVesselImage(orgMrn, entityMrn) :
         new Observable<any>();
   }
 
-  deleteImage(menuType: MenuType, entityMrn: string, orgMrn: string): Observable<any> {
-    return menuType === MenuType.Organization ?
+  deleteImage(menuType: ResourceType, entityMrn: string, orgMrn: string): Observable<any> {
+    return menuType === ResourceType.Organization ?
         this.logoControllerService.deleteLogo(entityMrn) :
-      menuType === MenuType.Vessel ?
+      menuType === ResourceType.Vessel ?
         this.vesselImageControllerService.deleteVesselImage(orgMrn, entityMrn) :
         new Observable<any>();
   }

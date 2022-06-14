@@ -22,6 +22,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { ColumnForMenu } from '../../shared/models/columnForMenu';
 
+/**
+ * a component for registration process
+ */
 @Component({
   selector: 'ngx-register-dialog',
   templateUrl: './register-dialog.component.html',

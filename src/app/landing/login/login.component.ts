@@ -23,22 +23,24 @@ import { ActivatedRoute } from '@angular/router';
 import { NbDialogService } from '@nebular/theme';
 import { AppConfig } from '../../app.config';
 
+/**
+ * a main landing component for login
+ */
 @Component({
   selector: 'ngx-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-
-/**
- * a main landing page for login
- */
 export class LoginComponent implements OnInit {
 
   /**
-   * value for version
+   * value for version of the portal
    */
   version = AppConfig.MP_VERSION;
-  canJoin = true;
+
+  /**
+   * environment name to show at front
+   */
   environmentName = this.capitalize(AppConfig.ENVIRONMENT_NAME);
 
   constructor(
@@ -65,6 +67,9 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  /**
+   * the function activates login process
+   */
   logIn() {
     this.authService.login();
   }
@@ -76,6 +81,9 @@ export class LoginComponent implements OnInit {
     this.dialogService.open(RegisterDialogComponent);
   }
 
+  /**
+   * it triggers opening the process dialog up
+   */
   createProcessDialog() {
     this.dialogService.open(ProcessDialogComponent);
   }

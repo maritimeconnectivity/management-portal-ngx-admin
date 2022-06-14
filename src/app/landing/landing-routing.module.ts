@@ -31,6 +31,9 @@ const routes: Routes = [{
   ],
 }];
 
+/**
+ * a router component for landing module
+ */
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
