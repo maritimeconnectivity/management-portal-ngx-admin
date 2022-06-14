@@ -155,7 +155,7 @@ export class EditableFormComponent implements OnInit {
   revokedCertificates = [];
   isServiceInstance = false;
   geometry = {};
-  
+
   constructor(
     private mrnHelperService: MrnHelperService,
     private formBuilder: FormBuilder,
@@ -185,6 +185,9 @@ export class EditableFormComponent implements OnInit {
     return this.columnForMenu[resourceType] ? this.columnForMenu[resourceType].shortIdType : undefined;
   }
 
+  /**
+   * a function initializing the interface depending on its context
+   */
   ngOnInit(): void {
     this.setForm();
 
@@ -223,6 +226,9 @@ export class EditableFormComponent implements OnInit {
     }
   }
 
+  /**
+   * creating a form taking given menu type account into
+   */
   setForm = () => {
     // filtered with context
     this.columnForMenu = {};
@@ -236,6 +242,10 @@ export class EditableFormComponent implements OnInit {
     this.setFormWithValidators();
   }
 
+  /**
+   * adjusting the form to given data
+   * @param data data from backend
+   */
   setFormFieldVisibility = (data?: any) => {
     const menuWithOptions = [];
     Object.entries(this.columnForMenu).forEach(([key, menu]) =>
@@ -268,6 +278,11 @@ export class EditableFormComponent implements OnInit {
     }
   }
 
+  /**
+   * getting field's visibility
+   * @param key field name
+   * @returns a boolean indicating whether the field should be visible or not
+   */
   isFieldVisible(key: string) {
     return this.fieldVisibility[key];
   }
@@ -314,11 +329,18 @@ export class EditableFormComponent implements OnInit {
     this.onRefresh.emit();
   }
 
+  /**
+   * handling of edit cancel
+   */
   cancelEdit() {
     this.invertIsEditing();
     this.refreshData();
   }
 
+  /**
+   * getting data fields and corresponding values of this form but outside of formGroup, which only allows string or number
+   * @returns form with fetched value
+   */
   fetchMissingValuesFromForm = () => {
     const result = {};
     for (const item of this.fetchList) {
@@ -329,6 +351,10 @@ export class EditableFormComponent implements OnInit {
     return result;
   }
 
+  /**
+   * getting form values from every input fields
+   * @returns a full set of values
+   */
   getFormValue = () => {
     // TEMPORARY: just to make it work
     if (this.menuType === ResourceType.Instance) {
@@ -347,7 +373,12 @@ export class EditableFormComponent implements OnInit {
     return Object.assign(this.loadedData, filtered, this.fetchMissingValuesFromForm());
   }
 
-  // filter unselected (empty) options from the form value
+  /**
+   * filtering unselected (empty) options from the form value
+   * @param formValue value of form
+   * @param menuWithOptions set of selection
+   * @returns form values only selected
+   */
   filterUnselected = (formValue: object, menuWithOptions: object[]): {} => {
     const unfiltered = Object.assign({}, formValue);
 
@@ -360,6 +391,9 @@ export class EditableFormComponent implements OnInit {
     return unfiltered;
   }
 
+  /**
+   * setting admin permission from auth information
+   */
   setIsAdmin = () => {
     if (this.menuType === ResourceType.Instance) {
       const isOurServiceInstance =  this.isEditing ? AuthService.staticAuthInfo.orgMrn === this.formGroup.get('organizationId').value :
@@ -370,14 +404,27 @@ export class EditableFormComponent implements OnInit {
     }
   }
 
+  /**
+   * indicating that given field is used for time
+   * @param fieldName name of field
+   * @returns whether the field notating time or not
+   */
   isForTime = (fieldName: string) => {
     return fieldName.endsWith('At') || fieldName === 'end' || fieldName === 'start';
   }
 
+  /**
+   * providing a proper way to show time
+   * @param timeString given string
+   * @returns a formatted string of time
+   */
   convertTimeString = (timeString: string) => {
     return convertTime(timeString);
   }
 
+  /**
+   * inverting editing status of page
+   */
   invertIsEditing = () => {
     this.isEditing = !this.isEditing;
     if (!this.isEditing){
