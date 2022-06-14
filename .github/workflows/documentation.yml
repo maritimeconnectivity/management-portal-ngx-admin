@@ -53,7 +53,7 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: documentation
-          path: documentation
+          path: docs
   deploy:
     name : Deploy GitHub pages 🚀
     needs: [build]
