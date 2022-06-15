@@ -80,5 +80,8 @@ The main idea of making the Management Portal configurable has done by JSON form
 
 We have [ColumnForMenu.json](https://github.com/maritimeconnectivity/ManagementPortal/blob/main/src/app/shared/models/columnForMenu.ts) and [ColumnForCert.json](https://github.com/maritimeconnectivity/ManagementPortal/blob/main/src/app/shared/models/columnForCertificate.ts) as examples on how it depicts functional interfaces for MCP entities and certificate respectively.
 
+## Acknowledgement
+This development is a part of the project titled “Development of Open Platform Technologies for Smart Maritime Safety and Industries” funded by the Korea Research Institute of Ships and Ocean Engineering (PES4070).
+
 ## License
 This project is licensed under the Apache 2.0 License - see the [LICENSE.md](LICENSE.md) file for details.
