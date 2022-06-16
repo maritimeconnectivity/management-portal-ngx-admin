@@ -314,14 +314,22 @@ export class EditableFormComponent implements OnInit {
     this.onRefresh.emit();
   }
 
+  /**
+   * handling edit cancel event
+   */
   cancelEdit() {
     this.invertIsEditing();
     this.refreshData();
   }
 
-  fetchMissingValuesFromForm = () => {
+  /**
+   * fetching missed fields which can't get from a native formGroup
+   * @param fetchList list of fields needed to be fetched
+   * @returns fetched values
+   */
+  fetchMissingValuesFromForm = (fetchList: any[]) => {
     const result = {};
-    for (const item of this.fetchList) {
+    for (const item of fetchList) {
       if (this.formGroup.get(item)) {
         result[item] = this.formGroup.get(item).value;
       }
@@ -329,6 +337,10 @@ export class EditableFormComponent implements OnInit {
     return result;
   }
 
+  /**
+   * getting a full and solid values from the editable form
+   * @returns fully integrated form value
+   */
   getFormValue = () => {
     // TEMPORARY: just to make it work
     if (this.menuType === ResourceType.Instance) {
@@ -343,11 +355,17 @@ export class EditableFormComponent implements OnInit {
       }
     }
 
-    const filtered = this.filterUnselected(this.formGroup.value, Object.entries(this.columnForMenu).filter((e: any) => e[1].options));
-    return Object.assign(this.loadedData, filtered, this.fetchMissingValuesFromForm());
+    const filtered =
+      this.filterUnselected(this.formGroup.value, Object.entries(this.columnForMenu).filter((e: any) => e[1].options));
+    return Object.assign(this.loadedData, filtered, this.fetchMissingValuesFromForm(this.fetchList));
   }
 
-  // filter unselected (empty) options from the form value
+  /**
+   * filtering unselected (empty) options from the form value
+   * @param formValue form to be filtered
+   * @param menuWithOptions menu option reference
+   * @returns form values without undefined
+   */
   filterUnselected = (formValue: object, menuWithOptions: object[]): {} => {
     const unfiltered = Object.assign({}, formValue);
 
@@ -360,6 +378,9 @@ export class EditableFormComponent implements OnInit {
     return unfiltered;
   }
 
+  /**
+   * setting permission for page
+   */
   setIsAdmin = () => {
     if (this.menuType === ResourceType.Instance) {
       const isOurServiceInstance =  this.isEditing ? AuthService.staticAuthInfo.orgMrn === this.formGroup.get('organizationId').value :
@@ -370,6 +391,11 @@ export class EditableFormComponent implements OnInit {
     }
   }
 
+  /**
+   * checking the field is for time-specific
+   * @param fieldName name of field
+   * @returns whether the field is for time or not
+   */
   isForTime = (fieldName: string) => {
     return fieldName.endsWith('At') || fieldName === 'end' || fieldName === 'start';
   }
@@ -389,11 +415,18 @@ export class EditableFormComponent implements OnInit {
     }
   }
 
-  settled = (value: boolean) => {
-    this.isLoaded = value;
+  /**
+   * setting the page with the settlement state
+   * @param isLoaded stating the loading result
+   */
+  settled = (isLoaded: boolean) => {
+    this.isLoaded = isLoaded;
     this.isLoading = false;
   }
 
+  /**
+   * activating a field for instance version
+   */
   updateForNewVer() {
     this.formGroup.get('instanceVersion').enable();
     this.isForNew = true;
