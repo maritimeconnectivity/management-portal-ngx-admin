@@ -155,7 +155,7 @@ export class EditableFormComponent implements OnInit {
   revokedCertificates = [];
   isServiceInstance = false;
   geometry = {};
-  
+
   constructor(
     private mrnHelperService: MrnHelperService,
     private formBuilder: FormBuilder,
@@ -185,6 +185,9 @@ export class EditableFormComponent implements OnInit {
     return this.columnForMenu[resourceType] ? this.columnForMenu[resourceType].shortIdType : undefined;
   }
 
+  /**
+   * a function initializing the interface depending on its context
+   */
   ngOnInit(): void {
     this.setForm();
 
@@ -223,6 +226,9 @@ export class EditableFormComponent implements OnInit {
     }
   }
 
+  /**
+   * creating a form taking given menu type account into
+   */
   setForm = () => {
     // filtered with context
     this.columnForMenu = {};
@@ -236,6 +242,10 @@ export class EditableFormComponent implements OnInit {
     this.setFormWithValidators();
   }
 
+  /**
+   * adjusting the form to given data
+   * @param data data from backend
+   */
   setFormFieldVisibility = (data?: any) => {
     const menuWithOptions = [];
     Object.entries(this.columnForMenu).forEach(([key, menu]) =>
@@ -268,6 +278,11 @@ export class EditableFormComponent implements OnInit {
     }
   }
 
+  /**
+   * getting field's visibility
+   * @param key field name
+   * @returns a boolean indicating whether the field should be visible or not
+   */
   isFieldVisible(key: string) {
     return this.fieldVisibility[key];
   }
@@ -379,7 +394,7 @@ export class EditableFormComponent implements OnInit {
   }
 
   /**
-   * setting permission for page
+   * setting admin permission from auth information
    */
   setIsAdmin = () => {
     if (this.menuType === ResourceType.Instance) {
@@ -400,10 +415,18 @@ export class EditableFormComponent implements OnInit {
     return fieldName.endsWith('At') || fieldName === 'end' || fieldName === 'start';
   }
 
+  /**
+   * providing a proper way to show time
+   * @param timeString given string
+   * @returns a formatted string of time
+   */
   convertTimeString = (timeString: string) => {
     return convertTime(timeString);
   }
 
+  /**
+   * inverting editing status of page
+   */
   invertIsEditing = () => {
     this.isEditing = !this.isEditing;
     if (!this.isEditing){
