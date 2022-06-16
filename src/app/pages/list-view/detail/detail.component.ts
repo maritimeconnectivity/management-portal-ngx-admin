@@ -292,9 +292,9 @@ export class DetailComponent implements OnInit {
       this.updateData(this.menuType, body, this.authService.authState.orgMrn, mrn, this.instanceVersion, this.numberId).subscribe(
         res => {
           this.notifierService.notify('success', this.menuType + ' has been updated');
-          if(this.editableForm) {
-            this.editableForm.adjustData(body);
+          if (this.editableForm) {
             this.editableForm.invertIsEditing();
+            this.refreshData();
           }
           this.settle(true);
         },

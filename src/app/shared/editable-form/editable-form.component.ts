@@ -330,7 +330,7 @@ export class EditableFormComponent implements OnInit {
   }
 
   /**
-   * handling of edit cancel
+   * handling edit cancel event
    */
   cancelEdit() {
     this.invertIsEditing();
@@ -338,12 +338,13 @@ export class EditableFormComponent implements OnInit {
   }
 
   /**
-   * getting data fields and corresponding values of this form but outside of formGroup, which only allows string or number
-   * @returns form with fetched value
+   * fetching missed fields which can't get from a native formGroup
+   * @param fetchList list of fields needed to be fetched
+   * @returns fetched values
    */
-  fetchMissingValuesFromForm = () => {
+  fetchMissingValuesFromForm = (fetchList: any[]) => {
     const result = {};
-    for (const item of this.fetchList) {
+    for (const item of fetchList) {
       if (this.formGroup.get(item)) {
         result[item] = this.formGroup.get(item).value;
       }
@@ -352,8 +353,8 @@ export class EditableFormComponent implements OnInit {
   }
 
   /**
-   * getting form values from every input fields
-   * @returns a full set of values
+   * getting a full and solid values from the editable form
+   * @returns fully integrated form value
    */
   getFormValue = () => {
     // TEMPORARY: just to make it work
@@ -369,15 +370,16 @@ export class EditableFormComponent implements OnInit {
       }
     }
 
-    const filtered = this.filterUnselected(this.formGroup.value, Object.entries(this.columnForMenu).filter((e: any) => e[1].options));
-    return Object.assign(this.loadedData, filtered, this.fetchMissingValuesFromForm());
+    const filtered =
+      this.filterUnselected(this.formGroup.value, Object.entries(this.columnForMenu).filter((e: any) => e[1].options));
+    return Object.assign(this.loadedData, filtered, this.fetchMissingValuesFromForm(this.fetchList));
   }
 
   /**
    * filtering unselected (empty) options from the form value
-   * @param formValue value of form
-   * @param menuWithOptions set of selection
-   * @returns form values only selected
+   * @param formValue form to be filtered
+   * @param menuWithOptions menu option reference
+   * @returns form values without undefined
    */
   filterUnselected = (formValue: object, menuWithOptions: object[]): {} => {
     const unfiltered = Object.assign({}, formValue);
@@ -405,9 +407,9 @@ export class EditableFormComponent implements OnInit {
   }
 
   /**
-   * indicating that given field is used for time
+   * checking the field is for time-specific
    * @param fieldName name of field
-   * @returns whether the field notating time or not
+   * @returns whether the field is for time or not
    */
   isForTime = (fieldName: string) => {
     return fieldName.endsWith('At') || fieldName === 'end' || fieldName === 'start';
@@ -436,11 +438,18 @@ export class EditableFormComponent implements OnInit {
     }
   }
 
-  settled = (value: boolean) => {
-    this.isLoaded = value;
+  /**
+   * setting the page with the settlement state
+   * @param isLoaded stating the loading result
+   */
+  settled = (isLoaded: boolean) => {
+    this.isLoaded = isLoaded;
     this.isLoading = false;
   }
 
+  /**
+   * activating a field for instance version
+   */
   updateForNewVer() {
     this.formGroup.get('instanceVersion').enable();
     this.isForNew = true;
