@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  *//* tslint:disable:no-unused-variable member-ordering */
 
+ import { environment } from './../../../../environments/environment';
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent }                           from '@angular/common/http';
@@ -27,7 +28,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class InstanceControllerService {
 
-    protected basePath = 'https://msr-test.maritimeconnectivity.net';
+    protected basePath = environment.srBasePath;
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
