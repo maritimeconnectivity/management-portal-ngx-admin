@@ -12,6 +12,10 @@
                   class="form-control search-location" #search (change)="onQueryStringChanged($event)">
         </div>
         <div class="row">
+          <input nbInput fullWidth placeholder="free text to search" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
+                  class="form-control search-location" #search (change)="onFreeTextChanged($event)">
+        </div>
+        <div class="row">
           <button fullWidth status="primary" nbButton (click)="onSearch()">Search</button>
         </div>
         <div class="row">
