@@ -25,21 +25,21 @@ export interface Point {
     x?: number;
     y?: number;
     simple?: boolean;
-    boundaryDimension?: number;
     coordinate?: Coordinate;
     numPoints?: number;
     dimension?: number;
     boundary?: Geometry;
+    boundaryDimension?: number;
     geometryType?: string;
     coordinateSequence?: CoordinateSequence;
     length?: number;
     valid?: boolean;
-    precisionModel?: PrecisionModel;
+    srid?: number;
+    numGeometries?: number;
     rectangle?: boolean;
     area?: number;
     centroid?: Point;
     interiorPoint?: Point;
     envelopeInternal?: Envelope;
-    srid?: number;
-    numGeometries?: number;
+    precisionModel?: PrecisionModel;
 }

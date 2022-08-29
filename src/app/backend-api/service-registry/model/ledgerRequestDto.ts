@@ -15,8 +15,8 @@ export interface LedgerRequestDto {
     serviceInstanceId: number;
     status?: LedgerRequestDto.StatusEnum;
     reason?: string;
-    createdAt?: string;
-    lastUpdatedAt?: string;
+    createdAt?: Date;
+    lastUpdatedAt?: Date;
 }
 export namespace LedgerRequestDto {
     export type StatusEnum = 'INACTIVE' | 'CREATED' | 'VETTING' | 'VETTED' | 'REQUESTING' | 'SUCCEEDED' | 'FAILED' | 'REJECTED';

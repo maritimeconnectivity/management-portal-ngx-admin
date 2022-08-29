@@ -1,6 +1,5 @@
 import { ResourceType } from './../../../shared/models/menuType';
 import { geojsonToWKT } from '@terraformer/wkt';
-import { SearchControllerService } from './../../../backend-api/service-registry/api/searchController.service';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -53,7 +52,7 @@ export class SrSearchComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private searchControllerService: SearchControllerService,
+    //private searchControllerService: SearchControllerService,
   ) { }
 
   ngOnInit(): void {
@@ -76,6 +75,7 @@ export class SrSearchComponent implements OnInit {
 
   search = (queryString: string, wktString: string) => {
     this.isLoading = true;
+    /*
     // send a query with given geometry, converted to WKT
     this.searchControllerService.searchInstances(queryString, {}, undefined, wktString)
       .subscribe(res => {
@@ -87,6 +87,7 @@ export class SrSearchComponent implements OnInit {
           geometries.push(i.geometry));
         this.geometryMap.loadGeometries(geometries, this.instances.map(i => i.name));
       });
+      */
   }
 
   onSearch = () => {

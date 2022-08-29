@@ -33,7 +33,7 @@ import { NbIconLibraries } from '@nebular/theme';
 import { NotifierService } from 'angular-notifier';
 import { MmsControllerService, Role, VesselControllerService } from '../../../backend-api/identity-registry';
 import { PageEntity } from '../../../backend-api/identity-registry/model/pageEntity';
-import { InstanceDto, SearchControllerService } from '../../../backend-api/service-registry';
+import { InstanceDto } from '../../../backend-api/service-registry';
 import { formatData, formatServiceData } from '../../../util/dataFormatter';
 import { Entity } from '../../../backend-api/identity-registry/model/entity';
 import { hasAdminPermission } from '../../../util/adminPermissionResolver';
@@ -86,7 +86,6 @@ export class ListComponent implements OnInit {
     private vesselControllerService: VesselControllerService,
     private serviceControllerService: ServiceControllerService,
     private instanceControllerService: InstanceControllerService,
-    private searchControllerService: SearchControllerService,
     private mmsControllerService: MmsControllerService,
     private organizationControllerService: OrganizationControllerService,
     private notifierService: NotifierService,
@@ -276,9 +275,12 @@ export class ListComponent implements OnInit {
     return this.organizationControllerService.getOrganizationByMrn(this.authService.authState.orgMrn);
 	}
 
-  loadServiceInstances = (orgMrn?: string):Observable<InstanceDto[]> => {
+  loadServiceInstances = (orgMrn?: string): Observable<InstanceDto[]> => {
+    return this.instanceControllerService.getInstances({});
+    /*
     return orgMrn ? this.searchControllerService.searchInstances('organizationId:' + orgMrn.split(":").join("\\:") + "*", {}) :
       this.instanceControllerService.getInstances({});
+    */
   }
 
   loadDataContent = (context: ResourceType, orgMrn?: string):Observable<PageEntity> => {

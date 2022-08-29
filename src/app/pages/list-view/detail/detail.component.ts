@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { InstanceDtDto } from './../../../backend-api/service-registry/model/instanceDtDto';
+import { InstanceDto } from './../../../backend-api/service-registry/model/instanceDto';
 import { InstanceControllerService } from './../../../backend-api/service-registry/api/instanceController.service';
 import { formatVesselToUpload } from '../../../util/dataFormatter';
 import { Device } from './../../../backend-api/identity-registry/model/device';
@@ -322,7 +322,7 @@ export class DetailComponent implements OnInit {
     } else if (context === ResourceType.Role) {
       return this.roleControllerService.createRole(body as Role, orgMrn);
     } else if (context === ResourceType.Instance) {
-      return this.instanceControllerService.createInstance(body as InstanceDtDto);
+      return this.instanceControllerService.createInstance(body as InstanceDto);
     }
     return new Observable();
   }
@@ -343,7 +343,7 @@ export class DetailComponent implements OnInit {
     } else if (context === ResourceType.Role) {
       return this.roleControllerService.updateRole(body as Role, orgMrn, this.numberId);
     } else if (context === ResourceType.Instance) {
-      return this.instanceControllerService.updateInstance(Object.assign({}, body, {id: instanceId}) as InstanceDtDto, instanceId);
+      return this.instanceControllerService.updateInstance(Object.assign({}, body, {id: instanceId}) as InstanceDto, instanceId);
     }
     return new Observable();
   }
