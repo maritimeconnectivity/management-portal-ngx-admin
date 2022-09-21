@@ -3,20 +3,14 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
-import { DocControllerService } from './api/docController.service';
-import { InstanceControllerService } from './api/instanceController.service';
-import { LedgerRequestControllerService } from './api/ledgerRequestController.service';
-import { XmlControllerService } from './api/xmlController.service';
+import { SECOMService } from './api/sECOM.service';
 
 @NgModule({
   imports:      [],
   declarations: [],
   exports:      [],
   providers: [
-    DocControllerService,
-    InstanceControllerService,
-    LedgerRequestControllerService,
-    XmlControllerService ]
+    SECOMService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {

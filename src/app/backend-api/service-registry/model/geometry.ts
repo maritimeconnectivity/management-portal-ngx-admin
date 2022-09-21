@@ -23,8 +23,8 @@ export interface Geometry {
     empty?: boolean;
     valid?: boolean;
     simple?: boolean;
-    boundaryDimension?: number;
-    precisionModel?: PrecisionModel;
+    srid?: number;
+    numGeometries?: number;
     coordinate?: Coordinate;
     coordinates?: Array<Coordinate>;
     numPoints?: number;
@@ -35,7 +35,7 @@ export interface Geometry {
     dimension?: number;
     boundary?: Geometry;
     envelopeInternal?: Envelope;
+    boundaryDimension?: number;
+    precisionModel?: PrecisionModel;
     geometryType?: string;
-    srid?: number;
-    numGeometries?: number;
 }

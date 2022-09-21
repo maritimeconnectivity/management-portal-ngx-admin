@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  *//* tslint:disable:no-unused-variable member-ordering */
 
+import { environment } from './../../../../environments/environment';
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent }                           from '@angular/common/http';
@@ -22,13 +23,12 @@ import { XmlDto } from '../model/xmlDto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
-import { AppConfig } from '../../../app.config';
 
 
 @Injectable()
 export class XmlControllerService {
 
-    protected basePath = AppConfig.SR_BASE_PATH;
+    protected basePath = environment.srBasePath;
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

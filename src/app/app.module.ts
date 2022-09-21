@@ -17,6 +17,7 @@
 import { LandingModule } from './landing/landing.module';
 import { ApiModule as MIRApiModule } from './backend-api/identity-registry';
 import { ApiModule as MSRApiModule } from './backend-api/service-registry';
+import { ApiModule as SECOMApiModule } from './backend-api/secom';
 /**
  * @license
  * Copyright Akveo. All Rights Reserved.
@@ -53,6 +54,7 @@ import { RouterModule } from '@angular/router';
     AppRoutingModule,
     MIRApiModule,
     MSRApiModule,
+    SECOMApiModule,
     AuthModule,
     LandingModule,
     RouterModule,

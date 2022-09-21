@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  *//* tslint:disable:no-unused-variable member-ordering */
 
+import { environment } from './../../../../environments/environment.stage';
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent }                           from '@angular/common/http';
@@ -18,19 +19,16 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { DocDto } from '../model/docDto';
-import { DtPageDocDtDto } from '../model/dtPageDocDtDto';
-import { DtPagingRequest } from '../model/dtPagingRequest';
 import { Pageable } from '../model/pageable';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
-import { AppConfig } from '../../../app.config';
 
 
 @Injectable()
 export class DocControllerService {
 
-    protected basePath = AppConfig.SR_BASE_PATH;
+    protected basePath = environment.srBasePath;
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -225,64 +223,6 @@ export class DocControllerService {
 
         return this.httpClient.request<Array<DocDto>>('get',`${this.basePath}/api/docs`,
             {
-                params: queryParameters,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
-     * @param body 
-     * @param instanceId 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getDocsForDatatables(body: DtPagingRequest, instanceId: number, observe?: 'body', reportProgress?: boolean): Observable<DtPageDocDtDto>;
-    public getDocsForDatatables(body: DtPagingRequest, instanceId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<DtPageDocDtDto>>;
-    public getDocsForDatatables(body: DtPagingRequest, instanceId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<DtPageDocDtDto>>;
-    public getDocsForDatatables(body: DtPagingRequest, instanceId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling getDocsForDatatables.');
-        }
-
-        if (instanceId === null || instanceId === undefined) {
-            throw new Error('Required parameter instanceId was null or undefined when calling getDocsForDatatables.');
-        }
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (instanceId !== undefined && instanceId !== null) {
-            queryParameters = queryParameters.set('instanceId', <any>instanceId);
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<DtPageDocDtDto>('post',`${this.basePath}/api/docs/dt`,
-            {
-                body: body,
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

@@ -1,6 +1,4 @@
-import { ResourceType } from './../../../shared/models/menuType';
-import { geojsonToWKT } from '@terraformer/wkt';
-import { SearchControllerService } from './../../../backend-api/service-registry/api/searchController.service';
+import { InstanceDto } from './../../../backend-api/service-registry/model/instanceDto';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -17,8 +15,13 @@ import { SearchControllerService } from './../../../backend-api/service-registry
  * limitations under the License.
  */
 
+import { InstanceControllerService } from './../../../backend-api/service-registry/api/instanceController.service';
+import { SearchParameters } from './../../../backend-api/secom/model/searchParameters';
+import { SearchObjectResult } from './../../../backend-api/secom/model/searchObjectResult';
+import { SECOMService } from './../../../backend-api/secom/api/sECOM.service';
+import { ResourceType } from './../../../shared/models/menuType';
+import { geojsonToWKT } from '@terraformer/wkt';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { InstanceDto } from '../../../backend-api/service-registry';
 import { InputGeometryComponent } from '../../../shared/input-geometry/input-geometry.component';
 import { ColumnForMenu } from '../../../shared/models/columnForMenu';
 import { Router } from '@angular/router';
@@ -33,10 +36,11 @@ export class SrSearchComponent implements OnInit {
 
   @ViewChild('map') geometryMap: InputGeometryComponent;
 
-  testOrgMrn = 'urn:mrn:mcp:org:mcc-test:core';
   geometry = undefined;
+  searchParams: SearchParameters = {};
   queryString = '';
-  instances: InstanceDto[] = [];
+  freetext = '';
+  instances: SearchObjectResult[] = [];
   showTables = true;
   contextForAttributes = 'list';
   menuType = ResourceType.Instance;
@@ -49,11 +53,13 @@ export class SrSearchComponent implements OnInit {
     columns: ColumnForMenu[this.menuType],
     hideSubHeader: true,
   };
+  allInstances: InstanceDto[];
   source: LocalDataSource = new LocalDataSource();
 
   constructor(
     private router: Router,
-    private searchControllerService: SearchControllerService,
+    private secomSearchController: SECOMService,
+    private instanceControllerService: InstanceControllerService,
   ) { }
 
   ngOnInit(): void {
@@ -62,6 +68,10 @@ export class SrSearchComponent implements OnInit {
         Object.entries(ColumnForMenu[this.menuType.toString()]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes)).map(([k,v]) => ({[k]:v}))
       );
       this.settings = Object.assign({}, this.mySettings);
+
+      this.instanceControllerService.getInstances({}).subscribe(
+        instances => this.allInstances = instances,
+      );
     }
   }
 
@@ -71,26 +81,30 @@ export class SrSearchComponent implements OnInit {
     }
     this.geometry = event['data'];
     this.geometryMap.loadGeometry(this.geometry);
-    this.search(this.queryString, geojsonToWKT(event['data']));
+    this.search(this.searchParams, geojsonToWKT(event['data']), this.freetext);
   }
 
-  search = (queryString: string, wktString: string) => {
+  search = (searchParams: SearchParameters, wktString: string, freetext: string) => {
     this.isLoading = true;
     // send a query with given geometry, converted to WKT
-    this.searchControllerService.searchInstances(queryString, {}, undefined, wktString)
-      .subscribe(res => {
-        this.instances = res;
-        this.refreshData(this.instances);
-        this.isLoading = false;
-        const geometries = [];
-        this.instances?.forEach(i =>
-          geometries.push(i.geometry));
-        this.geometryMap.loadGeometries(geometries, this.instances.map(i => i.name));
-      });
+    this.secomSearchController.search({query: searchParams, geometry: wktString, freetext: freetext })
+    .subscribe(res => {
+      this.instances = res;
+      this.refreshData(this.instances);
+      this.isLoading = false;
+      const geometries = [];
+      this.instances?.forEach(i =>
+        geometries.push(i.geometry));
+      this.geometryMap.loadGeometries(geometries, this.instances.map(i => i.name));
+    });
   }
 
   onSearch = () => {
-    this.search(this.queryString, this.geometry);
+    this.search(this.searchParams, this.geometry, this.freetext);
+  }
+
+  onFreeTextChanged = (event: any) => {
+    this.freetext = event.target.value;
   }
 
   onQueryStringChanged = (event: any) => {
@@ -117,14 +131,17 @@ export class SrSearchComponent implements OnInit {
   }
 
   onEdit(event): void {
-    const mrn = this.menuType === ResourceType.Instance ? event.data.id : event.data.mrn;
-    this.router.navigate(['/pages/sr/instances',
-      mrn ? encodeURIComponent(mrn) : event.data.id],
-        { queryParams: { name: event.data.roleName ? event.data.roleName :
-            event.data.name ? event.data.name :
-            event.data.lastName + ' ' + event.data.firstName,
-          version: event.data.instanceVersion,
-         }});
-    
+    const mrn = event.data.instanceId;
+    if (event && event.data && event.data.instanceId) {
+      const instance = this.allInstances.filter((i) => i.instanceId === event.data.instanceId && i.version === event.data.version);
+      if (instance.length) {
+        this.router.navigate(['/pages/sr/instances',
+        instance.pop().id],
+          { queryParams: { name: event.data.name,
+            version: event.data.instanceVersion,
+          }});
+      }
+      
+    }
   }
 }

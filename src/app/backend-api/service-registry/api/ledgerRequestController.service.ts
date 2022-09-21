@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  *//* tslint:disable:no-unused-variable member-ordering */
 
+import { environment } from './../../../../environments/environment';
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent }                           from '@angular/common/http';
@@ -22,13 +23,12 @@ import { Pageable } from '../model/pageable';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
-import { AppConfig } from '../../../app.config';
 
 
 @Injectable()
 export class LedgerRequestControllerService {
 
-    protected basePath = AppConfig.SR_BASE_PATH;
+    protected basePath = environment.srBasePath;
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -111,13 +111,13 @@ export class LedgerRequestControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteRequest(id: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteRequest(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteRequest(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteRequest(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteLedgerRequest(id: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteLedgerRequest(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteLedgerRequest(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteLedgerRequest(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling deleteRequest.');
+            throw new Error('Required parameter id was null or undefined when calling deleteLedgerRequest.');
         }
 
         let headers = this.defaultHeaders;

@@ -56,9 +56,13 @@ export class EditableFormComponent implements OnInit {
    */
   @Input() instanceVersion: string;
   /**
-   * a boolean indicating the page is for creating entity
+   * a boolean indicating its use for creating entity
    */
   @Input() isForNew: boolean;
+  /**
+   * a boolean indicating the use for registration
+   */
+   @Input() isForRegistration: boolean;
   /**
    * a boolean of MIR admin permission
    */
@@ -214,13 +218,20 @@ export class EditableFormComponent implements OnInit {
           }
         });
       }
-      // check admin permission
-      if (this.authService.authState.rolesLoaded) {
-        this.setIsAdmin();
+
+      // assign admin permission
+      // when the page is for registration then enable the submit button
+      if (this.isForRegistration) {
+        this.isAdmin = true;
       } else {
-        this.authService.rolesLoaded.subscribe((mode)=> {
+      // otherwise we need to check the assigned role
+        if (this.authService.authState.rolesLoaded) {
           this.setIsAdmin();
-        });
+        } else {
+          this.authService.rolesLoaded.subscribe((mode)=> {
+            this.setIsAdmin();
+          });
+        }
       }
       this.settled(true);
     }
