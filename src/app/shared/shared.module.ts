@@ -32,6 +32,7 @@ import { InputFileListComponent } from './input-file-list/input-file-list.compon
 import { InputGeometryComponent } from './input-geometry/input-geometry.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { DayCellComponent } from './calendar/day-cell/day-cell.component';
+import { LuceneQueryInputComponent } from './lucene-query-input/lucene-query-input.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { DayCellComponent } from './calendar/day-cell/day-cell.component';
     InputGeometryComponent,
     CalendarComponent,
     DayCellComponent,
+    LuceneQueryInputComponent,
   ],
   imports: [
     CommonModule,
@@ -68,6 +70,7 @@ import { DayCellComponent } from './calendar/day-cell/day-cell.component';
   exports: [
     EditableFormComponent,
     InputGeometryComponent,
+    LuceneQueryInputComponent,
   ],
 })
 export class SharedModule { }
