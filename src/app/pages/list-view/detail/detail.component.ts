@@ -53,7 +53,6 @@ export class DetailComponent implements OnInit {
   menuTypeName = '';
   entityMrn = '';
   orgMrn = '';
-  canApproveOrg = false;
   values = {};
   activeCertificates = [];
   revokedCertificates = [];
@@ -64,7 +63,7 @@ export class DetailComponent implements OnInit {
   mrnMask = '';
   isForServiceForOrg = false;
   orgShortId = undefined;
-  defaultPermissionForAdminUser = undefined;
+  defaultPermissionForAdminUser = ORG_ADMIN_AT_MIR;
 
   @ViewChild('editableForm') editableForm;
   @ViewChild('supplementForm') supplementForm;
@@ -88,19 +87,13 @@ export class DetailComponent implements OnInit {
     // preventing refresh
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
-    //this is my organization page when it comes with no name
+    // this is my organization page when it comes with no name
     this.route.queryParams.subscribe(e =>
-      {
-        this.noBacklink = e.name === undefined;
-        this.title = e.name;
-        this.instanceVersion = e.version;
-      });
-
-      if (this.menuType === ResourceType.OrgCandidate &&
-        this.authService.authState.permission &&
-        PermissionResolver.canApproveOrg(this.authService.authState.permission)) {
-        this.canApproveOrg = true;
-      }
+    {
+      this.noBacklink = e.name === undefined;
+      this.title = e.name;
+      this.instanceVersion = e.version;
+    });
 
     this.iconName = MenuTypeIconNames[this.menuType.toString()];
 
@@ -149,7 +142,6 @@ export class DetailComponent implements OnInit {
               this.editableForm.adjustTitle(this.menuType, this.title);
               this.editableForm.adjustData(data.content.filter(d => d.mrn === this.entityMrn).pop());
               this.orgShortId = this.entityMrn.split(':').pop();
-              this.defaultPermissionForAdminUser = ORG_ADMIN_AT_MIR;
             },
             error => {
               this.notifierService.notify('error', error.message);
@@ -230,7 +222,7 @@ export class DetailComponent implements OnInit {
           res => {
             this.createAdminRole().subscribe(
               role => {
-                this.createUser(this.supplementForm.getFormValue()).subscribe(
+                this.createAdminUser(this.supplementForm.getFormValue()).subscribe(
                   user => {
                     this.notifierService.notify('success', 'Organization Approved');
                     this.moveToListPage();
@@ -256,7 +248,19 @@ export class DetailComponent implements OnInit {
 		return this.roleControllerService.createRole(role, this.entityMrn);
 	}
 
-  createUser(user: any) {
+  createAdminUser(user: User) {
+    if (!user) {
+      throw new Error('No user data');
+    }
+    if (!user.permissions || user.permissions.length === 0) {
+      user.permissions = ORG_ADMIN_AT_MIR;
+    } else if (user.permissions.length > 0 && user.permissions.indexOf(ORG_ADMIN_AT_MIR) < 0) {
+      user.permissions = ',' + ORG_ADMIN_AT_MIR;
+    }
+		return this.createUser(user);
+	}
+
+  createUser(user: User) {
     if (!user) {
       throw new Error('No user data');
     }

@@ -22,4 +22,10 @@ describe('DetailComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  /*
+  it('should have an admin permission when the user has approved ', () => {
+
+  })
+  */
 });

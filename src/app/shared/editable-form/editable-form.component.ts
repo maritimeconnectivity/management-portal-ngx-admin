@@ -64,10 +64,6 @@ export class EditableFormComponent implements OnInit {
    */
    @Input() isForRegistration: boolean;
   /**
-   * a boolean of MIR admin permission
-   */
-  @Input() canApproveOrg: boolean;
-  /**
    * an mrn of chosen entity for this form
    */
   @Input() entityMrn: string;
@@ -159,6 +155,7 @@ export class EditableFormComponent implements OnInit {
   revokedCertificates = [];
   isServiceInstance = false;
   geometry = {};
+  canApproveOrg = false;
 
   constructor(
     private mrnHelperService: MrnHelperService,
@@ -414,6 +411,9 @@ export class EditableFormComponent implements OnInit {
       this.isAdmin = hasAdminPermission(this.menuType, this.authService, true, isOurServiceInstance);
     } else {
       this.isAdmin = hasAdminPermission(this.menuType, this.authService, true, false);
+      if (this.menuType === ResourceType.OrgCandidate) {
+        this.canApproveOrg = true;
+      }
     }
   }
 
