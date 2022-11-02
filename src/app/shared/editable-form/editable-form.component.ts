@@ -131,7 +131,7 @@ export class EditableFormComponent implements OnInit {
   /**
    * an rejection event callback
    */
-   @Output() onReject = new EventEmitter<any>();
+  @Output() onReject = new EventEmitter<any>();
   /**
    * a refresh event callback
    */

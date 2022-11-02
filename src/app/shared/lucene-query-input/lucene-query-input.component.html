@@ -1,5 +1,7 @@
-<div>
-    <form [formGroup]="formGroup">
-        <input type="text" nbInput />
-    </form>
-</div>
+<nb-card>
+    <nb-card-body fullWidth>
+        <ng-template luceneComponentHost></ng-template>
+            <ngx-lucene-component-input (onCreate)="onCreate($event)"></ngx-lucene-component-input>
+    </nb-card-body>
+</nb-card>
+
