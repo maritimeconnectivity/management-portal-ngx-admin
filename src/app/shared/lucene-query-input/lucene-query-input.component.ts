@@ -2,12 +2,11 @@ import { LuceneLogicInputComponent } from './lucene-logic-input/lucene-logic-inp
 import { LuceneComponentItem } from './lucene-component-item';
 import { LuceneSingleQueryInputComponent } from './lucene-single-query-input/lucene-single-query-input.component';
 import { Component, ComponentFactory, ComponentFactoryResolver, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { LuceneComponent } from './model/lucene-component';
 import { LuceneComponentDirective } from './lucene-component-directive';
-import { createOptions, CreateOptions } from './model/createOptions';
+import { fieldInfo, LogicalOperator } from './model/localOperator';
 import {v4 as uuidv4} from 'uuid';
-import _ from "lucene-query-string-builder";
+import { buildQuery } from './query-builder/query-builder';
 
 @Component({
   selector: 'ngx-lucene-query-input',
@@ -17,7 +16,6 @@ import _ from "lucene-query-string-builder";
 export class LuceneQueryInputComponent implements OnInit {
   group: LuceneComponentItem[] = [new LuceneComponentItem(LuceneSingleQueryInputComponent, uuidv4(), {})];
   data: object[] = [{}];
-  fields: string[];
 
   @ViewChild(LuceneComponentDirective, {static: true}) luceneComponentHost!: LuceneComponentDirective;
 
@@ -43,7 +41,7 @@ export class LuceneQueryInputComponent implements OnInit {
 
   onEditQuery(componentId: string, data: object): void {
     this.group = this.group.map(e => e.id === componentId ? {...e, data: data} : e);
-    console.log(this.buildQuery());
+    console.log(buildQuery(this.group.map(e => e.data)));
     /*
     const key = Object.keys(data).pop();
     this.data = this.group.map(e => Object.keys(e.data).includes(key) ? {key: data[key]} : e.data);
@@ -51,53 +49,10 @@ export class LuceneQueryInputComponent implements OnInit {
     */
   }
 
-  andString = _.builder(function(term1, term2){
-    return _.group(_.and(term1, term2));
-  });
-  singleString = _.builder(function(term) {
-    return term;
-  });
-
-  buildQuery(): string {
-    const op = this.group.filter(e => e.data['operator']).pop();
-    const buildTerm = (data: object) => {
-      if (data) {
-        const key = Object.keys(data).pop();
-        return _.field(key, _.term(data[key]));
-      }
-    }
-    const terms = this.group.filter(e => !e.data['operator']).map(e => buildTerm(e.data));
-    if (op) {
-      if (op.data['operator'] === CreateOptions.And) {
-        return this.andString(terms[0], terms[1]);
-      } else if (op.data['operator'] === CreateOptions.Or) {
-        return _.builder(_.group(_.or(terms[0], terms[1])));
-      }
-    } else {
-      return this.singleString(terms[0]);
-    }
-    return '';
-  }
-
   onCreate(value: any): void {
-    switch(value) {
-      /*
-      case CreateOptions.Bracket:
-        //this.createAddAndQuery();
-        break;
-        */
-      case CreateOptions.And:
-        this.createLogicalOperator(value);
-        break;
-      case CreateOptions.Or:
-        this.createLogicalOperator(value);
-        break;
-    }
-  }
-
-  createLogicalOperator(value): void {
-    this.group.push(new LuceneComponentItem(LuceneLogicInputComponent, uuidv4(), {operator: value}));
-    this.group.push(new LuceneComponentItem(LuceneSingleQueryInputComponent, uuidv4(), {}));
+    this.group.push(new LuceneComponentItem(LuceneLogicInputComponent, uuidv4(), {'operator': LogicalOperator.And}));
+    this.group.push(new LuceneComponentItem(LuceneSingleQueryInputComponent, uuidv4(),
+    {[fieldInfo.filter(e=> e.name === value).pop()?.value]: ''}));
     this.loadComponent();
   }
 

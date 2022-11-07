@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { createOptions } from '../model/createOptions';
+import { fieldInfo } from '../model/localOperator';
 
 @Component({
   selector: 'ngx-lucene-component-input',
@@ -18,8 +17,9 @@ export class LuceneComponentInputComponent implements OnInit {
   @Output() onCreate = new EventEmitter<any>();
 
   ngOnInit() {
-    this.options = createOptions;
+    this.options = fieldInfo.map(e => e.name);
     this.filteredOptions$ = of(this.options);
+    console.log(this.filteredOptions$);
   }
 
   private filter(value: string): string {
