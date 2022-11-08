@@ -10,6 +10,7 @@ export class LuceneLogicInputComponent implements LuceneComponent {
   @Input() id: string;
   @Input() data: object = {operator: 'and'};
   @Output() onUpdate = new EventEmitter<any>();
+  @Output() onDelete = new EventEmitter<any>();
 
   onSelectionChange(event): void {
     this.data = {operator: event};

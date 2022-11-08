@@ -18,6 +18,7 @@ export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent 
   @Input() id: string;
   @Input() data: object;
   @Output() onUpdate = new EventEmitter<any>();
+  @Output() onDelete = new EventEmitter<any>();
 
   value: string;
 
@@ -53,5 +54,9 @@ export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent 
     this.valueEditable = true;
     this.data = {[this.field]: this.fieldValue};
     this.onUpdate.emit({id: this.id, data: this.data});
+  }
+
+  delete(): void {
+    this.onDelete.emit(this.id);
   }
 }

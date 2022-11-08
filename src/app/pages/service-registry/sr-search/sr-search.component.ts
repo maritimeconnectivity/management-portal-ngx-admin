@@ -35,7 +35,7 @@ import { LocalDataSource } from 'ng2-smart-table';
 export class SrSearchComponent implements OnInit {
 
   @ViewChild('map') geometryMap: InputGeometryComponent;
-
+  @ViewChild('luceneQueryStringInput') luceneQueryStringInput;
   geometry = undefined;
   searchParams: SearchParameters = {};
   queryString = '';
@@ -73,6 +73,10 @@ export class SrSearchComponent implements OnInit {
         instances => this.allInstances = instances,
       );
     }
+  }
+
+  onUpdateLuceneQuery = (queryString: string) => {
+    this.luceneQueryStringInput.nativeElement.value = queryString;
   }
 
   onUpdateGeometry = (event: any) => {

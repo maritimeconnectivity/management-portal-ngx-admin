@@ -4,5 +4,5 @@
     </nb-select>
     <input autoSizeInput nbInput [disabled]="!selectedItem" [value]="fieldValue"
         [includeBorders]=true [minWidth]="120" (input)="onEdit($event.target.value)">
-    <button class="btn btn-danger" type="button" id="button-addon2" rippleColor="danger">X</button>
+    <button class="btn btn-danger" type="button" id="button-addon2" rippleColor="danger" (click)="delete()">X</button>
 </div>

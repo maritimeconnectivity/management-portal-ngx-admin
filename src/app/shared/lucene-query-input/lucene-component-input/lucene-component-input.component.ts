@@ -19,7 +19,6 @@ export class LuceneComponentInputComponent implements OnInit {
   ngOnInit() {
     this.options = fieldInfo.map(e => e.name);
     this.filteredOptions$ = of(this.options);
-    console.log(this.filteredOptions$);
   }
 
   private filter(value: string): string {
@@ -31,11 +30,17 @@ export class LuceneComponentInputComponent implements OnInit {
   }
 
   onChange(event) {
-    this.onCreate.emit(this.filter(event));
+    const value = this.filter(event);
+    if (value) {
+      this.onCreate.emit(value);
+    }
   }
 
   onSelectionChange(event) {
-    this.onCreate.emit(this.filter(event));
+    const value = this.filter(event);
+    if (value) {
+      this.onCreate.emit(value);
+    }
     this.input.nativeElement.value = '';
   }
 }

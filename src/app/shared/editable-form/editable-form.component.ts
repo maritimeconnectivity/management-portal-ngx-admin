@@ -141,7 +141,7 @@ export class EditableFormComponent implements OnInit {
    * a link to geometry map component, mainly for consistency
    */
   @ViewChild('map') geometryMap: InputGeometryComponent;
-  
+
   isAdmin = false;
   loadedData = {};
   nonStringForm = {};
