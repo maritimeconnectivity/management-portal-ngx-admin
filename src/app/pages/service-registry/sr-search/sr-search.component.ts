@@ -1,3 +1,4 @@
+import { LuceneQueryOutput } from './../../../shared/lucene-query-input/model/lucene-query-output';
 import { InstanceDto } from './../../../backend-api/service-registry/model/instanceDto';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
@@ -35,7 +36,8 @@ import { LocalDataSource } from 'ng2-smart-table';
 export class SrSearchComponent implements OnInit {
 
   @ViewChild('map') geometryMap: InputGeometryComponent;
-
+  @ViewChild('luceneQueryStringInput') luceneQueryStringInput;
+  @ViewChild('luceneQueryInputComponent') luceneQueryInputComponent;
   geometry = undefined;
   searchParams: SearchParameters = {};
   queryString = '';
@@ -75,6 +77,15 @@ export class SrSearchComponent implements OnInit {
     }
   }
 
+  onUpdateLuceneQuery = (query: LuceneQueryOutput) => {
+    this.queryString = query.queryString ? query.queryString : '';
+    this.luceneQueryStringInput.nativeElement.value = this.queryString;
+    this.searchParams = query.data;
+    if (!query.queryString || query.queryString.length === 0) {
+      this.clearMap();
+    }
+  }
+
   onUpdateGeometry = (event: any) => {
     if (this.instances.length > 0) {
       this.clearMap();
@@ -109,6 +120,9 @@ export class SrSearchComponent implements OnInit {
 
   onQueryStringChanged = (event: any) => {
     this.queryString = event.target.value;
+    if (this.queryString.length === 0) {
+      this.clearMap();
+    }
   }
 
   onClear = () => {
@@ -117,6 +131,7 @@ export class SrSearchComponent implements OnInit {
 
   clearMap = () => {
     this.geometryMap?.clearMap();
+    this.luceneQueryInputComponent?.clearInput();
     this.source.reset();
     this.instances = [];
     this.refreshData(this.instances);
@@ -141,7 +156,6 @@ export class SrSearchComponent implements OnInit {
             version: event.data.instanceVersion,
           }});
       }
-      
     }
   }
 }

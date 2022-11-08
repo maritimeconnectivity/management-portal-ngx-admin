@@ -1,3 +1,5 @@
+import { LuceneComponentDirective } from './lucene-query-input/lucene-component-directive';
+import { LuceneComponentInputComponent } from './lucene-query-input/lucene-component-input/lucene-component-input.component';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -14,7 +16,7 @@
  * limitations under the License.
  */
 
-import { NbCardModule, NbSpinnerModule, NbButtonModule, NbIconModule, NbDatepickerModule, NbSelectModule, NbInputModule, NbTabsetModule, NbCalendarModule, NbCalendarRangeModule } from '@nebular/theme';
+import { NbCardModule, NbSpinnerModule, NbButtonModule, NbIconModule, NbDatepickerModule, NbSelectModule, NbInputModule, NbTabsetModule, NbCalendarModule, NbCalendarRangeModule, NbAutocompleteModule } from '@nebular/theme';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EditableFormComponent } from './editable-form/editable-form.component';
@@ -32,6 +34,10 @@ import { InputFileListComponent } from './input-file-list/input-file-list.compon
 import { InputGeometryComponent } from './input-geometry/input-geometry.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { DayCellComponent } from './calendar/day-cell/day-cell.component';
+import { LuceneQueryInputComponent } from './lucene-query-input/lucene-query-input.component';
+import { AutoSizeInputModule } from 'ngx-autosize-input';
+import { LuceneSingleQueryInputComponent } from './lucene-query-input/lucene-single-query-input/lucene-single-query-input.component';
+import { LuceneLogicInputComponent } from './lucene-query-input/lucene-logic-input/lucene-logic-input.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +53,11 @@ import { DayCellComponent } from './calendar/day-cell/day-cell.component';
     InputGeometryComponent,
     CalendarComponent,
     DayCellComponent,
+    LuceneQueryInputComponent,
+    LuceneSingleQueryInputComponent,
+    LuceneComponentInputComponent,
+    LuceneLogicInputComponent,
+    LuceneComponentDirective,
   ],
   imports: [
     CommonModule,
@@ -64,10 +75,13 @@ import { DayCellComponent } from './calendar/day-cell/day-cell.component';
     ThemeModule,
     Ng2SmartTableModule,
     NbSelectModule,
+    AutoSizeInputModule,
+    NbAutocompleteModule,
   ],
   exports: [
     EditableFormComponent,
     InputGeometryComponent,
+    LuceneQueryInputComponent,
   ],
 })
 export class SharedModule { }

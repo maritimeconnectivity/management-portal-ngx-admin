@@ -127,7 +127,7 @@ export class EditableFormComponent implements OnInit {
   /**
    * an rejection event callback
    */
-   @Output() onReject = new EventEmitter<any>();
+  @Output() onReject = new EventEmitter<any>();
   /**
    * a refresh event callback
    */
@@ -137,7 +137,7 @@ export class EditableFormComponent implements OnInit {
    * a link to geometry map component, mainly for consistency
    */
   @ViewChild('map') geometryMap: InputGeometryComponent;
-  
+
   isAdmin = false;
   loadedData = {};
   nonStringForm = {};
