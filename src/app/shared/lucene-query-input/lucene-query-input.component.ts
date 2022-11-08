@@ -60,18 +60,24 @@ export class LuceneQueryInputComponent implements OnInit {
   }
 
   exportQuery() {
-    const query = buildQuery(this.group.map(e => e.data));
-    this.onUpdateQuery.emit(query);
+    const dataArray = this.group.map(e => e.data);
+    const queryString = buildQuery(dataArray);
+
+    // flattening data array for SearchParameters
+    let data = {};
+    dataArray.forEach(e => {
+      if (Object.keys(e).length &&
+        Object.keys(e).pop() !== 'operator' &&
+        e[Object.keys(e).pop()].length) {
+          data[Object.keys(e).pop()] = e[Object.keys(e).pop()];
+        }
+      });
+    this.onUpdateQuery.emit({queryString, data});
   }
 
   onEditQuery(componentId: string, data: object): void {
     this.group = this.group.map(e => e.id === componentId ? {...e, data: data} : e);
     this.exportQuery();
-    /*
-    const key = Object.keys(data).pop();
-    this.data = this.group.map(e => Object.keys(e.data).includes(key) ? {key: data[key]} : e.data);
-    console.log(data);
-    */
   }
 
   onCreate(value: any): void {

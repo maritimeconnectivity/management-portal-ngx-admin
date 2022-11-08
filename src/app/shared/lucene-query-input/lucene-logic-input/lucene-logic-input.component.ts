@@ -1,3 +1,4 @@
+import { LogicalOperator } from './../model/localOperator';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LuceneComponent } from '../model/lucene-component';
 
@@ -8,7 +9,7 @@ import { LuceneComponent } from '../model/lucene-component';
 })
 export class LuceneLogicInputComponent implements LuceneComponent {
   @Input() id: string;
-  @Input() data: object = {operator: 'and'};
+  @Input() data: object = {operator: LogicalOperator.And};
   @Output() onUpdate = new EventEmitter<any>();
   @Output() onDelete = new EventEmitter<any>();
 

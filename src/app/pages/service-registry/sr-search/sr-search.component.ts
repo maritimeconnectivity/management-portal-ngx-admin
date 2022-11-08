@@ -1,3 +1,4 @@
+import { LuceneQueryOutput } from './../../../shared/lucene-query-input/model/lucene-query-output';
 import { InstanceDto } from './../../../backend-api/service-registry/model/instanceDto';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
@@ -75,8 +76,13 @@ export class SrSearchComponent implements OnInit {
     }
   }
 
-  onUpdateLuceneQuery = (queryString: string) => {
-    this.luceneQueryStringInput.nativeElement.value = queryString;
+  onUpdateLuceneQuery = (query: LuceneQueryOutput) => {
+    this.queryString = query.queryString ? query.queryString : '';
+    this.luceneQueryStringInput.nativeElement.value = this.queryString;
+    this.searchParams = query.data;
+    if (!query.queryString || query.queryString.length === 0) {
+      this.clearMap();
+    }
   }
 
   onUpdateGeometry = (event: any) => {
@@ -113,6 +119,9 @@ export class SrSearchComponent implements OnInit {
 
   onQueryStringChanged = (event: any) => {
     this.queryString = event.target.value;
+    if (this.queryString.length === 0) {
+      this.clearMap();
+    }
   }
 
   onClear = () => {
