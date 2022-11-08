@@ -37,6 +37,7 @@ export class SrSearchComponent implements OnInit {
 
   @ViewChild('map') geometryMap: InputGeometryComponent;
   @ViewChild('luceneQueryStringInput') luceneQueryStringInput;
+  @ViewChild('luceneQueryInputComponent') luceneQueryInputComponent;
   geometry = undefined;
   searchParams: SearchParameters = {};
   queryString = '';
@@ -130,6 +131,7 @@ export class SrSearchComponent implements OnInit {
 
   clearMap = () => {
     this.geometryMap?.clearMap();
+    this.luceneQueryInputComponent?.clearInput();
     this.source.reset();
     this.instances = [];
     this.refreshData(this.instances);
@@ -154,7 +156,6 @@ export class SrSearchComponent implements OnInit {
             version: event.data.instanceVersion,
           }});
       }
-      
     }
   }
 }

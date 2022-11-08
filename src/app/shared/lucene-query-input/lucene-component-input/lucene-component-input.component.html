@@ -1,10 +1,10 @@
-<div class="p-1">
+<div class="p-0">
     <input #autoInput
     nbInput
     fullWidth
     type="text"
     (input)="onChange($event.target.value)"
-    placeholder="Enter value"
+    placeholder="Click to generate query"
     [nbAutocomplete]="auto" />
 
     <nb-autocomplete #auto (selectedChange)="onSelectionChange($event)">

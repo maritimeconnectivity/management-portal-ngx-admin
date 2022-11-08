@@ -1,7 +1,6 @@
-<nb-card>
-    <nb-card-body fullWidth>
+<div className="p-0">
+    <ngx-lucene-component-input (onCreate)="onCreate($event)"></ngx-lucene-component-input>
+    <div className="d-flex justify-content-start">
         <ng-template luceneComponentHost></ng-template>
-            <ngx-lucene-component-input (onCreate)="onCreate($event)"></ngx-lucene-component-input>
-    </nb-card-body>
-</nb-card>
-
+    </div>
+</div>

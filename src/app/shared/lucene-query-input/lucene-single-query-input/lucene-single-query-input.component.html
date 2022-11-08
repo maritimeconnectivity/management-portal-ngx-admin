@@ -1,8 +1,8 @@
-<div class="input-group-box input-group flex-nowrap p-1 ">
+<div class="d-inline-block text-center align-items-start align-middle p-1 ">
     <nb-select multiple="false" placeholder="Select field" [(selected)]="selectedItem" (selectedChange)="onSelectedChange($event)" filled status="primary">
         <nb-option *ngFor="let c of fieldInfo" value="{{c.value}}">{{c.name}}</nb-option>
     </nb-select>
     <input autoSizeInput nbInput [disabled]="!selectedItem" [value]="fieldValue"
-        [includeBorders]=true [minWidth]="120" (input)="onEdit($event.target.value)">
-    <button class="btn btn-danger" type="button" id="button-addon2" rippleColor="danger" (click)="delete()">X</button>
+        [includeBorders]=true [minWidth]="140" (input)="onEdit($event.target.value)">
+    <button nbButton status="danger" (click)="delete()">X</button>
 </div>

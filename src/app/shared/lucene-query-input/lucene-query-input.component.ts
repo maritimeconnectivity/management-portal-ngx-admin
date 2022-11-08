@@ -1,7 +1,7 @@
 import { LuceneLogicInputComponent } from './lucene-logic-input/lucene-logic-input.component';
 import { LuceneComponentItem } from './lucene-component-item';
 import { LuceneSingleQueryInputComponent } from './lucene-single-query-input/lucene-single-query-input.component';
-import { Component, ComponentFactory, ComponentFactoryResolver, OnInit, ViewChild, EventEmitter, Output } from '@angular/core';
+import { Component, ComponentFactory, ComponentFactoryResolver, OnInit, ViewChild, EventEmitter, Output, Input } from '@angular/core';
 import { LuceneComponent } from './model/lucene-component';
 import { LuceneComponentDirective } from './lucene-component-directive';
 import { fieldInfo, LogicalOperator } from './model/localOperator';
@@ -14,7 +14,7 @@ import { buildQuery } from './query-builder/query-builder';
   styleUrls: ['./lucene-query-input.component.scss']
 })
 export class LuceneQueryInputComponent implements OnInit {
-  group: LuceneComponentItem[] = [new LuceneComponentItem(LuceneSingleQueryInputComponent, uuidv4(), {})];
+  group: LuceneComponentItem[] = [];
   data: object[] = [{}];
 
   @Output() onUpdateQuery = new EventEmitter<any>();
@@ -86,6 +86,11 @@ export class LuceneQueryInputComponent implements OnInit {
     }
     this.group.push(new LuceneComponentItem(LuceneSingleQueryInputComponent, uuidv4(),
     {[fieldInfo.filter(e=> e.name === value).pop()?.value]: ''}));
+    this.loadComponent();
+  }
+
+  clearInput(): void {
+    this.group = [];
     this.loadComponent();
   }
 
