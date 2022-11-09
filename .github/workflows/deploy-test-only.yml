@@ -6,6 +6,15 @@ on:
     branches:
       - v0.2.0
   workflow_dispatch:
+    inputs:
+      BRANCH:
+        description: 'Branch to test'
+        required: true
+        default: 'v0.2.0'
+        type: choice
+        options:
+        - main
+        - v0.2.0
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
