@@ -67,7 +67,7 @@
     "jszip": "^3.7.1",
     "keycloak-angular": "^8.4.0",
     "keycloak-js": "^15.0.2",
-    "leaflet": "1.2.0",
+    "leaflet": "1.9.2",
     "leaflet-draw": "^1.0.2",
     "lodash": "^4.17.21",
     "lodash.template": ">=4.5.0",
@@ -94,6 +94,7 @@
     "url-parse": ">=1.5.9",
     "uuid": "^3.4.0",
     "web-animations-js": "^2.3.2",
+    "web3": "^1.8.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

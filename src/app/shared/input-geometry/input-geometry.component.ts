@@ -59,13 +59,14 @@ export class InputGeometryComponent implements OnInit, OnDestroy {
 
   initMap = (container: any) => {
     const map = L.map(container).setView([55.692864, 12.599246], 5);
-    L.tileLayer(location.protocol.includes('https:') ? 'https:' : 'http:' + '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    L.tileLayer(location.protocol.includes('https:') ? 'https:' : 'http:' + '//b.tile.openstreetmap.org/{z}/{x}/{y}.png',
       { maxZoom: 18, minZoom: 3, attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>' })
       .addTo(map);
     return map;
   }
 
   ngOnInit(): void {
+    /*
     // Initialise the map before we need it
     this.map = this.initMap('map');
 
@@ -91,6 +92,7 @@ export class InputGeometryComponent implements OnInit, OnDestroy {
     this.map.on(L.Draw.Event.DELETED, this.handleDeletion );
 
     this.loadGeometry();
+    */
   }
 
   @HostListener('window:beforeunload')
