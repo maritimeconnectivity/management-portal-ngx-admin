@@ -1,6 +1,6 @@
 {
   "name": "management-portal",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "license": "Apache license 2.0",
   "repository": {
     "type": "git",
@@ -123,6 +123,7 @@
     "karma-coverage-istanbul-reporter": "~3.0.2",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
+    "loader-utils": "^1.4.1",
     "lodash.template": ">=4.5.0",
     "minimist": ">=1.2.6",
     "moment": "^2.29.4",
