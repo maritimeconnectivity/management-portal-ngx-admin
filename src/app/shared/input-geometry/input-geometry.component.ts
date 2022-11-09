@@ -58,20 +58,15 @@ export class InputGeometryComponent implements OnInit, OnDestroy {
   constructor() { }
 
   initMap = (container: any) => {
-    const map = L.map(container).setView([55.692864, 12.599246], 5);
-    /*
+    const map = L.map(container).setView([55.692864, 12.599246], 4);
     L.tileLayer(location.protocol.includes('https:') ? 'https:' : 'http:' + '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       { maxZoom: 18, minZoom: 3, attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>' })
-      .addTo(map);*/
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
+      .addTo(map);
+    map.invalidateSize();
     return map;
   }
 
   ngOnInit(): void {
-    //*
     // Initialise the map before we need it
     this.map = this.initMap('map');
 
@@ -97,7 +92,6 @@ export class InputGeometryComponent implements OnInit, OnDestroy {
     this.map.on(L.Draw.Event.DELETED, this.handleDeletion );
 
     this.loadGeometry();
-    //*/
   }
 
   @HostListener('window:beforeunload')
@@ -182,7 +176,7 @@ export class InputGeometryComponent implements OnInit, OnDestroy {
       const geomLayer = L.geoJSON(geometry as geojson.GeoJsonObject);
       addNonGroupLayers(geomLayer, drawnItems);
       if(fitBounds) {
-        setTimeout(() => map.fitBounds(geomLayer.getBounds()), 50);
+        setTimeout(() => map.fitBounds(drawnItems.getBounds()), 50);
       }
       if (tooltipString.length > 0) {
         if (geometry.type === 'Point') {
