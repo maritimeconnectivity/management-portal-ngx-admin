@@ -38,7 +38,9 @@ export class SrSearchComponent implements OnInit {
   @ViewChild('map') geometryMap: InputGeometryComponent;
   @ViewChild('luceneQueryStringInput') luceneQueryStringInput;
   @ViewChild('luceneQueryInputComponent') luceneQueryInputComponent;
-  geometry = undefined;
+  queryGeometry: any;
+  geometries: any[] = [];
+  geometryNames: string[] = [];
   searchParams: SearchParameters = {};
   queryString = '';
   freetext = '';
@@ -87,12 +89,8 @@ export class SrSearchComponent implements OnInit {
   }
 
   onUpdateGeometry = (event: any) => {
-    if (this.instances.length > 0) {
-      this.clearMap();
-    }
-    this.geometry = event['data'];
-    this.geometryMap.loadGeometry(this.geometry);
-    this.search(this.searchParams, geojsonToWKT(event['data']), this.freetext);
+    this.queryGeometry = event['data'];
+    this.search(this.searchParams, geojsonToWKT(this.queryGeometry), this.freetext);
   }
 
   search = (searchParams: SearchParameters, wktString: string, freetext: string) => {
@@ -103,15 +101,19 @@ export class SrSearchComponent implements OnInit {
       this.instances = res;
       this.refreshData(this.instances);
       this.isLoading = false;
-      const geometries = [];
+      this.geometries = [];
+      this.geometryNames = [];
       this.instances?.forEach(i =>
-        geometries.push(i.geometry));
-      this.geometryMap.loadGeometries(geometries, this.instances.map(i => i.name));
+        {
+          this.geometries.push(i.geometry);
+          this.geometryNames.push(i.name);
+        });
+      this.geometryMap.loadGeometryOnMap();
     });
   }
 
   onSearch = () => {
-    this.search(this.searchParams, this.geometry, this.freetext);
+    this.search(this.searchParams, this.queryGeometry ? geojsonToWKT(this.queryGeometry) : '', this.freetext);
   }
 
   onFreeTextChanged = (event: any) => {
@@ -126,6 +128,8 @@ export class SrSearchComponent implements OnInit {
   }
 
   onClear = () => {
+    this.geometries = [];
+    this.queryGeometry = undefined;
     this.clearMap();
   }
 

@@ -1,3 +1,4 @@
+import { OnChanges, SimpleChanges } from '@angular/core';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -39,16 +40,16 @@ L.Marker.prototype.options.icon = iconDefault;
   templateUrl: './input-geometry.component.html',
   styleUrls: ['./input-geometry.component.scss']
 })
-export class InputGeometryComponent implements OnInit, OnDestroy {
+export class InputGeometryComponent implements OnInit, OnChanges, OnDestroy {
   @Input() isEditing: boolean;
   @Input() isForSearch: boolean;
-  @Input() geometry: object;
+  @Input() geometries: object[];
+  @Input() geometryNames: string[];
 
   @Output() onUpdate = new EventEmitter<any>();
-  @ViewChild('map') mapDiv: ElementRef;
 
-  drawnItems: L.FeatureGroup;
-  drawnItemsForSearch: L.FeatureGroup;
+  responseFeatureGroup: L.FeatureGroup;
+  queryFeatureGroup: L.FeatureGroup;
   layersControl: any;
   controlWithEdit: any;
   controlWithoutEdit: any;
@@ -71,15 +72,15 @@ export class InputGeometryComponent implements OnInit, OnDestroy {
     this.map = this.initMap('map');
 
     // FeatureGroup is to store editable layers
-    this.drawnItems = new L.FeatureGroup();
-    this.map.addLayer(this.drawnItems);
-    this.drawnItemsForSearch = new L.FeatureGroup();
-    this.map.addLayer(this.drawnItemsForSearch);
+    this.responseFeatureGroup = new L.FeatureGroup();
+    this.map.addLayer(this.responseFeatureGroup);
+    this.queryFeatureGroup = new L.FeatureGroup();
+    this.map.addLayer(this.queryFeatureGroup);
 
     // Initialise the draw controls
-    this.controlWithEdit = this.initDrawControlWithEdit(this.drawnItems);
-    this.controlWithoutEdit = this.initDrawControlWithoutEdit(this.drawnItems);
-    this.controlForSearch = this.initDrawControlForSearch(this.drawnItemsForSearch);
+    this.controlWithEdit = this.initDrawControlWithEdit(this.responseFeatureGroup);
+    this.controlWithoutEdit = this.initDrawControlWithoutEdit(this.responseFeatureGroup);
+    this.controlForSearch = this.initDrawControlForSearch(this.queryFeatureGroup);
 
     // apply draw controls
     if (this.isForSearch) {
@@ -91,7 +92,11 @@ export class InputGeometryComponent implements OnInit, OnDestroy {
     this.map.on(L.Draw.Event.CREATED, this.handleCreation );
     this.map.on(L.Draw.Event.DELETED, this.handleDeletion );
 
-    this.loadGeometry();
+    this.loadGeometryOnMap();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.loadGeometryOnMap();
   }
 
   @HostListener('window:beforeunload')
@@ -109,7 +114,7 @@ export class InputGeometryComponent implements OnInit, OnDestroy {
       // remove leaflet element from DOM
       const container = L.DomUtil.get('map');
       if(container){
-        this.mapDiv.nativeElement.remove();
+        container.remove();
       }
     }
   }
@@ -131,69 +136,62 @@ export class InputGeometryComponent implements OnInit, OnDestroy {
   }
 
   handleCreation = (e: any) => {
+    // clear map before 
+    this.clearMap();
     const layer = e.layer;
-    if(this.isForSearch) {
-      addNonGroupLayers(layer, this.drawnItemsForSearch);
-    this.onUpdate.emit({ fieldName: 'geometry', data: getGeometryCollectionFromMap(this.drawnItemsForSearch)});
-    } else {
-      addNonGroupLayers(layer, this.drawnItems);
-    this.onUpdate.emit({ fieldName: 'geometry', data: getGeometryCollectionFromMap(this.drawnItems)});
-    }
+    addNonGroupLayers(layer, this.isForSearch ? this.queryFeatureGroup : this.responseFeatureGroup);
+    this.onUpdate.emit({ fieldName: 'geometry',
+      data: getGeometryCollectionFromMap( this.isForSearch ? this.queryFeatureGroup : this.responseFeatureGroup)});
   }
 
   handleDeletion = (e: any) => {
     const layer = e.layer;
-    removeLayers(layer, this.drawnItems);
-    this.onUpdate.emit({ fieldName: 'geometry', data: getGeometryCollectionFromMap(this.drawnItems)});
+    removeLayers(layer, this.responseFeatureGroup);
+    this.onUpdate.emit({ fieldName: 'geometry', data: getGeometryCollectionFromMap(this.responseFeatureGroup)});
   }
 
   clearMap = () => {
-    this.drawnItems.clearLayers();
-    this.drawnItemsForSearch.clearLayers();
+    this.responseFeatureGroup.clearLayers();
+    this.queryFeatureGroup.clearLayers();
   }
 
-  loadGeometry = (geometry: any = this.geometry, fitBounds = true, clearMapFromBeginning = true, tooltipString = '') => {
-    if (geometry) {
-      this.loadGeometryOnMap(geometry, this.map, this.drawnItems, fitBounds, clearMapFromBeginning, tooltipString);
+  loadGeometryOnMap = () => {
+    // there is nothing to draw!
+    if (!this.geometries || this.geometries.length === 0) {
+      return ;
     }
-  }
 
-  loadGeometries = (geometries: any[], names: any[]) => {
-    this.drawnItems.clearLayers();
-    if (names) {
-      geometries?.forEach((g, i) => this.loadGeometry(g, false, false, names[i]));
-    } else {
-      geometries?.forEach((g, i) => this.loadGeometry(g, false, false));
-    }
-  }
-
-  loadGeometryOnMap = (geometry, map, drawnItems, fitBounds = true, clearMapFromBeginning = true, tooltipString = '') => {
     // Recreate the drawn items feature group
-    if (clearMapFromBeginning) {
-      drawnItems.clearLayers();
+    if (this.responseFeatureGroup) {
+      this.responseFeatureGroup.clearLayers();
+    } else {
+      this.responseFeatureGroup = new L.FeatureGroup();
     }
-    if (geometry) {
+
+    this.geometries.forEach( (geometry: any, i: number) =>
+    {
       const geomLayer = L.geoJSON(geometry as geojson.GeoJsonObject);
-      addNonGroupLayers(geomLayer, drawnItems);
-      if(fitBounds) {
-        setTimeout(() => map.fitBounds(drawnItems.getBounds()), 50);
-      }
-      if (tooltipString.length > 0) {
+      addNonGroupLayers(geomLayer, this.responseFeatureGroup);
+      // assign name plate to the region
+      if (this.geometryNames && this.geometryNames.length > 0 && this.geometryNames[i]) {
         if (geometry.type === 'Point') {
           const coordinate = geometry.coordinates;
-          this.setToolTip(tooltipString, coordinate[1], coordinate[0]);
+          this.setToolTip(this.geometryNames[i], coordinate[1], coordinate[0]);
         } else {
           const coordinate = geomLayer.getBounds().getCenter();
-          this.setToolTip(tooltipString, coordinate.lat, coordinate.lng);
+          this.setToolTip(this.geometryNames[i], coordinate.lat, coordinate.lng);
         }
       }
+    });
+    if (this.map) {
+      this.map.fitBounds(this.responseFeatureGroup.getBounds());
     }
   }
 
   setToolTip = (tooltipString: string, lat: number, lng: number) => {
     const marker = L.marker([lat, lng], { opacity: 0.01 }); //opacity may be set to zero
     marker.bindTooltip(tooltipString, {permanent: true, className: "my-label", offset: [0, 0] });
-    marker.addTo(this.drawnItems);
+    marker.addTo(this.responseFeatureGroup);
   }
 
   initDrawControlWithoutEdit = (drawnItems) => {

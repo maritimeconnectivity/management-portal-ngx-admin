@@ -154,7 +154,7 @@ export class EditableFormComponent implements OnInit {
   activeCertificates = [];
   revokedCertificates = [];
   isServiceInstance = false;
-  geometry = {};
+  geometries = [];
   canApproveOrg = false;
 
   constructor(
@@ -555,10 +555,9 @@ export class EditableFormComponent implements OnInit {
       this.revokedCertificates = splited.revokedCertificates;
     }
 
-    this.geometry = data["geometry"];
-    // refresh the geometry map when the data from both sides are not coincidence
-    if (this.geometryMap && (this.geometry !== this.geometryMap.geometry)) {
-      this.geometryMap.loadGeometry(this.geometry);
+    this.geometries = [data["geometry"]];
+    if (this.geometryMap) {
+      this.geometryMap.loadGeometryOnMap();
     }
 
     this.setFormFieldVisibility(data);
@@ -610,7 +609,6 @@ export class EditableFormComponent implements OnInit {
 
   onDataChanged = (event: any) => {
     if (event['data'] && event['fieldName']) {
-      //this.loadedData[event['fieldName']] = event['data'];
       this.loadedData = Object.assign(this.loadedData, {[event['fieldName']]: event['data']});
     }
   }
@@ -624,7 +622,6 @@ export class EditableFormComponent implements OnInit {
   onUpdateGeometry = (event: any) => {
     if (event['data'] && event['fieldName']) {
       this.loadedData = { ...this.loadedData, ...{[event['fieldName']]: event['data']}};
-      console.log(geojsonToWKT(event['data']));
     }
   }
 
