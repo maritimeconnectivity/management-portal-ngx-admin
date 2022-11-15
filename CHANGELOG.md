@@ -1,3 +1,9 @@
+<!--<a name="0.2.0"></a>
+# [0.2.0](MSR Ledger integration) (2022-11-30)
+-->
+<a name="0.1.3"></a>
+# [0.1.3](Leaflet map update) (2022-11-15)
+
 <a name="0.1.2"></a>
 # [0.1.2](MSR search GUI support) (2022-11-08)
 

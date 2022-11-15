@@ -26,7 +26,7 @@
         </div>
       </div>
       <hr />
-      <ngx-input-geometry #map [isEditing]="false" isForSearch="true" [geometry]="geometry" (onUpdate)="onUpdateGeometry($event)" (onClear)="onClear()"></ngx-input-geometry>
+      <ngx-input-geometry #map [isEditing]="false" isForSearch="true" [geometries]="geometries" [geometryNames]="geometryNames" (onUpdate)="onUpdateGeometry($event)" (onClear)="onClear()"></ngx-input-geometry>
       <ng2-smart-table *ngIf="showTables" [settings]="settings" [source]="source" (userRowSelect)="onEdit($event)"
         [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary"></ng2-smart-table>
     </nb-card-body>
