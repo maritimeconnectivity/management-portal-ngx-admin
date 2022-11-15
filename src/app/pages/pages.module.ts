@@ -27,6 +27,7 @@ import { IrGuideComponent } from './identity-registry/ir-guide/ir-guide.componen
 import { SrGuideComponent } from './service-registry/sr-guide/sr-guide.component';
 import { SrSearchComponent } from './service-registry/sr-search/sr-search.component';
 import { InfoComponent } from './about/info/info.component';
+import { MsrLedgerSearchComponent } from './service-registry/msr-ledger-search/msr-ledger-search.component';
 
 @NgModule({
   imports: [
@@ -52,6 +53,7 @@ import { InfoComponent } from './about/info/info.component';
     SrGuideComponent,
     SrSearchComponent,
     InfoComponent,
+    MsrLedgerSearchComponent,
   ],
 })
 export class PagesModule {

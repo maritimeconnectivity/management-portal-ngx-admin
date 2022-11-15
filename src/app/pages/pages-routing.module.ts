@@ -1,3 +1,4 @@
+import { MsrLedgerSearchComponent } from './service-registry/msr-ledger-search/msr-ledger-search.component';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -107,6 +108,10 @@ const routes: Routes = [
     {
       path: 'sr/search',
       component: SrSearchComponent,
+    },
+    {
+      path: 'sr/ledger',
+      component: MsrLedgerSearchComponent,
     },
     {
       path: 'sr/guide',

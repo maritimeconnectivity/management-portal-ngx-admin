@@ -1,5 +1,5 @@
 <nb-card>
-    <nb-card-header>Service search</nb-card-header>
+    <nb-card-header>MSR Ledger search</nb-card-header>
     <nb-card-body>
       <div class="container">
         <div class="row">
@@ -9,14 +9,6 @@
         </div>
         <div class="row">
           <ngx-lucene-query-input #luceneQueryInputComponent class="w-100" (onUpdateQuery)="onUpdateLuceneQuery($event)"></ngx-lucene-query-input>
-        </div>
-        <div class="row">
-          <input nbInput hidden fullWidth placeholder="field1:value1 AND/OR field2:value2" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
-                  class="form-control search-location" #luceneQueryStringInput (change)="onQueryStringChanged($event)">
-        </div>
-        <div class="row">
-          <input nbInput fullWidth placeholder="free text to search" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
-                  class="form-control search-location" #freetextInput (change)="onFreeTextChanged($event)">
         </div>
         <div class="row">
           <button fullWidth status="primary" nbButton (click)="onSearch()">Search</button>
