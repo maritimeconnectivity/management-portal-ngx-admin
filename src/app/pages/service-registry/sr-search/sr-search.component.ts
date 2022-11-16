@@ -39,7 +39,7 @@ export class SrSearchComponent implements OnInit {
   @ViewChild('map') geometryMap: InputGeometryComponent;
   @ViewChild('luceneQueryStringInput') luceneQueryStringInput;
   @ViewChild('luceneQueryInputComponent') luceneQueryInputComponent;
-  queryGeometry: any;
+  queryGeometry: any = {};
   geometries: any[] = [];
   geometryNames: string[] = [];
   searchParams: SearchParameters = {};
@@ -115,7 +115,7 @@ export class SrSearchComponent implements OnInit {
   }
 
   onSearch = () => {
-    this.search(this.searchParams, this.queryGeometry ? geojsonToWKT(this.queryGeometry) : '', this.freetext);
+    this.search(this.searchParams, Object.keys(this.queryGeometry).length > 0 ? geojsonToWKT(this.queryGeometry) : '', this.freetext);
   }
 
   onFreeTextChanged = (event: any) => {
@@ -131,7 +131,8 @@ export class SrSearchComponent implements OnInit {
 
   onClear = () => {
     this.geometries = [];
-    this.queryGeometry = undefined;
+    this.queryGeometry = {};
+    this.searchParams = {};
     this.clearMap();
   }
 

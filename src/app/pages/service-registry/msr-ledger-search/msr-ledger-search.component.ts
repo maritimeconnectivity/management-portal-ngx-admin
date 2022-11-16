@@ -14,6 +14,11 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { ledgerFieldInfo } from './model/ledger-instance-query-info';
 
 const _ = require("lodash");
+const Terraformer = require('@terraformer/spatial');
+const TerraformerWKT = require('@terraformer/wkt');
+const wktToGeoJSONs = (wktData: string[]): any => {
+  return wktData.map(d => TerraformerWKT.wktToGeoJSON(d));
+};
 
 const msrContractAddress = '0x6d9588CC38Ee905D51e5624e85af3F6db5F0810a';
 
@@ -29,7 +34,7 @@ export class MsrLedgerSearchComponent implements OnInit {
   showTables = true;
   contract: Contract;
   allInstances: ServiceInstance[] = [];
-  queryGeometry: any;
+  queryGeometry: any = {};
   isLoading = false;
   geometries: any[] = [];
   geometryNames: string[] = [];
@@ -81,44 +86,43 @@ export class MsrLedgerSearchComponent implements OnInit {
   }
 
   onUpdateGeometry = (event: any) => {
-    this.queryGeometry = event['data'];
-    this.search(this.searchParams, geojsonToWKT(this.queryGeometry));
+    this.queryGeometry = event['data']['geometries'].pop();
+    this.search(this.searchParams, this.queryGeometry);
   }
 
-  search = (searchParams: object, wktString: string) => {
+  findIntersects = (instances: ServiceInstance[], query: object): object[] => {
+    return instances.filter((d, i) =>
+      Terraformer.intersects(TerraformerWKT.wktToGeoJSON(d.coverageArea), query));
+  }
+
+  search = (searchParams: object, geoQuery: object) => {
     this.isLoading = true;
-    if (Object.keys(searchParams).length === 0) {
-      this.refreshData(this.allInstances);
-    } else {
-      this.refreshData(_.filter(this.allInstances, searchParams));
-    }
+    console.log(geoQuery);
+    console.log(searchParams);
+    console.log(Object.keys(geoQuery).length);
+    console.log(Object.keys(searchParams).length);
+    console.log(this.allInstances);
+    const geoFiltered = Object.keys(geoQuery).length > 0 ?
+      this.findIntersects(this.allInstances, geoQuery) :
+      this.allInstances;
+    console.log(geoFiltered);
+    const attrAndGeoFiltered = Object.keys(searchParams).length > 0 ?
+      _.filter(geoFiltered, searchParams) :
+      geoFiltered;
+
+    console.log(attrAndGeoFiltered);
+    this.refreshData(attrAndGeoFiltered);
     this.isLoading = false;
-    // send a query with given geometry, converted to WKT
-    /*
-    this.secomSearchController.search({query: searchParams, geometry: wktString, freetext: freetext })
-    .subscribe(res => {
-      this.instances = res;
-      this.refreshData(this.instances);
-      this.isLoading = false;
-      this.geometries = [];
-      this.geometryNames = [];
-      this.instances?.forEach(i =>
-        {
-          this.geometries.push(i.geometry);
-          this.geometryNames.push(i.name);
-        });
-      this.geometryMap.loadGeometryOnMap();
-    });
-    */
   }
 
   onSearch = () => {
-    this.search(this.searchParams, this.queryGeometry ? geojsonToWKT(this.queryGeometry) : '');
+    this.search(this.searchParams, this.queryGeometry);
   }
 
   onClear = () => {
     this.geometries = [];
-    this.queryGeometry = undefined;
+    this.queryGeometry = {};
+    this.searchParams = {};
     this.clearMap();
   }
 
@@ -126,11 +130,24 @@ export class MsrLedgerSearchComponent implements OnInit {
     this.geometryMap?.clearMap();
     this.luceneQueryInputComponent?.clearInput();
     this.source.reset();
-    this.allInstances = [];
-    this.refreshData(this.allInstances);
+    this.refreshData([]);
   }
 
-  refreshData(data?: any) {
+  refreshData(data?: ServiceInstance[]) {
+    this.applyDataToMap(data);
+    this.applyDataToTable(data);
+  }
+
+  getGeoJsonArray = (data: ServiceInstance[]) => {
+    return wktToGeoJSONs(data.map(d => d.coverageArea));
+  }
+
+  applyDataToMap = (data?: ServiceInstance[]) => {
+    this.geometries = this.getGeoJsonArray(data);
+    this.geometryNames = data.map(d => d.name + ' from ' + d.msrName);
+  }
+
+  applyDataToTable = (data?: ServiceInstance[]) => {
     if (data) {
       this.source.load(data);
     } else {
@@ -139,9 +156,6 @@ export class MsrLedgerSearchComponent implements OnInit {
   }
 
   onEdit(event): void {
-    const mrn = event.data.instanceId;
-    if (event && event.data && event.data.instanceId) {
-      
-    }
+    console.log(event.data.mrn);
   }
 }
