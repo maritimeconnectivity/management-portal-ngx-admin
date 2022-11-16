@@ -27,6 +27,7 @@ import { InputGeometryComponent } from '../../../shared/input-geometry/input-geo
 import { ColumnForMenu } from '../../../shared/models/columnForMenu';
 import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
+import { srFieldInfo } from './model/sr-instance-query-info';
 
 @Component({
   selector: 'ngx-sr-search',
@@ -59,6 +60,7 @@ export class SrSearchComponent implements OnInit {
   };
   allInstances: InstanceDto[];
   source: LocalDataSource = new LocalDataSource();
+  fieldInfo = srFieldInfo;
 
   constructor(
     private router: Router,

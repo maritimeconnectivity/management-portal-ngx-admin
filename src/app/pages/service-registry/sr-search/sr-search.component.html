@@ -8,7 +8,7 @@
           </span>
         </div>
         <div class="row">
-          <ngx-lucene-query-input #luceneQueryInputComponent class="w-100" (onUpdateQuery)="onUpdateLuceneQuery($event)"></ngx-lucene-query-input>
+          <ngx-lucene-query-input #luceneQueryInputComponent class="w-100" [fieldInfo]="fieldInfo" (onUpdateQuery)="onUpdateLuceneQuery($event)"></ngx-lucene-query-input>
         </div>
         <div class="row">
           <input nbInput hidden fullWidth placeholder="field1:value1 AND/OR field2:value2" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"

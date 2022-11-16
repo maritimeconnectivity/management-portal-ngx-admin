@@ -1,3 +1,5 @@
+import { ColumnForMenu } from './../../../shared/models/columnForMenu';
+import { ResourceType } from './../../../shared/models/menuType';
 import { InputGeometryComponent } from './../../../shared/input-geometry/input-geometry.component';
 import { geojsonToWKT } from '@terraformer/wkt';
 import { AppConfig } from './../../../app.config';
@@ -8,6 +10,7 @@ import {AbiItem} from 'web3-utils/types';
 import msrABI from '../../../backend-api/msr-ledger/json/msrContract.json';
 import { ServiceInstance } from './model/serviceInstance';
 import { LocalDataSource } from 'ng2-smart-table';
+import { ledgerFieldInfo } from './model/ledger-instance-query-info';
 
 const msrContractAddress = '0x6d9588CC38Ee905D51e5624e85af3F6db5F0810a';
 
@@ -22,35 +25,44 @@ export class MsrLedgerSearchComponent implements OnInit {
   @ViewChild('luceneQueryInputComponent') luceneQueryInputComponent;
   showTables = true;
   contract: Contract;
-  instances: ServiceInstance[] = [];
+  allInstances: ServiceInstance[] = [];
   queryGeometry: any;
   isLoading = false;
   geometries: any[] = [];
   geometryNames: string[] = [];
   source: LocalDataSource = new LocalDataSource();
+  settings;
+  contextForAttributes = 'list';
+  menuType = ResourceType.LedgerInstance;
+  mySettings = {
+    actions: false,
+    mode: 'external',
+    delete: false,
+    columns: ColumnForMenu[this.menuType],
+    hideSubHeader: true,
+  };
+  fieldInfo = ledgerFieldInfo;
 
   constructor() { }
 
   ngOnInit(): void {
+    if (ColumnForMenu.hasOwnProperty(this.menuType.toString())) {
+      this.mySettings.columns = Object.assign({}, ...
+        Object.entries(ColumnForMenu[this.menuType.toString()]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes)).map(([k,v]) => ({[k]:v}))
+      );
+      this.settings = Object.assign({}, this.mySettings);
+
+      this.fetchDataFromLedger();
+    }
+  }
+
+  fetchDataFromLedger = () => {
     const provider = AppConfig.LEDGER_PATH ? AppConfig.LEDGER_PATH : '';
 
     const web3 = new Web3(provider);
     this.contract = new web3.eth.Contract(msrABI.abi as AbiItem[], msrContractAddress);
 
-    this.getServiceInstances().then((res: ServiceInstance[]) => this.instances = res);
-/*
-    contract.methods.somFunc().send({from: ....})
-    .on('receipt', function(){
-        ...
-    });
-
-    const web3Provider = new Web3.providers.HttpProvider(provider);
-    const web3 = new Web3(web3Provider);
-    web3.eth.Contract(msrABI, msrContractAddress);
-    web3.eth.getBlockNumber().then((result) => {
-      console.log("Latest Ethereum Block is ",result);
-    });
-    */
+    this.getServiceInstances().then((res: ServiceInstance[]) => this.allInstances = res);
   }
 
   getServiceInstances = async () => {
@@ -97,8 +109,8 @@ export class MsrLedgerSearchComponent implements OnInit {
     this.geometryMap?.clearMap();
     this.luceneQueryInputComponent?.clearInput();
     this.source.reset();
-    this.instances = [];
-    this.refreshData(this.instances);
+    this.allInstances = [];
+    this.refreshData(this.allInstances);
   }
 
   refreshData(data?: any) {

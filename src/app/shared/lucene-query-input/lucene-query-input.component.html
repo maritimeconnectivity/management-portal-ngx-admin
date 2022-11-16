@@ -1,5 +1,5 @@
 <div className="p-0">
-    <ngx-lucene-component-input (onCreate)="onCreate($event)"></ngx-lucene-component-input>
+    <ngx-lucene-component-input [fieldInfo]="fieldInfo" (onCreate)="onCreate($event)"></ngx-lucene-component-input>
     <div className="d-flex justify-content-start">
         <ng-template luceneComponentHost></ng-template>
     </div>
