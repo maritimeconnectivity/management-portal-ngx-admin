@@ -60,7 +60,6 @@ export class InputGeometryComponent implements OnInit, OnChanges, OnDestroy {
 
   initMap = (container: any) => {
     const map = L.map(container).setView([55.692864, 12.599246], 3);
-    map.invalidateSize();
     L.tileLayer(location.protocol.includes('https:') ? 'https:' : 'http:' + '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       { maxZoom: 18, minZoom: 2, attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>' })
       .addTo(map);
@@ -92,6 +91,7 @@ export class InputGeometryComponent implements OnInit, OnChanges, OnDestroy {
     this.map.on(L.Draw.Event.CREATED, this.handleCreation );
     this.map.on(L.Draw.Event.DELETED, this.handleDeletion );
 
+    this.map.invalidateSize();
     this.loadGeometryOnMap();
   }
 

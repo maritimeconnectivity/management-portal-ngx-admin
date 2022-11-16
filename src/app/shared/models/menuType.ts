@@ -31,6 +31,7 @@ export enum ResourceType {
   InstanceOfOrg = 'instanceorg',
   OrgCandidate = 'orgcandidate',
   NewOrganization = 'newOrganization',
+  LedgerInstance = 'ledgerInstance',
 }
 
 /**

@@ -31,6 +31,7 @@ export class AppConfig {
   static IR_CONTACT: string;
   static SR_PROVIDER: string;
   static SR_CONTACT: string;
+  static LEDGER_PATH: string;
   static MP_PROVIDER: string;
   static MP_CONTACT: string;
   static MP_VERSION: string;
@@ -48,6 +49,7 @@ export class AppConfig {
     AppConfig.IR_CONTACT = environment.irContact;
     AppConfig.SR_PROVIDER = environment.srProvider;
     AppConfig.SR_CONTACT = environment.srContact;
+    AppConfig.LEDGER_PATH = environment.ledgerPath;
     AppConfig.MP_PROVIDER = environment.mpProvider;
     AppConfig.MP_CONTACT = environment.mpContact;
     AppConfig.MP_VERSION = require( '../../package.json').version;

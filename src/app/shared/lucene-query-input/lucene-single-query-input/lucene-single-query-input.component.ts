@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { fieldInfo } from '../model/localOperator';
 import { LuceneComponent } from '../model/lucene-component';
+import { QueryFieldInfo } from '../model/queryFieldInfo';
 
 @Component({
   selector: 'ngx-lucene-single-query-input',
@@ -13,10 +13,10 @@ export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent 
   field: string;
   fieldValue: string = '';
   valueEditable: boolean = false;
-  fieldInfo = fieldInfo;
 
   @Input() id: string;
   @Input() data: object;
+  @Input() fieldInfo: QueryFieldInfo[];
   @Output() onUpdate = new EventEmitter<any>();
   @Output() onDelete = new EventEmitter<any>();
 
@@ -30,9 +30,11 @@ export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent 
   }
 
   applyData() {
-    this.selectedItem = this.getFilteredKey(this.data).pop();
-    this.field = this.selectedItem;
-    this.fieldValue = this.data[this.selectedItem] ? this.data[this.selectedItem] : '';
+    if (this.fieldInfo) {
+      this.selectedItem = this.getFilteredKey(this.data).pop();
+      this.field = this.selectedItem;
+      this.fieldValue = this.data[this.selectedItem] ? this.data[this.selectedItem] : '';
+    }
   }
 
   getFilteredKey(data: object) {

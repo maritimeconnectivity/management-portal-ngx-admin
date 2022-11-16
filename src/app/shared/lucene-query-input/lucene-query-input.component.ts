@@ -4,7 +4,8 @@ import { LuceneSingleQueryInputComponent } from './lucene-single-query-input/luc
 import { Component, ComponentFactory, ComponentFactoryResolver, OnInit, ViewChild, EventEmitter, Output, Input } from '@angular/core';
 import { LuceneComponent } from './model/lucene-component';
 import { LuceneComponentDirective } from './lucene-component-directive';
-import { fieldInfo, LogicalOperator } from './model/localOperator';
+import { LogicalOperator } from './model/localOperator';
+import { QueryFieldInfo } from './model/queryFieldInfo';
 import {v4 as uuidv4} from 'uuid';
 import { buildQuery } from './query-builder/query-builder';
 
@@ -17,6 +18,7 @@ export class LuceneQueryInputComponent implements OnInit {
   group: LuceneComponentItem[] = [];
   data: object[] = [{}];
 
+  @Input() fieldInfo: QueryFieldInfo[];
   @Output() onUpdateQuery = new EventEmitter<any>();
   @ViewChild(LuceneComponentDirective, {static: true}) luceneComponentHost!: LuceneComponentDirective;
 
@@ -27,11 +29,12 @@ export class LuceneQueryInputComponent implements OnInit {
     const viewContainerRef = this.luceneComponentHost.viewContainerRef;
     viewContainerRef.clear();
 
-    this.group.forEach((component, index) => {
+    this.group.forEach((component) => {
       const factory: ComponentFactory<LuceneComponent> = this.resolver.resolveComponentFactory(component.component);
       const componentRef = viewContainerRef.createComponent<LuceneComponent>(factory);
       componentRef.instance.id = component.id;
       componentRef.instance.data = component.data;
+      componentRef.instance.fieldInfo = component.fieldInfo ? component.fieldInfo : undefined;
       componentRef.instance.onUpdate.subscribe(value => this.onEditQuery(value.id, value.data));
       componentRef.instance.onDelete.subscribe(id => this.onDeleteById(id));
     });
@@ -67,8 +70,7 @@ export class LuceneQueryInputComponent implements OnInit {
     let data = {};
     dataArray.forEach(e => {
       if (Object.keys(e).length &&
-        Object.keys(e).pop() !== 'operator' &&
-        e[Object.keys(e).pop()].length) {
+        Object.keys(e).pop() !== 'operator') {
           data[Object.keys(e).pop()] = e[Object.keys(e).pop()];
         }
       });
@@ -85,7 +87,7 @@ export class LuceneQueryInputComponent implements OnInit {
       this.group.push(new LuceneComponentItem(LuceneLogicInputComponent, uuidv4(), {'operator': LogicalOperator.And}));
     }
     this.group.push(new LuceneComponentItem(LuceneSingleQueryInputComponent, uuidv4(),
-    {[fieldInfo.filter(e=> e.name === value).pop()?.value]: ''}));
+      {[this.fieldInfo?.filter(e=> e.name === value).pop()?.value]: ''}, this.fieldInfo));
     this.loadComponent();
   }
 

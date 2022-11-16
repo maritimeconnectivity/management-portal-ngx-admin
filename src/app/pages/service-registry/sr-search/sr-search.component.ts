@@ -27,6 +27,7 @@ import { InputGeometryComponent } from '../../../shared/input-geometry/input-geo
 import { ColumnForMenu } from '../../../shared/models/columnForMenu';
 import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
+import { srFieldInfo } from './model/sr-instance-query-info';
 
 @Component({
   selector: 'ngx-sr-search',
@@ -38,7 +39,7 @@ export class SrSearchComponent implements OnInit {
   @ViewChild('map') geometryMap: InputGeometryComponent;
   @ViewChild('luceneQueryStringInput') luceneQueryStringInput;
   @ViewChild('luceneQueryInputComponent') luceneQueryInputComponent;
-  queryGeometry: any;
+  queryGeometry: any = {};
   geometries: any[] = [];
   geometryNames: string[] = [];
   searchParams: SearchParameters = {};
@@ -59,6 +60,7 @@ export class SrSearchComponent implements OnInit {
   };
   allInstances: InstanceDto[];
   source: LocalDataSource = new LocalDataSource();
+  fieldInfo = srFieldInfo;
 
   constructor(
     private router: Router,
@@ -113,7 +115,7 @@ export class SrSearchComponent implements OnInit {
   }
 
   onSearch = () => {
-    this.search(this.searchParams, this.queryGeometry ? geojsonToWKT(this.queryGeometry) : '', this.freetext);
+    this.search(this.searchParams, Object.keys(this.queryGeometry).length > 0 ? geojsonToWKT(this.queryGeometry) : '', this.freetext);
   }
 
   onFreeTextChanged = (event: any) => {
@@ -129,7 +131,8 @@ export class SrSearchComponent implements OnInit {
 
   onClear = () => {
     this.geometries = [];
-    this.queryGeometry = undefined;
+    this.queryGeometry = {};
+    this.searchParams = {};
     this.clearMap();
   }
 
