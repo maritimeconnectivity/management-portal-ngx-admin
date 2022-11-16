@@ -1112,39 +1112,81 @@ export const ColumnForMenu = {
       options: countryOptions,
       required: true,
     },
-    /*
-    adminMrn: {
-      title: 'MRN for admin user',
+  },
+  ledgerInstance: {
+    name: {
+      title: 'Name',
+      type: 'string',
+      description: 'Name of service instance',
+      visibleFrom: ['list'],
+    },
+    mrn: {
+      title: 'MRN',
       type: 'string',
       description: 'MCP MRN as unique identifer',
-      visibleFrom: ['detail'],
-      required: true,
-      shortIdType: 'user',
+      visibleFrom: ['list'],
     },
-    adminFirstName: {
-      title: 'First name of admin user',
+    version: {
+      title: 'Version',
       type: 'string',
-      description: 'First name',
-      placeholder: 'anonymized first name',
-      visibleFrom: ['detail'],
-      required: true,
+      description: 'Version of service instance',
+      visibleFrom: ['list'],
     },
-    adminLastName: {
-      title: 'Last name of admin user',
+    keywords: {
+      title: 'Keywords',
       type: 'string',
-      description: 'Last name',
-      placeholder: 'anonymized last name',
-      visibleFrom: ['detail'],
-      required: true,
+      visibleFrom: ['list'],
     },
-    adminEmail: {
-      title: 'e-mail of admin user',
+    coverageArea: {
+      title: 'Coverage ',
       type: 'string',
-      description: 'Contact e-mail to admin user',
-      placeholder: 'non-personal email, e.g., admin@example.org',
-      visibleFrom: ['detail'],
-      required: true,
     },
-    */
+    status: {
+      title: 'Status',
+      type: 'string',
+      options: [
+        {
+          title: 'Provisional',
+          value: 'PROVISIONAL',
+        },
+        {
+          title: 'Released',
+          value: 'RELEASED',
+        },
+        {
+          title: 'Deprecated',
+          value: 'DEPRECATED',
+        },
+        {
+          title: 'Deleted',
+          value: 'DELETED',
+        },
+      ],
+      visibleFrom: ['list'],
+    },
+    implementsDesignMRN: {
+      title: 'Technical design ID',
+      type: 'string',
+      description: 'MCP MRN as unique identifer',
+      visibleFrom: ['list'],
+      shortIdType: 'design',
+      immutable: true,
+    },
+    implementsDesignVersion: {
+      title: 'Technical design version',
+      type: 'string',
+      description: 'MCP MRN as unique identifer',
+      visibleFrom: ['list'],
+    },
+    msrName: {
+      title: 'MSR Name of register',
+      type: 'string',
+      visibleFrom: ['list'],
+    },
+    msrUrl: {
+      title: 'MSR URL of register',
+      type: 'string',
+      visibleFrom: ['list'],
+    },
   },
 };

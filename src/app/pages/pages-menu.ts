@@ -47,6 +47,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/pages/sr/search',
       },
       {
+        title: 'MSR Ledger Search',
+        link: '/pages/sr/ledger',
+      },
+      {
         title: 'User Guide',
         link: '/pages/sr/guide',
       },

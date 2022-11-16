@@ -201,7 +201,6 @@ export class MrnHelperService {
   public checkMrnForSpecification(specificationMrn: string): boolean {
     // TODO Temp check until mrn-service is ready
     const rawRegex = `^${this.mrnMaskForSpecification()}((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)|\/)*)$`;
-    console.log(rawRegex);
     const regex = new RegExp(rawRegex);
     return regex.test(specificationMrn);
     //return specificationMrn.indexOf(':service:specification:' + this.orgShortId() + ':') >= 0 && specificationMrn.startsWith('urn:mrn:');

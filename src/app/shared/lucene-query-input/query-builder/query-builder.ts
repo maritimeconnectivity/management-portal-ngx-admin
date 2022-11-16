@@ -4,7 +4,7 @@ import { LogicalOperator } from '../model/localOperator';
 export const buildTerm = (data: object) => {
     if (data) {
       const key = Object.keys(data).pop();
-      return key && data[key] &&  _.field(key, _.term(data[key]));
+      return key && data[key] !== undefined &&  _.field(key, _.term(data[key]));
     }
 }
 

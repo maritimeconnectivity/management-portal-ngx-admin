@@ -1,6 +1,6 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { fieldInfo } from '../model/localOperator';
+import { QueryFieldInfo } from '../model/queryFieldInfo';
 
 @Component({
   selector: 'ngx-lucene-component-input',
@@ -8,16 +8,16 @@ import { fieldInfo } from '../model/localOperator';
   styleUrls: ['./lucene-component-input.component.scss']
 })
 export class LuceneComponentInputComponent implements OnInit {
-
   options: string[];
   filteredOptions$: Observable<string[]>;
 
   @ViewChild('autoInput') input;
 
+  @Input() fieldInfo: QueryFieldInfo[];
   @Output() onCreate = new EventEmitter<any>();
 
   ngOnInit() {
-    this.options = fieldInfo.map(e => e.name);
+    this.options = this.fieldInfo?.map(e => e.name);
     this.filteredOptions$ = of(this.options);
   }
 
@@ -26,7 +26,7 @@ export class LuceneComponentInputComponent implements OnInit {
       return undefined;
     }
     const filterValue = value.toLowerCase();
-    return this.options.filter(optionValue => optionValue.toLowerCase().includes(filterValue)).pop();
+    return this.options.filter(optionValue => optionValue.toLowerCase() === filterValue).pop();
   }
 
   onChange(event) {
