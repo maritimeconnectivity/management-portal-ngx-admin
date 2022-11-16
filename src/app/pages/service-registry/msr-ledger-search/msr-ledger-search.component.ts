@@ -1,3 +1,4 @@
+import { LuceneQueryOutput } from './../../../shared/lucene-query-input/model/lucene-query-output';
 import { ColumnForMenu } from './../../../shared/models/columnForMenu';
 import { ResourceType } from './../../../shared/models/menuType';
 import { InputGeometryComponent } from './../../../shared/input-geometry/input-geometry.component';
@@ -11,6 +12,8 @@ import msrABI from '../../../backend-api/msr-ledger/json/msrContract.json';
 import { ServiceInstance } from './model/serviceInstance';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ledgerFieldInfo } from './model/ledger-instance-query-info';
+
+const _ = require("lodash");
 
 const msrContractAddress = '0x6d9588CC38Ee905D51e5624e85af3F6db5F0810a';
 
@@ -30,6 +33,7 @@ export class MsrLedgerSearchComponent implements OnInit {
   isLoading = false;
   geometries: any[] = [];
   geometryNames: string[] = [];
+  searchParams: object = {};
   source: LocalDataSource = new LocalDataSource();
   settings;
   contextForAttributes = 'list';
@@ -69,13 +73,26 @@ export class MsrLedgerSearchComponent implements OnInit {
     return this.contract?.methods.getServiceInstances().call();
   }
 
+  onUpdateLuceneQuery = (query: LuceneQueryOutput) => {
+    this.searchParams = query.data;
+    if (Object.keys(query).length === 0) {
+      this.clearMap();
+    }
+  }
+
   onUpdateGeometry = (event: any) => {
     this.queryGeometry = event['data'];
-    this.search({}, geojsonToWKT(this.queryGeometry));
+    this.search(this.searchParams, geojsonToWKT(this.queryGeometry));
   }
 
   search = (searchParams: object, wktString: string) => {
     this.isLoading = true;
+    if (Object.keys(searchParams).length === 0) {
+      this.refreshData(this.allInstances);
+    } else {
+      this.refreshData(_.filter(this.allInstances, searchParams));
+    }
+    this.isLoading = false;
     // send a query with given geometry, converted to WKT
     /*
     this.secomSearchController.search({query: searchParams, geometry: wktString, freetext: freetext })
@@ -96,7 +113,7 @@ export class MsrLedgerSearchComponent implements OnInit {
   }
 
   onSearch = () => {
-    this.search({}, this.queryGeometry ? geojsonToWKT(this.queryGeometry) : '');
+    this.search(this.searchParams, this.queryGeometry ? geojsonToWKT(this.queryGeometry) : '');
   }
 
   onClear = () => {
@@ -125,13 +142,6 @@ export class MsrLedgerSearchComponent implements OnInit {
     const mrn = event.data.instanceId;
     if (event && event.data && event.data.instanceId) {
       
-    }
-  }
-
-  onUpdateLuceneQuery = (query: any) => {
-    
-    if (!query.queryString || query.queryString.length === 0) {
-      this.clearMap();
     }
   }
 }
