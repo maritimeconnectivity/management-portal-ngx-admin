@@ -10,7 +10,6 @@
  * Do not edit the class manually.
  *//* tslint:disable:no-unused-variable member-ordering */
 
- import { environment } from './../../../../environments/environment';
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent }                           from '@angular/common/http';
@@ -19,11 +18,10 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { InstanceDto } from '../model/instanceDto';
-import { Pageable } from '../model/pageable';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
-
+import { environment } from './../../../../environments/environment.test';
 
 @Injectable()
 export class InstanceControllerService {
@@ -188,22 +186,77 @@ export class InstanceControllerService {
     /**
      * 
      * 
-     * @param pageable 
+     * @param mrn 
+     * @param version 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getInstances(pageable: Pageable, observe?: 'body', reportProgress?: boolean): Observable<Array<InstanceDto>>;
-    public getInstances(pageable: Pageable, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<InstanceDto>>>;
-    public getInstances(pageable: Pageable, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<InstanceDto>>>;
-    public getInstances(pageable: Pageable, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getInstanceByMRNAndVersion(mrn: string, version: string, observe?: 'body', reportProgress?: boolean): Observable<InstanceDto>;
+    public getInstanceByMRNAndVersion(mrn: string, version: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<InstanceDto>>;
+    public getInstanceByMRNAndVersion(mrn: string, version: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<InstanceDto>>;
+    public getInstanceByMRNAndVersion(mrn: string, version: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling getInstances.');
+        if (mrn === null || mrn === undefined) {
+            throw new Error('Required parameter mrn was null or undefined when calling getInstanceByMRNAndVersion.');
         }
 
+        if (version === null || version === undefined) {
+            throw new Error('Required parameter version was null or undefined when calling getInstanceByMRNAndVersion.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<InstanceDto>('get',`${this.basePath}/api/instances/mrn/${encodeURIComponent(String(mrn))}/${encodeURIComponent(String(version))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getInstances(page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<Array<InstanceDto>>;
+    public getInstances(page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<InstanceDto>>>;
+    public getInstances(page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<InstanceDto>>>;
+    public getInstances(page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+
+
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (pageable !== undefined && pageable !== null) {
-            queryParameters = queryParameters.set('pageable', <any>pageable);
+        if (page !== undefined && page !== null) {
+            queryParameters = queryParameters.set('page', <any>page);
+        }
+        if (size !== undefined && size !== null) {
+            queryParameters = queryParameters.set('size', <any>size);
+        }
+        if (sort) {
+            sort.forEach((element) => {
+                queryParameters = queryParameters.append('sort', <any>element);
+            })
         }
 
         let headers = this.defaultHeaders;
@@ -224,6 +277,47 @@ export class InstanceControllerService {
         return this.httpClient.request<Array<InstanceDto>>('get',`${this.basePath}/api/instances`,
             {
                 params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param mrn 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getInstancesByMRN(mrn: string, observe?: 'body', reportProgress?: boolean): Observable<Array<InstanceDto>>;
+    public getInstancesByMRN(mrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<InstanceDto>>>;
+    public getInstancesByMRN(mrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<InstanceDto>>>;
+    public getInstancesByMRN(mrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (mrn === null || mrn === undefined) {
+            throw new Error('Required parameter mrn was null or undefined when calling getInstancesByMRN.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<InstanceDto>>('get',`${this.basePath}/api/instances/mrn/${encodeURIComponent(String(mrn))}`,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

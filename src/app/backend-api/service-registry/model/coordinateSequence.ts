@@ -11,6 +11,6 @@
  */
 
 export interface CoordinateSequence { 
-    measures?: number;
     dimension?: number;
+    measures?: number;
 }

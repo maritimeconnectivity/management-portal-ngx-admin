@@ -29,17 +29,17 @@ export interface Point {
     numPoints?: number;
     dimension?: number;
     boundary?: Geometry;
-    boundaryDimension?: number;
     geometryType?: string;
+    boundaryDimension?: number;
     coordinateSequence?: CoordinateSequence;
     length?: number;
     valid?: boolean;
-    srid?: number;
     numGeometries?: number;
     rectangle?: boolean;
     area?: number;
     centroid?: Point;
     interiorPoint?: Point;
     envelopeInternal?: Envelope;
+    srid?: number;
     precisionModel?: PrecisionModel;
 }
