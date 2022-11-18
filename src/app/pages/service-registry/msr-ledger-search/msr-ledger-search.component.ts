@@ -1,3 +1,4 @@
+import { DetailModalComponent } from './../../../shared/list-view/detail-modal/detail-modal.component';
 import { LuceneQueryOutput } from './../../../shared/lucene-query-input/model/lucene-query-output';
 import { ColumnForMenu } from './../../../shared/models/columnForMenu';
 import { ResourceType } from './../../../shared/models/menuType';
@@ -12,6 +13,7 @@ import msrABI from '../../../backend-api/msr-ledger/json/msrContract.json';
 import { ServiceInstance } from './model/serviceInstance';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ledgerFieldInfo } from './model/ledger-instance-query-info';
+import { NbDialogService } from '@nebular/theme';
 
 const _ = require("lodash");
 const Terraformer = require('@terraformer/spatial');
@@ -52,7 +54,9 @@ export class MsrLedgerSearchComponent implements OnInit {
   };
   fieldInfo = ledgerFieldInfo;
 
-  constructor() { }
+  constructor(
+    private dialogService: NbDialogService,
+  ) { }
 
   ngOnInit(): void {
     if (ColumnForMenu.hasOwnProperty(this.menuType.toString())) {
@@ -148,6 +152,17 @@ export class MsrLedgerSearchComponent implements OnInit {
   }
 
   onEdit(event): void {
-    console.log(event.data.mrn);
+    const instance = event.data as ServiceInstance;
+    this.dialogService.open(DetailModalComponent, {
+      context: {
+        instanceMrn: instance.mrn,
+        instanceName: instance.name,
+        instanceVersion: instance.version,
+        msrName: instance.msrName,
+        msrUrl: instance.msrUrl,
+      },
+      closeOnBackdropClick: false,
+      closeOnEsc: false,
+    });
   }
 }

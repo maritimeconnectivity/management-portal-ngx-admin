@@ -25,11 +25,13 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { NotifierModule, NotifierService } from 'angular-notifier';
 import { customNotifierOptions } from '../../shared/customNotifierOption';
 import { ThemeModule } from '../../@theme/theme.module';
+import { DetailModalComponent } from './detail-modal/detail-modal.component';
 
 @NgModule({
   declarations: [
     ListComponent,
     DetailComponent,
+    DetailModalComponent,
   ],
   imports: [
     CommonModule,
