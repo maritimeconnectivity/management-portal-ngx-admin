@@ -110,12 +110,12 @@ const routes: Routes = [
       component: SrSearchComponent,
     },
     {
-      path: 'sr/ledger',
-      component: MsrLedgerSearchComponent,
-    },
-    {
       path: 'sr/guide',
       component: SrGuideComponent,
+    },
+    {
+      path: 'ledger/search',
+      component: MsrLedgerSearchComponent,
     },
     {
       path: 'about',

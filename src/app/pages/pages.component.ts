@@ -54,6 +54,9 @@ export class PagesComponent implements OnInit {
     if (!AppConfig.HAS_SERVICE_REGISTRY) {
       this.menu = this.menu.filter(e => e.title !== 'Service Registry');
     }
+    if (!AppConfig.HAS_MSR_LEDGER) {
+      this.menu = this.menu.filter(e => e.title !== 'Global Service Discovery');
+    }
   }
 
   ngOnInit(): void {
