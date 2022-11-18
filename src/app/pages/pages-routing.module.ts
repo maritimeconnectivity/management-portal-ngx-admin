@@ -37,52 +37,52 @@ const routes: Routes = [
     // identity registry
     {
       path: 'ir/devices',
-      loadChildren: () => import('./list-view/list-view.module')
+      loadChildren: () => import('../shared/list-view/list-view.module')
         .then(m => m.ListViewModule),
     },
     {
       path: 'ir/services',
-      loadChildren: () => import('./list-view/list-view.module')
+      loadChildren: () => import('../shared/list-view/list-view.module')
         .then(m => m.ListViewModule),
     },
     {
       path: 'ir/users',
-      loadChildren: () => import('./list-view/list-view.module')
+      loadChildren: () => import('../shared/list-view/list-view.module')
         .then(m => m.ListViewModule),
     },
     {
       path: 'ir/vessels',
-      loadChildren: () => import('./list-view/list-view.module')
+      loadChildren: () => import('../shared/list-view/list-view.module')
         .then(m => m.ListViewModule),
     },
     {
       path: 'ir/organizations',
-      loadChildren: () => import('./list-view/list-view.module')
+      loadChildren: () => import('../shared/list-view/list-view.module')
         .then(m => m.ListViewModule),
     },
     {
       path: 'ir/apply-org',
-      loadChildren: () => import('./list-view/list-view.module')
+      loadChildren: () => import('../shared/list-view/list-view.module')
         .then(m => m.ListViewModule),
     },
     {
       path: 'ir/orgcandidates',
-      loadChildren: () => import('./list-view/list-view.module')
+      loadChildren: () => import('../shared/list-view/list-view.module')
         .then(m => m.ListViewModule),
     },
     {
       path: 'ir/acting',
-      loadChildren: () => import('./list-view/list-view.module')
+      loadChildren: () => import('../shared/list-view/list-view.module')
         .then(m => m.ListViewModule),
     },
     {
       path: 'ir/roles',
-      loadChildren: () => import('./list-view/list-view.module')
+      loadChildren: () => import('../shared/list-view/list-view.module')
         .then(m => m.ListViewModule),
     },
     {
       path: 'ir/agents',
-      loadChildren: () => import('./list-view/list-view.module')
+      loadChildren: () => import('../shared/list-view/list-view.module')
         .then(m => m.ListViewModule),
     },
     {
@@ -92,17 +92,17 @@ const routes: Routes = [
     // service registry
     {
       path: 'sr/instances',
-      loadChildren: () => import('./list-view/list-view.module')
+      loadChildren: () => import('../shared/list-view/list-view.module')
         .then(m => m.ListViewModule),
     },
     {
       path: 'sr/instanceorg',
-      loadChildren: () => import('./list-view/list-view.module')
+      loadChildren: () => import('../shared/list-view/list-view.module')
         .then(m => m.ListViewModule),
     },
     {
       path: 'sr/approve-svc',
-      loadChildren: () => import('./list-view/list-view.module')
+      loadChildren: () => import('../shared/list-view/list-view.module')
         .then(m => m.ListViewModule),
     },
     {

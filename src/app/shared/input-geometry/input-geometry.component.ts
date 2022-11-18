@@ -1,4 +1,4 @@
-import { OnChanges, SimpleChanges } from '@angular/core';
+import { AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -40,7 +40,7 @@ L.Marker.prototype.options.icon = iconDefault;
   templateUrl: './input-geometry.component.html',
   styleUrls: ['./input-geometry.component.scss']
 })
-export class InputGeometryComponent implements OnInit, OnChanges, OnDestroy {
+export class InputGeometryComponent implements OnChanges, OnDestroy, AfterViewInit {
   @Input() isEditing: boolean;
   @Input() isForSearch: boolean;
   @Input() geometries: object[];
@@ -60,13 +60,14 @@ export class InputGeometryComponent implements OnInit, OnChanges, OnDestroy {
 
   initMap = (container: any) => {
     const map = L.map(container).setView([55.692864, 12.599246], 3);
+    map.invalidateSize();
     L.tileLayer(location.protocol.includes('https:') ? 'https:' : 'http:' + '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       { maxZoom: 18, minZoom: 2, attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>' })
       .addTo(map);
     return map;
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     // Initialise the map before we need it
     this.map = this.initMap('map');
 
@@ -91,7 +92,6 @@ export class InputGeometryComponent implements OnInit, OnChanges, OnDestroy {
     this.map.on(L.Draw.Event.CREATED, this.handleCreation );
     this.map.on(L.Draw.Event.DELETED, this.handleDeletion );
 
-    this.map.invalidateSize();
     this.loadGeometryOnMap();
   }
 

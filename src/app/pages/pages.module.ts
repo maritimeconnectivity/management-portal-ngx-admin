@@ -22,7 +22,6 @@ import { PagesComponent } from './pages.component';
 import { pagesRoutingComponents, PagesRoutingModule } from './pages-routing.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-import { ListViewComponent } from './list-view/list-view.component';
 import { IrGuideComponent } from './identity-registry/ir-guide/ir-guide.component';
 import { SrGuideComponent } from './service-registry/sr-guide/sr-guide.component';
 import { SrSearchComponent } from './service-registry/sr-search/sr-search.component';
@@ -48,7 +47,6 @@ import { MsrLedgerSearchComponent } from './service-registry/msr-ledger-search/m
   declarations: [
     PagesComponent,
     pagesRoutingComponents,
-    ListViewComponent,
     IrGuideComponent,
     SrGuideComponent,
     SrSearchComponent,

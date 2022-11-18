@@ -38,6 +38,8 @@ import { LuceneQueryInputComponent } from './lucene-query-input/lucene-query-inp
 import { AutoSizeInputModule } from 'ngx-autosize-input';
 import { LuceneSingleQueryInputComponent } from './lucene-query-input/lucene-single-query-input/lucene-single-query-input.component';
 import { LuceneLogicInputComponent } from './lucene-query-input/lucene-logic-input/lucene-logic-input.component';
+import { ListViewComponent } from './list-view/list-view.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -58,9 +60,11 @@ import { LuceneLogicInputComponent } from './lucene-query-input/lucene-logic-inp
     LuceneComponentInputComponent,
     LuceneLogicInputComponent,
     LuceneComponentDirective,
+    ListViewComponent,
   ],
   imports: [
     CommonModule,
+    RouterModule,
     ReactiveFormsModule,
     NbCardModule,
     NbSpinnerModule,
