@@ -97,20 +97,12 @@ export class MsrLedgerSearchComponent implements OnInit {
 
   search = (searchParams: object, geoQuery: object) => {
     this.isLoading = true;
-    console.log(geoQuery);
-    console.log(searchParams);
-    console.log(Object.keys(geoQuery).length);
-    console.log(Object.keys(searchParams).length);
-    console.log(this.allInstances);
     const geoFiltered = Object.keys(geoQuery).length > 0 ?
       this.findIntersects(this.allInstances, geoQuery) :
       this.allInstances;
-    console.log(geoFiltered);
     const attrAndGeoFiltered = Object.keys(searchParams).length > 0 ?
       _.filter(geoFiltered, searchParams) :
       geoFiltered;
-
-    console.log(attrAndGeoFiltered);
     this.refreshData(attrAndGeoFiltered);
     this.isLoading = false;
   }
