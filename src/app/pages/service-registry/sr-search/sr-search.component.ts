@@ -1,5 +1,6 @@
-import { LuceneQueryOutput } from './../../../shared/lucene-query-input/model/lucene-query-output';
+import { InstanceControllerService } from './../../../backend-api/service-registry/api/instanceController.service';
 import { InstanceDto } from './../../../backend-api/service-registry/model/instanceDto';
+import { LuceneQueryOutput } from './../../../shared/lucene-query-input/model/lucene-query-output';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -16,7 +17,6 @@ import { InstanceDto } from './../../../backend-api/service-registry/model/insta
  * limitations under the License.
  */
 
-import { InstanceControllerService } from './../../../backend-api/service-registry/api/instanceController.service';
 import { SearchParameters } from './../../../backend-api/secom/model/searchParameters';
 import { SearchObjectResult } from './../../../backend-api/secom/model/searchObjectResult';
 import { SECOMService } from './../../../backend-api/secom/api/sECOM.service';
@@ -75,7 +75,7 @@ export class SrSearchComponent implements OnInit {
       );
       this.settings = Object.assign({}, this.mySettings);
 
-      this.instanceControllerService.getInstances({}).subscribe(
+      this.instanceControllerService.getInstances().subscribe(
         instances => this.allInstances = instances,
       );
     }

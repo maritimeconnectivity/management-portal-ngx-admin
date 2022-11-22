@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  *//* tslint:disable:no-unused-variable member-ordering */
 
-import { environment } from './../../../../environments/environment';
+import { environment } from './../../../../environments/environment.test';
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
          HttpResponse, HttpEvent }                           from '@angular/common/http';
@@ -18,17 +18,17 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { Pageable } from '../model/pageable';
 import { XmlDto } from '../model/xmlDto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
 
+
 @Injectable()
 export class XmlControllerService {
 
-    protected basePath = environment.srBasePath;
+    protected basePath = environment.srBasePath
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -147,22 +147,31 @@ export class XmlControllerService {
     /**
      * 
      * 
-     * @param pageable 
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllXmls(pageable: Pageable, observe?: 'body', reportProgress?: boolean): Observable<Array<XmlDto>>;
-    public getAllXmls(pageable: Pageable, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<XmlDto>>>;
-    public getAllXmls(pageable: Pageable, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<XmlDto>>>;
-    public getAllXmls(pageable: Pageable, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAllXmls(page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<Array<XmlDto>>;
+    public getAllXmls(page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<XmlDto>>>;
+    public getAllXmls(page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<XmlDto>>>;
+    public getAllXmls(page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling getAllXmls.');
-        }
+
+
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (pageable !== undefined && pageable !== null) {
-            queryParameters = queryParameters.set('pageable', <any>pageable);
+        if (page !== undefined && page !== null) {
+            queryParameters = queryParameters.set('page', <any>page);
+        }
+        if (size !== undefined && size !== null) {
+            queryParameters = queryParameters.set('size', <any>size);
+        }
+        if (sort) {
+            sort.forEach((element) => {
+                queryParameters = queryParameters.append('sort', <any>element);
+            })
         }
 
         let headers = this.defaultHeaders;

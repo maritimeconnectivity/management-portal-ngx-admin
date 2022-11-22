@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-import { MenuTypeNames } from './../../../shared/models/menuType';
-import { AuthService } from './../../../auth/auth.service';
-import { InstanceControllerService } from './../../../backend-api/service-registry/api/instanceController.service';
-import { ServiceControllerService } from './../../../backend-api/identity-registry/api/serviceController.service';
-import { DeviceControllerService } from './../../../backend-api/identity-registry/api/deviceController.service';
+import { MenuTypeNames } from '../../models/menuType';
+import { AuthService } from '../../../auth/auth.service';
+import { InstanceControllerService } from '../../../backend-api/service-registry/api/instanceController.service';
+import { ServiceControllerService } from '../../../backend-api/identity-registry/api/serviceController.service';
+import { DeviceControllerService } from '../../../backend-api/identity-registry/api/deviceController.service';
 import { Observable } from 'rxjs/Observable';
-import { RoleControllerService } from './../../../backend-api/identity-registry/api/roleController.service';
-import { Organization } from './../../../backend-api/identity-registry/model/organization';
-import { OrganizationControllerService } from './../../../backend-api/identity-registry/api/organizationController.service';
-import { UserControllerService } from './../../../backend-api/identity-registry/api/userController.service';
-import { ColumnForMenu } from '../../../shared/models/columnForMenu';
+import { RoleControllerService } from '../../../backend-api/identity-registry/api/roleController.service';
+import { Organization } from '../../../backend-api/identity-registry/model/organization';
+import { OrganizationControllerService } from '../../../backend-api/identity-registry/api/organizationController.service';
+import { UserControllerService } from '../../../backend-api/identity-registry/api/userController.service';
+import { ColumnForMenu } from '../../models/columnForMenu';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
-import { ResourceType, MenuTypeIconNames, EntityTypes } from '../../../shared/models/menuType';
+import { ResourceType, MenuTypeIconNames, EntityTypes } from '../../models/menuType';
 import { NbIconLibraries } from '@nebular/theme';
 import { NotifierService } from 'angular-notifier';
 import { MmsControllerService, Role, VesselControllerService } from '../../../backend-api/identity-registry';
@@ -285,7 +285,7 @@ export class ListComponent implements OnInit {
 	}
 
   loadServiceInstances = (): Observable<InstanceDto[]> => {
-    return this.instanceControllerService.getInstances({});
+    return this.instanceControllerService.getInstances();
   }
 
   loadDataContent = (context: ResourceType, orgMrn?: string):Observable<PageEntity> => {
