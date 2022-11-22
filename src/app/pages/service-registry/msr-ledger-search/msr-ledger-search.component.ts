@@ -152,6 +152,7 @@ export class MsrLedgerSearchComponent implements OnInit {
   }
 
   onEdit(event): void {
+    /*
     const instance = event.data as ServiceInstance;
     this.dialogService.open(DetailModalComponent, {
       context: {
@@ -164,5 +165,6 @@ export class MsrLedgerSearchComponent implements OnInit {
       closeOnBackdropClick: false,
       closeOnEsc: false,
     });
+    */
   }
 }
