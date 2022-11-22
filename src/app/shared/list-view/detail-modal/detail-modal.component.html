@@ -1,0 +1,19 @@
+<nb-card class="modal-window">
+    <nb-card-header>
+        {{instanceName}}
+    </nb-card-header>
+    <nb-card-body [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary">
+        <!--<ngx-editable-form #editableForm
+        [menuType]="instance" [isForNew]="isForNew" [title]="title" [iconName]="iconName"
+        [entityMrn]="entityMrn" [orgMrn]="orgMrn" [numberId]="numberId"
+        [instanceVersion]="instanceVersion" [isLoading]="isLoading" [isLoaded]="isLoaded"
+        [hasHeader]="true" [showButtons]="true" (onApprove)="approve()" (onReject)="delete()"
+        (onCancel)="cancel()" (onSubmit)="submit($event)" (onDelete)="delete()" (onRefresh)="refreshData()"
+        ></ngx-editable-form>-->
+    </nb-card-body>
+    <nb-card-footer>
+        <div class="buttons-row">
+            <button type="button" nbButton status="danger" (click)="dismiss()">Close</button>
+        </div>
+    </nb-card-footer>
+  </nb-card>

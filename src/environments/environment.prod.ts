@@ -30,6 +30,7 @@
   srBasePath: 'https://msr.maritimeconnectivity.net',
   srProvider: 'MCP Consortium',
   srContact: 'info@maritimeconnectivity.net',
+  hasMSRLedger: false,
   mpProvider: 'MCP Consortium',
   mpContact: 'info@maritimeconnectivity.net',
   environmentTitle: 'MCC Testbed',

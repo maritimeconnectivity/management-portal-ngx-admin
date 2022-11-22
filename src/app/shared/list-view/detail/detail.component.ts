@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import { InstanceDto } from './../../../backend-api/service-registry/model/instanceDto';
-import { InstanceControllerService } from './../../../backend-api/service-registry/api/instanceController.service';
+import { InstanceDto } from '../../../backend-api/service-registry/model/instanceDto';
+import { InstanceControllerService } from '../../../backend-api/service-registry/api/instanceController.service';
 import { formatVesselToUpload } from '../../../util/dataFormatter';
-import { Device } from './../../../backend-api/identity-registry/model/device';
+import { Device } from '../../../backend-api/identity-registry/model/device';
 import { Location } from '@angular/common';
-import { Organization } from './../../../backend-api/identity-registry/model/organization';
-import { Entity } from './../../../backend-api/identity-registry/model/entity';
-import { EntityTypes, ResourceType, MenuTypeIconNames, MenuTypeNames } from '../../../shared/models/menuType';
-import { ColumnForMenu } from '../../../shared/models/columnForMenu';
+import { Organization } from '../../../backend-api/identity-registry/model/organization';
+import { Entity } from '../../../backend-api/identity-registry/model/entity';
+import { EntityTypes, ResourceType, MenuTypeIconNames, MenuTypeNames } from '../../models/menuType';
+import { ColumnForMenu } from '../../models/columnForMenu';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DeviceControllerService, MMS, MmsControllerService, OrganizationControllerService, Role, RoleControllerService, Service, ServiceControllerService, User, UserControllerService, Vessel, VesselControllerService } from '../../../backend-api/identity-registry';
@@ -30,7 +30,7 @@ import { Observable } from 'rxjs/Observable';
 import { NotifierService } from 'angular-notifier';
 import { AuthService } from '../../../auth/auth.service';
 import { AuthPermission, AuthPermissionForMSR, PermissionResolver, rolesToPermission } from '../../../auth/auth.permission';
-import { ORG_ADMIN_AT_MIR } from '../../../shared/app.constants';
+import { ORG_ADMIN_AT_MIR } from '../../app.constants';
 
 import RoleNameEnum = Role.RoleNameEnum;
 import { hasAdminPermission } from '../../../util/adminPermissionResolver';

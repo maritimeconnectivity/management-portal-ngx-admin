@@ -16,10 +16,10 @@
 
 import { FormControl, FormGroup } from '@angular/forms';
 import { NotifierService } from 'angular-notifier';
-import { XmlControllerService } from './../../backend-api/service-registry/api/xmlController.service';
 import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 import { NbDialogRef, NbDialogService } from '@nebular/theme';
 import { XmlDto } from '../../backend-api/service-registry';
+import { XmlControllerService } from './../../backend-api/service-registry/api/xmlController.service';
 
 @Component({
   selector: 'ngx-xml-edit-dialog',

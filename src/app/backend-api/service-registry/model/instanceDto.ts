@@ -13,7 +13,7 @@ import { DocDto } from './docDto';
 import { Geometry } from './geometry';
 import { XmlDto } from './xmlDto';
 
-export interface InstanceDto {
+export interface InstanceDto { 
     id?: number;
     name: string;
     version: string;
