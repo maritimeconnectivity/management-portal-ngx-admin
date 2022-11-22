@@ -191,10 +191,10 @@ export class InstanceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getInstanceByMRNAndVersion(mrn: string, version: string, observe?: 'body', reportProgress?: boolean): Observable<InstanceDto>;
-    public getInstanceByMRNAndVersion(mrn: string, version: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<InstanceDto>>;
-    public getInstanceByMRNAndVersion(mrn: string, version: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<InstanceDto>>;
-    public getInstanceByMRNAndVersion(mrn: string, version: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getInstanceByMRNAndVersion(mrn: string, version: string, basePath?: string, observe?: 'body', reportProgress?: boolean): Observable<InstanceDto>;
+    public getInstanceByMRNAndVersion(mrn: string, version: string, basePath?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<InstanceDto>>;
+    public getInstanceByMRNAndVersion(mrn: string, version: string, basePath?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<InstanceDto>>;
+    public getInstanceByMRNAndVersion(mrn: string, version: string, basePath?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (mrn === null || mrn === undefined) {
             throw new Error('Required parameter mrn was null or undefined when calling getInstanceByMRNAndVersion.');
@@ -219,7 +219,7 @@ export class InstanceControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<InstanceDto>('get',`${this.basePath}/api/instances/mrn/${encodeURIComponent(String(mrn))}/${encodeURIComponent(String(version))}`,
+        return this.httpClient.request<InstanceDto>('get',`${basePath ? basePath : this.basePath}/api/instances/mrn/${encodeURIComponent(String(mrn))}/${encodeURIComponent(String(version))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

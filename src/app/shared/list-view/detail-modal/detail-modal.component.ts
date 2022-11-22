@@ -1,3 +1,4 @@
+import { InstanceControllerService } from './../../../backend-api/service-registry/api/instanceController.service';
 import { SECOMService } from './../../../backend-api/secom/api/sECOM.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
@@ -24,13 +25,16 @@ export class DetailModalComponent implements OnInit {
   isLoading: boolean;
 
   constructor(protected ref: NbDialogRef<DetailModalComponent>,
-    
+    private instanceControllerService: InstanceControllerService,
     ) {
     this.isLoading = false;
   }
 
   ngOnInit(): void {
-    
+    this.instanceControllerService.getInstanceByMRNAndVersion(this.instanceMrn, this.instanceVersion, this.msrUrl)
+    .subscribe(res =>{
+      console.log(res);
+    })
   }
 
   dismiss() {
