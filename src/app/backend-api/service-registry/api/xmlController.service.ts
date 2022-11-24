@@ -28,7 +28,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class XmlControllerService {
 
-    protected basePath = environment.srBasePath
+    protected basePath = environment.srBasePath;
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
