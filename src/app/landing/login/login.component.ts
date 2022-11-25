@@ -22,6 +22,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NbDialogService } from '@nebular/theme';
 import { AppConfig } from '../../app.config';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
  * a main landing component for login
@@ -48,7 +49,11 @@ export class LoginComponent implements OnInit {
     private notifierService: NotifierService,
     private route: ActivatedRoute,
     private dialogService: NbDialogService,
-  ) {}
+    public translate: TranslateService,
+  ) {
+    translate.addLangs(['en']);
+    translate.setDefaultLang('en');
+  }
 
   capitalize(s: string) {
     return s[0].toUpperCase() + s.slice(1);

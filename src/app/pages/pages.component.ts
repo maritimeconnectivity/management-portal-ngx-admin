@@ -24,6 +24,7 @@ import { MENU_ITEMS, MIR_MENU_FOR_ADMIN, MIR_MENU_FOR_ORG, MSR_MENU_FOR_ORG} fro
 import { PermissionResolver } from '../auth/auth.permission';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AppConfig } from '../app.config';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
  * a core components for showing pages
@@ -50,7 +51,17 @@ export class PagesComponent implements OnInit {
     private organizationControllerService: OrganizationControllerService,
     private notifierService: NotifierService,
     private authService: AuthService,
+    public translate: TranslateService,
     ) {
+      translate.addLangs(['en']);
+      //translate.setDefaultLang('en');
+      translate.get('register.submitTitle').subscribe(res => console.log(res));
+      this.menu.forEach(e => {
+        if (e['title']) {
+          translate.get(e['title']).subscribe(res => e['title'] = res);
+
+        }
+      });
     if (!AppConfig.HAS_SERVICE_REGISTRY) {
       this.menu = this.menu.filter(e => e.title !== 'Service Registry');
     }

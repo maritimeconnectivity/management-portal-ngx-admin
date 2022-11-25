@@ -27,6 +27,9 @@ import { SrGuideComponent } from './service-registry/sr-guide/sr-guide.component
 import { SrSearchComponent } from './service-registry/sr-search/sr-search.component';
 import { InfoComponent } from './about/info/info.component';
 import { MsrLedgerSearchComponent } from './service-registry/msr-ledger-search/msr-ledger-search.component';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { httpTranslateLoader } from '../app.module';
+import { HttpClient } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -43,6 +46,13 @@ import { MsrLedgerSearchComponent } from './service-registry/msr-ledger-search/m
     Ng2SmartTableModule,
     NbSpinnerModule,
     SharedModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: httpTranslateLoader,
+        deps: [HttpClient],
+      }
+    }),
   ],
   declarations: [
     PagesComponent,

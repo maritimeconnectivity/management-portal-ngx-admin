@@ -40,6 +40,9 @@ import { LuceneSingleQueryInputComponent } from './lucene-query-input/lucene-sin
 import { LuceneLogicInputComponent } from './lucene-query-input/lucene-logic-input/lucene-logic-input.component';
 import { ListViewComponent } from './list-view/list-view.component';
 import { RouterModule } from '@angular/router';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { httpTranslateLoader } from '../app.module';
+import { HttpClient } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -81,6 +84,13 @@ import { RouterModule } from '@angular/router';
     NbSelectModule,
     AutoSizeInputModule,
     NbAutocompleteModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: httpTranslateLoader,
+        deps: [HttpClient],
+      }
+    }),
   ],
   exports: [
     EditableFormComponent,

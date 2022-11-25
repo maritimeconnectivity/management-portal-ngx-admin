@@ -21,11 +21,11 @@ import { NbMenuItem } from '@nebular/theme';
  */
 export const MENU_ITEMS: NbMenuItem[] = [
   {
-    title: 'Identity Registry',
+    title: 'menu.ir',
     icon: 'lock-outline',
     children: [
       {
-        title: 'Organizations',
+        title: 'menu.ir.organizations',
         link: '/pages/ir/organizations',
       },
       {
@@ -35,7 +35,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
-    title: 'Service Registry',
+    title: 'menu.sr',
     icon: 'layers-outline',
     children: [
       {
@@ -53,7 +53,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
-    title: 'Global Service Discovery',
+    title: 'menu.ledger',
     icon: 'radio-outline',
     children: [
       {
@@ -63,7 +63,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
-    title: 'About',
+    title: 'menu.about',
     icon: 'bulb-outline',
     link: '/pages/about',
   },

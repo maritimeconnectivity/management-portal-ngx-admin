@@ -16,6 +16,7 @@
 
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
  * a component for showing information of an MCP components or Management Portal
@@ -32,7 +33,12 @@ export class InfoComponent implements OnInit {
   @Input() provider: string;
   @Input() contact: string;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    public translate: TranslateService,
+    ) {
+      translate.addLangs(['en']);
+      translate.setDefaultLang('en');
+    }
 
   ngOnInit(): void {
   }

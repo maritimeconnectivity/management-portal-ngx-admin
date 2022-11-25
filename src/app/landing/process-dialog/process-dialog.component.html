@@ -2,40 +2,41 @@
     <div class="col">
         <nb-card>
           <nb-card-header>
-              Registration process
+            {{ 'registrationProcess.title' | translate }}
           </nb-card-header>
           <nb-card-body>
             <nb-stepper orientation="vertical">
               <nb-step label="First step">
-                <h3>Request to join</h3>
+                <h3>{{ 'registrationProcess.step1.title' | translate }}</h3>
                 <p class="lorem">
-                  Press <b>Register</b> button in the front page to begin with. After you agree with the terms of use, a form for information on your organization will be given and needs to be filled with. After press <b>Submit</b> button, you will be soon notified if the submission of your information is successful or not.</p>
-                <button nbButton disabled nbStepperNext>prev</button>
-                <button nbButton nbStepperNext>next</button>
+                  {{ 'registrationProcess.step1.content' | translate }}
+                </p>
+                <button nbButton disabled nbStepperNext>{{ 'registrationProcess.button.prev' | translate }}</button>
+                <button nbButton nbStepperNext>{{ 'registrationProcess.button.next' | translate }}</button>
               </nb-step>
               <nb-step label="Second step">
-                <h3>Vetting of organization</h3>
+                <h3>{{ 'registrationProcess.step2.title' | translate }}</h3>
                 <p class="lorem">
-                  The administrator receives the information and investigate the authenticity of the information. The level of details in this investigation is up to the policy of an MCP identity service provider.
+                  {{ 'registrationProcess.step2.content' | translate }}
                 </p>
-                <button nbButton nbStepperPrevious>prev</button>
-                <button nbButton nbStepperNext>next</button>
+                <button nbButton nbStepperPrevious>{{ 'registrationProcess.button.prev' | translate }}</button>
+                <button nbButton nbStepperNext>{{ 'registrationProcess.button.next' | translate }}</button>
               </nb-step>
               <nb-step label="Third step">
-                <h3>Approval of request</h3>
+                <h3>{{ 'registrationProcess.step3.title' | translate }}</h3>
                 <p class="lorem">
-                  The administrator sends you an e-mail for approal of request if everything is okay. Remember the given credential in the e-mail is temporary and needs to be replaced by your own password.
+                  {{ 'registrationProcess.step3.content' | translate }}
                 </p>
-                <button nbButton nbStepperPrevious>prev</button>
-                <button nbButton nbStepperNext>next</button>
+                <button nbButton nbStepperPrevious>{{ 'registrationProcess.button.prev' | translate }}</button>
+                <button nbButton nbStepperNext>{{ 'registrationProcess.button.next' | translate }}</button>
               </nb-step>
               <nb-step label="Fourth step">
-                <h3>Ready to use MIR and MSR through Management portal!</h3>
+                <h3>{{ 'registrationProcess.step4.title' | translate }}</h3>
                 <p class="lorem">
-                  Now you are accessible to Management portal and able to manage your resources in MIR and also service instances in MSR.
+                  {{ 'registrationProcess.step4.content' | translate }}
                 </p>
-                <button nbButton nbStepperPrevious>prev</button>
-                <button nbButton disabled nbStepperNext>next</button>
+                <button nbButton nbStepperPrevious>{{ 'registrationProcess.button.prev' | translate }}</button>
+                <button nbButton disabled nbStepperNext>{{ 'registrationProcess.button.next' | translate }}</button>
             </nb-step>
         </nb-stepper>
     </nb-card-body>

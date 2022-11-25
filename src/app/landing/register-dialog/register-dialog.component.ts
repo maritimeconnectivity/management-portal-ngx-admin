@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment.test';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -21,6 +22,7 @@ import { AppConfig } from './../../app.config';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { ColumnForMenu } from '../../shared/models/columnForMenu';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
  * a component for registration process
@@ -31,21 +33,24 @@ import { ColumnForMenu } from '../../shared/models/columnForMenu';
   styleUrls: ['./register-dialog.component.scss']
 })
 export class RegisterDialogComponent implements OnInit {
-  title = 'Requested information to join';
+  title = '';
   menuType = 'newOrganization';
   isForNew = true;
   environmentName: string;
   clause: string;
   agreed = false;
   submitted = false;
+  termsOfUse = environment.termsOfUse;
 
   constructor(
     protected ref: NbDialogRef<RegisterDialogComponent>,
     private organizationControllerService: OrganizationControllerService,
     private notifierService: NotifierService,
-    ) {
-    this.environmentName = AppConfig.ENVIRONMENT_TITLE;
-    this.clause = AppConfig.TERMS_OF_USE;
+    public translate: TranslateService) {
+      translate.addLangs(['en']);
+      translate.setDefaultLang('en');
+      this.title = translate.instant('register.submitTitle');
+      this.environmentName = AppConfig.ENVIRONMENT_TITLE;
   }
 
   ngOnInit(): void {

@@ -1,3 +1,4 @@
+import { TranslateService } from '@ngx-translate/core';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -44,7 +45,12 @@ export class AboutComponent implements OnInit {
   environmentName = AppConfig.ENVIRONMENT_NAME;
 
   constructor(private http: HttpClient,
-    private notifierService: NotifierService) { }
+    private notifierService: NotifierService,
+    public translate: TranslateService,
+    ) {
+      translate.addLangs(['en']);
+      translate.setDefaultLang('en');
+    }
 
   ngOnInit(): void {
     this.ir.title = 'Maritime Identity Registry';
@@ -63,7 +69,6 @@ export class AboutComponent implements OnInit {
       this.sr.provider = AppConfig.SR_PROVIDER;
       this.fetchVersionFromSwaggerFile(AppConfig.SR_BASE_PATH + '/v3/api-docs', 'sr');
     }
-    
   }
 
   fetchVersionFromSwaggerFile(url: string, type: string){
