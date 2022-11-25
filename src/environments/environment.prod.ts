@@ -31,6 +31,7 @@
   srProvider: 'MCP Consortium',
   srContact: 'info@maritimeconnectivity.net',
   hasMSRLedger: false,
+  ledgerPath: '',
   mpProvider: 'MCP Consortium',
   mpContact: 'info@maritimeconnectivity.net',
   environmentTitle: 'MCC Testbed',

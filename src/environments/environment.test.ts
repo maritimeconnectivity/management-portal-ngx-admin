@@ -35,6 +35,7 @@ export const environment = {
   srBasePath: 'https://msr-test.maritimeconnectivity.net',
   srProvider: 'MCP Consortium',
   srContact: 'info@maritimeconnectivity.net',
+  hasMSRLedger: true,
   ledgerPath: 'https://test-ledger.maritimeconnectivity.net',
   mpProvider: 'MCP Consortium',
   mpContact: 'info@maritimeconnectivity.net',
