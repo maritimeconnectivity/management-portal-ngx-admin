@@ -52,7 +52,6 @@ export class LoginComponent implements OnInit {
     public translate: TranslateService,
   ) {
     translate.addLangs(['en-US', 'ko-KR']);
-    translate.setDefaultLang('ko-KR');
   }
 
   capitalize(s: string) {

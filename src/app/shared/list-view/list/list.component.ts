@@ -39,6 +39,7 @@ import { formatData, formatServiceData } from '../../../util/dataFormatter';
 import { Entity } from '../../../backend-api/identity-registry/model/entity';
 import { hasAdminPermission } from '../../../util/adminPermissionResolver';
 import { TranslateService } from '@ngx-translate/core';
+import _ from 'lodash';
 
 const capitalize = (s): string => {
   if (typeof s !== 'string') return ''
@@ -94,9 +95,13 @@ export class ListComponent implements OnInit {
     private authService: AuthService,
     public translate: TranslateService,
     ) {
+      translate.addLangs(['en-US']);
       console.log(ColumnForResource[this.menuType]);
       console.log({...ColumnForResource[this.menuType], name:{title:"Nameeeee"}})
-      translate.addLangs(['en-US']);
+      this.translate.get(['table']).subscribe(res => {
+        console.log(res);
+      });
+      
       iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
   }
 

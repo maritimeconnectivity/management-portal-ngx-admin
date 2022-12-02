@@ -15,6 +15,7 @@
  */
 
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'ngx-sr-guide',
@@ -23,7 +24,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SrGuideComponent implements OnInit {
 
-  constructor() { }
+  constructor(public translate: TranslateService) {
+    translate.addLangs(['en-US']);
+  }
 
   ngOnInit(): void {
   }

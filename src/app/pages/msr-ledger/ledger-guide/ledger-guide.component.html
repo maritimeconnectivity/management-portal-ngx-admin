@@ -1,0 +1,32 @@
+<nb-card>
+    <nb-card-header>
+        {{ 'ledger.about.title' | translate }}
+    </nb-card-header>
+    <nb-card-body>
+      <p> {{ 'ledger.about.intro' | translate }} </p>
+    </nb-card-body>
+  </nb-card>
+  
+  <nb-card>
+    <nb-card-header>
+      {{ 'ledger.about.portal.title' | translate }}
+    </nb-card-header>
+    <nb-card-body>
+      <p> {{ 'ledger.about.portal.description' | translate }} </p>
+    </nb-card-body>
+  </nb-card>
+  
+  <nb-card>
+    <nb-card-header>
+      {{ 'ledger.about.howto.title' | translate }}
+    </nb-card-header>
+    <nb-tabset>
+      <nb-tab tabTitle="{{'ledger.about.howto.user.title' | translate}}">
+        <p>{{ 'ledger.about.howto.user.description' | translate }}</p>
+      </nb-tab>
+      <nb-tab tabTitle="{{'ledger.about.howto.orgAdmin.title' | translate}}">
+        <p>{{ 'ledger.about.howto.orgAdmin.description' | translate }}</p>
+      </nb-tab>
+    </nb-tabset>
+  </nb-card>
+  

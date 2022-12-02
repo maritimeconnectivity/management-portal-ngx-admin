@@ -1,10 +1,10 @@
-import { DetailModalComponent } from './../../../shared/list-view/detail-modal/detail-modal.component';
-import { LuceneQueryOutput } from './../../../shared/lucene-query-input/model/lucene-query-output';
-import { ColumnForResource } from './../../../shared/models/columnForMenu';
-import { ResourceType } from './../../../shared/models/menuType';
-import { InputGeometryComponent } from './../../../shared/input-geometry/input-geometry.component';
+import { DetailModalComponent } from '../../../shared/list-view/detail-modal/detail-modal.component';
+import { LuceneQueryOutput } from '../../../shared/lucene-query-input/model/lucene-query-output';
+import { ColumnForResource } from '../../../shared/models/columnForMenu';
+import { ResourceType } from '../../../shared/models/menuType';
+import { InputGeometryComponent } from '../../../shared/input-geometry/input-geometry.component';
 import { geojsonToWKT } from '@terraformer/wkt';
-import { AppConfig } from './../../../app.config';
+import { AppConfig } from '../../../app.config';
 import { Contract } from 'web3-eth-contract';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import Web3 from 'web3';
