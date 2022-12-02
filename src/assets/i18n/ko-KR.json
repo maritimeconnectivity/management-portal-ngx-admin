@@ -1,0 +1,136 @@
+{
+    "landing": {
+        "header": {
+            "mcpName": "Maritime Connectivity Platform"
+        },
+        "title": {
+            "serviceProviderName": "MCC MCP 테스트베드",
+            "serviceName": "관리 포탈",
+            "environmentName": "환경"
+        },
+        "button": {
+            "login": "로그인",
+            "register": "가입",
+            "registerInfo": "가입에 대한 정보를 알고 싶어요"
+        },
+        "footer": {
+            "shortIntro": "관리 포탈은 관리자들이 해사 자원을 관리하기 위한 웹사이트입니다. 다음의 MCP 컴포넌트를 사용합니다: ",
+            "mirName": "Maritime Identity Registry",
+            "namesConnector": ",",
+            "msrName": "Maritime Service Registry",
+            "disclamer": "관리 포털의 개발은 선박해양플랜트연구소의 “Development of Open Platform Technologies for Smart Maritime Safety and Industries” 과제 지원 하에 수행되었습니다."
+        }
+    },
+    "registrationProcess": {
+        "title": "가입 절차 안내",
+        "button": {
+            "prev": "이전",
+            "next": "다음"
+        },
+        "step1": {
+            "title": "가입 요청",
+            "content": "처음 화면의 가입 버튼을 눌러 가입 절차를 시작합니다. 가입 약관을 읽고 난 후 동의를 하시면 소속 기관에 대한 정보를 채울 수 있는 폼을 볼 수 있습니다. 작성 후 제출 버튼을 누르시면 가입 요청이 완료되고 관리자로부터 기관 이메일로 확인 메일이 도착하게 됩니다."
+        },
+        "step2": {
+            "title": "기관 인증",
+            "content": "관리자는 수신된 기관 정보에 대한 검증을 수행합니다. 검증 절차와 기준은 MCP 인증 서비스 제공자의 정책을 따르게 됩니다."
+        },
+        "step3": {
+            "title": "요청 승인",
+            "content": "검증이 완료되면 관리자는 승인 메일과 임시 비밀번호를 요청자에게 보내게 됩니다. 처음 로그인 후 비밀번호를 반드시 변경해주세요."
+        },
+        "step4": {
+            "title": "가입 완료",
+            "content": "MIR과 MSR, MSR 분산원장을 사용하실 수 있습니다. 관리 포털에 로그인하셔서 MIR과 MSR에 기관의 자원들을 등록하고 관리하세요."
+        }
+    },
+    "register": {
+        "title": "가입 요청 ",
+        "submitTitle": "가입 신청 기관 정보",
+        "button": {
+            "agree": "동의",
+            "disagree": "동의하지 않음",
+            "close": "닫기"
+        },
+        "termsOfUse": {
+            "title": "가입 약관"
+        },
+        "submitted": {
+            "title": "요청하신 정보가 접수되었습니다.",
+            "content": "MIR 관리자가 기관 정보 검토 후 연락드릴 예정입니다."
+        }
+    },
+    "about": {
+        "about": {
+            "title": "정보",
+            "info": {
+                "version": "버전",
+                "provider": "제공 기관",
+                "environment": "운영 환경",
+                "contact": "연락처"
+            }
+        }
+    },
+    "menu": {
+        "ir": "인증 레지스트리",
+        "ir.organizations": "모든 기관",
+        "ir.guide": "도움말",
+        "sr": "서비스 레지스트리",
+        "sr.instances": "모든 서비스",
+        "sr.search": "검색",
+        "sr.guide": "도움말",
+        "ledger": "글로벌 서비스 검색",
+        "ledger.search": "MSR 분산원장 검색",
+        "about": "정보",
+        "ir.admin": "가입 요청 승인",
+        "ir.org": "소속 기관",
+        "ir.org.info": "기관 정보",
+        "ir.org.devices": "기기",
+        "ir.org.services": "서비스 ID",
+        "ir.org.users": "사용자",
+        "ir.org.vessels": "선박",
+        "ir.org.roles": "권한",
+        "sr.org": "소속 기관",
+        "sr.org.services": "서비스"
+    },
+    "table": {
+        "resource": {
+            "device": {
+                "name": "Name"
+            }
+        }
+    },
+    "success": {
+        "resource": {
+            "delete": " has been successfully deleted",
+            "update": " has been updated",
+            "create": " has been created",
+            "approveOrganization": "Organization approved",
+            "uploadImage": "Uploaded image has been successfully deleted"
+        }
+    },
+    "warning": {
+        "resource": {
+            "beforeRevoke": " All certificates under this entity will be revoked",
+            "beforeDeletion": "Are you sure you want to delete?"
+        }
+    },
+    "error": {
+        "resource": {
+            "noDataService": "There's no such DataService - ",
+            "permissionError": "You don't have right permission",
+            "errorInDeletion": "There was error in deletion - ",
+            "missingInformation": "There is missing information",
+            "approveOrganization": {
+                "userCreation": "The organization was approved, but user creation failed. You can go to organizations and try to create the user again later - ",
+                "roleCreation": "The organization was approved, but role creation failed - ",
+                "reject": "The organization is not approved - "
+            },
+            "noUser": "No user data",
+            "fetchOrgInfo": "Error in fetching organization information",
+            "creationFailed" : "Creation has failed - ",
+            "updateFailed" : "Update has failed - ",
+            "updateImageFailed": "There was error in updating image - "
+        }
+    }
+}

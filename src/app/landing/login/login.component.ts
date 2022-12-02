@@ -51,8 +51,8 @@ export class LoginComponent implements OnInit {
     private dialogService: NbDialogService,
     public translate: TranslateService,
   ) {
-    translate.addLangs(['en']);
-    translate.setDefaultLang('en');
+    translate.addLangs(['en-US', 'ko-KR']);
+    translate.setDefaultLang('ko-KR');
   }
 
   capitalize(s: string) {

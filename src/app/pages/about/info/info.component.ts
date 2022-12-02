@@ -36,8 +36,7 @@ export class InfoComponent implements OnInit {
   constructor(private http: HttpClient,
     public translate: TranslateService,
     ) {
-      translate.addLangs(['en']);
-      translate.setDefaultLang('en');
+      translate.addLangs(['en-US']);
     }
 
   ngOnInit(): void {

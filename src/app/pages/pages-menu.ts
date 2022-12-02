@@ -29,7 +29,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/pages/ir/organizations',
       },
       {
-        title: 'User Guide',
+        title: 'menu.ir.guide',
         link: '/pages/ir/guide',
       },
     ],
@@ -39,15 +39,15 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'layers-outline',
     children: [
       {
-        title: 'Services',
+        title: 'menu.sr.instances',
         link: '/pages/sr/instances',
       },
       {
-        title: 'Search',
+        title: 'menu.sr.search',
         link: '/pages/sr/search',
       },
       {
-        title: 'User Guide',
+        title: 'menu.sr.guide',
         link: '/pages/sr/guide',
       },
     ],
@@ -57,7 +57,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'radio-outline',
     children: [
       {
-        title: 'MSR Ledger Search',
+        title: 'menu.ledger.search',
         link: '/pages/ledger/search',
       },
     ],
@@ -70,42 +70,42 @@ export const MENU_ITEMS: NbMenuItem[] = [
 ];
 
 export const MIR_MENU_FOR_ADMIN = {
-  title: 'Approve organization',
+  title: 'menu.ir.admin',
   link: '/pages/ir/orgcandidates',
 };
 
 export const MIR_MENU_FOR_ORG = {
-  title: 'My Organization',
+  title: 'menu.ir.org',
   home: true,
   children: [
     {
-      title: 'Devices',
+      title: 'menu.ir.org.devices',
       link: '/pages/ir/devices',
     },
     {
-      title: 'ID Services',
+      title: 'menu.ir.org.services',
       link: '/pages/ir/services',
     },
     {
-      title: 'Users',
+      title: 'menu.ir.org.users',
       link: '/pages/ir/users',
     },
     {
-      title: 'Vessels',
+      title: 'menu.ir.org.vessels',
       link: '/pages/ir/vessels',
     },
     {
-      title: 'Roles',
+      title: 'menu.ir.org.roles',
       link: '/pages/ir/roles',
     },
   ],
 };
 
 export const MSR_MENU_FOR_ORG = {
-  title: 'My Organization',
+  title: 'menu.sr.org',
   children: [
     {
-      title: 'Services',
+      title: 'menu.sr.org.services',
       link: '/pages/sr/instanceorg',
     },
   ],

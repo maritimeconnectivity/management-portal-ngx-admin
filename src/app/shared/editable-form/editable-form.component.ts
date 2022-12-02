@@ -23,7 +23,7 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angu
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { formatData } from '../../util/dataFormatter';
 import { MrnHelperService } from '../../util/mrn-helper.service';
-import { ColumnForMenu } from '../models/columnForMenu';
+import { ColumnForResource } from '../models/columnForMenu';
 import { EntityTypes, ResourceType, MenuTypeNames } from '../models/menuType';
 import { NbDialogService, NbIconLibraries } from '@nebular/theme';
 import { CertificateService } from '../certificate.service';
@@ -208,7 +208,7 @@ export class EditableFormComponent implements OnInit {
       if (this.menuType === ResourceType.Instance) {
         this.formGroup.get('organizationId').setValue(AuthService.staticAuthInfo.orgMrn);
         this.formGroup.get('organizationId').disable();
-        Object.entries(ColumnForMenu[this.menuType]).map(([key, value]) => 
+        Object.entries(ColumnForResource[this.menuType]).map(([key, value]) => 
         {
           if ((value as any).type === 'stringArray') {
             this.loadedData[key] = [];
@@ -240,7 +240,7 @@ export class EditableFormComponent implements OnInit {
   setForm = () => {
     // filtered with context
     this.columnForMenu = {};
-    Object.entries(ColumnForMenu[this.menuType]).map(([k,v]) => 
+    Object.entries(ColumnForResource[this.menuType]).map(([k,v]) => 
       {if (Array.isArray(v['visibleFrom']) && // array type checking
       v['visibleFrom'].includes(this.contextForAttributes) && // context filtering, either detail or list
       (!this.isEditing || (this.isForNew && v['notShowOnEdit'] !== true)))

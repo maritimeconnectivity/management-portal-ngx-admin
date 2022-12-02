@@ -48,8 +48,7 @@ export class AboutComponent implements OnInit {
     private notifierService: NotifierService,
     public translate: TranslateService,
     ) {
-      translate.addLangs(['en']);
-      translate.setDefaultLang('en');
+      translate.addLangs(['en-US']);
     }
 
   ngOnInit(): void {

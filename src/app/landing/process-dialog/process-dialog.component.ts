@@ -28,8 +28,8 @@ import { TranslateService } from '@ngx-translate/core';
 export class ProcessDialogComponent implements OnInit {
 
   constructor(public translate: TranslateService) {
-    translate.addLangs(['en']);
-    translate.setDefaultLang('en');
+    translate.addLangs(['en-US', 'ko-KR']);
+    translate.setDefaultLang('ko-KR');
   }
 
   ngOnInit(): void {

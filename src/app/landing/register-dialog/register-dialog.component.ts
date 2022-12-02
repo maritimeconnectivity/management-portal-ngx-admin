@@ -21,7 +21,7 @@ import { OrganizationControllerService } from './../../backend-api/identity-regi
 import { AppConfig } from './../../app.config';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
-import { ColumnForMenu } from '../../shared/models/columnForMenu';
+import { ColumnForResource } from '../../shared/models/columnForMenu';
 import { TranslateService } from '@ngx-translate/core';
 
 /**
@@ -47,8 +47,8 @@ export class RegisterDialogComponent implements OnInit {
     private organizationControllerService: OrganizationControllerService,
     private notifierService: NotifierService,
     public translate: TranslateService) {
-      translate.addLangs(['en']);
-      translate.setDefaultLang('en');
+      translate.addLangs(['en-US', 'ko-KR']);
+      translate.setDefaultLang('ko-KR');
       this.title = translate.instant('register.submitTitle');
       this.environmentName = AppConfig.ENVIRONMENT_TITLE;
   }

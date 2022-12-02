@@ -32,14 +32,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     private analytics: AnalyticsService,
-    private seoService: SeoService,
-    public translate: TranslateService) {
-      translate.addLangs(['en']);
-      translate.setDefaultLang('en');
-  }
-
-  switchLanguage(lang: string) {
-    this.translate.use(lang);
+    private seoService: SeoService) {
   }
 
   ngOnInit(): void {
