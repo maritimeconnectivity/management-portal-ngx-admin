@@ -116,7 +116,7 @@
     "ledger": {
         "about": {
             "title": "What is MSR Ledger",
-            "intro": "Maritime Service Registry Ledger (MSR Ledger) is a distributed ledger for maintaining meta-information of services.",
+            "intro": "Maritime Service Registry Ledger (MSR Ledger)is a distributed ledger for maintaining meta-information of services. The management portal will give you interface to search through the MSR ledger.",
             "portal": {
                 "title": "How to use MSR Ledger through MCP Management Portal",
                 "description": "MCP management portal aims to provide a front-end interface to MCP users. Search result will contain both service info and also the MSR that owns it."
@@ -196,7 +196,6 @@
         "resource": {
             "noDataService": "There's no such DataService - ",
             "permissionError": "You don't have right permission",
-            "errorInDeletion": "There was error in deletion - ",
             "missingInformation": "There is missing information",
             "approveOrganization": {
                 "userCreation": "The organization was approved, but user creation failed. You can go to organizations and try to create the user again later - ",
@@ -207,6 +206,7 @@
             "fetchOrgInfo": "Error in fetching organization information",
             "creationFailed" : "Creation has failed - ",
             "updateFailed" : "Update has failed - ",
+            "errorInDeletion": "Deletion has failed - ",
             "updateImageFailed": "There was error in updating image - "
         }
     }
