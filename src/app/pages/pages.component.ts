@@ -139,6 +139,7 @@ export class PagesComponent implements OnInit {
     }
     if (this.MIRPermission && PermissionResolver.canApproveOrg(this.MIRPermission)) {
       this.menu.find(e => e.title === this.translate.instant('menu.ir')).children.unshift(MIR_MENU_FOR_ADMIN);
+      MIR_MENU_FOR_ADMIN.title = this.translate.instant('menu.ir.admin');
     }
   }
 }

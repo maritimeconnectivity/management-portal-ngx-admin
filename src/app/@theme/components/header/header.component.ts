@@ -85,6 +85,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   changeLang(langName: string) {
     changeLang(this.translate, langs.filter(e => e.includes(langName.toUpperCase())).pop());
+    location.reload();
   }
 
   toggleSidebar(): boolean {
