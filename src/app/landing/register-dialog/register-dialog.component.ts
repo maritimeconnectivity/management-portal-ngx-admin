@@ -1,3 +1,4 @@
+import { addLangs } from './../../util/translateHelper';
 import { environment } from './../../../environments/environment.test';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
@@ -47,8 +48,7 @@ export class RegisterDialogComponent implements OnInit {
     private organizationControllerService: OrganizationControllerService,
     private notifierService: NotifierService,
     public translate: TranslateService) {
-      translate.addLangs(['en-US', 'ko-KR']);
-      translate.setDefaultLang('ko-KR');
+      addLangs(translate);
       this.title = translate.instant('register.submitTitle');
       this.environmentName = AppConfig.ENVIRONMENT_TITLE;
   }

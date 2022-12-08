@@ -1,3 +1,4 @@
+import { addLangs, fetchLocale } from './../../util/translateHelper';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -51,7 +52,8 @@ export class LoginComponent implements OnInit {
     private dialogService: NbDialogService,
     public translate: TranslateService,
   ) {
-    translate.addLangs(['en-US', 'ko-KR']);
+    addLangs(translate);
+    fetchLocale(translate);
   }
 
   capitalize(s: string) {

@@ -1,3 +1,4 @@
+import { addLangs } from './../../util/translateHelper';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -28,8 +29,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class ProcessDialogComponent implements OnInit {
 
   constructor(public translate: TranslateService) {
-    translate.addLangs(['en-US', 'ko-KR']);
-    translate.setDefaultLang('ko-KR');
+    addLangs(translate);
   }
 
   ngOnInit(): void {

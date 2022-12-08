@@ -1,3 +1,4 @@
+import { addLangs, fetchLocale } from './../util/translateHelper';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -54,8 +55,8 @@ export class PagesComponent implements OnInit {
     private authService: AuthService,
     public translate: TranslateService,
     ) {
-      translate.addLangs(['en-US', 'ko-KR']);
-      translate.setDefaultLang('en-US');
+      addLangs(translate);
+      fetchLocale(translate);
 
     if (!AppConfig.HAS_SERVICE_REGISTRY) {
       this.menu = this.menu.filter(e => e.title !== 'menu.sr');

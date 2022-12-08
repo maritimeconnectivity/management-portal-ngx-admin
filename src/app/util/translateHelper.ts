@@ -18,3 +18,24 @@ export const applyTranslateToSingleMenu = (translate: TranslateService, menu: ob
         });
     }
 };
+
+export const addLangs = (translate: TranslateService) => {
+    translate.addLangs(['en-US', 'ko-KR']);
+};
+
+export const fetchLocale = (translate: TranslateService) => {
+    if (localStorage.getItem('locale')) {
+      translate.setDefaultLang(localStorage.getItem('locale'));
+      translate.use(localStorage.getItem('locale'));
+    } else {
+        translate.setDefaultLang('en-US');
+        translate.use('en-US');
+        localStorage.setItem('locale', 'en-US');
+    }
+};
+
+export const changeLang = (translate: TranslateService, language: string) => {
+    translate.use(language);
+    translate.setDefaultLang(language);
+    localStorage.setItem('locale', language);
+};

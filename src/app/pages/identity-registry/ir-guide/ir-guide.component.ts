@@ -1,3 +1,4 @@
+import { addLangs } from './../../../util/translateHelper';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -25,7 +26,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class IrGuideComponent implements OnInit {
 
   constructor(public translate: TranslateService) {
-    translate.addLangs(['en-US']);
+    addLangs(translate);
   }
 
   ngOnInit() {

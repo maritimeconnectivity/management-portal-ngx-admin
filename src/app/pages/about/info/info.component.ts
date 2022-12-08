@@ -1,3 +1,4 @@
+import { addLangs } from './../../../util/translateHelper';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -36,7 +37,7 @@ export class InfoComponent implements OnInit {
   constructor(private http: HttpClient,
     public translate: TranslateService,
     ) {
-      translate.addLangs(['en-US']);
+      addLangs(translate);
     }
 
   ngOnInit(): void {

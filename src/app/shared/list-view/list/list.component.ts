@@ -1,4 +1,4 @@
-import { applyTranslateToSingleMenu } from './../../../util/translateHelper';
+import { addLangs, applyTranslateToSingleMenu } from './../../../util/translateHelper';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -95,13 +95,13 @@ export class ListComponent implements OnInit {
     private authService: AuthService,
     public translate: TranslateService,
     ) {
-      translate.addLangs(['en-US']);
+      addLangs(translate);
       console.log(ColumnForResource[this.menuType]);
       console.log({...ColumnForResource[this.menuType], name:{title:"Nameeeee"}})
       this.translate.get(['table']).subscribe(res => {
         console.log(res);
       });
-      
+
       iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
   }
 
