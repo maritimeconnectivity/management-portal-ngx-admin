@@ -38,6 +38,10 @@ import { DEFAULT_THEME } from './styles/theme.default';
 import { COSMIC_THEME } from './styles/theme.cosmic';
 import { CORPORATE_THEME } from './styles/theme.corporate';
 import { DARK_THEME } from './styles/theme.dark';
+import { NgxFlagPickerModule } from 'ngx-flag-picker';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { httpTranslateLoader } from '../app.module';
+import { HttpClient } from '@angular/common/http';
 
 const NB_MODULES = [
   NbLayoutModule,
@@ -52,6 +56,14 @@ const NB_MODULES = [
   NbSelectModule,
   NbIconModule,
   NbEvaIconsModule,
+  NgxFlagPickerModule,
+  TranslateModule.forRoot({
+    loader: {
+      provide: TranslateLoader,
+      useFactory: httpTranslateLoader,
+      deps: [HttpClient],
+    }
+  }),
 ];
 const COMPONENTS = [
   HeaderComponent,

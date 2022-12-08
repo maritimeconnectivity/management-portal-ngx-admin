@@ -5,7 +5,7 @@
         },
         "title": {
             "serviceProviderName": "MCC MCP 테스트베드",
-            "serviceName": "관리 포탈",
+            "serviceName": "관리 포털",
             "environmentName": "환경"
         },
         "button": {
@@ -207,5 +207,9 @@
             "errorInDeletion": "삭제 실패 - ",
             "updateImageFailed": "이미지를 업데이트하는 중에 오류가 발생했습니다 - "
         }
+    },
+    "header": {
+        "portalName": "MCP 관리 포털",
+        "logout": "로그아웃"
     }
 }

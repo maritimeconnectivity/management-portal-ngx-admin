@@ -1,4 +1,5 @@
-import { addLangs, fetchLocale } from './../../util/translateHelper';
+import { langs } from './../../util/langs';
+import { addLangs, changeLang, loadLang } from './../../util/translateHelper';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -40,6 +41,9 @@ export class LoginComponent implements OnInit {
    */
   version = AppConfig.MP_VERSION;
 
+  currentLang = 'en-GB';
+  selectedCountryCode = 'gb';
+  countryCodes = langs.map(e => e.split('-').pop().toLowerCase());
   /**
    * environment name to show at front
    */
@@ -53,7 +57,8 @@ export class LoginComponent implements OnInit {
     public translate: TranslateService,
   ) {
     addLangs(translate);
-    fetchLocale(translate);
+    this.currentLang = loadLang(translate);
+    this.selectedCountryCode = this.currentLang.split('-').pop().toLowerCase();
   }
 
   capitalize(s: string) {
@@ -71,6 +76,11 @@ export class LoginComponent implements OnInit {
         );
       }
     });
+  }
+
+  changeLang(langName: string) {
+    changeLang(this.translate, langs.filter(e => e.includes(langName.toUpperCase())).pop());
+    location.reload();
   }
 
   /**

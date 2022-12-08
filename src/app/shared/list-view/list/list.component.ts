@@ -96,11 +96,14 @@ export class ListComponent implements OnInit {
     public translate: TranslateService,
     ) {
       addLangs(translate);
-      console.log(ColumnForResource[this.menuType]);
-      console.log({...ColumnForResource[this.menuType], name:{title:"Nameeeee"}})
+      // TODO: apply translate to table
+      //console.log(ColumnForResource[this.menuType]);
+      //console.log({...ColumnForResource[this.menuType], name:{title:"Nameeeee"}})
+      /*
       this.translate.get(['table']).subscribe(res => {
         console.log(res);
       });
+      */
 
       iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
   }

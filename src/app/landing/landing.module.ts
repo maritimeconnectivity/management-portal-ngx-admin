@@ -27,6 +27,7 @@ import { ProcessDialogComponent } from './process-dialog/process-dialog.componen
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { httpTranslateLoader } from '../app.module';
 import { HttpClient } from '@angular/common/http';
+import { NgxFlagPickerModule } from 'ngx-flag-picker';
 
 /**
  * a module for landing process
@@ -47,6 +48,7 @@ import { HttpClient } from '@angular/common/http';
     NbLayoutModule,
     SharedModule,
     NbStepperModule,
+    NgxFlagPickerModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

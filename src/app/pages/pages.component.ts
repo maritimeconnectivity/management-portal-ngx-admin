@@ -1,4 +1,4 @@
-import { addLangs, fetchLocale } from './../util/translateHelper';
+import { addLangs, loadLang } from './../util/translateHelper';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -56,7 +56,7 @@ export class PagesComponent implements OnInit {
     public translate: TranslateService,
     ) {
       addLangs(translate);
-      fetchLocale(translate);
+      loadLang(translate);
 
     if (!AppConfig.HAS_SERVICE_REGISTRY) {
       this.menu = this.menu.filter(e => e.title !== 'menu.sr');

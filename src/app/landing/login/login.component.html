@@ -1,9 +1,17 @@
 <nb-layout>
     <nb-layout-header class="image-container">
-        <div class="d-flex">
-            <div class="mr-auto p-2">
-                <a class="text-white" href="https://maritimeconnectivity.net/" target="_blank">{{ 'landing.header.mcpName' | translate }}</a>
-            </div>
+        <div class="p-2">
+            <a class="text-white" href="https://maritimeconnectivity.net/" target="_blank">{{ 'landing.header.mcpName' | translate }}</a>
+        </div>
+        <div class="ml-auto p-2">
+            <span class="text-white">Language: </span>
+            <ngx-flag-picker
+                [selectedCountryCode]="selectedCountryCode"
+                [countryCodes]="countryCodes"
+                [showFlags]="true"
+                [showLabels]="false"
+                (changedCountryCode)="changeLang($event)">
+            </ngx-flag-picker>
         </div>
     </nb-layout-header>
     <nb-layout-column class="image-container">

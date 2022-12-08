@@ -209,5 +209,9 @@
             "errorInDeletion": "Deletion has failed - ",
             "updateImageFailed": "There was error in updating image - "
         }
+    },
+    "header": {
+        "portalName": "MCP Management Portal",
+        "logout": "Log out"
     }
 }
