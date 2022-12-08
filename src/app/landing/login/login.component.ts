@@ -80,7 +80,6 @@ export class LoginComponent implements OnInit {
 
   changeLang(langName: string) {
     changeLang(this.translate, langs.filter(e => e.includes(langName.toUpperCase())).pop());
-    location.reload();
   }
 
   /**
