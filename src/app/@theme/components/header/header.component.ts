@@ -1,3 +1,4 @@
+import { loadTheme, storeTheme } from './../../../util/themeHelper';
 import { AuthService } from './../../../auth/auth.service';
 import { KeycloakService } from 'keycloak-angular';
 import { Component, OnDestroy, OnInit } from '@angular/core';
@@ -52,7 +53,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.currentTheme = this.themeService.currentTheme;
+    const themeName = loadTheme();
+    this.currentTheme = themeName ? themeName : 'default';
 
     if (this.authService.authState.user) {
       this.userName = this.authService.authState.user.lastName + ' ' + this.authService.authState.user.firstName;
@@ -72,8 +74,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .pipe(
         map(({ name }) => name),
         takeUntil(this.destroy$),
-      )
-      .subscribe(themeName => this.currentTheme = themeName);
+      );
+    if (this.currentTheme !== this.themeService.currentTheme) {
+      this.themeService.changeTheme(themeName);
+    }
   }
 
   ngOnDestroy() {
@@ -83,6 +87,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   changeTheme(themeName: string) {
     this.themeService.changeTheme(themeName);
+    storeTheme(themeName);
   }
 
   toggleSidebar(): boolean {
