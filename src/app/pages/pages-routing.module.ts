@@ -119,6 +119,11 @@ const routes: Routes = [
       component: MsrLedgerSearchComponent,
     },
     {
+      path: 'ledger/register',
+      loadChildren: () => import('../shared/list-view/list-view.module')
+        .then(m => m.ListViewModule),
+    },
+    {
       path: 'ledger/guide',
       component: LedgerGuideComponent,
     },
