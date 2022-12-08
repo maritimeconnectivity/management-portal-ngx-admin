@@ -1,3 +1,4 @@
+import { addLangs, applyTranslateToSingleMenu } from './../../../util/translateHelper';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -24,7 +25,7 @@ import { RoleControllerService } from '../../../backend-api/identity-registry/ap
 import { Organization } from '../../../backend-api/identity-registry/model/organization';
 import { OrganizationControllerService } from '../../../backend-api/identity-registry/api/organizationController.service';
 import { UserControllerService } from '../../../backend-api/identity-registry/api/userController.service';
-import { ColumnForMenu } from '../../models/columnForMenu';
+import { ColumnForResource } from '../../models/columnForMenu';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
@@ -37,6 +38,8 @@ import { InstanceDto } from '../../../backend-api/service-registry';
 import { formatData, formatServiceData } from '../../../util/dataFormatter';
 import { Entity } from '../../../backend-api/identity-registry/model/entity';
 import { hasAdminPermission } from '../../../util/adminPermissionResolver';
+import { TranslateService } from '@ngx-translate/core';
+import _ from 'lodash';
 
 const capitalize = (s): string => {
   if (typeof s !== 'string') return ''
@@ -70,7 +73,7 @@ export class ListComponent implements OnInit {
       deleteButtonContent: '<i class="nb-trash"></i>',
       confirmDelete: true,
     },
-    columns: ColumnForMenu[this.menuType],
+    columns: {...ColumnForResource[this.menuType], ...{name:{title:"Nameeeee"}}},
     hideSubHeader: true,
   };
   showTables = true;
@@ -90,7 +93,18 @@ export class ListComponent implements OnInit {
     private organizationControllerService: OrganizationControllerService,
     private notifierService: NotifierService,
     private authService: AuthService,
+    public translate: TranslateService,
     ) {
+      addLangs(translate);
+      // TODO: apply translate to table
+      //console.log(ColumnForResource[this.menuType]);
+      //console.log({...ColumnForResource[this.menuType], name:{title:"Nameeeee"}})
+      /*
+      this.translate.get(['table']).subscribe(res => {
+        console.log(res);
+      });
+      */
+
       iconsLibrary.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
   }
 
@@ -117,14 +131,15 @@ export class ListComponent implements OnInit {
         this.isAdmin = hasAdminPermission(this.menuType, this.authService, false);
       });
     }
+
     this.fetchValues();
   }
 
   fetchValues() {
     // filtered with context
-    if(ColumnForMenu.hasOwnProperty(this.menuType.toString())) {
+    if(ColumnForResource.hasOwnProperty(this.menuType.toString())) {
       this.mySettings.columns = Object.assign({}, ...
-        Object.entries(ColumnForMenu[this.menuType.toString()]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes)).map(([k,v]) => ({[k]:v}))
+        Object.entries(ColumnForResource[this.menuType.toString()]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes)).map(([k,v]) => ({[k]:v}))
       );
       this.settings = Object.assign({}, this.mySettings);
       // Not-approved organization list
@@ -170,11 +185,11 @@ export class ListComponent implements OnInit {
         }
       } else {
         this.isLoading = false;
-        throw new Error(`There's no such thing as '${this.menuType}DataService'`);
+        throw new Error(`${this.translate.instant('error.resource.noDataService')}${this.menuType}`);
       }
     } else {
       this.isLoading = false;
-      throw new Error(`There's no '${this.menuType}DataService' in ColumnForMenu`);
+      throw new Error(`${this.translate.instant('error.resource.noDataService')}${this.menuType}`);
     }
   }
 
@@ -182,8 +197,7 @@ export class ListComponent implements OnInit {
     if (data) {
       this.source.load(data);
       this.data = data;
-    }
-    else {
+    } else {
       this.source.load([]);
     }
   }
@@ -195,27 +209,27 @@ export class ListComponent implements OnInit {
   formatResponseForService(data: any[]) {
     return data.map(d => formatServiceData(d));
   }
-  
+
   onDelete(event): void {
     if (!this.isAdmin) {
-      this.notifierService.notify('error', 'You don\'t have right permission');
+      this.notifierService.notify('error', this.translate.instant('error.resource.permissionError'));
     } else {
       this.delete(this.menuType, this.orgMrn, event.data.mrn, event.data.instanceVersion, event.data.id);
     }
   }
 
   delete(menuType: ResourceType, orgMrn: string, entityMrn: string, instanceVersion?: string, numberId?: number) {
-    let message = 'Are you sure you want to delete?';
+    let message = this.translate.instant('warning.list.beforeDeletion');
     message = EntityTypes.indexOf(this.menuType) >= 0 ?
-      message + ' All certificates under this entity will be revoked.' : message;
+      message + this.translate.instant('warning.list.beforeRevoke') : message;
     if (confirm(message)) {
       this.deleteData(menuType, orgMrn, entityMrn, instanceVersion, numberId).subscribe(
         res => {
-          this.notifierService.notify('success', this.menuTypeName + ' has been successfully deleted');
+          this.notifierService.notify('success', this.menuTypeName + this.translate.instant('success.list.delete'));
           this.fetchValues();
         },
-        err => this.notifierService.notify('error', 'There was error in deletion - ' + err.error.message)
-      );
+        err => this.notifierService.notify('error',
+          this.translate.instant('error.resource.errorInDeletion') + err.error.message));
     }
   }
 

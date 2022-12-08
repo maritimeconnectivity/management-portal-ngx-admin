@@ -60,9 +60,8 @@ export class InputGeometryComponent implements OnChanges, OnDestroy, AfterViewIn
 
   initMap = (container: any) => {
     const map = L.map(container).setView([55.692864, 12.599246], 3);
-    map.invalidateSize();
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-      { maxZoom: 18, minZoom: 2, attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' })
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      { maxZoom: 18, minZoom: 2, attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);
     return map;
   }
 

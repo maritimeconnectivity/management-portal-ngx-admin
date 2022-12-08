@@ -1,3 +1,4 @@
+import { addLangs } from './../../../util/translateHelper';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -16,6 +17,7 @@
 
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
  * a component for showing information of an MCP components or Management Portal
@@ -32,7 +34,11 @@ export class InfoComponent implements OnInit {
   @Input() provider: string;
   @Input() contact: string;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    public translate: TranslateService,
+    ) {
+      addLangs(translate);
+    }
 
   ngOnInit(): void {
   }

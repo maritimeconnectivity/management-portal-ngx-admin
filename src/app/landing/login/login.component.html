@@ -1,9 +1,17 @@
 <nb-layout>
     <nb-layout-header class="image-container">
-        <div class="d-flex">
-            <div class="mr-auto p-2">
-                <a class="text-white" href="https://maritimeconnectivity.net/" target="_blank">Maritime Connectivity Platform</a>
-            </div>
+        <div class="p-2">
+            <a class="text-white" href="https://maritimeconnectivity.net/" target="_blank">{{ 'landing.header.mcpName' | translate }}</a>
+        </div>
+        <div class="ml-auto p-2">
+            <span class="text-white">Language: </span>
+            <ngx-flag-picker
+                [selectedCountryCode]="selectedCountryCode"
+                [countryCodes]="countryCodes"
+                [showFlags]="true"
+                [showLabels]="false"
+                (changedCountryCode)="changeLang($event)">
+            </ngx-flag-picker>
         </div>
     </nb-layout-header>
     <nb-layout-column class="image-container">
@@ -16,34 +24,33 @@
                 </div>
                 <div class="row">
                     <div class="col text-center w-100">
-                        <p class="title-font text-white p-3 w-100">MCC MCP Testbed</p>
-                        <p class="subtitle-font text-white w-100">Management Portal</p>
-                        <h5 class="description-font p-1 text-white w-100">{{environmentName}} environment</h5>
+                        <p class="title-font text-white p-3 w-100">{{ 'landing.title.serviceProviderName' | translate }}</p>
+                        <p class="subtitle-font text-white w-100">{{ 'landing.title.serviceName' | translate }}</p>
+                        <h5 class="description-font p-1 text-white w-100">{{environmentName}} {{ 'landing.title.environmentName' | translate }}</h5>
                     </div>
                 </div>
                 <div class="row justify-content-center p-4">
                     <div class="buttons-row">
-                        <button status="primary" nbButton type="button" (click)="logIn()">Log in</button>
-                        <button status="success" nbButton type="button" (click)="createRegisterDialog()">Register</button>
+                        <button status="primary" nbButton type="button" (click)="logIn()">{{ 'landing.button.login' | translate }}</button>
+                        <button status="success" nbButton type="button" (click)="createRegisterDialog()">{{ 'landing.button.register' | translate }}</button>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col text-center p-2">
-                        <button class="text-white" nbButton type="button" (click)="createProcessDialog()" size="small" outline>I want to know more about registration</button>
+                        <button class="text-white" nbButton type="button" (click)="createProcessDialog()" size="small" outline>{{ 'landing.button.registerInfo' | translate }}</button>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col text-center p-2">
-                        <p class="lead description-font font-weight-bold text-white">A website for administrators who manage resources in 
-                            <a class="text-white" href="https://maritimeconnectivity.net/mcp-documents/#MIR" target="_blank">Maritime Identity Registry</a> and 
-                            <a class="text-white" href="https://maritimeconnectivity.net/mcp-documents/#MSR" target="_blank">Maritime Service Registry</a></p>
+                        <p class="lead description-font font-weight-bold text-white">{{ 'landing.footer.shortIntro' | translate }}
+                            <a class="text-white" href="https://maritimeconnectivity.net/mcp-documents/#MIR" target="_blank">{{ 'landing.footer.mirName' | translate }}</a>{{ 'landing.footer.namesConnector' | translate }}
+                            <a class="text-white" href="https://maritimeconnectivity.net/mcp-documents/#MSR" target="_blank">{{ 'landing.footer.msrName' | translate }}</a></p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col text-center p-2">
                         <p class="lead description-font text-white">
-                            The development of Management Portal has funded by <a href="https://kriso.re.kr/eng/" class="text-white font-weight-bold" target="_blank">KRISO</a><br>
-                            under the project <span class="font-weight-bold">“Development of Open Platform Technologies for Smart Maritime Safety and Industries”</span></p>
+                            {{ 'landing.footer.disclamer' | translate }}</p>
                     </div>
                 </div>
             </nb-card-body>

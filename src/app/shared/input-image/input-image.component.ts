@@ -1,3 +1,5 @@
+import { addLangs } from './../../util/translateHelper';
+import { TranslateService } from '@ngx-translate/core';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -46,7 +48,10 @@ export class InputImageComponent implements OnInit {
     private vesselImageControllerService: VesselImageControllerService,
     private notifierService: NotifierService,
     private sanitizer: DomSanitizer,
-    ) { }
+    public translate: TranslateService,
+    ) {
+      addLangs(translate);
+    }
 
   ngOnInit(): void {
     this.accept = this.allowedExtensions ? this.allowedExtensions.join(',') : '';
@@ -62,17 +67,19 @@ export class InputImageComponent implements OnInit {
   }
 
   clickToRemoveImage = () => {
-    let message = 'Are you sure you want to delete?';
+    const message = this.translate.instant('warning.resource.beforeDeletion');
     if (confirm(message)) {
       this.isLoading = true;
       this.deleteImage(this.menuType, this.entityMrn, this.orgMrn).subscribe(
         res => {
-          this.notifierService.notify('success', 'Uploaded image has been successfully deleted');
+          this.notifierService.notify('success',
+            this.translate.instant('success.resource.uploadImage'));
           this.isLoading = false;
           this.image = undefined;
         },
         err => {
-          this.notifierService.notify('error', 'There was error in deletion - ' + err.error.message);
+          this.notifierService.notify('error',
+            this.translate.instant('error.resource.errorInDeletion') + err.error.message);
           this.isLoading = false;
         },
       );
@@ -83,17 +90,18 @@ export class InputImageComponent implements OnInit {
     const file = event.target.files[0];
     const reader = new FileReader();
     this.isLoading = true;
-    reader.addEventListener('load', (event:Event) => {
-	    this.image = (<any> event.target).result;
+    reader.addEventListener('load', (e: Event) => {
+      this.image = (<any> e.target).result;
       const mediaType = file.type;
-      if ((mediaType !== "image/png") && (mediaType !== "image/jpeg")) {
+      if ((mediaType !== 'image/png') && (mediaType !== 'image/jpeg')) {
         return;
       }
       this.updatePut(this.menuType, file, this.entityMrn, this.orgMrn, mediaType).subscribe(
         logo => {
           this.isLoading = false;
         },
-        err => this.notifierService.notify('error', 'There was error in updating image - ' + err.error.message),
+        err => this.notifierService.notify('error',
+          this.translate.instant('error.resource.updateImageFailed') + err.error.message),
       );
     }, false);
     reader.readAsDataURL(file);

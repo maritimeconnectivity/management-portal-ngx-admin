@@ -1,3 +1,5 @@
+import { langs } from './../../util/langs';
+import { addLangs, changeLang, loadLang } from './../../util/translateHelper';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -22,6 +24,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NbDialogService } from '@nebular/theme';
 import { AppConfig } from '../../app.config';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
  * a main landing component for login
@@ -38,6 +41,9 @@ export class LoginComponent implements OnInit {
    */
   version = AppConfig.MP_VERSION;
 
+  currentLang = 'en-GB';
+  selectedCountryCode = 'gb';
+  countryCodes = langs.map(e => e.split('-').pop().toLowerCase());
   /**
    * environment name to show at front
    */
@@ -48,7 +54,12 @@ export class LoginComponent implements OnInit {
     private notifierService: NotifierService,
     private route: ActivatedRoute,
     private dialogService: NbDialogService,
-  ) {}
+    public translate: TranslateService,
+  ) {
+    addLangs(translate);
+    this.currentLang = loadLang(translate);
+    this.selectedCountryCode = this.currentLang.split('-').pop().toLowerCase();
+  }
 
   capitalize(s: string) {
     return s[0].toUpperCase() + s.slice(1);
@@ -65,6 +76,11 @@ export class LoginComponent implements OnInit {
         );
       }
     });
+  }
+
+  changeLang(langName: string) {
+    changeLang(this.translate, langs.filter(e => e.includes(langName.toUpperCase())).pop());
+    location.reload();
   }
 
   /**

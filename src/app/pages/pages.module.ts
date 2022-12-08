@@ -26,7 +26,11 @@ import { IrGuideComponent } from './identity-registry/ir-guide/ir-guide.componen
 import { SrGuideComponent } from './service-registry/sr-guide/sr-guide.component';
 import { SrSearchComponent } from './service-registry/sr-search/sr-search.component';
 import { InfoComponent } from './about/info/info.component';
-import { MsrLedgerSearchComponent } from './service-registry/msr-ledger-search/msr-ledger-search.component';
+import { MsrLedgerSearchComponent } from './msr-ledger/msr-ledger-search/msr-ledger-search.component';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { httpTranslateLoader } from '../app.module';
+import { HttpClient } from '@angular/common/http';
+import { LedgerGuideComponent } from './msr-ledger/ledger-guide/ledger-guide.component';
 
 @NgModule({
   imports: [
@@ -43,6 +47,13 @@ import { MsrLedgerSearchComponent } from './service-registry/msr-ledger-search/m
     Ng2SmartTableModule,
     NbSpinnerModule,
     SharedModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: httpTranslateLoader,
+        deps: [HttpClient],
+      }
+    }),
   ],
   declarations: [
     PagesComponent,
@@ -52,6 +63,7 @@ import { MsrLedgerSearchComponent } from './service-registry/msr-ledger-search/m
     SrSearchComponent,
     InfoComponent,
     MsrLedgerSearchComponent,
+    LedgerGuideComponent,
   ],
 })
 export class PagesModule {

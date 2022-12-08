@@ -26,7 +26,7 @@ import { ApiModule as SECOMApiModule } from './backend-api/secom';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
@@ -44,6 +44,8 @@ import { customNotifierOptions } from './shared/customNotifierOption';
 import { NotifierModule } from 'angular-notifier';
 import { AuthModule } from './auth/auth.module';
 import { RouterModule } from '@angular/router';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 @NgModule({
   declarations: [AppComponent],
@@ -69,9 +71,19 @@ import { RouterModule } from '@angular/router';
     }),
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: httpTranslateLoader,
+        deps: [HttpClient],
+      }
+    }),
     NotifierModule.withConfig(customNotifierOptions),
   ],
   bootstrap: [AppComponent],
 })
 export class AppModule {
+}
+export function httpTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http);
 }

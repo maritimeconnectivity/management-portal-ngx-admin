@@ -1,3 +1,4 @@
+import { addLangs } from './../../util/translateHelper';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -15,6 +16,7 @@
  */
 
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
  * a process component for explaining joining process
@@ -26,7 +28,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProcessDialogComponent implements OnInit {
 
-  constructor() { }
+  constructor(public translate: TranslateService) {
+    addLangs(translate);
+  }
 
   ngOnInit(): void {
   }

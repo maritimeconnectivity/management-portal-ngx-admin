@@ -24,7 +24,7 @@ import { ResourceType } from './../../../shared/models/menuType';
 import { geojsonToWKT } from '@terraformer/wkt';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { InputGeometryComponent } from '../../../shared/input-geometry/input-geometry.component';
-import { ColumnForMenu } from '../../../shared/models/columnForMenu';
+import { ColumnForResource } from '../../../shared/models/columnForMenu';
 import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
 import { srFieldInfo } from './model/sr-instance-query-info';
@@ -55,7 +55,7 @@ export class SrSearchComponent implements OnInit {
     actions: false,
     mode: 'external',
     delete: false,
-    columns: ColumnForMenu[this.menuType],
+    columns: ColumnForResource[this.menuType],
     hideSubHeader: true,
   };
   allInstances: InstanceDto[];
@@ -69,9 +69,9 @@ export class SrSearchComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if(ColumnForMenu.hasOwnProperty(this.menuType.toString())) {
+    if(ColumnForResource.hasOwnProperty(this.menuType.toString())) {
       this.mySettings.columns = Object.assign({}, ...
-        Object.entries(ColumnForMenu[this.menuType.toString()]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes)).map(([k,v]) => ({[k]:v}))
+        Object.entries(ColumnForResource[this.menuType.toString()]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes)).map(([k,v]) => ({[k]:v}))
       );
       this.settings = Object.assign({}, this.mySettings);
 

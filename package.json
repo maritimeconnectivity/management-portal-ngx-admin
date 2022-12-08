@@ -1,6 +1,6 @@
 {
   "name": "management-portal",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "license": "Apache license 2.0",
   "repository": {
     "type": "git",
@@ -45,6 +45,8 @@
     "@nebular/eva-icons": "8.0.0",
     "@nebular/security": "8.0.0",
     "@nebular/theme": "8.0.0",
+    "@ngx-translate/core": "^13.0.0",
+    "@ngx-translate/http-loader": "^6.0.0",
     "@swimlane/ngx-charts": "^14.0.0",
     "@terraformer/spatial": "^2.1.2",
     "@terraformer/wkt": "^2.1.2",
@@ -79,6 +81,7 @@
     "ng2-smart-table": "^1.6.0",
     "ngx-autosize-input": "^12.0.0",
     "ngx-echarts": "^4.2.2",
+    "ngx-flag-picker": "^12.0.0",
     "normalize.css": "6.0.0",
     "pace-js": "1.0.2",
     "pkijs": "^3.0.5",

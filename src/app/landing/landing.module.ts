@@ -24,6 +24,10 @@ import { NbLayoutModule, NbCardModule, NbButtonModule, NbStepperModule } from '@
 import { RouterModule } from '@angular/router';
 import { RegisterDialogComponent } from './register-dialog/register-dialog.component';
 import { ProcessDialogComponent } from './process-dialog/process-dialog.component';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { httpTranslateLoader } from '../app.module';
+import { HttpClient } from '@angular/common/http';
+import { NgxFlagPickerModule } from 'ngx-flag-picker';
 
 /**
  * a module for landing process
@@ -44,6 +48,14 @@ import { ProcessDialogComponent } from './process-dialog/process-dialog.componen
     NbLayoutModule,
     SharedModule,
     NbStepperModule,
+    NgxFlagPickerModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: httpTranslateLoader,
+        deps: [HttpClient],
+      }
+    }),
   ]
 })
 export class LandingModule { }

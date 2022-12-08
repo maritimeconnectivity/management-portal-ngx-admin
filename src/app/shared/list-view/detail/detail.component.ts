@@ -1,3 +1,4 @@
+import { addLangs, applyTranslateToMenu, applyTranslateToSingleMenu } from './../../../util/translateHelper';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -14,6 +15,7 @@
  * limitations under the License.
  */
 
+import { TranslateService } from '@ngx-translate/core';
 import { InstanceDto } from '../../../backend-api/service-registry/model/instanceDto';
 import { InstanceControllerService } from '../../../backend-api/service-registry/api/instanceController.service';
 import { formatVesselToUpload } from '../../../util/dataFormatter';
@@ -22,18 +24,16 @@ import { Location } from '@angular/common';
 import { Organization } from '../../../backend-api/identity-registry/model/organization';
 import { Entity } from '../../../backend-api/identity-registry/model/entity';
 import { EntityTypes, ResourceType, MenuTypeIconNames, MenuTypeNames } from '../../models/menuType';
-import { ColumnForMenu } from '../../models/columnForMenu';
+import { ColumnForResource } from '../../models/columnForMenu';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DeviceControllerService, MMS, MmsControllerService, OrganizationControllerService, Role, RoleControllerService, Service, ServiceControllerService, User, UserControllerService, Vessel, VesselControllerService } from '../../../backend-api/identity-registry';
 import { Observable } from 'rxjs/Observable';
 import { NotifierService } from 'angular-notifier';
 import { AuthService } from '../../../auth/auth.service';
-import { AuthPermission, AuthPermissionForMSR, PermissionResolver, rolesToPermission } from '../../../auth/auth.permission';
 import { ORG_ADMIN_AT_MIR } from '../../app.constants';
 
 import RoleNameEnum = Role.RoleNameEnum;
-import { hasAdminPermission } from '../../../util/adminPermissionResolver';
 
 @Component({
   selector: 'ngx-detail',
@@ -48,7 +48,7 @@ export class DetailComponent implements OnInit {
   instanceVersion = '';
   noBacklink = false;
   isForNew = false;
-  columnForMenu = ColumnForMenu[this.menuType];
+  columnForMenu = ColumnForResource[this.menuType];
   contextForAttributes = 'detail';
   menuTypeName = '';
   entityMrn = '';
@@ -67,6 +67,23 @@ export class DetailComponent implements OnInit {
 
   @ViewChild('editableForm') editableForm;
   @ViewChild('supplementForm') supplementForm;
+
+  constructor(private route: ActivatedRoute, private router: Router,
+    private userControllerService: UserControllerService,
+    private deviceControllerService: DeviceControllerService,
+    private roleControllerService: RoleControllerService,
+    private vesselControllerService: VesselControllerService,
+    private serviceControllerService: ServiceControllerService,
+    private mmsControllerService: MmsControllerService,
+    private organizationControllerService: OrganizationControllerService,
+    private instanceControllerService: InstanceControllerService,
+    private notifierService: NotifierService,
+    private authService: AuthService,
+    private location: Location,
+    public translate: TranslateService,
+    ) {
+      addLangs(translate);
+  }
 
   ngOnInit(): void {
     const array = this.router.url.split('/');
@@ -105,21 +122,6 @@ export class DetailComponent implements OnInit {
     }
   }
 
-  constructor(private route: ActivatedRoute, private router: Router,
-    private userControllerService: UserControllerService,
-    private deviceControllerService: DeviceControllerService,
-    private roleControllerService: RoleControllerService,
-    private vesselControllerService: VesselControllerService,
-    private serviceControllerService: ServiceControllerService,
-    private mmsControllerService: MmsControllerService,
-    private organizationControllerService: OrganizationControllerService,
-    private instanceControllerService: InstanceControllerService,
-    private notifierService: NotifierService,
-    private authService: AuthService,
-    private location: Location,
-    ) {
-  }
-
   cancel() {
     this.location.back();
   }
@@ -132,7 +134,7 @@ export class DetailComponent implements OnInit {
   }
 
   fetchFieldValues() {
-    if(ColumnForMenu.hasOwnProperty(this.menuType)) {
+    if(ColumnForResource.hasOwnProperty(this.menuType)) {
       this.isLoading = true;
       if (Object.values(ResourceType).includes(this.menuType as ResourceType)) {
         if(this.menuType === ResourceType.OrgCandidate){
@@ -182,11 +184,11 @@ export class DetailComponent implements OnInit {
         }
       } else {
         this.settle(false);
-          throw new Error(`There's no such thing as '${this.menuType}DataService'`);
+        throw new Error(`${this.translate.instant('error.resource.noDataService')}${this.menuType}`);
       }
     } else {
       this.settle(false);
-      throw new Error(`There's no '${this.menuType}DataService' in ColumnForMenu`);
+      throw new Error(`${this.translate.instant('error.resource.noDataService')}${this.menuType}`);
     }
   }
 
@@ -199,24 +201,25 @@ export class DetailComponent implements OnInit {
   }
 
   delete() {
-    let message = 'Are you sure you want to delete?';
-    message = EntityTypes.indexOf(this.menuType)>=0 ?
-      message + ' All certificates under this entity will be revoked.' : message;
+    let message = this.translate.instant('warning.list.beforeDeletion');
+    message = EntityTypes.indexOf(this.menuType) >= 0 ?
+      message + this.translate.instant('warning.list.beforeRevoke') : message;
     if (confirm(message)) {
       this.deleteData(this.menuType, this.orgMrn, this.entityMrn, this.instanceVersion).subscribe(
         res => {
-          this.notifierService.notify('success', this.title + ' has been successfully deleted');
+          this.notifierService.notify('success', this.menuTypeName + this.translate.instant('success.list.delete'));
           this.moveToListPage();
         },
-        err => this.notifierService.notify('error', 'There was error in deletion - ' + err.error.message),
-      );
+        err => this.notifierService.notify('error',
+          this.translate.instant('error.resource.errorInDeletion') + err.error.message));
     }
   }
 
   approve() {
     if (this.menuType === ResourceType.OrgCandidate) {
       if (!this.supplementForm.formGroup.valid) {
-        this.notifierService.notify('error', 'There is missing information of administrator');
+        this.notifierService.notify('error',
+          this.translate.instant('error.resource.missingInformation'));
       } else {
         this.organizationControllerService.approveOrganization(this.entityMrn).subscribe(
           res => {
@@ -224,33 +227,36 @@ export class DetailComponent implements OnInit {
               role => {
                 this.createAdminUser(this.supplementForm.getFormValue()).subscribe(
                   user => {
-                    this.notifierService.notify('success', 'Organization Approved');
+                    this.notifierService.notify('success',
+                      this.translate.instant('success.resource.approveOrganization'));
                     this.moveToListPage();
                   },
-                  err => this.notifierService.notify('error', 'The organization was approved, but user creation failed. You can go to organizations and try to create the user again later - ' + err.error.message),
+                  err => this.notifierService.notify('error',
+                    this.translate.instant('error.resource.approveOrganization.userCreation') + err.error.message),
                 );
               },
-              err => this.notifierService.notify('error', 'The organization was approved, but role creation failed - ' + err.error.message),
+              err => this.notifierService.notify('error',
+               this.translate.instant('error.resource.approveOrganization.roleCreation') + err.error.message),
             );
           },
-          err => this.notifierService.notify('error', 'The organization is not approved - ' + err.error.message),
+          err => this.notifierService.notify('error',
+            this.translate.instant('error.resource.approveOrganization.reject') + err.error.message),
         );
       }
     }
   }
 
   createAdminRole() {
-		const role: Role = {
-			permission: ORG_ADMIN_AT_MIR, // TODO is this correct? Revise when creating the new role-functionality
-			roleName: RoleNameEnum.ORGADMIN,
-		};
-
-		return this.roleControllerService.createRole(role, this.entityMrn);
-	}
+    const role: Role = {
+      permission: ORG_ADMIN_AT_MIR, // TODO is this correct? Revise when creating the new role-functionality
+      roleName: RoleNameEnum.ORGADMIN,
+    };
+    return this.roleControllerService.createRole(role, this.entityMrn);
+  }
 
   createAdminUser(user: User) {
     if (!user) {
-      throw new Error('No user data');
+      throw new Error(this.translate.instant('error.resource.noUser'));
     }
     if (!user.permissions || user.permissions.length === 0) {
       user.permissions = ORG_ADMIN_AT_MIR;
@@ -262,7 +268,7 @@ export class DetailComponent implements OnInit {
 
   createUser(user: User) {
     if (!user) {
-      throw new Error('No user data');
+      throw new Error(this.translate.instant('error.resource.noUser'));
     }
 		return this.userControllerService.createUser(user, this.entityMrn);
 	}
@@ -271,7 +277,8 @@ export class DetailComponent implements OnInit {
     if (this.menuType === ResourceType.Role) {
       this.organizationControllerService.getOrganizationByMrn(this.orgMrn).subscribe(
         res => this.submitDataToBackend({ ...body, idOrganization: res.id}),
-        err => this.notifierService.notify('error', 'Error in fetching organization information'),
+        err => this.notifierService.notify('error',
+          this.translate.instant('error.resource.fetchOrgInfo')),
       );
     } else {
       this.submitDataToBackend(body, body.mrn);
@@ -282,12 +289,14 @@ export class DetailComponent implements OnInit {
     if (this.isForNew) {
       this.registerData(this.menuType, body, this.authService.authState.orgMrn).subscribe(
         res => {
-          this.notifierService.notify('success', 'New ' + this.menuType + ' has been created');
+          this.notifierService.notify('success', 'New ' + this.menuType +
+            this.translate.instant('success.resource.create'));
           this.settle(true);
           this.moveToListPage();
         },
         err => {
-          this.notifierService.notify('error', 'Creation has failed - ' + err.error.message);
+          this.notifierService.notify('error',
+            this.translate.instant('error.resource.creationFailed') + err.error.message);
           this.settle(true);
         }
       );
@@ -295,7 +304,8 @@ export class DetailComponent implements OnInit {
       // editing
       this.updateData(this.menuType, body, this.authService.authState.orgMrn, mrn, this.instanceVersion, this.numberId).subscribe(
         res => {
-          this.notifierService.notify('success', this.menuType + ' has been updated');
+          this.notifierService.notify('success', this.menuType
+            + this.translate.instant('success.resource.update'));
           if (this.editableForm) {
             this.editableForm.invertIsEditing();
             this.refreshData();
@@ -303,7 +313,8 @@ export class DetailComponent implements OnInit {
           this.settle(true);
         },
         err => {
-          this.notifierService.notify('error', 'Update has failed - ' + err.error.message);
+          this.notifierService.notify('error', 
+            this.translate.instant('error.resource.updateFailed') + err.error.message);
           this.settle(true);
         }
       );

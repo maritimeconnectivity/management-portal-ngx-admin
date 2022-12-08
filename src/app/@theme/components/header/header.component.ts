@@ -1,3 +1,6 @@
+import { langs } from './../../../util/langs';
+import { addLangs, changeLang, loadLang } from './../../../util/translateHelper';
+import { loadTheme, storeTheme } from './../../../util/themeHelper';
 import { AuthService } from './../../../auth/auth.service';
 import { KeycloakService } from 'keycloak-angular';
 import { Component, OnDestroy, OnInit } from '@angular/core';
@@ -5,9 +8,11 @@ import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeServ
 
 import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
-import { map, takeUntil } from 'rxjs/operators';
+import { map, takeUntil, filter } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { themes } from './../../../util/themes';
 
 @Component({
   selector: 'ngx-header',
@@ -20,27 +25,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userPictureOnly: boolean = false;
   userName: string;
   logoutUrl: string;
-
-  themes = [
-    {
-      value: 'default',
-      name: 'Light',
-    },
-    {
-      value: 'dark',
-      name: 'Dark',
-    },
-    {
-      value: 'cosmic',
-      name: 'Cosmic',
-    },
-    {
-      value: 'corporate',
-      name: 'Corporate',
-    },
-  ];
+  themes = themes;
 
   currentTheme = 'default';
+  currentLang = 'en-GB';
+  selectedCountryCode = 'gb';
+  countryCodes = langs.map(e => e.split('-').pop().toLowerCase());
 
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
@@ -48,11 +38,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private layoutService: LayoutService,
               private breakpointService: NbMediaBreakpointsService,
               private router: Router,
-              private authService: AuthService) {
+              private authService: AuthService,
+              public translate: TranslateService) {
+    addLangs(translate);
+    this.currentLang = loadLang(translate);
+    this.selectedCountryCode = this.currentLang.split('-').pop().toLowerCase();
   }
 
   ngOnInit() {
-    this.currentTheme = this.themeService.currentTheme;
+    const themeName = loadTheme();
+    this.currentTheme = themeName ? themeName : 'default';
 
     if (this.authService.authState.user) {
       this.userName = this.authService.authState.user.lastName + ' ' + this.authService.authState.user.firstName;
@@ -72,8 +67,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .pipe(
         map(({ name }) => name),
         takeUntil(this.destroy$),
-      )
-      .subscribe(themeName => this.currentTheme = themeName);
+      );
+    if (this.currentTheme !== this.themeService.currentTheme) {
+      this.themeService.changeTheme(themeName);
+    }
   }
 
   ngOnDestroy() {
@@ -83,6 +80,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   changeTheme(themeName: string) {
     this.themeService.changeTheme(themeName);
+    storeTheme(themeName);
+  }
+
+  changeLang(langName: string) {
+    changeLang(this.translate, langs.filter(e => e.includes(langName.toUpperCase())).pop());
   }
 
   toggleSidebar(): boolean {

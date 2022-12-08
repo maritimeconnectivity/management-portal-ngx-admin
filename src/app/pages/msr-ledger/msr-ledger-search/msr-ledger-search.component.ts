@@ -1,10 +1,10 @@
-import { DetailModalComponent } from './../../../shared/list-view/detail-modal/detail-modal.component';
-import { LuceneQueryOutput } from './../../../shared/lucene-query-input/model/lucene-query-output';
-import { ColumnForMenu } from './../../../shared/models/columnForMenu';
-import { ResourceType } from './../../../shared/models/menuType';
-import { InputGeometryComponent } from './../../../shared/input-geometry/input-geometry.component';
+import { DetailModalComponent } from '../../../shared/list-view/detail-modal/detail-modal.component';
+import { LuceneQueryOutput } from '../../../shared/lucene-query-input/model/lucene-query-output';
+import { ColumnForResource } from '../../../shared/models/columnForMenu';
+import { ResourceType } from '../../../shared/models/menuType';
+import { InputGeometryComponent } from '../../../shared/input-geometry/input-geometry.component';
 import { geojsonToWKT } from '@terraformer/wkt';
-import { AppConfig } from './../../../app.config';
+import { AppConfig } from '../../../app.config';
 import { Contract } from 'web3-eth-contract';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import Web3 from 'web3';
@@ -49,7 +49,7 @@ export class MsrLedgerSearchComponent implements OnInit {
     actions: false,
     mode: 'external',
     delete: false,
-    columns: ColumnForMenu[this.menuType],
+    columns: ColumnForResource[this.menuType],
     hideSubHeader: true,
   };
   fieldInfo = ledgerFieldInfo;
@@ -59,9 +59,9 @@ export class MsrLedgerSearchComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if (ColumnForMenu.hasOwnProperty(this.menuType.toString())) {
+    if (ColumnForResource.hasOwnProperty(this.menuType.toString())) {
       this.mySettings.columns = Object.assign({}, ...
-        Object.entries(ColumnForMenu[this.menuType.toString()]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes)).map(([k,v]) => ({[k]:v}))
+        Object.entries(ColumnForResource[this.menuType.toString()]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes)).map(([k,v]) => ({[k]:v}))
       );
       this.settings = Object.assign({}, this.mySettings);
 

@@ -1,18 +1,18 @@
 <div class="card-container">
     <nb-card *ngIf="!agreed && !submitted">
         <nb-card-header>
-            Request to join {{environmentName}}
+            {{ 'register.title' | translate }}{{environmentName}}
         </nb-card-header>
         <nb-card-body>
             <div *ngIf="!agreed">
                 <div class="rows">
                     <div class="col">
-                        <strong>Terms of use</strong>
+                        <strong>{{ 'register.termsOfUse.title' | translate }}</strong>
                     </div>
                 </div>
                 <div class="rows">
                     <div class="col">
-                        {{clause}}
+                        {{ termsOfUse }}
                     </div>
                 </div>
             </div>
@@ -20,8 +20,12 @@
         <nb-card-footer>
             <div>
                 <div class="buttons-row">
-                    <button nbButton status="success" (click)="agree()">Agree</button>
-                    <button nbButton status="danger" (click)="dismiss()">Disagree</button>
+                    <button nbButton status="success" (click)="agree()">
+                        {{ 'register.button.agree' | translate }}
+                    </button>
+                    <button nbButton status="danger" (click)="dismiss()">
+                        {{ 'register.button.disagree' | translate }}
+                    </button>
                 </div>
             </div>
         </nb-card-footer>
@@ -44,18 +48,22 @@
     
     <nb-card *ngIf="submitted">
         <nb-card-header>
-            Your information has been successfully submitted!
+            {{ 'register.submitted.title' | translate }}
         </nb-card-header>
         <nb-card-body>
             <div class="rows">
                 <div class="col">
-                    <h5 class="text-center">MIR Administrator will process the information and be in contact with you.</h5>
+                    <h5 class="text-center">
+                        {{ 'register.submitted.content' | translate }}
+                    </h5>
                 </div>
             </div>
         </nb-card-body>
         <nb-card-footer>
             <div class="buttons-row">
-                <button nbButton status="danger" (click)="dismiss()">Close</button>
+                <button nbButton status="danger" (click)="dismiss()">
+                    {{ 'register.button.close' | translate }}
+                </button>
             </div>
         </nb-card-footer>
     </nb-card>

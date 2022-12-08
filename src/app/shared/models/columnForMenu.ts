@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
+import { table } from 'console';
 import { convertTime } from '../../util/timeConverter';
 import { countryOptions } from './countryOptions';
 
 /**
  * a json format for both ngx-smart-table and ngx-editable-form articulating how the corresponding interface should work
  */
-export const ColumnForMenu = {
+export const ColumnForResource = {
   device: {
     id: {
       title: 'ID',

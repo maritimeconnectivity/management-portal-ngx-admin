@@ -1,4 +1,4 @@
-import { MsrLedgerSearchComponent } from './service-registry/msr-ledger-search/msr-ledger-search.component';
+import { LedgerGuideComponent } from './msr-ledger/ledger-guide/ledger-guide.component';
 /*
  * Copyright (c) 2022 Maritime Connectivity Platform Consortium
  *
@@ -15,6 +15,7 @@ import { MsrLedgerSearchComponent } from './service-registry/msr-ledger-search/m
  * limitations under the License.
  */
 
+import { MsrLedgerSearchComponent } from './msr-ledger/msr-ledger-search/msr-ledger-search.component';
 import { SrSearchComponent } from './service-registry/sr-search/sr-search.component';
 import { IrGuideComponent } from './identity-registry/ir-guide/ir-guide.component';
 import { RouterModule, Routes } from '@angular/router';
@@ -116,6 +117,10 @@ const routes: Routes = [
     {
       path: 'ledger/search',
       component: MsrLedgerSearchComponent,
+    },
+    {
+      path: 'ledger/guide',
+      component: LedgerGuideComponent,
     },
     {
       path: 'about',

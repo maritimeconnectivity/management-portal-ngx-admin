@@ -1,4 +1,4 @@
-import { QueryFieldInfo } from './../../../../shared/lucene-query-input/model/queryFieldInfo';
+import { QueryFieldInfo } from '../../../../shared/lucene-query-input/model/queryFieldInfo';
 
 export const ledgerFieldInfo: QueryFieldInfo[] = [
 {

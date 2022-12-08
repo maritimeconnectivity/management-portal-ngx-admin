@@ -24,7 +24,6 @@ export class AppConfig {
   static HAS_SERVICE_REGISTRY: boolean;
   static SR_BASE_PATH: string;
   static ENVIRONMENT_TITLE: string;
-  static TERMS_OF_USE: string;
   static IDP_NAMESPACE: string;
   static ENVIRONMENT_NAME: string;
   static IR_PROVIDER: string;
@@ -34,6 +33,7 @@ export class AppConfig {
   static HAS_MSR_LEDGER: boolean;
   static LEDGER_PATH: string;
   static MP_PROVIDER: string;
+  static TERMS_OF_USE: string;
   static MP_CONTACT: string;
   static MP_VERSION: string;
 
@@ -41,7 +41,6 @@ export class AppConfig {
     AppConfig.IR_BASE_PATH = environment.irBasePath,
     AppConfig.SR_BASE_PATH = environment.hasServiceRegistry ? environment.srBasePath : '',
     AppConfig.ENVIRONMENT_TITLE = environment.environmentTitle,
-    AppConfig.TERMS_OF_USE = environment.termsOfUse,
     AppConfig.IDP_NAMESPACE = environment.idpNamespace;
     AppConfig.HAS_SERVICE_REGISTRY = environment.hasServiceRegistry;
     AppConfig.OIDC_BASE_PATH = environment.oidcBasePath;
@@ -53,6 +52,7 @@ export class AppConfig {
     AppConfig.HAS_MSR_LEDGER = environment.hasMSRLedger;
     AppConfig.LEDGER_PATH = environment.hasMSRLedger ? environment.ledgerPath : '';
     AppConfig.MP_PROVIDER = environment.mpProvider;
+    AppConfig.TERMS_OF_USE = environment.termsOfUse;
     AppConfig.MP_CONTACT = environment.mpContact;
     AppConfig.MP_VERSION = require( '../../package.json').version;
   }

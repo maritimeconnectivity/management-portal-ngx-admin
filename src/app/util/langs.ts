@@ -1,0 +1,1 @@
+export const langs = ['en-GB', 'ko-KR'];
