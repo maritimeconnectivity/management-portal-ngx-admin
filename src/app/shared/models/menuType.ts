@@ -74,6 +74,7 @@ export const MenuTypeNames = {
   instanceorg: 'service instance',
   orgcandidate: 'unapproved organization',
   orgsvc: 'owned service',
+  ledgerInstance: 'service instance for MSR ledger',
 };
 
 /**
@@ -91,4 +92,5 @@ export const MenuTypeIconNames = {
   instance: 'compass',
   instanceorg: 'compass',
   orgcandidate: 'clipboard',
+  ledgerInstance: 'compass',
 };

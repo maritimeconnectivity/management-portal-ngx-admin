@@ -110,7 +110,10 @@ export class ListComponent implements OnInit {
 
   ngOnInit(): void {
     const menuTypeString = this.router.url.split('/').pop();
-    if (menuTypeString === ResourceType.InstanceOfOrg) {
+    if (menuTypeString === ResourceType.LedgerInstance) {
+      this.isForServiceForOrg = true;
+      this.menuType = ResourceType.LedgerInstance;
+    } else if (menuTypeString === ResourceType.InstanceOfOrg) {
       this.isForServiceForOrg = true;
       this.menuType = ResourceType.Instance;
     } else {
@@ -160,7 +163,8 @@ export class ListComponent implements OnInit {
             ),
             error => this.notifierService.notify('error', error.message),
           );
-        } else if(this.menuType === ResourceType.Instance || this.menuType === ResourceType.InstanceOfOrg){
+        } else if(this.menuType === ResourceType.Instance || this.menuType === ResourceType.InstanceOfOrg ||
+          this.menuType === ResourceType.LedgerInstance) {
           this.loadServiceInstances().subscribe(
             resData => {
               this.refreshData(
@@ -195,6 +199,7 @@ export class ListComponent implements OnInit {
 
   refreshData(data?: any) {
     if (data) {
+      console.log(data);
       this.source.load(data);
       this.data = data;
     } else {
@@ -255,14 +260,16 @@ export class ListComponent implements OnInit {
   }
 
   onEdit(event): void {
-    const mrn = this.menuType === ResourceType.Instance ? event.data.id : event.data.mrn;
-    this.router.navigate([this.router.url,
-      mrn ? encodeURIComponent(mrn) : event.data.id],
-        { queryParams: { name: event.data.roleName ? event.data.roleName :
-            event.data.name ? event.data.name :
-            event.data.lastName + ' ' + event.data.firstName,
-          version: event.data.instanceVersion,
-         }});
+    if (this.menuType !== ResourceType.LedgerInstance) {
+      const mrn = this.menuType === ResourceType.Instance ? event.data.id : event.data.mrn;
+      this.router.navigate([this.router.url,
+        mrn ? encodeURIComponent(mrn) : event.data.id],
+          { queryParams: { name: event.data.roleName ? event.data.roleName :
+              event.data.name ? event.data.name :
+              event.data.lastName + ' ' + event.data.firstName,
+            version: event.data.instanceVersion,
+          }});
+    }
   }
 
   onAddNew(): void {

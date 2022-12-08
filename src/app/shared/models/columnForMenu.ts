@@ -1121,7 +1121,7 @@ export const ColumnForResource = {
       description: 'Name of service instance',
       visibleFrom: ['list'],
     },
-    mrn: {
+    instanceId: {
       title: 'MRN',
       type: 'string',
       description: 'MCP MRN as unique identifer',
@@ -1133,60 +1133,43 @@ export const ColumnForResource = {
       description: 'Version of service instance',
       visibleFrom: ['list'],
     },
-    keywords: {
-      title: 'Keywords',
-      type: 'string',
-      visibleFrom: ['list'],
-    },
-    coverageArea: {
-      title: 'Coverage ',
-      type: 'string',
-    },
-    status: {
-      title: 'Status',
+    ledgerRequestStatus: {
+      title: 'Ledger Request status',
       type: 'string',
       options: [
         {
-          title: 'Provisional',
-          value: 'PROVISIONAL',
+          title: 'Inactive',
+          value: 'INACTIVE',
         },
         {
-          title: 'Released',
-          value: 'RELEASED',
+          title: 'Created',
+          value: 'CREATED',
         },
         {
-          title: 'Deprecated',
-          value: 'DEPRECATED',
+          title: 'Vetting',
+          value: 'VETTING',
         },
         {
-          title: 'Deleted',
-          value: 'DELETED',
+          title: 'Vetted',
+          value: 'VETTED',
+        },
+        {
+          title: 'Requesting',
+          value: 'REQUESTING',
+        },
+        {
+          title: 'Succeeded',
+          value: 'SUCCEEDED',
+        },
+        {
+          title: 'Failed',
+          value: 'FAILED',
+        },
+        {
+          title: 'Rejected',
+          value: 'REJECTED',
         },
       ],
-      visibleFrom: ['list'],
-    },
-    implementsDesignMRN: {
-      title: 'Technical design ID',
-      type: 'string',
-      description: 'MCP MRN as unique identifer',
-      visibleFrom: ['list'],
-      shortIdType: 'design',
-      immutable: true,
-    },
-    implementsDesignVersion: {
-      title: 'Technical design version',
-      type: 'string',
-      description: 'MCP MRN as unique identifer',
-      visibleFrom: ['list'],
-    },
-    msrName: {
-      title: 'MSR Name of register',
-      type: 'string',
-      visibleFrom: ['list'],
-    },
-    msrUrl: {
-      title: 'MSR URL of register',
-      type: 'string',
       visibleFrom: ['list'],
     },
   },

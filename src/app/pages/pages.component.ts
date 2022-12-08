@@ -126,6 +126,7 @@ export class PagesComponent implements OnInit {
     if (this.myOrganizationName && this.keycloakMSRPermissions) {
       if (PermissionResolver.isOrgServiceAdmin(this.keycloakMSRPermissions)) {
         MSR_MENU_FOR_ORG.title = this.myOrganizationName;
+        applyTranslateToSingleMenu(this.translate, MSR_MENU_FOR_ORG);
         this.menu.find(e => e.title === this.translate.instant('menu.sr')).children.unshift(MSR_MENU_FOR_ORG);
       }
     }

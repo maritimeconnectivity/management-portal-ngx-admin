@@ -119,7 +119,7 @@ const routes: Routes = [
       component: MsrLedgerSearchComponent,
     },
     {
-      path: 'ledger/register',
+      path: 'ledger/ledgerInstance',
       loadChildren: () => import('../shared/list-view/list-view.module')
         .then(m => m.ListViewModule),
     },

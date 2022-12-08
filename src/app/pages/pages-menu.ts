@@ -61,8 +61,8 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/pages/ledger/search',
       },
       {
-        title: 'menu.ledger.register',
-        link: '/pages/ledger/register',
+        title: 'menu.ledger.ledgerInstance',
+        link: '/pages/ledger/ledgerInstance',
       },
       {
         title: 'menu.ledger.guide',

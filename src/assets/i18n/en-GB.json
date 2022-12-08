@@ -155,7 +155,7 @@
         "sr.guide": "User Guide",
         "ledger": "Global Service Discovery",
         "ledger.search": "MSR Ledger Search",
-        "ledger.register": "Services in MSR Ledger",
+        "ledger.ledgerInstance": "Services in MSR Ledger",
         "ledger.guide": "User Guide",
         "about": "About",
         "ir.admin": "Approve organization",
