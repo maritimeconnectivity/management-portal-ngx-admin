@@ -47,7 +47,7 @@
     "@nebular/theme": "8.0.0",
     "@ngx-translate/core": "^13.0.0",
     "@ngx-translate/http-loader": "^6.0.0",
-    "@swimlane/ngx-charts": "^14.0.0",
+    "@swimlane/ngx-charts": "^20.1.2",
     "@terraformer/spatial": "^2.1.2",
     "@terraformer/wkt": "^2.1.2",
     "angular-notifier": "^10.0.0",
