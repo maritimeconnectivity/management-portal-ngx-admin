@@ -26,6 +26,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userName: string;
   logoutUrl: string;
   themes = themes;
+  customLabels = {
+    'gb': 'en-GB',
+    'kr': 'ko-KR',
+  };
 
   currentTheme = 'default';
   currentLang = 'en-GB';
