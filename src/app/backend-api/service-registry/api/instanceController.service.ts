@@ -1,3 +1,4 @@
+import { AppConfig } from './../../../app.config';
 /**
  * Maritime Connectivity Platform Service Registry API
  * Maritime Connectivity Platform Service Registry, developed by the MCC MSR WG
@@ -26,7 +27,7 @@ import { environment } from './../../../../environments/environment.test';
 @Injectable()
 export class InstanceControllerService {
 
-    protected basePath = environment.srBasePath;
+    protected basePath = AppConfig.SR_BASE_PATH;
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
