@@ -149,6 +149,8 @@ export class InputGeometryComponent implements OnChanges, OnDestroy, AfterViewIn
   }
 
   clearMap = () => {
+    this.geometries = [];
+    this.geometryNames = [];
     this.responseFeatureGroup.clearLayers();
     this.queryFeatureGroup.clearLayers();
   }
