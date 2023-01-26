@@ -86,7 +86,7 @@ export class SrSearchComponent implements OnInit {
     this.luceneQueryStringInput.nativeElement.value = this.queryString;
     this.searchParams = query.data;
     if (!query.queryString || query.queryString.length === 0) {
-      this.clearMap();
+      this.clearAll();
     }
   }
 
@@ -125,7 +125,7 @@ export class SrSearchComponent implements OnInit {
   onQueryStringChanged = (event: any) => {
     this.queryString = event.target.value;
     if (this.queryString.length === 0) {
-      this.clearMap();
+      this.clearAll();
     }
   }
 
@@ -133,20 +133,28 @@ export class SrSearchComponent implements OnInit {
     this.geometries = [];
     this.queryGeometry = {};
     this.searchParams = {};
+    this.clearAll();
+  }
+
+  clearAll = () => {
     this.clearMap();
+    this.luceneQueryInputComponent?.clearInput();
+    this.source.reset();
   }
 
   clearMap = () => {
+    this.geometries = [];
+    this.geometryNames = [];
+    this.source.load([]);
     this.geometryMap?.clearMap();
-    this.luceneQueryInputComponent?.clearInput();
-    this.source.reset();
-    this.instances = [];
-    this.refreshData(this.instances);
   }
 
   refreshData(data?: any) {
     if (data) {
       this.source.load(data);
+      if (data.length === 0) {
+        this.clearMap();
+      }
     } else {
       this.source.load([]);
     }
