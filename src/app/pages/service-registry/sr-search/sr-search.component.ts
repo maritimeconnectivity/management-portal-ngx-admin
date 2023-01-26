@@ -84,8 +84,10 @@ export class SrSearchComponent implements OnInit {
   onUpdateLuceneQuery = (query: LuceneQueryOutput) => {
     this.queryString = query.queryString ? query.queryString : '';
     this.luceneQueryStringInput.nativeElement.value = this.queryString;
-    this.searchParams = query.data;
-    if (!query.queryString || query.queryString.length === 0) {
+
+    // get rid of " to convert it to the freetext
+    this.freetext = this.queryString.split('"').join('');
+    if (this.queryString.length === 0) {
       this.clearAll();
     }
   }
@@ -116,10 +118,6 @@ export class SrSearchComponent implements OnInit {
 
   onSearch = () => {
     this.search(this.searchParams, Object.keys(this.queryGeometry).length > 0 ? geojsonToWKT(this.queryGeometry) : '', this.freetext);
-  }
-
-  onFreeTextChanged = (event: any) => {
-    this.freetext = event.target.value;
   }
 
   onQueryStringChanged = (event: any) => {
