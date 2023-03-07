@@ -1,7 +1,5 @@
-import { addLangs } from './../../util/translateHelper';
-import { environment } from './../../../environments/environment.test';
 /*
- * Copyright (c) 2022 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2023 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +14,8 @@ import { environment } from './../../../environments/environment.test';
  * limitations under the License.
  */
 
+import { addLangs } from './../../util/translateHelper';
+import { environment } from './../../../environments/environment.test';
 import { NotifierService } from 'angular-notifier';
 import { Organization } from './../../backend-api/identity-registry/model/organization';
 import { OrganizationControllerService } from './../../backend-api/identity-registry/api/organizationController.service';

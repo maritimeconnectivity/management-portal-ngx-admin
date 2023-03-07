@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2023 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ export enum AuthPermissionForMSR {
 export const rolesToPermission = (roles: string[]): AuthPermission => {
     let permission = AuthPermission.User;
     for (const roleString of roles) {
-      switch (roleString as RoleNameEnum) {
+      switch (roleString as Role.RoleNameEnum) {
         case RoleNameEnum.ORGADMIN: {
           permission = permission | AuthPermission.OrgAdmin;
           break;

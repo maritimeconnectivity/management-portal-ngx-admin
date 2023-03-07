@@ -18,17 +18,17 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { SearchFilterObject } from '../model/searchFilterObject';
-import { SearchObjectResult } from '../model/searchObjectResult';
+import { ResponseSearchObject } from '../model/responseSearchObject';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
-import { environment } from '../../../../environments/environment';
+import { AppConfig } from '../../../app.config';
 
 
 @Injectable()
 export class SECOMService {
 
-    protected basePath = environment.srBasePath;
+    protected basePath = AppConfig.SR_BASE_PATH;
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -66,9 +66,9 @@ export class SECOMService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public search(body?: SearchFilterObject, page?: number, pageSize?: number, observe?: 'body', reportProgress?: boolean): Observable<Array<SearchObjectResult>>;
-    public search(body?: SearchFilterObject, page?: number, pageSize?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchObjectResult>>>;
-    public search(body?: SearchFilterObject, page?: number, pageSize?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchObjectResult>>>;
+    public search(body?: SearchFilterObject, page?: number, pageSize?: number, observe?: 'body', reportProgress?: boolean): Observable<ResponseSearchObject>;
+    public search(body?: SearchFilterObject, page?: number, pageSize?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ResponseSearchObject>>;
+    public search(body?: SearchFilterObject, page?: number, pageSize?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ResponseSearchObject>>;
     public search(body?: SearchFilterObject, page?: number, pageSize?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
@@ -102,7 +102,7 @@ export class SECOMService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<Array<SearchObjectResult>>('post',`${this.basePath}/api/secom/v1/searchService`,
+        return this.httpClient.request<ResponseSearchObject>('post',`${this.basePath}/api/secom/v1/searchService`,
             {
                 body: body,
                 params: queryParameters,

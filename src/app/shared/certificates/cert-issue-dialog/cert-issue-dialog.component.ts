@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2023 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,10 @@ import {
   SafeBag,
   SafeContents
 } from 'pkijs';
+
+const ab2str = (buf: ArrayBuffer) => {
+  return String.fromCharCode.apply(null, new Uint16Array(buf));
+}
 
 export interface LabelValueModel {
   label:string;
@@ -165,7 +169,7 @@ export class CertIssueDialogComponent implements OnInit{
                                 publicKey: this.toPem(rawPublicKey, 'PUBLIC KEY'),
                                 certificate: certificate
                               },
-                              pkcs12Keystore: result,
+                              pkcs12Keystore: ab2str(result),
                               keystorePassword: password
                             };
                             this.isLoading = false;

@@ -1,8 +1,5 @@
-import { InstanceControllerService } from './../../../backend-api/service-registry/api/instanceController.service';
-import { InstanceDto } from './../../../backend-api/service-registry/model/instanceDto';
-import { LuceneQueryOutput } from './../../../shared/lucene-query-input/model/lucene-query-output';
 /*
- * Copyright (c) 2022 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2023 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +14,9 @@ import { LuceneQueryOutput } from './../../../shared/lucene-query-input/model/lu
  * limitations under the License.
  */
 
+import { InstanceControllerService } from './../../../backend-api/service-registry/api/instanceController.service';
+import { InstanceDto } from './../../../backend-api/service-registry/model/instanceDto';
+import { LuceneQueryOutput } from './../../../shared/lucene-query-input/model/lucene-query-output';
 import { SearchParameters } from './../../../backend-api/secom/model/searchParameters';
 import { SearchObjectResult } from './../../../backend-api/secom/model/searchObjectResult';
 import { SECOMService } from './../../../backend-api/secom/api/sECOM.service';
@@ -102,7 +102,7 @@ export class SrSearchComponent implements OnInit {
     // send a query with given geometry, converted to WKT
     this.secomSearchController.search({query: searchParams, geometry: wktString, freetext: freetext })
     .subscribe(res => {
-      this.instances = res;
+      this.instances = res.searchServiceResult;
       this.refreshData(this.instances);
       this.isLoading = false;
       this.geometries = [];

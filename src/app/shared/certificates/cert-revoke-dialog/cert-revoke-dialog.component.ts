@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2023 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 import { NotifierService } from 'angular-notifier';
 import { CertificateService } from '../../certificate.service';
-import { RevokationReasonEnum } from '../../../backend-api/identity-registry/model/certificateRevocation';
 import { Component, Input, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { getReasonOptionFromRevocationReason } from '../../../util/certRevokeInfo';
 import { EntityType } from '../../models/menuType';
 import { DayCellComponent } from '../../calendar/day-cell/day-cell.component';
+import { CertificateRevocation } from '../../../backend-api/identity-registry';
 
 @Component({
   selector: 'ngx-cert-revoke-dialog',
@@ -45,20 +45,20 @@ export class CertRevokeDialogComponent implements OnInit {
   reasons = [];
   description = '';
   reference = '';
-  revokationReason: RevokationReasonEnum;
+  revokationReason: CertificateRevocation.RevokationReasonEnum;
   dayCellComponent = DayCellComponent;
   
   constructor(protected ref: NbDialogRef<CertRevokeDialogComponent>) {
     this.isLoading = false;
-    for (const reason in RevokationReasonEnum) {
-      this.reasons.push(getReasonOptionFromRevocationReason(reason.toLocaleLowerCase() as RevokationReasonEnum));
+    for (const reason in CertificateRevocation.RevokationReasonEnum) {
+      this.reasons.push(getReasonOptionFromRevocationReason(reason.toLocaleLowerCase() as CertificateRevocation.RevokationReasonEnum));
     }
   }
 
   doRevoke() {
     this.isLoading = true;
-    const certificateRevocation = {
-      revokedAt: this.date.getTime().toString(),
+    const certificateRevocation: CertificateRevocation = {
+      revokedAt: this.date,
       revokationReason: this.revokationReason,
     };
 

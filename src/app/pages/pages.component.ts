@@ -1,6 +1,5 @@
-import { addLangs, loadLang } from './../util/translateHelper';
 /*
- * Copyright (c) 2022 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2023 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,22 +14,18 @@ import { addLangs, loadLang } from './../util/translateHelper';
  * limitations under the License.
  */
 
-import { applyTranslateToMenu, applyTranslateToSingleMenu } from './../util/translateHelper';
-import { AuthService } from './../auth/auth.service';
-import { NotifierService } from 'angular-notifier';
-import { Organization } from './../backend-api/identity-registry/model/organization';
-import { OrganizationControllerService } from './../backend-api/identity-registry/api/organizationController.service';
-import { Component, OnInit } from '@angular/core';
-
-import { MENU_ITEMS, MIR_MENU_FOR_ADMIN, MIR_MENU_FOR_ORG, MSR_MENU_FOR_ORG} from './pages-menu';
-import { PermissionResolver } from '../auth/auth.permission';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AppConfig } from '../app.config';
+import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { NotifierService } from 'angular-notifier';
+import { AppConfig } from '../app.config';
+import { PermissionResolver } from '../auth/auth.permission';
+import { AuthService } from '../auth/auth.service';
+import { Organization, OrganizationControllerService } from '../backend-api/identity-registry';
+import { addLangs, applyTranslateToMenu, applyTranslateToSingleMenu, loadLang } from '../util/translateHelper';
 
-/**
- * a core components for showing pages
- */
+import { MENU_ITEMS, MIR_MENU_FOR_ADMIN, MIR_MENU_FOR_ORG, MSR_MENU_FOR_ORG } from './pages-menu';
+
 @Component({
   selector: 'ngx-pages',
   styleUrls: ['pages.component.scss'],
@@ -41,7 +36,7 @@ import { TranslateService } from '@ngx-translate/core';
     </ngx-one-column-layout>
   `,
 })
-export class PagesComponent implements OnInit {
+export class PagesComponent {
   menu = MENU_ITEMS;
 
   myOrganizationName: string;
@@ -74,7 +69,7 @@ export class PagesComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.myOrganizationName) {
-      this.organizationControllerService.getOrganizationByMrn(this.authService.authState.orgMrn).subscribe(
+      this.organizationControllerService.getOrganization1(this.authService.authState.orgMrn).subscribe(
         (org: Organization) => {
           this.authService.updateOrgName(org.name);
           this.myOrganizationName = org.name;
