@@ -10,8 +10,8 @@
                 <div class="p-2" ><button *ngIf="isEditing" [size]="tiny" value="{{file.id}}" class="rounded-circle bg-info text-white border-0" (click)="deleteFile($event)" nbButton>X</button></div>
             </div>            
         </div>
-        <div *ngIf="docDtoList.length === 0 && !file" class="bg-light align-baseline p-1 w-100 text-center">
-            <span class="text-secondary font-weight-bold">No file</span>
+        <div *ngIf="docDtoList.length === 0 && !file" class="bg-light align-baseline p-0 w-100 text-center">
+            <button type='button' nbButton class="m-0" fullWidth disabled>No file</button>
         </div>
     </div>
     <input *ngIf="isEditing" type="file" (change)="changeFile($event)"/>
