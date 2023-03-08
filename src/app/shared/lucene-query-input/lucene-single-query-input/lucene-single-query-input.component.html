@@ -1,8 +1,8 @@
-<div class="d-inline-block text-center align-items-start align-middle p-1 ">
-    <nb-select multiple="false" placeholder="Select field" [(selected)]="selectedItem" (selectedChange)="onSelectedChange($event)" filled status="primary">
+<div class="d-inline-flex p-1" style="align-items:flex-start">
+    <nb-select multiple="false" placeholder="Select field" [(selected)]="selectedItem" (selectedChange)="onSelectedChange($event)" hero status="info">
         <nb-option *ngFor="let c of fieldInfo" value="{{c.value}}">{{c.name}}</nb-option>
     </nb-select>
     <input autoSizeInput nbInput [disabled]="!selectedItem" [value]="fieldValue"
         [includeBorders]=true [minWidth]="140" (input)="onEdit($event.target.value)">
-    <button nbButton status="danger" (click)="delete()">X</button>
+    <button status="danger" nbButton (click)="delete()">X</button>
 </div>
