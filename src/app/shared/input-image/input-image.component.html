@@ -8,8 +8,8 @@
         </div>
         <img *ngIf="isEditing" class="mh-100" [attr.src]="image">
     </div>
-    <div *ngIf="!image" [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary" class="row h-100 justify-content-center align-items-center bg-light">
-        <span class="text-secondary font-weight-bold">No image</span>
-    </div>
+    
+    <button *ngIf="!image" type='button' nbButton class="m-0" fullWidth disabled>No image</button>
+    
     <input *ngIf="isEditing" type="file" accept="{{accept}}" (change)="changeFile($event)"/>
 </div>
