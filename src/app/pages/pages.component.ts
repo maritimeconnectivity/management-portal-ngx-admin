@@ -98,7 +98,8 @@ export class PagesComponent {
   }
 
   assignOrganizationNameForMIR = () => {
-    if (!this.menu.find(e => e.title === this.translate.instant('menu.ir')) || this.menu.find(e => e.title === this.translate.instant('menu.ir')).children.find(e => e.title === MIR_MENU_FOR_ORG.title)) {
+    if (!this.menu.find(e => e.title === this.translate.instant('menu.ir')) ||
+      this.menu.find(e => e.title === this.translate.instant('menu.ir')).children.find(e => e.title === MIR_MENU_FOR_ORG.title)) {
       return ;
     }
     if (this.myOrganizationName && this.myOrganizationMrn) {
@@ -107,6 +108,7 @@ export class PagesComponent {
         title: this.translate.instant('menu.ir.org.info'),
         link: 'ir/organizations/' + encodeURIComponent(this.myOrganizationMrn),
       });
+      // apply translate
       applyTranslateToSingleMenu(this.translate, MIR_MENU_FOR_ORG);
       this.menu.find(e => e.title === this.translate.instant('menu.ir')).children.unshift(MIR_MENU_FOR_ORG);
     }
@@ -121,6 +123,8 @@ export class PagesComponent {
     if (this.myOrganizationName && this.keycloakMSRPermissions) {
       if (PermissionResolver.isOrgServiceAdmin(this.keycloakMSRPermissions)) {
         MSR_MENU_FOR_ORG.title = this.myOrganizationName;
+        // apply translate
+        applyTranslateToSingleMenu(this.translate, MSR_MENU_FOR_ORG);
         this.menu.find(e => e.title === this.translate.instant('menu.sr')).children.unshift(MSR_MENU_FOR_ORG);
       }
     }
