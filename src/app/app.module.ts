@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2023 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-import { LandingModule } from './landing/landing.module';
-import { ApiModule as MIRApiModule } from './backend-api/identity-registry';
-import { ApiModule as MSRApiModule } from './backend-api/service-registry';
-import { ApiModule as SECOMApiModule } from './backend-api/secom';
-/**
- * @license
- * Copyright Akveo. All Rights Reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- */
+ import { LandingModule } from './landing/landing.module';
+ import { ApiModule as MIRApiModule } from './backend-api/identity-registry';
+ import { ApiModule as MSRApiModule } from './backend-api/service-registry';
+ import { ApiModule as SECOMApiModule } from './backend-api/secom';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
@@ -30,6 +25,10 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
+import { customNotifierOptions } from './shared/customNotifierOption';
+import { NotifierModule } from 'angular-notifier';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppRoutingModule } from './app-routing.module';
 import {
   NbChatModule,
@@ -40,12 +39,8 @@ import {
   NbToastrModule,
   NbWindowModule,
 } from '@nebular/theme';
-import { customNotifierOptions } from './shared/customNotifierOption';
-import { NotifierModule } from 'angular-notifier';
 import { AuthModule } from './auth/auth.module';
 import { RouterModule } from '@angular/router';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 @NgModule({
   declarations: [AppComponent],

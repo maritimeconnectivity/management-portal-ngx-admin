@@ -1,7 +1,5 @@
 <ng2-smart-table [settings]="settings" [source]="data" (edit)="onEdit($event)" (delete)="onDelete($event)">
 </ng2-smart-table>
-<div *ngIf="!forRevoked">
-    <div class="container">
-        <button class="w-100" status="primary" type='button' nbButton (click)="openIssueDialog()" *ngIf="hasPermissionInMIR">Issue new certificate</button>    
-    </div>
+<div *ngIf="!forRevoked" class="pt-1">
+    <button class="w-100" status="primary" type='button' nbButton (click)="openIssueDialog()" *ngIf="hasPermissionInMIR">Issue new certificate</button>    
 </div>

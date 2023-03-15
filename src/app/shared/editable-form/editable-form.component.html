@@ -52,10 +52,8 @@
             <ngx-input-file-list *ngIf="menu.value.type === 'file'" [fieldName]="menu.key" [file]="loadedData[menu.key]" [isEditing]="isEditing" [instanceId]="numberId"
               [fieldName]="menu.key" [placeholder]="menu.value.placeholder" [required]="menu.value.required" (onUpdate)="onDataChanged($event)"
               (onDelete)="onFileDeleted($event)"></ngx-input-file-list>
-            <div *ngIf="!isEditing">
-              <span *ngIf="menu.value.type === 'string'" id="keyword.name">{{ menuType !== 'instance' && isForTime(menu.key) ? convertTimeString(formGroup.get(menu.key).value) : formGroup.get(menu.key).value }}</span>
-              <button type='button' nbButton fullWidth (click)="openXmlDialog(loadedData[menu.key], isEditing)" *ngIf="menu.value.type === 'xml'">Read XML</button>
-            </div>
+            <span *ngIf="!isEditing && menu.value.type === 'string'" id="keyword.name">{{ menuType !== 'instance' && isForTime(menu.key) ? convertTimeString(formGroup.get(menu.key).value) : formGroup.get(menu.key).value }}</span>
+            <button type='button' class="m-0" fullWidth nbButton (click)="openXmlDialog(loadedData[menu.key], isEditing)" *ngIf="!isEditing && menu.value.type === 'xml'">Read XML</button>
             <div *ngIf="isEditing" >
               <input *ngIf="menu.value.type === 'string' && !menu.value.options" type="text" nbInput fullWidth id="input_{{menu.key}}" class="form-control"
               status="{{formGroup.get(menu.key).value ? formGroup.get(menu.key).valid ? 'success' : 'danger' : menu.value.required? 'danger' : ''}}"
@@ -72,7 +70,7 @@
               fullWidth required="menu.value.required === true">
                 <nb-option *ngFor="let option of menu.value.options" value="{{option.value}}">{{option.title}}</nb-option>
               </nb-select>
-              <button type='button' nbButton fullWidth (click)="openXmlDialog(formGroup.get(menu.key).value, isEditing)" *ngIf="menu.value.type === 'xml'">Edit XML</button>
+              <button type='button' nbButton class="m-0" fullWidth (click)="openXmlDialog(formGroup.get(menu.key).value, isEditing)" *ngIf="menu.value.type === 'xml'">Edit XML</button>
             </div>
           </div>
         </div>

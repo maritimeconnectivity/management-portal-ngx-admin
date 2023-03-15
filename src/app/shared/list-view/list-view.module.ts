@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2023 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { SharedModule } from './../../shared/shared.module';
+import { SharedModule } from '../shared.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ListViewRoutingModule } from './list-view-routing.module';

@@ -1,3 +1,13 @@
+<a name="0.3.0"></a>
+# [0.3.0](ngx-admin 9.0.0 update) (2023-03-06)
+
+### BREAKING CHANGES
+
+- Angular updated to version 13.
+- Nebular updated to version 9.
+- Move from tslint to eslint
+
+
 <a name="0.2.0"></a>
 # [0.2.0](MSR Ledger search) (2022-11-16)
 

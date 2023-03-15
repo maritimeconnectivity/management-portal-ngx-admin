@@ -30,8 +30,7 @@ import { VesselImageControllerService } from './api/vesselImageController.servic
     ServiceControllerService,
     UserControllerService,
     VesselControllerService,
-    VesselImageControllerService,
- ]
+    VesselImageControllerService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {

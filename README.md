@@ -1,90 +1,102 @@
-# Management Portal
+# ngx-admin [<img src="https://i.imgur.com/oMcxwZ0.png" alt="Eva Design System" height="20px" />](https://eva.design?utm_campaign=eva_design%20-%20home%20-%20ngx_admin%20github%20readme&utm_source=ngx_admin&utm_medium=referral&utm_content=top_status_tile) [![Build Status](https://travis-ci.org/akveo/ngx-admin.svg?branch=master)](https://travis-ci.org/akveo/ngx-admin)
 
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[Who uses ngx-admin?](https://github.com/akveo/ngx-admin/issues/1645)| [Documentation](https://akveo.github.io/ngx-admin?utm_campaign=ngx_admin%20-%20home%20-%20ngx_admin%20github%20readme&utm_source=ngx_admin&utm_medium=referral&utm_content=github_readme_documentation_link) | [Installation Guidelines](https://akveo.github.io/ngx-admin/docs/getting-started/what-is-ngxadmin?utm_campaign=ngx_admin%20-%20home%20-%20ngx_admin%20github%20readme&utm_source=ngx_admin&utm_medium=referral&utm_content=github_readme_installation_guidelines) | [Angular templates](https://www.akveo.com/templates?utm_campaign=services%20-%20github%20-%20templates&utm_source=ngx_admin&utm_medium=referral&utm_content=github%20readme%20top%20angular%20templates%20link)
 
-Management Portal is an interface to manage resources registered in [Maritime Identity Registry](https://github.com/maritimeconnectivity/IdentityRegistry) and [Maritime Service Registry](https://github.com/maritimeconnectivity/ServiceRegistry), which are core components of [Maritime Connectivity Platform](https://maritimeconnectivity.net/). The starting foundation of this project has been build from the [ngx-admin from Akveo](https://github.com/akveo/ngx-admin). This repository maintains a spin-off implementation of Management Portal under the Apache 2.0 License.
+# Installation notes
 
-## Live demo
-You can experience a live demo from [our public demonstrator environment](https://management.maritimeconnectivity.net).
+To install ngx-admin you have to use NodeJS version 14.14+ because of [node-sass](https://github.com/sass/node-sass) version utilized in the application.
 
+# Material theme for ngx-admin
 
-## Development
-### Installation
-Install the project through:
+Material admin theme is based on the most popular Angular dashboard template - [ngx-admin](https://akveo.github.io/ngx-admin?utm_campaign=ngx_admin%20-%20home%20-%20ngx_admin%20github%20readme&utm_source=ngx_admin_material&utm_medium=referral&utm_content=github_readme)
+To use material theme checkout `feat/material-theme` branch.
 
-```bash
-npm install
-```
+## Key features
 
-Now it can be reached at  http://localhost:4200.
+- The most popular and trusted Angular open source dashboard template is out there. Used by hundreds of thousands developers worldwide and Fortune 500 companies\*.
+- Over 40+ Angular Components and 60+ Usage Examples. Kick off your project and save money by using ngx-admin.
+- Already using ngx-admin and willing to switch to material theme? Material theme is backward-compatible. Check out the article describing how to do that.
+- ngx-admin material works perfectly with Angular Material and Nebular. Take the best from both!
 
-### Deployment
-First, we would recommend to read the [instruction of Angular deployment](https://angular.io/guide/deployment).
+### To use material theme checkout `feat/material-theme` branch
 
-#### Deployment to GitHub Pages through Angular deploy command
-You can deploy the Angular App to a GitHub pages through:
+# Admin template based on Angular 13+ and <a href="https://github.com/akveo/nebular">Nebular</a>
 
-```bash
-ng deploy --build-target=[%AngularBuildTarget] --repo=[%GitHubRepositoryURL] --cname=[%TargetURL]
-```
+<a target="_blank" href="https://akveo.com/ngx-admin/pages/dashboard?theme=corporate&utm_campaign=ngx_admin%20-%20demo%20-%20ngx_admin%20github%20readme&utm_source=ngx_admin&utm_medium=referral&utm_content=hero_banner_corporate"><img src="https://i.imgur.com/mFdqvgG.png"/></a>
 
-*build-target* option needs to be a full name of *buildTarget* from "build", e.g., management-portal:build:test for test configuration.
+### UI Bakery
 
-The deployment is powered by [angular-cli-ghpages](https://github.com/angular-schule/angular-cli-ghpages).
+Try low-code internal tool builder for free
+<a href="https://uibakery.io/?utm_source=github&utm_medium=clicks&utm_campaign=banner"><img src="https://user-images.githubusercontent.com/6151971/125071660-41f84900-e0c2-11eb-882a-0c675eb1e5e3.png"></a>
 
-#### Deployment to GitHub Pages through GitHub Action
-You can also take [our GitHub Action script](https://github.com/maritimeconnectivity/ManagementPortal/blob/main/.github/workflows/main.yml) to deploy your own management portal to GitHub Pages.
+[Check out our Store](https://store.akveo.com/pages/all-collections?utm_campaign=akveo_store%20-%20all%20bundles%20-%20ngx_admin%20github%20readme&utm_source=ngx_admin&utm_medium=referral%20&utm_content=check_out_our_store) for ready to use Backend Bundles.
 
-### Configuration
-There are examples of environment configuration in the 'src/environments' folder.
+### Templates
 
-Configuration parameter covers:
+<a href="https://www.akveo.com/templates/fleet-management-dashboard?utm_campaign=services%20[…]x-admin%20&utm_medium=referral%20&utm_content=github_banner%20"><img src="https://i.imgur.com/Z8EwGfh.png"></a>
 
-* *production*: boolean value of whether a build for production or not
+### With 6 stunning visual themes
 
-* *staging*: boolean value of whether a build for staging or not
+| <a target="_blank" href="https://www.akveo.com/ngx-admin/pages/dashboard?theme=material-dark&utm_campaign=ngx_admin%20-%20demo%20-%20ngx_admin%20docs&utm_source=ngx_admin&utm_medium=referral&utm_content=ngx_admin_material_themes_material_dark"><img src="https://i.imgur.com/67YAlhf.png"/></a> | <a target="_blank" href="https://www.akveo.com/ngx-admin/pages/dashboard?theme=material-light&utm_campaign=ngx_admin%20-%20demo%20-%20ngx_admin%20docs&utm_source=ngx_admin&utm_medium=referral&utm_content=ngx_admin_material_themes_material_light"><img src="https://i.imgur.com/aQzw0hD.png"/></a> |
+| --- | --- |
+|  Material Dark | Material Light |
 
-* *irProvider*: name of the MIR provider
+| <a target="_blank" href="https://www.akveo.com/ngx-admin/pages/dashboard?theme=dark&utm_campaign=ngx_admin%20-%20demo%20-%20ngx_admin%20github%20readme&utm_source=ngx_admin&utm_medium=referral&utm_content=github_readme_theme_dark"><img src="https://i.imgur.com/9UkTGgr.png"/></a> | <a target="_blank" href="https://akveo.com/ngx-admin/pages/dashboard?theme=default&utm_campaign=ngx_admin%20-%20demo%20-%20ngx_admin%20github%20readme&utm_source=ngx_admin&utm_medium=referral&utm_content=github_readme_theme_default"><img src="https://i.imgur.com/Kn3xDKQ.png"/></a> |
+| --- | --- |
+|  Dark| Default |
 
-* *irContact*: contact of the MIR provider
+| <a target="_blank" href="https://www.akveo.com/ngx-admin/pages/dashboard?theme=cosmic&utm_campaign=ngx_admin%20-%20demo%20-%20ngx_admin%20github%20readme&utm_source=ngx_admin&utm_medium=referral&utm_content=github_readme_theme_cosmic"><img src="https://i.imgur.com/iJu2YDF.png"/></a> | <a target="_blank" href="https://www.akveo.com/ngx-admin/pages/dashboard?theme=corporate&utm_campaign=ngx_admin%20-%20demo%20-%20ngx_admin%20github%20readme&utm_source=ngx_admin&utm_medium=referral&utm_content=github_readme_theme_corporate"><img src="https://i.imgur.com/GpUt6NW.png"/></a> |
+| --- | --- |
+| Cosmic  | Corporate |
 
-* *irBasePath*: url of MIR API
+### What's included:
 
-* *oidcBasePath*: url of MIR OIDC (keycloak endpoint for the MCC testbed)
+- Angular 13+ & Typescript
+- Bootstrap 4+ & SCSS
+- Responsive layout
+- RTL support
+- High resolution
+- Flexibly configurable themes with **hot-reload** (3 themes included)
+- Authentication module with multiple providers
+- 40+ Angular Components
+- 60+ Usage Examples
 
-* *hasServiceRegistry*: boolean value of whether the provider has service registry or not
+### Demo
 
-* *srProvider*: name of the MSR provider
+<a target="_blank" href="http://www.akveo.com/ngx-admin/?utm_campaign=ngx_admin%20-%20demo%20-%20ngx_admin%20github%20readme&utm_source=ngx_admin&utm_medium=referral&utm_content=live_demo_link">Live Demo</a>
 
-* *srContact*: contact of the MSR provider
+## Documentation
 
-* *srBasePath*: url of MSR API
+This template is using [Nebular](https://github.com/akveo/nebular) modules set, [here you can find documentation and other useful articles](https://akveo.github.io/nebular/docs/guides/install-based-on-starter-kit?utm_campaign=nebular%20-%20docs%20-%20ngx_admin%20github%20readme&utm_source=ngx_admin&utm_medium=referral&utm_content=documentation_useful_articles).
 
-* *mpProvider*: name of the Management Portal provider
+### Empty starter kit
 
-* *mpContact*: contact of the Management Portal provider
+Don't need all the pages and modules and just looking for an empty starter kit for your next project? Check out our [starter-kit branch](https://github.com/akveo/ngx-admin/tree/starter-kit).
 
-* *environmentTitle*: title showing at the front page
+## BrowserStack
 
-* *termsOfUse*: terms of use using in the registration
+This project runs its tests on multiple desktop and mobile browsers using [BrowserStack](http://www.browserstack.com).
 
-* *idpNamespace*: identity provider short ID (*IPID* in MCP IDsec2 MCC Identity Management and Security; Identity Management) included in MCP MRN, e.g., 'mcc-test'
+<img src="https://cloud.githubusercontent.com/assets/131406/22254249/534d889e-e254-11e6-8427-a759fb23b7bd.png" height="40" />
 
-* *environmentName*: environment name showing at the front page
+## More from Akveo
 
-#### Client generation for backend integration with MIR and MSR
-The client for MIR and MSR was auto-generated from the corresponding swagger files with [Swagger Editor](https://editor.swagger.io/).
+- [Eva Icons](https://github.com/akveo/eva-icons) - 480+ beautiful Open Source icons
+- [Nebular](https://github.com/akveo/nebular) - Angular Components, Auth and Security
+- [Akveo templates](https://www.akveo.com/templates?utm_campaign=services%20-%20github%20-%20templates&utm_source=ngx_admin&utm_medium=referral&utm_content=ngx_admin%20github%20readme%20more%20from%20akveo%20link) - 10+ Ready-to-use apps templates to speed up your apps developments
 
-#### Configurable interface through ColumnFor*.json file
-The main idea of making the Management Portal configurable has done by JSON formulation of interface capability for each attribute.
+### How can I support developers?
 
-We have [ColumnForMenu.json](https://github.com/maritimeconnectivity/ManagementPortal/blob/main/src/app/shared/models/columnForMenu.ts) and [ColumnForCert.json](https://github.com/maritimeconnectivity/ManagementPortal/blob/main/src/app/shared/models/columnForCertificate.ts) as examples on how it depicts functional interfaces for MCP entities and certificate respectively.
+- Star our GitHub repo :star:
+- Create pull requests, submit bugs, suggest new features or documentation updates :wrench:
+- Follow us on [Twitter](https://twitter.com/akveo_inc) :feet:
+- Like our page on [Facebook](https://www.facebook.com/akveo/) :thumbsup:
 
-### Localization support
-Currently English and Korean are supported.
+### Looking for engineering services? 
 
-## Acknowledgement
-This development is a part of the project titled “Development of Open Platform Technologies for Smart Maritime Safety and Industries” funded by the Korea Research Institute of Ships and Ocean Engineering (PES4070).
+Visit [our homepage](https://www.akveo.com?utm_campaign=services%20-%20akveo%20website%20-%20ngx_admin%20github%20readme&utm_source=ngx_admin&utm_medium=referral&utm_content=looking_for_engineering_services_visit_homepage) or simply leave us a message to [contact@akveo.com](mailto:contact@akveo.com). We will be happy to work with you!
 
-## License
-This project is licensed under the Apache 2.0 License - see the [LICENSE.md](LICENSE.md) file for details.
+### From Developers
+
+Made with :heart: by [Akveo team](https://www.akveo.com?utm_campaign=services%20-%20akveo%20website%20-%20ngx_admin%20github%20readme&utm_source=ngx_admin&utm_medium=referral&utm_content=from_developers_made_by). Follow us on [Twitter](https://twitter.com/akveo_inc) to get the latest news first!
+We're always happy to receive your feedback!

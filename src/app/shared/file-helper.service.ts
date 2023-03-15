@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2023 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,35 +33,40 @@ export class FileHelperService {
   public downloadPemCertificate(certificateBundle: CertificateBundle, entityName: string,
                                 serverGeneratedKeys: boolean, notifierService: NotifierService) {
     try {
-      let nameNoSpaces = entityName.split(' ').join('_');
-      if (serverGeneratedKeys) {
-        certificateBundle.pemCertificate.certificate = this.replaceNewLines(certificateBundle.pemCertificate.certificate);
-        if (certificateBundle.pemCertificate.publicKey)
-          certificateBundle.pemCertificate.publicKey = this.replaceNewLines(certificateBundle.pemCertificate.publicKey);
-        if (certificateBundle.pemCertificate.privateKey)
-          certificateBundle.pemCertificate.privateKey = this.replaceNewLines(certificateBundle.pemCertificate.privateKey);
-        if (certificateBundle.pkcs12Keystore && typeof(certificateBundle.pkcs12Keystore) === 'string')
-          certificateBundle.pkcs12Keystore = this.convertBase64ToByteArray(certificateBundle.pkcs12Keystore) as ArrayBuffer;
+      const nameNoSpaces = entityName.split(' ').join('_');
+
+      const certificate = serverGeneratedKeys ?
+        this.replaceNewLines(certificateBundle.pemCertificate.certificate)
+        : certificateBundle.pemCertificate.certificate;
+      const publicKey = serverGeneratedKeys ?
+        this.replaceNewLines(certificateBundle.pemCertificate.publicKey)
+        : certificateBundle.pemCertificate.publicKey;
+      const privateKey = serverGeneratedKeys ?
+        this.replaceNewLines(certificateBundle.pemCertificate.privateKey)
+        : certificateBundle.pemCertificate.privateKey;
+      const pkcs12Keystore = certificateBundle.pkcs12Keystore && typeof(certificateBundle.pkcs12Keystore) === 'string' ?
+        this.convertBase64ToByteArray(certificateBundle.pkcs12Keystore) as ArrayBuffer
+        : certificateBundle.pkcs12Keystore;
+
+      const zip = new JSZip();
+      zip.file("Certificate_" + nameNoSpaces + ".pem", certificate);
+      if (privateKey) {
+        zip.file("PrivateKey_" + nameNoSpaces + ".pem", privateKey);
       }
-      let zip = new JSZip();
-      zip.file("Certificate_" + nameNoSpaces + ".pem", certificateBundle.pemCertificate.certificate);
-      if (certificateBundle.pemCertificate.privateKey) {
-        zip.file("PrivateKey_" + nameNoSpaces + ".pem", certificateBundle.pemCertificate.privateKey);
-      }
-      if (certificateBundle.pemCertificate.publicKey) {
-        zip.file("PublicKey_" + nameNoSpaces + ".pem", certificateBundle.pemCertificate.publicKey);
+      if (publicKey) {
+        zip.file("PublicKey_" + nameNoSpaces + ".pem", publicKey);
       }
       if (certificateBundle.keystorePassword) {
         zip.file("KeystorePassword.txt", this.replaceNewLines(certificateBundle.keystorePassword));
       }
       if (certificateBundle.jksKeystore) {
-        let jksByteArray = this.convertBase64ToByteArray(certificateBundle.jksKeystore);
-        let blob = new Blob([jksByteArray]);
+        const jksByteArray = this.convertBase64ToByteArray(certificateBundle.jksKeystore);
+        const blob = new Blob([jksByteArray]);
         zip.file("Keystore_" + nameNoSpaces + ".jks", blob);
       }
-      if (certificateBundle.pkcs12Keystore) {
-        let p12ByteArray = certificateBundle.pkcs12Keystore;
-        let blob = new Blob([p12ByteArray]);
+      if (pkcs12Keystore) {
+        const p12ByteArray = pkcs12Keystore;
+        const blob = new Blob([p12ByteArray]);
         zip.file("Keystore_" + nameNoSpaces + ".p12", blob);
       }
       zip.generateAsync({type:"blob"}).then(function (content) {

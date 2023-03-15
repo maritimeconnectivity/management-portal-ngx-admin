@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2023 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,72 +14,73 @@
  * limitations under the License.
  */
 
-import { RevokationReasonEnum } from './../backend-api/identity-registry/model/certificateRevocation';
+import { CertificateRevocation } from './../backend-api/identity-registry/model/certificateRevocation';
 export interface ReasonOption {
-  value: RevokationReasonEnum;
+  value: CertificateRevocation.RevokationReasonEnum;
   title: string;
   description: string;
   reference: string;
 }
 
 // reference: https://www.itu.int/rec/dologin_pub.asp?lang=e&id=T-REC-X.509-201210-S!!PDF-E&type=items
-export const getReasonOptionFromRevocationReason = (revocationReason:RevokationReasonEnum): ReasonOption => {
+export const getReasonOptionFromRevocationReason = (
+  revocationReason:CertificateRevocation.RevokationReasonEnum): ReasonOption => {
     switch (revocationReason) {
-      case RevokationReasonEnum.Aacompromise: {
+      case CertificateRevocation.RevokationReasonEnum.Aacompromise: {
         return { value: revocationReason,
           title: 'AA compromised',
           description: 'This reason indicates that it is known or suspected that the certificate subject\'s private key has been compromised. It applies to authority attribute (AA) certificates only.',
           reference: 'https://docs.oracle.com/javase/8/docs/api/java/security/cert/CRLReason.html'};
       }
-      case RevokationReasonEnum.Affiliationchanged: {
+      case CertificateRevocation.RevokationReasonEnum.Affiliationchanged: {
         return { value: revocationReason,
           title: 'Affiliation changed',
           description: 'The user has terminated his or her relationship with the organization indicated in the Distinguished Name attribute of the certificate. This revocation code is typically used when an individual is terminated or has resigned from an organization. You do not have to revoke a certificate when a user changes departments, unless your security policy requires different certificate be issued by a departmental CA.',
           reference: 'https://docs.microsoft.com/en-us/previous-versions/tn-archive/cc700843(v=technet.10)?redirectedfrom=MSDN#revocation-reasons'};
       }
-      case RevokationReasonEnum.Cacompromise: {
+      case CertificateRevocation.RevokationReasonEnum.Cacompromise: {
         return { value: revocationReason,
           title: 'CA compromised',
           description: 'The token or disk location where the CA\'s private key is stored has been compromised and is in the possession of an unauthorized individual. When a CA\'s private key is revoked, this results in all certificates issued by the CA that are signed using the private key associated with the revoked certificate being considered revoked.',
           reference: 'https://docs.microsoft.com/en-us/previous-versions/tn-archive/cc700843(v=technet.10)?redirectedfrom=MSDN#revocation-reasons'};
       }
-      case RevokationReasonEnum.Certificatehold: {
+      case CertificateRevocation.RevokationReasonEnum.Certificatehold: {
         return { value: revocationReason,
           title: 'Certificate Hold',
           description: 'A temporary revocation that indicates that a CA will not vouch for a certificate at a specific point in time. Once a certificate is revoked with a CertificateHold reason code, the certificate can then be revoked with another Reason Code, or unrevoked and returned to use.',
           reference: 'https://docs.microsoft.com/en-us/previous-versions/tn-archive/cc700843(v=technet.10)?redirectedfrom=MSDN#revocation-reasons'};
       }
-      case RevokationReasonEnum.Cessationofoperation: {
+      case CertificateRevocation.RevokationReasonEnum.Cessationofoperation: {
         return { value: revocationReason,
           title: 'Cessation of Operation',
           description: 'If a CA is decommissioned, no longer to be used, the CA\'s certificate should be revoked with this reason code. Do not revoke the CA\'s certificate if the CA no longer issues new certificates, yet still publishes CRLs for the currently issued certificates.',
           reference: 'https://docs.microsoft.com/en-us/previous-versions/tn-archive/cc700843(v=technet.10)?redirectedfrom=MSDN#revocation-reasons'};
       }
-      case RevokationReasonEnum.Keycompromise: {
+      case CertificateRevocation.RevokationReasonEnum.Keycompromise: {
         return { value: revocationReason,
           title: 'Key compromised',
           description: 'The token or disk location where the private key associated with the certificate has been compromised and is in the possession of an unauthorized individual. This can include the case where a laptop is stolen, or a smart card is lost.',
           reference: 'https://docs.microsoft.com/en-us/previous-versions/tn-archive/cc700843(v=technet.10)?redirectedfrom=MSDN#revocation-reasons'};
       }
-      case RevokationReasonEnum.Privilegewithdrawn: {
+      case CertificateRevocation.RevokationReasonEnum.Privilegewithdrawn: {
         return { value: revocationReason,
           title: 'Privilege withdrawn',
           description: 'A certificate (public-key or attribute certificate) was revoked because a privilege contained within that certificate has been withdrawn',
           reference: 'https://docs.microsoft.com/en-us/previous-versions/tn-archive/cc700843(v=technet.10)?redirectedfrom=MSDN#revocation-reasons'};
       }
-      case RevokationReasonEnum.Removefromcrl: {
+      case CertificateRevocation.RevokationReasonEnum.Removefromcrl: {
         return { value: revocationReason,
           title: 'Remove from CRL',
           description: 'If a certificate is revoked with the CertificateHold reason code, it is possible to "unrevoke" a certificate. The unrevoking process still lists the certificate in the CRL, but with the reason code set to RemoveFromCRL.',
           reference: 'https://docs.microsoft.com/en-us/previous-versions/tn-archive/cc700843(v=technet.10)?redirectedfrom=MSDN#revocation-reasons'};
       }
-      case RevokationReasonEnum.Superseded: {
+      case CertificateRevocation.RevokationReasonEnum.Superseded: {
         return { value: revocationReason,
           title: 'Superseded',
           description: 'A replacement certificate has been issued to a user, and the reason does not fall under the previous reasons. This revocation reason is typically used when a smart card fails, the password for a token is forgotten by a user, or the user has changed their legal name.',
           reference: 'https://docs.microsoft.com/en-us/previous-versions/tn-archive/cc700843(v=technet.10)?redirectedfrom=MSDN#revocation-reasons'};
       }
-      case RevokationReasonEnum.Unspecified: {
+      case CertificateRevocation.RevokationReasonEnum.Unspecified: {
         return { value: revocationReason,
           title: 'Unspecified',
           description: 'It is possible to revoke a certificate without providing a specific reason code. While it is possible to revoke a certificate with the Unspecified reason code, this is not recommended, as it does not provide an audit trail as to why a certificate is revoked.',
@@ -87,7 +88,7 @@ export const getReasonOptionFromRevocationReason = (revocationReason:RevokationR
       }
       default : {
         return { value: revocationReason,
-          title: RevokationReasonEnum[revocationReason],
+          title: CertificateRevocation.RevokationReasonEnum[revocationReason],
           description: 'No description',
           reference: ''};
       }

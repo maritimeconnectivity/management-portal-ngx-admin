@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2023 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-import { SharedModule } from './../shared/shared.module';
 import { NgModule } from '@angular/core';
-import { NbMenuModule, NbCardModule, NbButtonModule, NbSelectModule, NbTabsetModule, NbStepperModule, NbInputModule, NbSpinnerModule } from '@nebular/theme';
+import { NbButtonModule, NbCardModule, NbInputModule, NbMenuModule, NbSelectModule, NbSpinnerModule, NbStepperModule, NbTabsetModule } from '@nebular/theme';
 import { ThemeModule } from '../@theme/theme.module';
 import { PagesComponent } from './pages.component';
-import { pagesRoutingComponents, PagesRoutingModule } from './pages-routing.module';
+import { PagesRoutingModule } from './pages-routing.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-import { IrGuideComponent } from './identity-registry/ir-guide/ir-guide.component';
-import { SrGuideComponent } from './service-registry/sr-guide/sr-guide.component';
-import { SrSearchComponent } from './service-registry/sr-search/sr-search.component';
-import { InfoComponent } from './about/info/info.component';
-import { MsrLedgerSearchComponent } from './msr-ledger/msr-ledger-search/msr-ledger-search.component';
+import { SharedModule } from '../shared/shared.module';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { httpTranslateLoader } from '../app.module';
 import { HttpClient } from '@angular/common/http';
+import { InfoComponent } from './about/info/info.component';
+import { AboutComponent } from './about/about.component';
+import { IrGuideComponent } from './identity-registry/ir-guide/ir-guide.component';
+import { SrGuideComponent } from './service-registry/sr-guide/sr-guide.component';
+import { SrSearchComponent } from './service-registry/sr-search/sr-search.component';
+import { MsrLedgerSearchComponent } from './msr-ledger/msr-ledger-search/msr-ledger-search.component';
 import { LedgerGuideComponent } from './msr-ledger/ledger-guide/ledger-guide.component';
 
 @NgModule({
@@ -57,7 +58,7 @@ import { LedgerGuideComponent } from './msr-ledger/ledger-guide/ledger-guide.com
   ],
   declarations: [
     PagesComponent,
-    pagesRoutingComponents,
+    AboutComponent,
     IrGuideComponent,
     SrGuideComponent,
     SrSearchComponent,

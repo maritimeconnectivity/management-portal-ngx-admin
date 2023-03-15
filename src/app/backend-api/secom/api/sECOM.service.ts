@@ -22,13 +22,13 @@ import { ResponseSearchObject } from '../model/responseSearchObject';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
-import { environment } from '../../../../environments/environment';
+import { AppConfig } from '../../../app.config';
 
 
 @Injectable()
 export class SECOMService {
 
-    protected basePath = environment.srBasePath;
+    protected basePath = AppConfig.SR_BASE_PATH;
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

@@ -1,7 +1,5 @@
-import { langs } from './../../util/langs';
-import { addLangs, changeLang, loadLang } from './../../util/translateHelper';
 /*
- * Copyright (c) 2022 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2023 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +14,8 @@ import { addLangs, changeLang, loadLang } from './../../util/translateHelper';
  * limitations under the License.
  */
 
+import { langs } from './../../util/langs';
+import { addLangs, changeLang, loadLang } from './../../util/translateHelper';
 import { ProcessDialogComponent } from './../process-dialog/process-dialog.component';
 import { RegisterDialogComponent } from './../register-dialog/register-dialog.component';
 import { NotifierService } from 'angular-notifier';

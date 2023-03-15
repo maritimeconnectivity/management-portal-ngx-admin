@@ -1,4 +1,4 @@
-import { LogicalOperator } from './../model/localOperator';
+import { LogicalOperator } from '../model/localOperator';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LuceneComponent } from '../model/lucene-component';
 

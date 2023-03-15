@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2023 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 import { geojsonToWKT } from '@terraformer/wkt';
-import { InputGeometryComponent } from './../input-geometry/input-geometry.component';
+import { InputGeometryComponent } from '../input-geometry/input-geometry.component';
 import { convertTime } from './../../util/timeConverter';
-import { XmlEditDialogComponent } from './../xml-edit-dialog/xml-edit-dialog.component';
+import { XmlEditDialogComponent } from '../xml-edit-dialog/xml-edit-dialog.component';
 import { AuthService } from './../../auth/auth.service';
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';

@@ -1,6 +1,6 @@
 import { addLangs, applyTranslateToSingleMenu } from './../../../util/translateHelper';
 /*
- * Copyright (c) 2022 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2023 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,10 +33,8 @@ import { ResourceType, MenuTypeIconNames, EntityTypes } from '../../models/menuT
 import { NbIconLibraries } from '@nebular/theme';
 import { NotifierService } from 'angular-notifier';
 import { MmsControllerService, Role, VesselControllerService } from '../../../backend-api/identity-registry';
-import { PageEntity } from '../../../backend-api/identity-registry/model/pageEntity';
 import { InstanceDto } from '../../../backend-api/service-registry';
 import { formatData, formatServiceData } from '../../../util/dataFormatter';
-import { Entity } from '../../../backend-api/identity-registry/model/entity';
 import { hasAdminPermission } from '../../../util/adminPermissionResolver';
 import { TranslateService } from '@ngx-translate/core';
 import _ from 'lodash';
@@ -233,7 +231,7 @@ export class ListComponent implements OnInit {
     }
   }
 
-  deleteData = (context: ResourceType, orgMrn: string, entityMrn: string, version?: string, numberId?: number): Observable<Entity> => {
+  deleteData = (context: ResourceType, orgMrn: string, entityMrn: string, version?: string, numberId?: number): Observable<any> => {
     if (context === ResourceType.User) {
       return this.userControllerService.deleteUser(orgMrn, entityMrn);
     } else if (context === ResourceType.Device) {
@@ -295,14 +293,14 @@ export class ListComponent implements OnInit {
 
   loadMyOrganization = ():Observable<Organization> => {
     // fetch organization information from it
-    return this.organizationControllerService.getOrganizationByMrn(this.authService.authState.orgMrn);
+    return this.organizationControllerService.getOrganization1(this.authService.authState.orgMrn);
 	}
 
   loadServiceInstances = (): Observable<InstanceDto[]> => {
     return this.instanceControllerService.getInstances();
   }
 
-  loadDataContent = (context: ResourceType, orgMrn?: string):Observable<PageEntity> => {
+  loadDataContent = (context: ResourceType, orgMrn?: string): Observable<any> => {
     if (context === ResourceType.User) {
       return this.userControllerService.getOrganizationUsers(orgMrn);
     } else if (context === ResourceType.Device) {

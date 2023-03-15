@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2023 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import { NotifierService } from 'angular-notifier';
 import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 import { NbDialogRef, NbDialogService } from '@nebular/theme';
 import { XmlDto } from '../../backend-api/service-registry';
-import { XmlControllerService } from './../../backend-api/service-registry/api/xmlController.service';
+import { XmlControllerService } from '../../backend-api/service-registry/api/xmlController.service';
 
 @Component({
   selector: 'ngx-xml-edit-dialog',

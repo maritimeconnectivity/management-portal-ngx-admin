@@ -1,9 +1,23 @@
-import { DetailModalComponent } from '../../../shared/list-view/detail-modal/detail-modal.component';
+/*
+ * Copyright (c) 2023 Maritime Connectivity Platform Consortium
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { LuceneQueryOutput } from '../../../shared/lucene-query-input/model/lucene-query-output';
 import { ColumnForResource } from '../../../shared/models/columnForMenu';
 import { ResourceType } from '../../../shared/models/menuType';
 import { InputGeometryComponent } from '../../../shared/input-geometry/input-geometry.component';
-import { geojsonToWKT } from '@terraformer/wkt';
 import { AppConfig } from '../../../app.config';
 import { Contract } from 'web3-eth-contract';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -101,6 +115,7 @@ export class MsrLedgerSearchComponent implements OnInit {
 
   search = (searchParams: object, geoQuery: object) => {
     this.isLoading = true;
+    this.onClear();
     const geoFiltered = Object.keys(geoQuery).length > 0 ?
       this.findIntersects(this.allInstances, geoQuery) :
       this.allInstances;

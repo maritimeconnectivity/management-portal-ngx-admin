@@ -1,7 +1,7 @@
 import { LuceneComponentDirective } from './lucene-query-input/lucene-component-directive';
 import { LuceneComponentInputComponent } from './lucene-query-input/lucene-component-input/lucene-component-input.component';
 /*
- * Copyright (c) 2022 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2023 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,7 @@ import { RouterModule } from '@angular/router';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { httpTranslateLoader } from '../app.module';
 import { HttpClient } from '@angular/common/http';
+import { ListViewModule } from './list-view/list-view.module';
 
 @NgModule({
   declarations: [

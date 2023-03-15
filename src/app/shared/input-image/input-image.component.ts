@@ -1,7 +1,7 @@
 import { addLangs } from './../../util/translateHelper';
 import { TranslateService } from '@ngx-translate/core';
 /*
- * Copyright (c) 2022 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2023 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@ import { TranslateService } from '@ngx-translate/core';
  */
 
 import { Observable } from 'rxjs';
-import { ResourceType } from './../models/menuType';
-import { VesselImageControllerService } from './../../backend-api/identity-registry/api/vesselImageController.service';
-import { LogoControllerService } from './../../backend-api/identity-registry/api/logoController.service';
+import { ResourceType } from '../models/menuType';
+import { VesselImageControllerService } from '../../backend-api/identity-registry/api/vesselImageController.service';
+import { LogoControllerService } from '../../backend-api/identity-registry/api/logoController.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NotifierService } from 'angular-notifier';
@@ -109,9 +109,9 @@ export class InputImageComponent implements OnInit {
 
   updatePut(menuType: ResourceType, file: any, entityMrn: string, orgMrn: string, mediaType: string): Observable<any> {
     return menuType === ResourceType.Organization ?
-        this.logoControllerService.updateLogoPut(file, entityMrn, mediaType) :
+        this.logoControllerService.updateLogoPut(file, entityMrn) :
       menuType === ResourceType.Vessel ?
-        this.vesselImageControllerService.updateVesselImagePut(file, orgMrn, entityMrn, mediaType) :
+        this.vesselImageControllerService.updateVesselImagePut(file, orgMrn, entityMrn) :
         new Observable<any>();
   }
 

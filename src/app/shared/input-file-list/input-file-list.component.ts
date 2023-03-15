@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2023 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { DocDto } from './../../backend-api/service-registry/model/docDto';
-import { DocControllerService } from './../../backend-api/service-registry/api/docController.service';
+import { DocDto } from '../../backend-api/service-registry/model/docDto';
+import { DocControllerService } from '../../backend-api/service-registry/api/docController.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NbIconLibraries } from '@nebular/theme';
 import { NotifierService } from 'angular-notifier';

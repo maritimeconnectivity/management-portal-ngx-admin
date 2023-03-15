@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2023 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import { MmsControllerService } from './../backend-api/identity-registry/api/mmsController.service';
-import { VesselControllerService } from './../backend-api/identity-registry/api/vesselController.service';
-import { UserControllerService } from './../backend-api/identity-registry/api/userController.service';
-import { ServiceControllerService } from './../backend-api/identity-registry/api/serviceController.service';
-import { DeviceControllerService } from './../backend-api/identity-registry/api/deviceController.service';
-import { OrganizationControllerService } from './../backend-api/identity-registry/api/organizationController.service';
+import { MmsControllerService } from '../backend-api/identity-registry/api/mmsController.service';
+import { VesselControllerService } from '../backend-api/identity-registry/api/vesselController.service';
+import { UserControllerService } from '../backend-api/identity-registry/api/userController.service';
+import { ServiceControllerService } from '../backend-api/identity-registry/api/serviceController.service';
+import { DeviceControllerService } from '../backend-api/identity-registry/api/deviceController.service';
+import { OrganizationControllerService } from '../backend-api/identity-registry/api/organizationController.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CertificateBundle, CertificateRevocation } from '../backend-api/identity-registry';
