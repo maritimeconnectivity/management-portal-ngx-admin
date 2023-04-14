@@ -1,5 +1,5 @@
 <div class="card-container">
-    <nb-card *ngIf="!agreed && !submitted">
+    <nb-card *ngIf="!submitted">
         <nb-card-header>
             {{ 'register.title' | translate }}{{environmentName}}
         </nb-card-header>
@@ -16,9 +16,23 @@
                     </div>
                 </div>
             </div>
+            <div *ngIf="agreed">
+                <div class="rows">
+                    <div class="col">
+                        <ngx-editable-form #editableForm
+                        [isForRegistration]="true"
+                        [menuType]="menuType" [isForNew]="isForNew" [title]="title" [iconName]="iconName"
+                        [entityMrn]="entityMrn" [orgMrn]="orgMrn" [numberId]="numberId" 
+                        [instanceVersion]="instanceVersion" [isLoading]="isLoading" [isLoaded]="isLoaded"
+                        [hasHeader]="true" [showButtons]="true" (onApprove)="approve()" (onReject)="delete()"
+                        (onCancel)="dismiss()" (onSubmit)="submit($event)" (onDelete)="delete()" (onRefresh)="refreshData()"
+                        ></ngx-editable-form>
+                    </div>
+                </div>
+            </div>
         </nb-card-body>
         <nb-card-footer>
-            <div>
+            <div *ngIf="!agreed">
                 <div class="buttons-row">
                     <button nbButton status="success" (click)="agree()">
                         {{ 'register.button.agree' | translate }}
@@ -30,21 +44,6 @@
             </div>
         </nb-card-footer>
     </nb-card>
-    
-    <div *ngIf="agreed && !submitted">
-        <div class="rows">
-            <div class="col">
-                <ngx-editable-form #editableForm
-                [title]="title" [hasHeader]="true" [menuType]="menuType" [isForNew]="isForNew"
-                [isForRegistration]="true" [title]="title" [iconName]="iconName" [isUnapprovedorg]="isUnapprovedorg"
-                [entityMrn]="entityMrn" [orgMrn]="orgMrn"
-                [instanceVersion]="instanceVersion" [isLoading]="isLoading" [isLoaded]="isLoaded"
-                [showButtons]="true"
-                (onCancel)="dismiss()" (onSubmit)="submit($event)" (onDelete)="delete()"
-                ></ngx-editable-form>
-            </div>
-        </div>
-    </div>
     
     <nb-card *ngIf="submitted">
         <nb-card-header>

@@ -1,4 +1,4 @@
-import { addLangs, applyTranslateToMenu, applyTranslateToSingleMenu } from './../../../util/translateHelper';
+import { addLangs, applyTranslateToMenu, applyTranslateToSingleMenu, loadLang } from './../../../util/translateHelper';
 /*
  * Copyright (c) 2023 Maritime Connectivity Platform Consortium
  *
@@ -82,6 +82,7 @@ export class DetailComponent implements OnInit {
     public translate: TranslateService,
     ) {
       addLangs(translate);
+      loadLang(translate);
   }
 
   ngOnInit(): void {

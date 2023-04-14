@@ -1,4 +1,4 @@
-import { addLangs, applyTranslateToSingleMenu } from './../../../util/translateHelper';
+import { addLangs, applyTranslateToSingleMenu, loadLang } from './../../../util/translateHelper';
 /*
  * Copyright (c) 2023 Maritime Connectivity Platform Consortium
  *
@@ -94,6 +94,7 @@ export class ListComponent implements OnInit {
     public translate: TranslateService,
     ) {
       addLangs(translate);
+      loadLang(translate);
       // TODO: apply translate to table
       //console.log(ColumnForResource[this.menuType]);
       //console.log({...ColumnForResource[this.menuType], name:{title:"Nameeeee"}})

@@ -43,6 +43,7 @@ import { NgxFlagPickerModule } from 'ngx-flag-picker';
     CommonModule,
     LandingRoutingModule,
     RouterModule,
+    SharedModule,
     NbCardModule,
     NbButtonModule,
     NbLayoutModule,
