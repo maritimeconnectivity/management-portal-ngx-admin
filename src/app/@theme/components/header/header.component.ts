@@ -100,6 +100,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   navigateHome() {
+    this.navigatePersonalInfo();
+  }
+
+  navigatePersonalInfo() {
     this.router.navigate(['pages/ir/users/' + this.authService.authState.user.mrn]);
     return false;
   }

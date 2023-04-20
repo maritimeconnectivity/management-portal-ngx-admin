@@ -63,7 +63,6 @@ export class RegisterDialogComponent implements OnInit {
   agree(): void {
     this.agreed = true;
     this.title = this.translate.instant('register.submitTitle');
-      console.log(this.title);
   }
 
   approve(): void {}
@@ -85,7 +84,5 @@ export class RegisterDialogComponent implements OnInit {
       },
       err => this.notifierService.notify('error', 'There was error in registration of information - ' + err.error.message),
     );
-    
-    
   }
 }
