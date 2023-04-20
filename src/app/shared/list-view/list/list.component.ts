@@ -218,13 +218,13 @@ export class ListComponent implements OnInit {
   }
 
   delete(menuType: ResourceType, orgMrn: string, entityMrn: string, instanceVersion?: string, numberId?: number) {
-    let message = this.translate.instant('warning.list.beforeDeletion');
+    let message = this.translate.instant('warning.resource.beforeDeletion');
     message = EntityTypes.indexOf(this.menuType) >= 0 ?
-      message + this.translate.instant('warning.list.beforeRevoke') : message;
+      message + this.translate.instant('warning.resource.beforeRevoke') : message;
     if (confirm(message)) {
       this.deleteData(menuType, orgMrn, entityMrn, instanceVersion, numberId).subscribe(
         res => {
-          this.notifierService.notify('success', this.menuTypeName + this.translate.instant('success.list.delete'));
+          this.notifierService.notify('success', this.menuTypeName + this.translate.instant('success.resource.delete'));
           this.fetchValues();
         },
         err => this.notifierService.notify('error',
