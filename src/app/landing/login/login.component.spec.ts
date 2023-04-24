@@ -1,3 +1,4 @@
+import { RoleControllerService } from './../../backend-api/identity-registry/api/roleController.service';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LoginComponent } from './login.component';
@@ -8,6 +9,7 @@ describe('LoginComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [RoleControllerService],
       declarations: [ LoginComponent ]
     })
     .compileComponents();

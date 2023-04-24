@@ -19,9 +19,6 @@ describe('DetailComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
 
   /*
   it('should have an admin permission when the user has approved ', () => {

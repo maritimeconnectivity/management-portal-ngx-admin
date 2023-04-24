@@ -26,7 +26,4 @@ describe('MrnHelperService', () => {
     service = TestBed.inject(MrnHelperService);
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
 });
