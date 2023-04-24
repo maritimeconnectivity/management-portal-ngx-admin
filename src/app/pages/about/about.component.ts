@@ -1,4 +1,4 @@
-import { addLangs } from './../../util/translateHelper';
+import { addLangs, loadLang } from './../../util/translateHelper';
 import { TranslateService } from '@ngx-translate/core';
 /*
  * Copyright (c) 2023 Maritime Connectivity Platform Consortium
@@ -50,6 +50,7 @@ export class AboutComponent implements OnInit {
     public translate: TranslateService,
     ) {
       addLangs(translate);
+      loadLang(translate);
     }
 
   ngOnInit(): void {

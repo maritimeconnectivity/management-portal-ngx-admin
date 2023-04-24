@@ -3,7 +3,7 @@
     <a (click)="toggleSidebar()" href="#" class="sidebar-toggle">
       <nb-icon icon="menu-2-outline"></nb-icon>
     </a>
-    <a class="logo" href="#" (click)="navigateHome()">{{ 'header.portalName' | translate }}</a>
+    <a class="logo" href="#" (click)="navigatePersonalInfo()">{{ 'header.portalName' | translate }}</a>
     <nb-select [selected]="currentTheme" (selectedChange)="changeTheme($event)" status="primary">
       <nb-option *ngFor="let theme of themes" [value]="theme.value"> {{ theme.name }}</nb-option>
     </nb-select>
@@ -21,7 +21,7 @@
     </ngx-flag-picker>
   <nb-actions size="small">
     <nb-action class="user-action" *nbIsGranted="['view', 'user']" >
-      <nb-user [name]="userName" (click)="navigateHome()">
+      <nb-user [name]="userName" (click)="navigatePersonalInfo()">
       </nb-user>
     </nb-action>
   </nb-actions>

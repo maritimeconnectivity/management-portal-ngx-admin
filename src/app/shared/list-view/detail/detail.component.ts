@@ -1,4 +1,4 @@
-import { addLangs, applyTranslateToMenu, applyTranslateToSingleMenu } from './../../../util/translateHelper';
+import { addLangs, applyTranslateToMenu, applyTranslateToSingleMenu, loadLang } from './../../../util/translateHelper';
 /*
  * Copyright (c) 2023 Maritime Connectivity Platform Consortium
  *
@@ -82,6 +82,7 @@ export class DetailComponent implements OnInit {
     public translate: TranslateService,
     ) {
       addLangs(translate);
+      loadLang(translate);
   }
 
   ngOnInit(): void {
@@ -200,13 +201,13 @@ export class DetailComponent implements OnInit {
   }
 
   delete() {
-    let message = this.translate.instant('warning.list.beforeDeletion');
+    let message = this.translate.instant('warning.resource.beforeDeletion');
     message = EntityTypes.indexOf(this.menuType) >= 0 ?
-      message + this.translate.instant('warning.list.beforeRevoke') : message;
+      message + this.translate.instant('warning.resource.beforeRevoke') : message;
     if (confirm(message)) {
       this.deleteData(this.menuType, this.orgMrn, this.entityMrn, this.instanceVersion).subscribe(
         res => {
-          this.notifierService.notify('success', this.menuTypeName + this.translate.instant('success.list.delete'));
+          this.notifierService.notify('success', this.menuTypeName + this.translate.instant('success.resource.delete'));
           this.moveToListPage();
         },
         err => this.notifierService.notify('error',

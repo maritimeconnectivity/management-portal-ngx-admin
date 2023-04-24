@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { addLangs } from './../../util/translateHelper';
+import { addLangs, loadLang } from './../../util/translateHelper';
 import { environment } from './../../../environments/environment.test';
 import { NotifierService } from 'angular-notifier';
 import { Organization } from './../../backend-api/identity-registry/model/organization';
@@ -49,7 +49,7 @@ export class RegisterDialogComponent implements OnInit {
     private notifierService: NotifierService,
     public translate: TranslateService) {
       addLangs(translate);
-      this.title = translate.instant('register.submitTitle');
+      loadLang(translate);
       this.environmentName = AppConfig.ENVIRONMENT_TITLE;
   }
 
@@ -62,7 +62,12 @@ export class RegisterDialogComponent implements OnInit {
 
   agree(): void {
     this.agreed = true;
+    this.title = this.translate.instant('register.submitTitle');
   }
+
+  approve(): void {}
+  delete(): void {}
+  refreshData(): void {}
 
   submit(value: any): void {
     const organization: Organization = {
@@ -79,7 +84,5 @@ export class RegisterDialogComponent implements OnInit {
       },
       err => this.notifierService.notify('error', 'There was error in registration of information - ' + err.error.message),
     );
-    
-    
   }
 }
