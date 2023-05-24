@@ -73,7 +73,7 @@
     "leaflet": "^1.9.2",
     "leaflet-draw": "^1.0.4",
     "lodash": "^4.17.21",
-    "lodash.template": "^3.6.2",
+    "lodash.template": "^4.5.0",
     "lucene-query-string-builder": "^1.0.8",
     "minimist": "^1.2.8",
     "nebular-icons": "1.1.0",
