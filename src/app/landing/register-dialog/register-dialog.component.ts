@@ -41,7 +41,7 @@ export class RegisterDialogComponent implements OnInit {
   clause: string;
   agreed = false;
   submitted = false;
-  termsOfUse = environment.termsOfUse;
+  termsOfUse = AppConfig.TERMS_OF_USE;
 
   constructor(
     protected ref: NbDialogRef<RegisterDialogComponent>,
