@@ -36,6 +36,9 @@ export class AppConfig {
   static TERMS_OF_USE: string;
   static MP_CONTACT: string;
   static MP_VERSION: string;
+  static FOOTER_NAME: string;
+  static FOOTER_LINK: string;
+  static LOGO_IMG: string;
 
   public static _initialize() {
     AppConfig.IR_BASE_PATH = environment.irBasePath,
@@ -55,6 +58,9 @@ export class AppConfig {
     AppConfig.TERMS_OF_USE = environment.termsOfUse;
     AppConfig.MP_CONTACT = environment.mpContact;
     AppConfig.MP_VERSION = require( '../../package.json').version;
+    AppConfig.FOOTER_NAME = environment.footerName;
+    AppConfig.FOOTER_LINK = environment.footerLink;
+    AppConfig.LOGO_IMG = environment.logoImg;
   }
 }
 AppConfig._initialize();
