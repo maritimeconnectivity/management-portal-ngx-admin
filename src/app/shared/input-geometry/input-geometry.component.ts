@@ -215,13 +215,8 @@ export class InputGeometryComponent implements OnChanges, OnDestroy, AfterViewIn
                 weight: 10,
               },
             },
+            rectangle: false,
             polygon: {
-              shapeOptions: {
-                color: '#f35f57',
-                weight: 10,
-              },
-            },
-            rectangle: {
               shapeOptions: {
                 color: '#f35f57',
                 weight: 10,
@@ -232,8 +227,8 @@ export class InputGeometryComponent implements OnChanges, OnDestroy, AfterViewIn
         },
         edit: {
             featureGroup: drawnItems,
-        }
-    });
+        },
+  });
   }
 
   initDrawControlForSearch = (drawnItems) => {
@@ -248,13 +243,8 @@ export class InputGeometryComponent implements OnChanges, OnDestroy, AfterViewIn
               weight: 10,
             },
           },
+          rectangle: false,
           polygon: {
-            shapeOptions: {
-              color: '#f35f57',
-              weight: 10,
-            },
-          },
-          rectangle: {
             shapeOptions: {
               color: '#f35f57',
               weight: 10,
@@ -265,7 +255,7 @@ export class InputGeometryComponent implements OnChanges, OnDestroy, AfterViewIn
       },
       edit: {
           featureGroup: drawnItems,
-      }
+      },
   });
   }
 }
