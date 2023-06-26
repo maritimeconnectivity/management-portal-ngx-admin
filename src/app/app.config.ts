@@ -36,6 +36,7 @@ export class AppConfig {
   static TERMS_OF_USE: string;
   static MP_CONTACT: string;
   static MP_VERSION: string;
+  static MP_NAME: string;
   static FOOTER_NAME: string;
   static FOOTER_LINK: string;
   static LOGO_IMG: string;
@@ -55,6 +56,7 @@ export class AppConfig {
     AppConfig.HAS_MSR_LEDGER = environment.hasMSRLedger;
     AppConfig.LEDGER_PATH = environment.hasMSRLedger ? environment.ledgerPath : '';
     AppConfig.MP_PROVIDER = environment.mpProvider;
+    AppConfig.MP_NAME = environment.mpName;
     AppConfig.TERMS_OF_USE = environment.termsOfUse;
     AppConfig.MP_CONTACT = environment.mpContact;
     AppConfig.MP_VERSION = require( '../../package.json').version;

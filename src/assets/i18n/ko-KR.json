@@ -1,10 +1,6 @@
 {
     "landing": {
-        "header": {
-            "mcpName": "Maritime Connectivity Platform"
-        },
         "title": {
-            "serviceProviderName": "MCC MCP 테스트베드",
             "serviceName": "관리 포털",
             "environmentName": "환경"
         },
@@ -209,7 +205,6 @@
         }
     },
     "header": {
-        "portalName": "MCP 관리 포털",
         "logout": "로그아웃"
     }
 }

@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./footer.component.scss'],
   template: `
     <span class="created-by">
-      <b><a href="{{footerLink}}" target="_blank">{{ footerName }}</a></b>
+      <b><a href="{{footerLink}}" target="_blank">{{ footerName }}</a>, {{currentYear}}</b>
     </span>
     <div class="socials">
     </div>
@@ -15,4 +15,5 @@ import { Component } from '@angular/core';
 export class FooterComponent {
   footerLink: string = AppConfig.FOOTER_LINK;
   footerName: string = AppConfig.FOOTER_NAME;
+  currentYear: string = (new Date()).getFullYear().toString();
 }

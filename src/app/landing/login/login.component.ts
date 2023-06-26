@@ -41,13 +41,16 @@ export class LoginComponent implements OnInit {
    */
   version = AppConfig.MP_VERSION;
   logo_img = AppConfig.LOGO_IMG;
+  environmentName = this.capitalize(AppConfig.ENVIRONMENT_NAME);
+  serviceProviderName = AppConfig.MP_NAME;
+  footerLink = AppConfig.FOOTER_LINK;
+  footerName = AppConfig.FOOTER_NAME;
   currentLang = 'en-GB';
   selectedCountryCode = 'gb';
   countryCodes = langs.map(e => e.split('-').pop().toLowerCase());
   /**
    * environment name to show at front
    */
-  environmentName = '';
 
   constructor(
     private authService: AuthService,
@@ -57,8 +60,6 @@ export class LoginComponent implements OnInit {
     public translate: TranslateService,
   ) {
     addLangs(translate);
-    this.environmentName = this.capitalize(AppConfig.ENVIRONMENT_NAME);
-    
     this.currentLang = loadLang(translate);
     this.selectedCountryCode = this.currentLang.split('-').pop().toLowerCase();
   }

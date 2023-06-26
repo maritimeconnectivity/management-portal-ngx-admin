@@ -1,3 +1,4 @@
+import { AppConfig } from './../../../app.config';
 import { langs } from './../../../util/langs';
 import { addLangs, changeLang, loadLang } from './../../../util/translateHelper';
 import { loadTheme, storeTheme } from './../../../util/themeHelper';
@@ -25,6 +26,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userPictureOnly: boolean = false;
   userName: string;
   logoutUrl: string;
+  logo_img: string = AppConfig.LOGO_IMG;
   themes = themes;
   customLabels = {
     'gb': 'EN',
