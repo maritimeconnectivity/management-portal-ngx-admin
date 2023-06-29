@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { geojsonToWKT } from '@terraformer/wkt';
 import { InputGeometryComponent } from '../input-geometry/input-geometry.component';
 import { convertTime } from './../../util/timeConverter';
 import { XmlEditDialogComponent } from '../xml-edit-dialog/xml-edit-dialog.component';

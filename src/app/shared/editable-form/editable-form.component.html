@@ -52,7 +52,8 @@
             <ngx-input-file-list *ngIf="menu.value.type === 'file'" [fieldName]="menu.key" [file]="loadedData[menu.key]" [isEditing]="isEditing" [instanceId]="numberId"
               [fieldName]="menu.key" [placeholder]="menu.value.placeholder" [required]="menu.value.required" (onUpdate)="onDataChanged($event)"
               (onDelete)="onFileDeleted($event)"></ngx-input-file-list>
-            <span *ngIf="!isEditing && menu.value.type === 'string'" id="keyword.name">{{ menuType !== 'instance' && isForTime(menu.key) ? convertTimeString(formGroup.get(menu.key).value) : formGroup.get(menu.key).value }}</span>
+            <span *ngIf="!isEditing && menu.value.type === 'string' && menuType !== 'instance' && isForTime(menu.key)" id="keyword.name">{{ convertTimeString(formGroup.get(menu.key).value) }}</span>
+            <span *ngIf="!isEditing && menu.value.type === 'string' && !isForTime(menu.key)" innerHtml="{{ formGroup.get(menu.key).value | textFormatter }}"></span>
             <button type='button' class="m-0" fullWidth nbButton (click)="openXmlDialog(loadedData[menu.key], isEditing)" *ngIf="!isEditing && menu.value.type === 'xml'">Read XML</button>
             <div *ngIf="isEditing" >
               <input *ngIf="menu.value.type === 'string' && !menu.value.options" type="text" nbInput fullWidth id="input_{{menu.key}}" class="form-control"

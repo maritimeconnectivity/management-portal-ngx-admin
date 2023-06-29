@@ -1,3 +1,4 @@
+import { TextFormatterHtmlPipe } from './editable-form/textFormatter/textFormatter.pipe';
 import { LuceneComponentDirective } from './lucene-query-input/lucene-component-directive';
 import { LuceneComponentInputComponent } from './lucene-query-input/lucene-component-input/lucene-component-input.component';
 /*
@@ -65,6 +66,7 @@ import { ListViewModule } from './list-view/list-view.module';
     LuceneLogicInputComponent,
     LuceneComponentDirective,
     ListViewComponent,
+    TextFormatterHtmlPipe,
   ],
   imports: [
     CommonModule,
@@ -97,6 +99,9 @@ import { ListViewModule } from './list-view/list-view.module';
     EditableFormComponent,
     InputGeometryComponent,
     LuceneQueryInputComponent,
+  ],
+  providers: [
+    TextFormatterHtmlPipe,
   ],
 })
 export class SharedModule { }
