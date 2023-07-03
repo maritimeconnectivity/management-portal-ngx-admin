@@ -42,12 +42,12 @@ export class AppConfig {
   static LOGO_IMG: string;
 
   public static _initialize() {
-    AppConfig.IR_BASE_PATH = environment.irBasePath,
-    AppConfig.SR_BASE_PATH = environment.hasServiceRegistry ? environment.srBasePath : '',
+    AppConfig.IR_BASE_PATH = environment.irBasePath.replace(/\/$/, ''),
+    AppConfig.SR_BASE_PATH = environment.hasServiceRegistry ? environment.srBasePath.replace(/\/$/, '') : '',
     AppConfig.ENVIRONMENT_TITLE = environment.environmentTitle,
     AppConfig.IDP_NAMESPACE = environment.idpNamespace;
     AppConfig.HAS_SERVICE_REGISTRY = environment.hasServiceRegistry;
-    AppConfig.OIDC_BASE_PATH = environment.oidcBasePath;
+    AppConfig.OIDC_BASE_PATH = environment.oidcBasePath.replace(/\/$/, '');
     AppConfig.ENVIRONMENT_NAME = environment.environmentName;
     AppConfig.IR_PROVIDER = environment.irProvider;
     AppConfig.IR_CONTACT = environment.irContact;
