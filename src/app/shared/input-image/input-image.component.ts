@@ -62,7 +62,7 @@ export class InputImageComponent implements OnInit {
           const objectURL = URL.createObjectURL(new Blob([blob]));
           this.image = this.sanitizer.bypassSecurityTrustUrl(objectURL);
         },
-        err => { console.log(err); },
+        err => {  },
       );
     }
   }

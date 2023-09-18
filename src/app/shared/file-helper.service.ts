@@ -18,9 +18,7 @@ import { DocDto } from '../backend-api/service-registry';
 import { XmlDto } from '../backend-api/service-registry';
 import { Injectable } from '@angular/core';
 import { NotifierService } from 'angular-notifier';
-import * as fileSaver from "file-saver";
-import * as JSZip from 'jszip';
-import { CertificateBundle } from '../backend-api/identity-registry';
+import * as fileSaver from 'file-saver';
 
 @Injectable({
   providedIn: 'root'
@@ -30,48 +28,11 @@ export class FileHelperService {
 
   }
 
-  public downloadPemCertificate(certificateBundle: CertificateBundle, entityName: string,
-                                serverGeneratedKeys: boolean, notifierService: NotifierService) {
+  public downloadPemCertificate(certificateString: string, entityName: string, notifierService: NotifierService) {
     try {
       const nameNoSpaces = entityName.split(' ').join('_');
-
-      const certificate = serverGeneratedKeys ?
-        this.replaceNewLines(certificateBundle.pemCertificate.certificate)
-        : certificateBundle.pemCertificate.certificate;
-      const publicKey = serverGeneratedKeys ?
-        this.replaceNewLines(certificateBundle.pemCertificate.publicKey)
-        : certificateBundle.pemCertificate.publicKey;
-      const privateKey = serverGeneratedKeys ?
-        this.replaceNewLines(certificateBundle.pemCertificate.privateKey)
-        : certificateBundle.pemCertificate.privateKey;
-      const pkcs12Keystore = certificateBundle.pkcs12Keystore && typeof(certificateBundle.pkcs12Keystore) === 'string' ?
-        this.convertBase64ToByteArray(certificateBundle.pkcs12Keystore) as ArrayBuffer
-        : certificateBundle.pkcs12Keystore;
-
-      const zip = new JSZip();
-      zip.file("Certificate_" + nameNoSpaces + ".pem", certificate);
-      if (privateKey) {
-        zip.file("PrivateKey_" + nameNoSpaces + ".pem", privateKey);
-      }
-      if (publicKey) {
-        zip.file("PublicKey_" + nameNoSpaces + ".pem", publicKey);
-      }
-      if (certificateBundle.keystorePassword) {
-        zip.file("KeystorePassword.txt", this.replaceNewLines(certificateBundle.keystorePassword));
-      }
-      if (certificateBundle.jksKeystore) {
-        const jksByteArray = this.convertBase64ToByteArray(certificateBundle.jksKeystore);
-        const blob = new Blob([jksByteArray]);
-        zip.file("Keystore_" + nameNoSpaces + ".jks", blob);
-      }
-      if (pkcs12Keystore) {
-        const p12ByteArray = pkcs12Keystore;
-        const blob = new Blob([p12ByteArray]);
-        zip.file("Keystore_" + nameNoSpaces + ".p12", blob);
-      }
-      zip.generateAsync({type:"blob"}).then(function (content) {
-        fileSaver.saveAs(content, "Certificate_" + nameNoSpaces + ".zip");
-      });
+      var blob = new Blob([certificateString], {type: "text/plain;charset=utf-8"});
+      fileSaver.saveAs(blob, nameNoSpaces + ".pem");
     } catch ( error ) {
       notifierService.notify('error', 'Error when trying to download file - ' + error);
     }

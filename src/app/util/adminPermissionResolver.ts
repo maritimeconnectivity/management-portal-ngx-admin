@@ -47,12 +47,12 @@ export const hasAdminPermission = (context: ResourceType, authService: AuthServi
   // MSR
     return isEditing ? // for editing
       // when it is for editing
-      hasAdminPermissionInMSR(authService.authState.user.keycloakMSRPermissions, AuthPermissionForMSR.MSRAdmin) ||
+      hasAdminPermissionInMSR(authService.authState.permission, AuthPermissionForMSR.MSRAdmin) ||
         (isOurServiceInstance &&
-        hasAdminPermissionInMSR(authService.authState.user.keycloakMSRPermissions, AuthPermissionForMSR.OrgServiceAdmin)) :
+        hasAdminPermissionInMSR(authService.authState.permission, AuthPermissionForMSR.OrgServiceAdmin)) :
       // for creating
-      hasAdminPermissionInMSR(authService.authState.user.keycloakMSRPermissions, AuthPermissionForMSR.OrgServiceAdmin) ||
-      hasAdminPermissionInMSR(authService.authState.user.keycloakMSRPermissions, AuthPermissionForMSR.MSRAdmin);
+      hasAdminPermissionInMSR(authService.authState.permission, AuthPermissionForMSR.OrgServiceAdmin) ||
+      hasAdminPermissionInMSR(authService.authState.permission, AuthPermissionForMSR.MSRAdmin);
   }
 };
 
@@ -81,16 +81,16 @@ export const hasAdminPermissionInMIR = (myPermission: AuthPermission, permission
         }
 };
 
-export const hasAdminPermissionInMSR = (myPermissions: string[], permissionRole: AuthPermissionForMSR): boolean => {
+export const hasAdminPermissionInMSR = (myPermission: AuthPermission, permissionRole: AuthPermissionForMSR): boolean => {
   switch (permissionRole) {
     case AuthPermissionForMSR.User:
       return true;
     case AuthPermissionForMSR.OrgServiceAdmin:
-      return PermissionResolver.isOrgServiceAdmin(myPermissions);
+      return PermissionResolver.isServiceAdmin(myPermission);
     case AuthPermissionForMSR.LedgerAdmin:
-      return PermissionResolver.isLedgerAdmin(myPermissions);
+      return false;
     case AuthPermissionForMSR.MSRAdmin:
-      return PermissionResolver.isMSRAdmin(myPermissions);
+      return false;
     default:
       return false;
  }

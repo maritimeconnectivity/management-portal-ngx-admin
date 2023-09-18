@@ -1,15 +1,15 @@
 <nb-card>
     <nb-card-header>
-        <div *ngIf="certificateBundle">
+        <div *ngIf="certificateString">
             Certificate issued with success
         </div>
-        <div *ngIf="!certificateBundle">
+        <div *ngIf="!certificateString">
             Select cert issue method
         </div>
     </nb-card-header>
     <nb-card-body [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary">
-        <div *ngIf="!certificateBundle">
-            <p>There are four ways to issue a new certificate:</p>
+        <div *ngIf="!certificateString">
+            <p>There are three ways to issue a new certificate:</p>
             <div class="col-12">
                 <nb-card size="small">
                     <nb-tabset fullWidth>
@@ -37,19 +37,6 @@
                             <button nbButton status="info" class="w-100" (click)="locallyFromBrowser()">Issue a cert locally from browser</button>
                         </div>
                     </nb-tab>
-                    <nb-tab tabTitle="From server">
-                        <p>
-                            MIR API server generate it for you? NOTE that it is strongly recommended
-                            to NOT let the server generate the key pair for you as in case of a breach of the
-                            MIR API server, a malicious third party can potentially take control over your identity
-                            by stealing your private key when it is generated. Also note that the possibility of
-                            getting server generated key pairs will be removed completely in the future, and that MCP
-                            ID service providers can already choose to disable it now.
-                        </p>
-                        <div class="container">
-                            <button nbButton status="warning" class="w-100" (click)="fromServer()">Issue a cert from server</button>
-                        </div>
-                    </nb-tab>
                     <nb-tab tabTitle="Locally from scratch with OpenSSL">
                         <span>
                             You can generate the key pair and a CSR from scratch by yourself - an example on how to
@@ -66,8 +53,8 @@
             We strongly recommend to read the instructions throughly as the security impact significantly differs from each other.
         </p>
         </div>
-        <div *ngIf="certificateBundle" class="container">
-            <button type="button" nbButton status="success" class="w-100" (click)="zipAndDownload()">Download certificate</button>
+        <div *ngIf="certificateString" class="container">
+            <button type="button" nbButton status="success" class="w-100" (click)="download()">Download certificate</button>
         </div>
     </nb-card-body>
     <nb-card-footer>

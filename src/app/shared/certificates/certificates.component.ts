@@ -20,11 +20,13 @@ import { CertIssueDialogComponent } from './cert-issue-dialog/cert-issue-dialog.
 import { ActiveCertificatesColumn, RevokedCertificatesColumn } from '../models/columnForCertificate';
 import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
-import { Certificate as MCPCertificate, CertificateBundle, PemCertificate } from '../../backend-api/identity-registry';
+import { Certificate as MCPCertificate } from '../../backend-api/identity-registry';
 import { FileHelperService } from '../file-helper.service';
 import { NotifierService } from 'angular-notifier';
 import { NbDialogService } from '@nebular/theme';
 import { CertificateService } from '../certificate.service';
+import { formatDate } from '@angular/common';
+import { LOCALE_ID, Inject } from '@angular/core';
 @Component({
   selector: 'ngx-certificates',
   templateUrl: './certificates.component.html',
@@ -62,9 +64,8 @@ export class CertificatesComponent implements OnInit {
   @Input() hasPermissionInMIR: boolean;
   @Output() onUpdate: EventEmitter<any> = new EventEmitter();
 
-  certificateTitle = "Certificate for ";
-
   constructor(
+    @Inject(LOCALE_ID) public locale: string,
     private notifierService: NotifierService, private fileHelper: FileHelperService,
     private certificateService: CertificateService, private dialogService: NbDialogService) {
   }
@@ -132,8 +133,7 @@ export class CertificatesComponent implements OnInit {
   }
 
   download(certificate:MCPCertificate) {
-    let pemCertificate:PemCertificate = {certificate:certificate.certificate};
-    let certBundle:CertificateBundle = {pemCertificate:pemCertificate};
-    this.fileHelper.downloadPemCertificate(certBundle, "Certificate for " + this.entityTitle, true, this.notifierService);
+    const endText = formatDate(certificate.end,'yyyy-MM-ddTHH-mm-ss', this.locale);
+    this.fileHelper.downloadPemCertificate(certificate.certificate, this.entityTitle + "_exp_" + endText, this.notifierService);
   }
 }

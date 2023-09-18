@@ -16,7 +16,6 @@
 
 import {Component, Input, OnInit} from '@angular/core';
 import {NbDialogRef} from '@nebular/theme';
-import {CertificateBundle} from '../../../backend-api/identity-registry';
 import {TOKEN_DELIMITER} from '../../app.constants';
 import {EntityType} from '../../models/menuType';
 import {Convert} from 'pvtsutils';
@@ -72,9 +71,9 @@ export class CertIssueDialogComponent implements OnInit{
 
   nameNoSpaces: string;
   isLoading: boolean;
-  certificateBundle: CertificateBundle;
+  certificateString: string;
+  certificateEnd: string;
   labelValues: Array<LabelValueModel>;
-  serverGeneratedKeys: boolean = false;
 
   constructor(protected ref: NbDialogRef<CertIssueDialogComponent>) {}
 
@@ -99,34 +98,9 @@ export class CertIssueDialogComponent implements OnInit{
     this.issueNewWithLocalKeys(true);
   }
 
-  fromServer(): void {
-    this.issueNewWithServerKeys();
-  }
-
-  public zipAndDownload() {
-    this.fileHelper.downloadPemCertificate(this.certificateBundle, this.entityTitle, this.serverGeneratedKeys, this.notifierService);
+  public download() {
+    this.fileHelper.downloadPemCertificate(this.certificateString, this.entityTitle, this.notifierService);
     this.notifierService.notify('success', 'Chosen certificate has downloaded');
-  }
-
-  public issueNewWithServerKeys() {
-    this.isLoading = true;
-    this.certificateService.issueNewCertificateFromMIR(this.entityType as EntityType, this.entityMrn, this.orgMrn, this.instanceVersion)
-        .subscribe((certificateBundle: CertificateBundle) => {
-          this.certificateBundle = certificateBundle;
-          this.serverGeneratedKeys = true;
-          this.isLoading = false;
-          this.notifierService.notify('success', 'You can now download the issued certificate');
-        }, err => {
-          this.isLoading = false;
-          if (err.status === 410) {
-            this.notifierService.notify('error',
-                'Generating certificates with server generated keys is not supported by ' +
-                'this ID provider');
-            return;
-          }
-          this.notifierService.notify('error',
-              'Error when trying to issue new certificate', err.error.message);
-        });
   }
 
   public issueNewWithLocalKeys(generatePkcs12: boolean) {
@@ -163,15 +137,7 @@ export class CertIssueDialogComponent implements OnInit{
                           let password = this.generatePassword();
 
                           this.generatePKCS12(privateKey, certs, password).then(result => {
-                            this.certificateBundle = {
-                              pemCertificate: {
-                                privateKey: this.toPem(rawPrivateKey, 'PRIVATE KEY'),
-                                publicKey: this.toPem(rawPublicKey, 'PUBLIC KEY'),
-                                certificate: certificate
-                              },
-                              pkcs12Keystore: ab2str(result),
-                              keystorePassword: password
-                            };
+                            this.certificateString = certificate;
                             this.isLoading = false;
                             this.notifierService.notify('success', 'You can now download the issued certificate');
                           }, err => {
@@ -180,13 +146,7 @@ export class CertIssueDialogComponent implements OnInit{
                                 'PKCS#12 keystore could not be generated - ' + err.error.message);
                           });
                         } else {
-                          this.certificateBundle = {
-                            pemCertificate: {
-                              privateKey: this.toPem(rawPrivateKey, 'PRIVATE KEY'),
-                              publicKey: this.toPem(rawPublicKey, 'PUBLIC KEY'),
-                              certificate: certificate
-                            }
-                          };
+                          this.certificateString = certificate;
                           this.notifierService.notify('success', 'You can now download the issued certificate');
                           this.isLoading = false;
                         }

@@ -32,12 +32,13 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { ResourceType, MenuTypeIconNames, EntityTypes } from '../../models/menuType';
 import { NbIconLibraries } from '@nebular/theme';
 import { NotifierService } from 'angular-notifier';
-import { MmsControllerService, Role, VesselControllerService } from '../../../backend-api/identity-registry';
 import { InstanceDto } from '../../../backend-api/service-registry';
 import { formatData, formatServiceData } from '../../../util/dataFormatter';
 import { hasAdminPermission } from '../../../util/adminPermissionResolver';
 import { TranslateService } from '@ngx-translate/core';
 import _ from 'lodash';
+import { MmsControllerService, VesselControllerService } from '../../../backend-api/identity-registry/api/api';
+import { Role } from '../../../backend-api/identity-registry/model/role';
 
 const capitalize = (s): string => {
   if (typeof s !== 'string') return ''

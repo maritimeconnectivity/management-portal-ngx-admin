@@ -22,7 +22,7 @@ import { DeviceControllerService } from '../backend-api/identity-registry/api/de
 import { OrganizationControllerService } from '../backend-api/identity-registry/api/organizationController.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CertificateBundle, CertificateRevocation } from '../backend-api/identity-registry';
+import { CertificateRevocation } from '../backend-api/identity-registry';
 import { getReasonOptionFromRevocationReason } from '../util/certRevokeInfo';
 import { EntityType } from './models/menuType';
 
@@ -73,33 +73,6 @@ export class CertificateService {
       revokedCertificates: this.formatCerts(revokedCertificates),
     };
   }
-
-  public issueNewCertificateFromMIR(entityType: EntityType, entityMrn: string, orgMrn: string, version?: string)
-            : Observable<CertificateBundle> {
-		if (entityType == null || !entityMrn) { // We lost our state data somehow???
-			throw new Error('Internal state lost');
-		}
-		switch (entityType) {
-      case EntityType.Organization: {
-        return this.organizationsService.newOrgCert(entityMrn);
-      }
-      case EntityType.Device: {
-        return this.devicesService.newDeviceCert(orgMrn, entityMrn);
-      }
-      case EntityType.Service: {
-        return this.servicesService.newServiceCert(orgMrn, entityMrn, version);
-      }
-      case EntityType.User: {
-        return this.usersService.newUserCert(orgMrn, entityMrn);
-      }
-      case EntityType.Vessel: {
-        return this.vesselsService.newVesselCert(orgMrn, entityMrn);
-      }
-      case EntityType.MMS: {
-        return this.mmsService.newMMSCert(orgMrn, entityMrn);
-      }
-    }
-	}
 
 	public issueNewCertificate(csr: string, entityType: EntityType, entityMrn: string, orgMrn: string, version?: string)
             : Observable<string> {

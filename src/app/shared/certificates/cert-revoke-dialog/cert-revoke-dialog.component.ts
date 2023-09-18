@@ -45,13 +45,13 @@ export class CertRevokeDialogComponent implements OnInit {
   reasons = [];
   description = '';
   reference = '';
-  revokationReason: CertificateRevocation.RevokationReasonEnum;
+  revocationReason: CertificateRevocation.RevocationReasonEnum;
   dayCellComponent = DayCellComponent;
   
   constructor(protected ref: NbDialogRef<CertRevokeDialogComponent>) {
     this.isLoading = false;
-    for (const reason in CertificateRevocation.RevokationReasonEnum) {
-      this.reasons.push(getReasonOptionFromRevocationReason(reason.toLocaleLowerCase() as CertificateRevocation.RevokationReasonEnum));
+    for (const reason in CertificateRevocation.RevocationReasonEnum) {
+      this.reasons.push(getReasonOptionFromRevocationReason(reason.toLocaleLowerCase() as CertificateRevocation.RevocationReasonEnum));
     }
   }
 
@@ -59,7 +59,7 @@ export class CertRevokeDialogComponent implements OnInit {
     this.isLoading = true;
     const certificateRevocation: CertificateRevocation = {
       revokedAt: this.date,
-      revokationReason: this.revokationReason,
+      revocationReason: this.revocationReason,
     };
 
     this.certificateService.revokeCertificate(this.entityType as EntityType, this.entityMrn, this.orgMrn, this.certificateId, certificateRevocation, this.instanceVersion)
@@ -91,7 +91,7 @@ export class CertRevokeDialogComponent implements OnInit {
 
   onMenuItemSelected(event) {
     const chosenReasonOption = getReasonOptionFromRevocationReason(event);
-    this.revokationReason = chosenReasonOption.value;
+    this.revocationReason = chosenReasonOption.value;
     this.description = chosenReasonOption.description;
     this.reference = chosenReasonOption.reference;
   }
