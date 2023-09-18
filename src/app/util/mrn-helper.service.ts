@@ -82,11 +82,9 @@ export class MrnHelperService {
       case ResourceType.Vessel:
         return this.mrnMaskForVessel(orgShortId);
       case ResourceType.Instance:
-        return this.mrnMaskForInstance(orgShortId);
-      case ResourceType.Design:
-        return this.mrnMaskForDesign(orgShortId);
+        return this.mrnMaskForIdService(orgShortId);
       case ResourceType.Service:
-        return this.mrnMaskForInstance(orgShortId);
+        return this.mrnMaskForIdService(orgShortId);
       case ResourceType.MMS:
         return this.mrnMaskForMms(orgShortId);
       default:
@@ -150,79 +148,15 @@ export class MrnHelperService {
     );
   }
 
-  public mrnMaskForSpecification(): string {
-    // TODO Temp check until mrn-service is ready
-    return (
-      this.mrnMCP +
-      "service:" +
-      this.idpNamespace +
-      ":" +
-      this.orgShortId() +
-      ":specification:"
-    );
-    //return "urn:mrn:[mcp|stm]:service:specification:" + this.orgShortId() + ':';
-  }
-
-  public mrnMaskForInstance(orgShortId?: string): string {
+  public mrnMaskForIdService(orgShortId?: string): string {
     return (
       this.mrnMCP +
       "service:" +
       this.idpNamespace +
       ":" +
       (orgShortId ? orgShortId : this.orgShortId()) +
-      ":instance:"
+      ":"
     );
-  }
-
-  public mrnMaskForDesign(orgShortId?: string): string {
-    return (
-      this.mrnMCP +
-      "service:" +
-      this.idpNamespace +
-      ":" +
-      (orgShortId ? orgShortId : this.orgShortId()) +
-      ":design:"
-    );
-  }
-
-  public mrnMaskTextForInstance(): string {
-    // TODO Temp check until mrn-service is ready
-    return (
-      this.mrnMCP +
-      "service:" +
-      this.idpNamespace +
-      ":" +
-      this.orgShortId() +
-      ":instance:"
-    );
-    //return "urn:mrn:[mcp|stm]:service:instance:" + this.orgShortId() + ':';
-  }
-
-  public checkMrnForSpecification(specificationMrn: string): boolean {
-    // TODO Temp check until mrn-service is ready
-    const rawRegex = `^${this.mrnMaskForSpecification()}((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)|\/)*)$`;
-    const regex = new RegExp(rawRegex);
-    return regex.test(specificationMrn);
-    //return specificationMrn.indexOf(':service:specification:' + this.orgShortId() + ':') >= 0 && specificationMrn.startsWith('urn:mrn:');
-    //return this.checkMrn(specificationMrn, this.mrnMaskForSpecification());
-  }
-
-  public checkMrnForDesign(designMrn: string): boolean {
-    // TODO Temp check until mrn-service is ready
-    const rawRegex = `^${this.mrnMaskForDesign()}((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)|\/)*)$`;
-    const regex = new RegExp(rawRegex);
-    return regex.test(designMrn);
-    //return designMrn.indexOf(':service:design:' + this.orgShortId() + ':') >= 0 && designMrn.startsWith('urn:mrn:');
-    //	return this.checkMrn(designMrn, this.mrnMaskForDesign());
-  }
-
-  public checkMrnForInstance(instanceMrn: string): boolean {
-    // TODO Temp check until mrn-service is ready
-    const rawRegex = `^${this.mrnMaskForInstance()}((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)((([-._a-z0-9]|~)|%[0-9a-f][0-9a-f]|([!$&'()*+,;=])|:|@)|\/)*)$`;
-    const regex = new RegExp(rawRegex, "g");
-    return regex.test(instanceMrn);
-    //return instanceMrn.indexOf(':service:instance:' + this.orgShortId() + ':') >= 0 && instanceMrn.startsWith('urn:mrn:');
-    //return this.checkMrn(instanceMrn, this.mrnMaskForInstance());
   }
 
   public checkMrn(mrn: string, validMrnMask: string): boolean {
