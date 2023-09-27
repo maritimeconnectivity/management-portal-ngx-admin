@@ -40,24 +40,26 @@ import {
   SafeBag,
   SafeContents
 } from 'pkijs';
+import {CertificateBundle} from '../../models/certificateBundle';
 
 const ab2str = (buf: ArrayBuffer) => {
   return String.fromCharCode.apply(null, new Uint16Array(buf));
 }
 
 export interface LabelValueModel {
-  label:string;
-  valueHtml:string;
-  linkFunction?:Function;
-  linkValue?:any;
-  linkClass?:string;
+  label: string;
+  valueHtml: string;
+  linkFunction?: Function;
+  linkValue?: any;
+  linkClass?: string;
 }
+
 @Component({
   selector: 'ngx-cert-issue-dialog',
   templateUrl: './cert-issue-dialog.component.html',
   styleUrls: ['./cert-issue-dialog.component.scss']
 })
-export class CertIssueDialogComponent implements OnInit{
+export class CertIssueDialogComponent implements OnInit {
 
   @Input() entityMrn: string;
   @Input() entityTitle: string;
@@ -71,11 +73,11 @@ export class CertIssueDialogComponent implements OnInit{
 
   nameNoSpaces: string;
   isLoading: boolean;
-  certificateString: string;
-  certificateEnd: string;
+  certificateBundle: CertificateBundle;
   labelValues: Array<LabelValueModel>;
 
-  constructor(protected ref: NbDialogRef<CertIssueDialogComponent>) {}
+  constructor(protected ref: NbDialogRef<CertIssueDialogComponent>) {
+  }
 
   ngOnInit(): void {
     this.isLoading = false;
@@ -99,81 +101,91 @@ export class CertIssueDialogComponent implements OnInit{
   }
 
   public download() {
-    this.fileHelper.downloadPemCertificate(this.certificateString, this.entityTitle, this.notifierService);
+    this.fileHelper.downloadPemCertificate(this.certificateBundle, this.entityTitle, this.notifierService);
     this.notifierService.notify('success', 'Chosen certificate has downloaded');
   }
 
   public issueNewWithLocalKeys(generatePkcs12: boolean) {
     this.isLoading = true;
     const ecKeyGenParams = {name: 'ECDSA', namedCurve: 'P-384', typedCurve: ''};
-    let keyResult = crypto.subtle.generateKey(ecKeyGenParams, true, ['sign', 'verify']);
+    const keyResult = crypto.subtle.generateKey(ecKeyGenParams, true, ['sign', 'verify']);
     keyResult.then(keyPair => {
-      let csr = new CertificationRequest();
+      const csr = new CertificationRequest();
       csr.subject.typesAndValues.push(new AttributeTypeAndValue({
         type: '2.5.4.3', // Common name
-        value: new PrintableString({ value: 'Test' })
+        value: new PrintableString({value: 'Test'}),
       }));
       csr.subjectPublicKeyInfo.importKey(keyPair.publicKey).then(() => {
         csr.sign(keyPair.privateKey, 'SHA-384').then(() => {
-          let csrBytes = csr.toSchema().toBER(false);
-          let pemCsr = this.toPem(csrBytes, 'CERTIFICATE REQUEST');
+          const csrBytes = csr.toSchema().toBER(false);
+          const pemCsr = this.toPem(csrBytes, 'CERTIFICATE REQUEST');
           this.certificateService.issueNewCertificate(pemCsr, this.entityType as EntityType, this.entityMrn,
             this.orgMrn, this.instanceVersion)
-              .subscribe((certificate) => {
+            .subscribe((certificate) => {
               },
               err => {
-                // succeessful response but failed due to PEM fitting to json format
-                if(err.status === 201) {
+                // successful response but failed due to PEM fitting to json format
+                if (err.status === 201) {
                   {
                     const certificate = err.error.text;
                     crypto.subtle.exportKey('pkcs8', keyPair.privateKey).then(rawPrivateKey => {
                       crypto.subtle.exportKey('spki', keyPair.publicKey).then(rawPublicKey => {
-                        let privateKey = new PrivateKeyInfo({schema: fromBER(rawPrivateKey).result});
+                        const privateKey = new PrivateKeyInfo({schema: fromBER(rawPrivateKey).result});
 
                         if (generatePkcs12) {
-                          let rawCerts = this.convertCertChain(certificate);
-                          let certs = rawCerts.map(cert =>
-                              new Certificate({schema: fromBER(cert).result}));
-                          let password = this.generatePassword();
+                          const rawCerts = this.convertCertChain(certificate);
+                          const certs = rawCerts.map(cert =>
+                            new Certificate({schema: fromBER(cert).result}));
+                          const password = this.generatePassword();
 
                           this.generatePKCS12(privateKey, certs, password).then(result => {
-                            this.certificateString = certificate;
+                            this.certificateBundle = {
+                              certificate: certificate,
+                              publicKey: this.toPem(rawPublicKey, 'PUBLIC KEY'),
+                              privateKey: this.toPem(rawPrivateKey, 'PRIVATE KEY'),
+                              pkcs12Keystore: result,
+                              keystorePassword: password,
+                            };
                             this.isLoading = false;
                             this.notifierService.notify('success', 'You can now download the issued certificate');
                           }, err => {
                             this.isLoading = false;
                             this.notifierService.notify('error',
-                                'PKCS#12 keystore could not be generated - ' + err.error.message);
+                              'PKCS#12 keystore could not be generated - ' + err.error.message);
                           });
                         } else {
-                          this.certificateString = certificate;
+                          this.certificateBundle = {
+                            certificate: certificate,
+                            publicKey: this.toPem(rawPublicKey, 'PUBLIC KEY'),
+                            privateKey: this.toPem(rawPrivateKey, 'PRIVATE KEY'),
+                          };
                           this.notifierService.notify('success', 'You can now download the issued certificate');
                           this.isLoading = false;
                         }
                       }, err => {
                         this.isLoading = false;
                         this.notifierService.notify('error',
-                            'Public key could not be exported - ' + err.error.message);
+                          'Public key could not be exported - ' + err.error.message);
                       });
                     }, err => {
                       this.isLoading = false;
                       this.notifierService.notify('error',
-                          'Private key could not be exported - ' + err.error.message);
+                        'Private key could not be exported - ' + err.error.message);
                     });
                   }
                 } else {
                   this.isLoading = false;
                   this.notifierService.notify('error',
-                      'Error when trying to issue new certificate - ' + err.error.message);
+                    'Error when trying to issue new certificate - ' + err.error.message);
                 }
               }
-          );
+            );
         });
       });
     }, err => {
       this.isLoading = false;
       this.notifierService.notify('error',
-          'Error when trying to issue new certificate - ' + err.error.message);
+        'Error when trying to issue new certificate - ' + err.error.message);
     });
   }
 
@@ -201,8 +213,8 @@ export class CertIssueDialogComponent implements OnInit{
   }
 
   private generatePassword(): string {
-    let charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_^$#&!%';
-    let values = new Uint32Array(26);
+    const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_^$#&!%';
+    const values = new Uint32Array(26);
     crypto.getRandomValues(values);
     let result = '';
     for (const element of values) {
@@ -269,32 +281,32 @@ export class CertIssueDialogComponent implements OnInit{
                 privacyMode: 0,
                 value: new SafeContents({
                   safeBags: [
-                      new SafeBag({
-                        bagId: '1.2.840.113549.1.12.10.1.2',
-                        bagValue: new PKCS8ShroudedKeyBag({
-                          parsedValue: privateKey
+                    new SafeBag({
+                      bagId: '1.2.840.113549.1.12.10.1.2',
+                      bagValue: new PKCS8ShroudedKeyBag({
+                        parsedValue: privateKey
+                      }),
+                      bagAttributes: [
+                        new Attribute({
+                          type: '1.2.840.113549.1.9.20', // friendlyName
+                          values: [
+                            new BmpString({value: 'PKCS8ShroudedKeyBag from PKIjs'})
+                          ]
                         }),
-                        bagAttributes: [
-                            new Attribute({
-                              type: '1.2.840.113549.1.9.20', // friendlyName
-                              values: [
-                                  new BmpString({ value: 'PKCS8ShroudedKeyBag from PKIjs' })
-                              ]
-                            }),
-                            new Attribute({
-                              type: '1.2.840.113549.1.9.21', // localKeyID
-                              values: [
-                                  new OctetString({ valueHex: keyLocalIDBuffer })
-                              ]
-                            }),
-                            new Attribute({
-                              type: '1.3.6.1.4.1.311.17.1', // pkcs12KeyProviderNameAttr
-                              values: [
-                                  new BmpString({ value: 'MCP using https://pkijs.org/' })
-                              ]
-                            })
-                        ]
-                      })
+                        new Attribute({
+                          type: '1.2.840.113549.1.9.21', // localKeyID
+                          values: [
+                            new OctetString({valueHex: keyLocalIDBuffer})
+                          ]
+                        }),
+                        new Attribute({
+                          type: '1.3.6.1.4.1.311.17.1', // pkcs12KeyProviderNameAttr
+                          values: [
+                            new BmpString({value: 'MCP using https://pkijs.org/'})
+                          ]
+                        })
+                      ]
+                    })
                   ]
                 })
               },
@@ -302,58 +314,58 @@ export class CertIssueDialogComponent implements OnInit{
                 privacyMode: 1,
                 value: new SafeContents({
                   safeBags: [
-                      new SafeBag({
-                        bagId: '1.2.840.113549.1.12.10.1.3',
-                        bagValue: new CertBag({
-                          parsedValue: certs[0]
-                        }),
-                        bagAttributes: [
-                            new Attribute({
-                              type: '1.2.840.113549.1.9.20', // friendlyName
-                              values: [
-                                  new BmpString({ value: certCn })
-                              ]
-                            }),
-                            new Attribute({
-                              type: '1.2.840.113549.1.9.21', // localKeyID
-                              values: [
-                                  new OctetString({ valueHex: certLocalIDBuffer })
-                              ]
-                            }),
-                            new Attribute({
-                              type: '1.3.6.1.4.1.311.17.1', // pkcs12KeyProviderNameAttr
-                              values: [
-                                  new BmpString({ value: 'MCP using https://pkijs.org/' })
-                              ]
-                            })
-                        ]
+                    new SafeBag({
+                      bagId: '1.2.840.113549.1.12.10.1.3',
+                      bagValue: new CertBag({
+                        parsedValue: certs[0]
                       }),
-                      new SafeBag({
-                        bagId: '1.2.840.113549.1.12.10.1.3',
-                        bagValue: new CertBag({
-                          parsedValue: certs[1]
+                      bagAttributes: [
+                        new Attribute({
+                          type: '1.2.840.113549.1.9.20', // friendlyName
+                          values: [
+                            new BmpString({value: certCn})
+                          ]
                         }),
-                        bagAttributes: [
-                          new Attribute({
-                            type: '1.2.840.113549.1.9.20', // friendlyName
-                            values: [
-                              new BmpString({ value: caCn })
-                            ]
-                          }),
-                          new Attribute({
-                            type: '1.2.840.113549.1.9.21', // localKeyID
-                            values: [
-                              new OctetString({ valueHex: caCertLocalIDBuffer })
-                            ]
-                          }),
-                          new Attribute({
-                            type: '1.3.6.1.4.1.311.17.1', // pkcs12KeyProviderNameAttr
-                            values: [
-                              new BmpString({ value: 'MCP using https://pkijs.org/' })
-                            ]
-                          })
-                        ]
-                      })
+                        new Attribute({
+                          type: '1.2.840.113549.1.9.21', // localKeyID
+                          values: [
+                            new OctetString({valueHex: certLocalIDBuffer})
+                          ]
+                        }),
+                        new Attribute({
+                          type: '1.3.6.1.4.1.311.17.1', // pkcs12KeyProviderNameAttr
+                          values: [
+                            new BmpString({value: 'MCP using https://pkijs.org/'})
+                          ]
+                        })
+                      ]
+                    }),
+                    new SafeBag({
+                      bagId: '1.2.840.113549.1.12.10.1.3',
+                      bagValue: new CertBag({
+                        parsedValue: certs[1]
+                      }),
+                      bagAttributes: [
+                        new Attribute({
+                          type: '1.2.840.113549.1.9.20', // friendlyName
+                          values: [
+                            new BmpString({value: caCn})
+                          ]
+                        }),
+                        new Attribute({
+                          type: '1.2.840.113549.1.9.21', // localKeyID
+                          values: [
+                            new OctetString({valueHex: caCertLocalIDBuffer})
+                          ]
+                        }),
+                        new Attribute({
+                          type: '1.3.6.1.4.1.311.17.1', // pkcs12KeyProviderNameAttr
+                          values: [
+                            new BmpString({value: 'MCP using https://pkijs.org/'})
+                          ]
+                        })
+                      ]
+                    })
                   ]
                 })
               }

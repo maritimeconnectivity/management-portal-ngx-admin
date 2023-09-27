@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-import { Certificate } from '../../backend-api/identity-registry/model/certificate';
-import { CertRevokeDialogComponent } from './cert-revoke-dialog/cert-revoke-dialog.component';
-import { CertIssueDialogComponent } from './cert-issue-dialog/cert-issue-dialog.component';
-import { ActiveCertificatesColumn, RevokedCertificatesColumn } from '../models/columnForCertificate';
-import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
-import { LocalDataSource } from 'ng2-smart-table';
-import { Certificate as MCPCertificate } from '../../backend-api/identity-registry';
-import { FileHelperService } from '../file-helper.service';
-import { NotifierService } from 'angular-notifier';
-import { NbDialogService } from '@nebular/theme';
-import { CertificateService } from '../certificate.service';
-import { formatDate } from '@angular/common';
-import { LOCALE_ID, Inject } from '@angular/core';
+import {Certificate} from '../../backend-api/identity-registry';
+import {CertRevokeDialogComponent} from './cert-revoke-dialog/cert-revoke-dialog.component';
+import {CertIssueDialogComponent} from './cert-issue-dialog/cert-issue-dialog.component';
+import {ActiveCertificatesColumn, RevokedCertificatesColumn} from '../models/columnForCertificate';
+import {Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output} from '@angular/core';
+import {LocalDataSource} from 'ng2-smart-table';
+import {Certificate as MCPCertificate} from '../../backend-api/identity-registry';
+import {FileHelperService} from '../file-helper.service';
+import {NotifierService} from 'angular-notifier';
+import {NbDialogService} from '@nebular/theme';
+import {CertificateService} from '../certificate.service';
+import {formatDate} from '@angular/common';
+
 @Component({
   selector: 'ngx-certificates',
   templateUrl: './certificates.component.html',
-  styleUrls: ['./certificates.component.scss']
+  styleUrls: ['./certificates.component.scss'],
 })
 
 export class CertificatesComponent implements OnInit {
@@ -49,7 +49,7 @@ export class CertificatesComponent implements OnInit {
     hideSubHeader: true,
     actions: {
       position: 'right',
-    }
+    },
   };
 
   source: LocalDataSource = new LocalDataSource();
@@ -132,8 +132,9 @@ export class CertificatesComponent implements OnInit {
     this.openRevokeDialog(event.data);
   }
 
-  download(certificate:MCPCertificate) {
-    const endText = formatDate(certificate.end,'yyyy-MM-ddTHH-mm-ss', this.locale);
-    this.fileHelper.downloadPemCertificate(certificate.certificate, this.entityTitle + "_exp_" + endText, this.notifierService);
+  download(certificate: MCPCertificate) {
+    const endText = formatDate(certificate.end, 'yyyy-MM-ddTHH-mm-ss', this.locale);
+    this.fileHelper.downloadPemCertificate({certificate: certificate.certificate},
+      this.entityTitle + '_exp_' + endText, this.notifierService);
   }
 }

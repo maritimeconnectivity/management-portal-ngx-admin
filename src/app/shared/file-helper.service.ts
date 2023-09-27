@@ -14,31 +14,49 @@
  * limitations under the License.
  */
 
-import { DocDto } from '../backend-api/service-registry';
-import { XmlDto } from '../backend-api/service-registry';
-import { Injectable } from '@angular/core';
-import { NotifierService } from 'angular-notifier';
+import {DocDto, XmlDto} from '../backend-api/service-registry';
+import {Injectable} from '@angular/core';
+import {NotifierService} from 'angular-notifier';
 import * as fileSaver from 'file-saver';
+import JSZip from 'jszip';
+import {CertificateBundle} from './models/certificateBundle';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FileHelperService {
   constructor() {
 
   }
 
-  public downloadPemCertificate(certificateString: string, entityName: string, notifierService: NotifierService) {
+  public downloadPemCertificate(certificateBundle: CertificateBundle, entityName: string,
+                                notifierService: NotifierService) {
     try {
       const nameNoSpaces = entityName.split(' ').join('_');
-      var blob = new Blob([certificateString], {type: "text/plain;charset=utf-8"});
-      fileSaver.saveAs(blob, nameNoSpaces + ".pem");
-    } catch ( error ) {
+
+      const zip = new JSZip();
+      zip.file("Certificate_" + nameNoSpaces + ".pem", certificateBundle.certificate);
+      if (certificateBundle.privateKey) {
+        zip.file("PrivateKey_" + nameNoSpaces + ".pem", certificateBundle.privateKey);
+      }
+      if (certificateBundle.publicKey) {
+        zip.file("PublicKey_" + nameNoSpaces + ".pem", certificateBundle.publicKey);
+      }
+      if (certificateBundle.pkcs12Keystore) {
+        zip.file("Keystore_" + nameNoSpaces + ".p12", certificateBundle.pkcs12Keystore);
+      }
+      if (certificateBundle.keystorePassword) {
+        zip.file("KeystorePassword_" + nameNoSpaces + ".txt", certificateBundle.keystorePassword);
+      }
+      zip.generateAsync({type: "blob"}).then(function (content) {
+        fileSaver.saveAs(content, "Certificate_" + nameNoSpaces + ".zip");
+      });
+    } catch (error) {
       notifierService.notify('error', 'Error when trying to download file - ' + error);
     }
   }
 
-  public downloadXml(xmlFile:XmlDto, notifierService: NotifierService):void {
+  public downloadXml(xmlFile: XmlDto, notifierService: NotifierService): void {
     if (!xmlFile) {
       notifierService.notify('error', 'No file to download');
       return;
@@ -50,7 +68,7 @@ export class FileHelperService {
     this.downloadFile(fileContent, fileType, fileName, notifierService);
   }
 
-  public downloadDoc(docFile:DocDto, notifierService: NotifierService):void {
+  public downloadDoc(docFile: DocDto, notifierService: NotifierService): void {
     if (!docFile) {
       notifierService.notify('error', 'No file to download');
       return;
@@ -67,40 +85,32 @@ export class FileHelperService {
     this.downloadBase64File(fileContent, fileType, fileName, notifierService);
   }
 
-  public downloadBase64File(base64Content:string, fileType:string, fileName:string, notifierService: NotifierService):void {
+  public downloadBase64File(base64Content: string, fileType: string, fileName: string, notifierService: NotifierService): void {
     try {
       let byteArray = this.convertBase64ToByteArray(base64Content);
 
       let blob = new Blob([byteArray], {type: fileType});
       fileSaver.saveAs(blob, fileName);
-    } catch ( error ) {
+    } catch (error) {
       notifierService.notify('error', 'Error when trying to download file - ' + error);
     }
   }
 
-  public downloadFile(content:string, fileType:string, fileName:string, notifierService: NotifierService):void {
+  public downloadFile(content: string, fileType: string, fileName: string, notifierService: NotifierService): void {
     try {
       let blob = new Blob([content], {type: fileType});
       fileSaver.saveAs(blob, fileName);
-    } catch ( error ) {
+    } catch (error) {
       notifierService.notify('error', 'Error when trying to download file - ' + error);
     }
   }
 
   private convertBase64ToByteArray(base64Content: string): Uint8Array {
-    let byteCharacters  = window.atob(base64Content);
+    let byteCharacters = window.atob(base64Content);
     let byteNumbers = new Array(byteCharacters.length);
     for (let i = 0; i < byteCharacters.length; i++) {
       byteNumbers[i] = byteCharacters.charCodeAt(i);
     }
     return new Uint8Array(byteNumbers);
-  }
-
-  private replaceNewLines(stringToReplace: string) {
-    let replaceString = "\n";
-    if (navigator.appVersion.indexOf("Win")!=-1){
-      replaceString = "\r\n";
-    }
-    return (!stringToReplace) ? '' : stringToReplace.replace(/(\\n)/gm, replaceString);
   }
 }

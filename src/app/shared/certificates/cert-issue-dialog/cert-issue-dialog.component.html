@@ -1,43 +1,43 @@
 <nb-card>
-    <nb-card-header>
-        <div *ngIf="certificateString">
-            Certificate issued with success
-        </div>
-        <div *ngIf="!certificateString">
-            Select cert issue method
-        </div>
-    </nb-card-header>
-    <nb-card-body [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary">
-        <div *ngIf="!certificateString">
-            <p>There are three ways to issue a new certificate:</p>
-            <div class="col-12">
-                <nb-card size="small">
-                    <nb-tabset fullWidth>
-                    <nb-tab tabTitle="Locally with manual keystore setup">
-                        <p>Many operating systems and browsers require that certificates are
-                        imported as a password protected PKCS#12 keystore.
-                        If you want to manually generate the keystore, which is the recommended approach, click the corresponding button below and download the resulting zip file, unzip it and then use OpenSSL
-                        to generate the keystore using the following command:
-                        <br><br><pre>openssl pkcs12 -export -out keystore.p12 -in Certificate_{{nameNoSpaces}}.pem -inkey PrivateKey_{{nameNoSpaces}}.pem</pre>
-                        This will prompt you for a passphrase to protect the keystore. If successful the command will
-                        result in a PKCS#12 keystore file called 'keystore.p12'.
-                        <br>If you don't want to generate a keystore at all you can just skip executing the OpenSSL command.
-                        </p>
-                        <div class="container">
-                            <button nbButton status="success" class="w-100" (click)="locallyWManualKeystore()">Issue a cert locally with manual keystore setup</button>
-                        </div>
-                    </nb-tab>
-                    <nb-tab tabTitle="Locally from browser">
-                        <p>
-                            Many operating systems and browsers require that certificates are
-                            imported as a password protected PKCS#12 keystore. You can let your browser generate a keystore for you. NOTE that this action will take a little while and the resulting keystore will
-                            NOT be compatible with most major operating systems and browsers.
-                        </p>
-                        <div class="container">
-                            <button nbButton status="info" class="w-100" (click)="locallyFromBrowser()">Issue a cert locally from browser</button>
-                        </div>
-                    </nb-tab>
-                    <nb-tab tabTitle="Locally from scratch with OpenSSL">
+  <nb-card-header>
+    <div *ngIf="certificateBundle">
+      Certificate issued with success
+    </div>
+    <div *ngIf="!certificateBundle">
+      Select cert issue method
+    </div>
+  </nb-card-header>
+  <nb-card-body [nbSpinner]="isLoading" nbSpinnerSize="large" nbSpinnerStatus="primary">
+    <div *ngIf="!certificateBundle">
+      <p>There are three ways to issue a new certificate:</p>
+      <div class="col-12">
+        <nb-card size="small">
+          <nb-tabset fullWidth>
+            <nb-tab tabTitle="Locally with manual keystore setup">
+              <p>Many operating systems and browsers require that certificates are
+                imported as a password protected PKCS#12 keystore.
+                If you want to manually generate the keystore, which is the recommended approach, click the corresponding button below and download the resulting zip file, unzip it and then use OpenSSL
+                to generate the keystore using the following command:
+                <br><br><pre>openssl pkcs12 -export -out keystore.p12 -in Certificate_{{nameNoSpaces}}.pem -inkey PrivateKey_{{nameNoSpaces}}.pem</pre>
+              This will prompt you for a passphrase to protect the keystore. If successful the command will
+              result in a PKCS#12 keystore file called 'keystore.p12'.
+              <br>If you don't want to generate a keystore at all you can just skip executing the OpenSSL command.
+              </p>
+              <div class="container">
+                <button nbButton status="success" class="w-100" (click)="locallyWManualKeystore()">Issue a cert locally with manual keystore setup</button>
+              </div>
+            </nb-tab>
+            <nb-tab tabTitle="Locally from browser">
+              <p>
+                Many operating systems and browsers require that certificates are
+                imported as a password protected PKCS#12 keystore. You can let your browser generate a keystore for you. NOTE that this action will take a little while and the resulting keystore will
+                NOT be compatible with most major operating systems and browsers.
+              </p>
+              <div class="container">
+                <button nbButton status="info" class="w-100" (click)="locallyFromBrowser()">Issue a cert locally from browser</button>
+              </div>
+            </nb-tab>
+            <nb-tab tabTitle="Locally from scratch with OpenSSL">
                         <span>
                             You can generate the key pair and a CSR from scratch by yourself - an example on how to
                             do this can be found
@@ -45,22 +45,22 @@
                         <br>
                         .. and you are free to click 'Close' button to proceed.
                         </span>
-                    </nb-tab>
-                    </nb-tabset>
-                </nb-card>
-            </div>
-        <p>
-            We strongly recommend to read the instructions throughly as the security impact significantly differs from each other.
-        </p>
-        </div>
-        <div *ngIf="certificateString" class="container">
-            <button type="button" nbButton status="success" class="w-100" (click)="download()">Download certificate</button>
-        </div>
-    </nb-card-body>
-    <nb-card-footer>
-        <div class="buttons-row">
+            </nb-tab>
+          </nb-tabset>
+        </nb-card>
+      </div>
+      <p>
+        We strongly recommend to read the instructions thoroughly as the security impact significantly differs from each other.
+      </p>
+    </div>
+    <div *ngIf="certificateBundle" class="container">
+      <button type="button" nbButton status="success" class="w-100" (click)="download()">Download certificate</button>
+    </div>
+  </nb-card-body>
+  <nb-card-footer>
+    <div class="buttons-row">
 
-            <button nbButton status="danger" (click)="dismiss()">Close</button>
-        </div>
-    </nb-card-footer>
-  </nb-card>
+      <button nbButton status="danger" (click)="dismiss()">Close</button>
+    </div>
+  </nb-card-footer>
+</nb-card>
