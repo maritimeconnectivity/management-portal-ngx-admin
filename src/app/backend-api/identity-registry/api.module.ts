@@ -29,13 +29,6 @@ import { AppConfig } from '../../app.config';
         deps: [HttpClient]
     },
     {
-        provide: AgentControllerService,
-        useFactory: (http: HttpClient) => {
-          return new AgentControllerService(http, AppConfig.IR_BASE_PATH, null);
-      },
-        deps: [HttpClient]
-    },
-    {
         provide: CertificateControllerService,
         useFactory: (http: HttpClient) => {
           return new CertificateControllerService(http, AppConfig.IR_BASE_PATH, null);
