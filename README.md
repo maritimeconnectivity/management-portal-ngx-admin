@@ -24,10 +24,15 @@ Currently there are some conflicts in dependencies which will be resolved soon.
 
 Now it can be reached at http://localhost:4200.
 
+Remember the url (here *http://localhost:4200*) should be listed in the *Valid redirect URIs* at the MCP-Portal client in the MCP realm of your Keycloak (or OIDC) setup.
+
 ### Deployment
 First, we would recommend to read the [instruction of Angular deployment](https://angular.io/guide/deployment).
 
 #### Deployment to GitHub Pages through Angular deploy command
+
+For successful deployment you need to be located at the root of the project folder.
+
 You can deploy the Angular App to a GitHub pages through:
 
 ```bash
@@ -40,6 +45,24 @@ The deployment is powered by [angular-cli-ghpages](https://github.com/angular-sc
 
 #### Deployment to GitHub Pages through GitHub Action
 You can also take [our GitHub Action script](https://github.com/maritimeconnectivity/ManagementPortal/blob/main/.github/workflows/main.yml) to deploy your own management portal to GitHub Pages.
+
+### Build and Run as a Docker image
+
+At the root of the project folder to build an docker image with default Dockerfile:
+
+```bash
+docker build -t management-portal-trial . 
+```
+
+After build, run:
+
+```bash
+docker run -p $YourPortNumber:4200 management-portal-trial
+```
+
+Now it can be reached at http://localhost:`$YourPortNumber`.
+
+Again, remember the url (here *http://localhost:`$YourPortNumber`*) should be listed in the *Valid redirect URIs* at the MCP-Portal client in the MCP realm of your Keycloak (or OIDC) setup.
 
 ### Configuration
 There are examples of environment configuration in the 'src/environments' folder.
