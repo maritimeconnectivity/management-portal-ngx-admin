@@ -32,13 +32,13 @@
     <form [formGroup]="formGroup" *ngIf="isLoaded">
       <div *ngFor="let menu of columnForMenu | keyvalue:sortColumnForMenu">
         <div class="form-group row" *ngIf="isForNew && menuType !== 'role' && needShortId(menu.key)">
-          <label class="label col-sm-3 col-form-label">Short ID for {{menu.value.title}}</label>
+          <div class="label col-sm-3 col-form-label">Short ID for {{menu.value.title}}</div>
           <div class="col-sm-9 my-auto">
             <input type="text" nbInput fullWidth id="input_shortId_{{menu.key}}" class="form-control" status="{{menu.value.required ? validateMrn(formGroup.get(menu.key).value) ? 'success' : 'danger' : ''}}" required="menu.value.required === true" (input)="addShortIdToMrn(menu.key, $event.target.value)" value="{{shortId}}">
           </div>
         </div>
         <div class="form-group row" *ngIf="!isEditing || (isEditing && isFieldVisible(menu.key))">
-          <label for="input{{menu.key}}" class="label col-sm-3 col-form-label" nbPopover="{{menu.value.description}}" nbPopoverTrigger="hint" nbPopoverPlacement="top">{{menu.value.title}}</label>
+          <div for="input{{menu.key}}" class="label col-sm-3 col-form-label" nbPopover="{{menu.value.description}}" nbPopoverTrigger="hint" nbPopoverPlacement="top">{{menu.value.title}}</div>
           <div class="col-sm-9 my-auto">
             <ngx-input-button-list *ngIf="menu.value.type === 'stringArray'" [items]="loadedData[menu.key]" [isEditing]="isEditing"
               [options]="menu.value.options" [fieldName]="menu.key" [placeholder]="menu.value.placeholder" [required]="menu.value.required" (onUpdate)="onDataChanged($event)"></ngx-input-button-list>
@@ -77,19 +77,19 @@
         </div>
       </div>
       <div class="form-group row" *ngIf="isEntity && !isForNew && !isEditing" >
-        <label for="inputActiveCert" class="label col-sm-3 col-form-label">Active certificates</label>
+        <div for="inputActiveCert" class="label col-sm-3 col-form-label">Active certificates</div>
         <div class="col">
           <ngx-certificates [data]="activeCertificates" [forRevoked]="false" [entityType]="menuType" [entityTitle]="title" [entityMrn]="entityMrn" [orgMrn]="orgMrn" [instanceVersion]="instanceVersion" [hasPermissionInMIR]="isAdmin" (onUpdate)="refreshData()"></ngx-certificates>
         </div>
       </div>
       <div class="form-group row" *ngIf="isEntity && !isForNew && !isEditing" >
-        <label for="inputRevokedCert" class="label col-sm-3 col-form-label">Revoked certificates</label>
+        <div for="inputRevokedCert" class="label col-sm-3 col-form-label">Revoked certificates</div>
         <div class="col">
           <ngx-certificates [data]="revokedCertificates" [forRevoked]="true" (onUpdate)="refreshData()"></ngx-certificates>
         </div>
       </div>
       <div class="form-group row" *ngIf="isServiceInstance" >
-        <label for="inputRevokedCert" class="label col-sm-3 col-form-label">Coverage</label>
+        <div for="inputRevokedCert" class="label col-sm-3 col-form-label">Coverage</div>
       </div>
       <div class="form-group row" *ngIf="isServiceInstance" >
         <div class="col">
