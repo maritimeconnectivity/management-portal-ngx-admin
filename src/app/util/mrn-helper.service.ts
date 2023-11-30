@@ -24,6 +24,8 @@ import { AppConfig } from "../app.config";
 })
 export class MrnHelperService {
   private idpNamespace = AppConfig.IDP_NAMESPACE;
+  public mrn: string = "urn:mrn:";
+
   public mrnMCP: string = "urn:mrn:mcp:";
 
   constructor(private authService: AuthService) {
@@ -71,6 +73,10 @@ export class MrnHelperService {
     );
   }
 
+  public defaultMrn() {
+    return this.mrn;
+  }
+
   public mrnMask(menuType: string, orgShortId? : string) {
     switch (menuType) {
       case ResourceType.Device:
@@ -82,9 +88,11 @@ export class MrnHelperService {
       case ResourceType.Vessel:
         return this.mrnMaskForVessel(orgShortId);
       case ResourceType.Instance:
-        return this.mrnMaskForIdService(orgShortId);
+        return this.mrnMaskForService(orgShortId);
       case ResourceType.Service:
         return this.mrnMaskForIdService(orgShortId);
+      case ResourceType.Design:
+        return this.mrnMaskForService(orgShortId);
       case ResourceType.MMS:
         return this.mrnMaskForMms(orgShortId);
       default:
@@ -157,6 +165,10 @@ export class MrnHelperService {
       (orgShortId ? orgShortId : this.orgShortId()) +
       ":"
     );
+  }
+
+  public mrnMaskForService(orgShortId?: string): string {
+    return this.mrn;
   }
 
   public checkMrn(mrn: string, validMrnMask: string): boolean {

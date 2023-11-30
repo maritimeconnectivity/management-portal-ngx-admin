@@ -52,6 +52,11 @@ export const MIRResourceType: string[] = [ ResourceType.Device, ResourceType.Ves
   MMS = 'mms',
 }
 
+export enum MrnAttributeInMSR {
+  Instance = 'instanceId',
+  Design = 'implementsServiceDesign',
+}
+
 /**
  * scope of MCP entity types
  */

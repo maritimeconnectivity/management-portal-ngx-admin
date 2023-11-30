@@ -683,8 +683,6 @@ export const ColumnForResource = {
       type: 'string',
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail'],
-      shortIdType: 'instance',
-      immutable: true,
       required: true,
     },
     name: {
@@ -951,8 +949,6 @@ export const ColumnForResource = {
       type: 'string',
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail'],
-      shortIdType: 'design',
-      immutable: true,
     },
     implementsServiceDesignVersion: {
       title: 'Technical design version',

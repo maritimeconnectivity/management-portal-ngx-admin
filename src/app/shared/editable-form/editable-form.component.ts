@@ -23,7 +23,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { formatData } from '../../util/dataFormatter';
 import { MrnHelperService } from '../../util/mrn-helper.service';
 import { ColumnForResource } from '../models/columnForMenu';
-import { EntityTypes, ResourceType, MenuTypeNames } from '../models/menuType';
+import { EntityTypes, ResourceType, MenuTypeNames, MrnAttributeInMSR } from '../models/menuType';
 import { NbDialogService, NbIconLibraries } from '@nebular/theme';
 import { CertificateService } from '../certificate.service';
 import { XmlDto } from '../../backend-api/service-registry';
@@ -181,6 +181,15 @@ export class EditableFormComponent implements OnInit {
    * @param resourceType type of resource
    * @returns whether the resource type requires short ID or not
    */
+   hasDefaultValueForMrn = (resourceType: string) => {
+    return resourceType === MrnAttributeInMSR.Instance || resourceType === MrnAttributeInMSR.Design;
+  }
+
+  /**
+   * a function fetching its short ID
+   * @param resourceType type of resource
+   * @returns whether the resource type requires short ID or not
+   */
   getShortIdType = (resourceType: string) => {
     return this.columnForMenu[resourceType] ? this.columnForMenu[resourceType].shortIdType : undefined;
   }
@@ -195,6 +204,10 @@ export class EditableFormComponent implements OnInit {
       this.isEditing = true;
       this.setFormFieldVisibility();
       Object.keys(this.formGroup.controls).forEach(field => {
+        if (this.hasDefaultValueForMrn(field)) {
+          this.formGroup.get(field).setValue(
+            this.mrnHelperService.defaultMrn());
+        }
         if (this.needShortId(field)) {
           this.formGroup.get(field).setValue(
             this.mrnHelperService.mrnMask( this.getShortIdType(field), this.orgShortId) );
