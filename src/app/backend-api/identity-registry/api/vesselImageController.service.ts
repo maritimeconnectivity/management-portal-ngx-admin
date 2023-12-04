@@ -57,11 +57,11 @@ export class VesselImageControllerService {
 
 
     /**
-     * 
+     *
      * Create a new vessel image using POST
-     * @param orgMrn 
-     * @param vesselMrn 
-     * @param body 
+     * @param orgMrn
+     * @param vesselMrn
+     * @param body
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -112,10 +112,10 @@ export class VesselImageControllerService {
     }
 
     /**
-     * 
+     *
      * Delete the image of a specified vessel
-     * @param orgMrn 
-     * @param vesselMrn 
+     * @param orgMrn
+     * @param vesselMrn
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -158,10 +158,10 @@ export class VesselImageControllerService {
     }
 
     /**
-     * 
+     *
      * Get the image of a specified vessel
-     * @param orgMrn 
-     * @param vesselMrn 
+     * @param orgMrn
+     * @param vesselMrn
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -185,31 +185,33 @@ export class VesselImageControllerService {
             'image/png',
             'application/json'
         ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
+        // const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        // if (httpHeaderAcceptSelected != undefined) {
+        //     headers = headers.set('Accept', httpHeaderAcceptSelected);
+        // }
+        headers = headers.set('Accept', httpHeaderAccepts.join());
 
         // to determine the Content-Type header
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/vessel/${encodeURIComponent(String(vesselMrn))}/vesselImage`,
+        return this.httpClient.request('get',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/vessel/${encodeURIComponent(String(vesselMrn))}/vesselImage`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
-                reportProgress: reportProgress
+                reportProgress: reportProgress,
+                responseType: 'blob'
             }
         );
     }
 
     /**
-     * 
+     *
      * Create or update a vessel image using PUT
-     * @param body 
-     * @param orgMrn 
-     * @param vesselMrn 
+     * @param body
+     * @param orgMrn
+     * @param vesselMrn
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */

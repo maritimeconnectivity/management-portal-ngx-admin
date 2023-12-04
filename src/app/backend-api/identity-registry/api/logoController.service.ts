@@ -57,10 +57,10 @@ export class LogoControllerService {
 
 
     /**
-     * 
+     *
      * Create a new organization logo using POST
-     * @param orgMrn 
-     * @param body 
+     * @param orgMrn
+     * @param body
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -107,9 +107,9 @@ export class LogoControllerService {
     }
 
     /**
-     * 
+     *
      * Delete an organization logo
-     * @param orgMrn 
+     * @param orgMrn
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -148,9 +148,9 @@ export class LogoControllerService {
     }
 
     /**
-     * 
+     *
      * Get the logo of the given organization
-     * @param orgMrn 
+     * @param orgMrn
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -170,30 +170,32 @@ export class LogoControllerService {
             'image/png',
             'application/json'
         ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
+        // const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        // if (httpHeaderAcceptSelected != undefined) {
+        //     headers = headers.set('Accept', httpHeaderAcceptSelected);
+        // }
+        headers = headers.set('Accept', httpHeaderAccepts.join());
 
         // to determine the Content-Type header
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/logo`,
+        return this.httpClient.request('get',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/logo`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
-                reportProgress: reportProgress
+                reportProgress: reportProgress,
+                responseType: 'blob'
             }
         );
     }
 
     /**
-     * 
+     *
      * Update an existing organization logo or create it if none already exists
-     * @param body 
-     * @param orgMrn 
+     * @param body
+     * @param orgMrn
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
