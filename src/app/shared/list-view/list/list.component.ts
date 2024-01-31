@@ -80,6 +80,9 @@ export class ListComponent implements OnInit {
   isForServiceForOrg = false;
   isAdmin: boolean = false;
   currentPageNumber = 0;
+  totalPages = 0;
+  totalElements = 0;
+  pageNumbers = [];
 
   constructor(private router: Router,
     private iconsLibrary: NbIconLibraries,
@@ -136,6 +139,12 @@ export class ListComponent implements OnInit {
     this.fetchValues(this.currentPageNumber);
   }
 
+  updatePageContentInfo = (res: any) => {
+    this.totalPages = res.totalPages;
+    this.totalElements = res.totalElements;
+    this.pageNumbers = Array(this.totalPages).fill(0).map((x,i)=>i+1);
+  }
+
   fetchValues(pageNumber: number) {
     // filtered with context
     if(ColumnForResource.hasOwnProperty(this.menuType.toString())) {
@@ -150,7 +159,7 @@ export class ListComponent implements OnInit {
       if (Object.values(ResourceType).includes(this.menuType)) {
         if(this.menuType === ResourceType.Organization || this.menuType === ResourceType.OrgCandidate){
           this.loadDataContent(this.menuType, pageNumber).subscribe(
-            res => {this.refreshData(this.formatResponse(res.content)); this.isLoading = false;},
+            res => { this.updatePageContentInfo(res); this.refreshData(this.formatResponse(res.content)); this.isLoading = false;},
             error => this.notifierService.notify('error', error.message),
           );
         } else if(this.menuType === ResourceType.Role){

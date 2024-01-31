@@ -82,6 +82,7 @@ import { ListViewModule } from './list-view/list-view.module';
     NbSelectModule,
     NbInputModule,
     NbTabsetModule,
+    NbButtonModule,
     ThemeModule,
     Ng2SmartTableModule,
     NbSelectModule,

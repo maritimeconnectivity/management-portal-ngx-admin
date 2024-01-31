@@ -254,6 +254,7 @@ export const ColumnForResource = {
       title: 'Access type',
       type: 'string',
       description: 'OpenID Connect access type',
+      required: true,
       options: [
         {
           title: 'public',
