@@ -1,7 +1,7 @@
 import { addLangs, loadLang } from './../../util/translateHelper';
 import { TranslateService } from '@ngx-translate/core';
 /*
- * Copyright (c) 2023 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2024 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

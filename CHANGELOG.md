@@ -1,3 +1,11 @@
+<a name="0.5.0"></a>
+# [0.5.0](ngx-admin 11.0.0 update) (2024-01-31)
+
+### BREAKING CHANGES
+
+- Angular updated to version 15.
+- ngx-flag-picker has deprecated according to Angular version.
+
 <a name="0.3.0"></a>
 # [0.3.0](ngx-admin 9.0.0 update) (2023-03-06)
 

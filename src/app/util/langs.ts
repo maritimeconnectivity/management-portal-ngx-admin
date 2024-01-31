@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2024 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,3 +15,12 @@
  */
 
 export const langs = ['en-GB', 'ko-KR'];
+
+export const languages = [ {
+        code: 'en-GB',
+        name: 'English',
+    },
+    {
+        code: 'ko-KR',
+        name: '한국어',
+    }];
