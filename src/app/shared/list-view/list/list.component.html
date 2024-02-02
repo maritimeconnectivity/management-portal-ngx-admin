@@ -18,6 +18,6 @@
     </nb-card-body>
     <!-- generate for loop generating indexes up to totalPages-->
     <div class="text-center pb-5">
-      <button *ngFor="let i of pageNumbers"  nbButton size="tiny" (click)="fetchValues(i-1)">{{i}}</button>
+      <button *ngFor="let i of pageNumbers" class="m-1" nbButton size="tiny" [disabled]="i==currentPageNumber" (click)="fetchValues(i)">{{i+1}}</button>
     </div>
   </nb-card>

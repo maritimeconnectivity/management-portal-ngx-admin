@@ -142,10 +142,11 @@ export class ListComponent implements OnInit {
   updatePageContentInfo = (res: any) => {
     this.totalPages = res.totalPages;
     this.totalElements = res.totalElements;
-    this.pageNumbers = Array(this.totalPages).fill(0).map((x,i)=>i+1);
+    this.pageNumbers = Array(this.totalPages).fill(0).map((x,i)=>i);
   }
 
   fetchValues(pageNumber: number) {
+    this.currentPageNumber = pageNumber;
     // filtered with context
     if(ColumnForResource.hasOwnProperty(this.menuType.toString())) {
       this.mySettings.columns = Object.assign({}, ...
