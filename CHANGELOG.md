@@ -4,7 +4,9 @@
 ### BREAKING CHANGES
 
 - Angular updated to version 15.
+- ngx-admin updated to version 11.
 - ngx-flag-picker has deprecated according to Angular version.
+- Enhanced page handing in list view 
 
 <a name="0.3.0"></a>
 # [0.3.0](ngx-admin 9.0.0 update) (2023-03-06)
