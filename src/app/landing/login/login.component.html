@@ -5,13 +5,9 @@
         </div>
         <div class="ml-auto p-2">
             <span class="text-white">Language: </span>
-            <ngx-flag-picker
-                [selectedCountryCode]="selectedCountryCode"
-                [countryCodes]="countryCodes"
-                [showFlags]="true"
-                [showLabels]="false"
-                (changedCountryCode)="changeLang($event)">
-            </ngx-flag-picker>
+            <nb-select [selected]="currentLang" (selectedChange)="changeLang($event)" status="primary">
+                <nb-option *ngFor="let lang of langs" [value]="lang.code"> {{ lang.name }}</nb-option>
+            </nb-select>
         </div>
     </nb-layout-header>
     <nb-layout-column class="image-container">

@@ -1,11 +1,9 @@
 // @nebular theming framework
-@import '~@nebular/theme/styles/theming';
+@import '@nebular/theme/styles/theming';
 // @nebular out of the box themes
-@import '~@nebular/theme/styles/themes';
+@import '@nebular/theme/styles/themes';
 
 $nb-themes: nb-register-theme((
-  url-bg: url('/assets/images/sea_background.jpg'),
-
   layout-padding-top: 2.25rem,
 
   menu-item-icon-margin: 0 0.5rem 0 0,
@@ -27,8 +25,6 @@ $nb-themes: nb-register-theme((
 ), default, default);
 
 $nb-themes: nb-register-theme((
-  url-bg: url('/assets/images/sea_background.jpg'),
-
   layout-padding-top: 2.25rem,
 
   menu-item-icon-margin: 0 0.5rem 0 0,
@@ -50,8 +46,6 @@ $nb-themes: nb-register-theme((
 ), cosmic, cosmic);
 
 $nb-themes: nb-register-theme((
-  url-bg: url('/assets/images/sea_background.jpg'),
-
   layout-padding-top: 2.25rem,
 
   menu-item-icon-margin: 0 0.5rem 0 0,
@@ -73,8 +67,6 @@ $nb-themes: nb-register-theme((
 ), corporate, corporate);
 
 $nb-themes: nb-register-theme((
-  url-bg: url('/assets/images/sea_background.jpg'),
-  
   layout-padding-top: 2.25rem,
 
   menu-item-icon-margin: 0 0.5rem 0 0,

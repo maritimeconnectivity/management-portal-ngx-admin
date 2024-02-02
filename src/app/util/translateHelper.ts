@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2024 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ export const addLangs = (translate: TranslateService) => {
 };
 
 export const loadLang = (translate: TranslateService): string => {
-    const locale = localStorage.getItem('locale') ? localStorage.getItem('locale') : 'en-GB';
+    const locale = localStorage.getItem('locale') !== undefined && localStorage.getItem('locale') !== 'undefined' ? localStorage.getItem('locale') : 'en-GB';
     translate.setDefaultLang(locale);
     translate.use(locale);
     return locale;

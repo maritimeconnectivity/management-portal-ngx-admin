@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2024 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -254,6 +254,7 @@ export const ColumnForResource = {
       title: 'Access type',
       type: 'string',
       description: 'OpenID Connect access type',
+      required: true,
       options: [
         {
           title: 'public',

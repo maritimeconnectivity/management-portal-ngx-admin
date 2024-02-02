@@ -12,6 +12,7 @@ import {
   NbSelectModule,
   NbIconModule,
   NbThemeModule,
+  NbListModule,
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NbSecurityModule } from '@nebular/security';
@@ -38,10 +39,9 @@ import { DEFAULT_THEME } from './styles/theme.default';
 import { COSMIC_THEME } from './styles/theme.cosmic';
 import { CORPORATE_THEME } from './styles/theme.corporate';
 import { DARK_THEME } from './styles/theme.dark';
-import { NgxFlagPickerModule } from 'ngx-flag-picker';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { httpTranslateLoader } from '../app.module';
 import { HttpClient } from '@angular/common/http';
+import { httpTranslateLoader } from '../app.module';
 
 const NB_MODULES = [
   NbLayoutModule,
@@ -56,7 +56,6 @@ const NB_MODULES = [
   NbSelectModule,
   NbIconModule,
   NbEvaIconsModule,
-  NgxFlagPickerModule,
   TranslateModule.forRoot({
     loader: {
       provide: TranslateLoader,

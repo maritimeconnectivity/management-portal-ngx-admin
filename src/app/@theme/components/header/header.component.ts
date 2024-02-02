@@ -1,19 +1,18 @@
-import { AppConfig } from './../../../app.config';
-import { langs } from './../../../util/langs';
-import { addLangs, changeLang, loadLang } from './../../../util/translateHelper';
-import { loadTheme, storeTheme } from './../../../util/themeHelper';
-import { AuthService } from './../../../auth/auth.service';
-import { KeycloakService } from 'keycloak-angular';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 
 import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
-import { map, takeUntil, filter } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { Router } from '@angular/router';
+import { AuthService } from '../../../auth/auth.service';
 import { TranslateService } from '@ngx-translate/core';
-import { themes } from './../../../util/themes';
+import { AppConfig } from '../../../app.config';
+import { themes } from '../../../util/themes';
+import { langs, languages } from '../../../util/langs';
+import { addLangs, changeLang, loadLang } from '../../../util/translateHelper';
+import { loadTheme, storeTheme } from '../../../util/themeHelper';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ngx-header',
@@ -28,27 +27,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
   logoutUrl: string;
   logo_img: string = AppConfig.LOGO_IMG;
   themes = themes;
-  customLabels = {
-    'gb': 'EN',
-    'kr': 'KO',
-  };
 
   currentTheme = 'default';
   currentLang = 'en-GB';
-  selectedCountryCode = 'gb';
-  countryCodes = langs.map(e => e.split('-').pop().toLowerCase());
+  langs = languages;
+
+  userMenu = [ { title: 'Profile' }, { title: 'Log out' } ];
 
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
               private themeService: NbThemeService,
+              private userService: UserData,
               private layoutService: LayoutService,
               private breakpointService: NbMediaBreakpointsService,
-              private router: Router,
               private authService: AuthService,
-              public translate: TranslateService) {
-    addLangs(translate);
+              private router: Router,
+              public translate: TranslateService,) {
+                addLangs(translate);
     this.currentLang = loadLang(translate);
-    this.selectedCountryCode = this.currentLang.split('-').pop().toLowerCase();
   }
 
   ngOnInit() {
@@ -90,7 +86,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   changeLang(langName: string) {
-    changeLang(this.translate, langs.filter(e => e.includes(langName.toUpperCase())).pop());
+    console.log(langs.filter(e => e.includes(langName.toUpperCase())).pop());
+    changeLang(this.translate, langName);
     location.reload();
   }
 

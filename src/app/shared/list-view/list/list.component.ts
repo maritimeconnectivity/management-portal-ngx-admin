@@ -1,6 +1,6 @@
 import { addLangs, applyTranslateToSingleMenu, loadLang } from './../../../util/translateHelper';
 /*
- * Copyright (c) 2023 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2024 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,6 +79,10 @@ export class ListComponent implements OnInit {
   source: LocalDataSource = new LocalDataSource();
   isForServiceForOrg = false;
   isAdmin: boolean = false;
+  currentPageNumber = 0;
+  totalPages = 0;
+  totalElements = 0;
+  pageNumbers = [];
 
   constructor(private router: Router,
     private iconsLibrary: NbIconLibraries,
@@ -132,10 +136,17 @@ export class ListComponent implements OnInit {
       });
     }
 
-    this.fetchValues();
+    this.fetchValues(this.currentPageNumber);
   }
 
-  fetchValues() {
+  updatePageContentInfo = (res: any) => {
+    this.totalPages = res.totalPages;
+    this.totalElements = res.totalElements;
+    this.pageNumbers = Array(this.totalPages).fill(0).map((x,i)=>i);
+  }
+
+  fetchValues(pageNumber: number) {
+    this.currentPageNumber = pageNumber;
     // filtered with context
     if(ColumnForResource.hasOwnProperty(this.menuType.toString())) {
       this.mySettings.columns = Object.assign({}, ...
@@ -148,8 +159,8 @@ export class ListComponent implements OnInit {
 
       if (Object.values(ResourceType).includes(this.menuType)) {
         if(this.menuType === ResourceType.Organization || this.menuType === ResourceType.OrgCandidate){
-          this.loadDataContent(this.menuType).subscribe(
-            res => {this.refreshData(this.formatResponse(res.content)); this.isLoading = false;},
+          this.loadDataContent(this.menuType, pageNumber).subscribe(
+            res => { this.updatePageContentInfo(res); this.refreshData(this.formatResponse(res.content)); this.isLoading = false;},
             error => this.notifierService.notify('error', error.message),
           );
         } else if(this.menuType === ResourceType.Role){
@@ -176,7 +187,7 @@ export class ListComponent implements OnInit {
           );
         } else {
           this.loadMyOrganization().subscribe(
-            resOrg => this.loadDataContent(this.menuType, resOrg.mrn).subscribe(
+            resOrg => this.loadDataContent(this.menuType, pageNumber, resOrg.mrn).subscribe(
               res => {this.refreshData(this.formatResponse(res.content)); this.isLoading = false;},
               error => this.notifierService.notify('error', error.message),
             ),
@@ -226,7 +237,7 @@ export class ListComponent implements OnInit {
       this.deleteData(menuType, orgMrn, entityMrn, instanceVersion, numberId).subscribe(
         res => {
           this.notifierService.notify('success', this.menuTypeName + this.translate.instant('success.resource.delete'));
-          this.fetchValues();
+          this.fetchValues(this.currentPageNumber);
         },
         err => this.notifierService.notify('error',
           this.translate.instant('error.resource.errorInDeletion') + err.error.message));
@@ -302,21 +313,22 @@ export class ListComponent implements OnInit {
     return this.instanceControllerService.getInstances();
   }
 
-  loadDataContent = (context: ResourceType, orgMrn?: string): Observable<any> => {
+  loadDataContent = (context: ResourceType, page: number, orgMrn?: string): Observable<any> => {
+    const size = 10;
     if (context === ResourceType.User) {
-      return this.userControllerService.getOrganizationUsers(orgMrn);
+      return this.userControllerService.getOrganizationUsers(orgMrn, page, size);
     } else if (context === ResourceType.Device) {
-      return this.deviceControllerService.getOrganizationDevices(orgMrn);
+      return this.deviceControllerService.getOrganizationDevices(orgMrn, page, size);
     } else if (context === ResourceType.Vessel) {
-      return this.vesselControllerService.getOrganizationVessels(orgMrn);
+      return this.vesselControllerService.getOrganizationVessels(orgMrn, page, size);
     } else if (context === ResourceType.MMS) {
-      return this.mmsControllerService.getOrganizationMMSes(orgMrn);
+      return this.mmsControllerService.getOrganizationMMSes(orgMrn, page, size);
     } else if (context === ResourceType.Service) {
-      return this.serviceControllerService.getOrganizationServices(orgMrn);
+      return this.serviceControllerService.getOrganizationServices(orgMrn, page, size);
     } else if (context === ResourceType.Organization) {
-      return this.organizationControllerService.getOrganization();
+      return this.organizationControllerService.getOrganization(page, size);
     } else if (context === ResourceType.OrgCandidate) {
-      return this.organizationControllerService.getUnapprovedOrganizations();
+      return this.organizationControllerService.getUnapprovedOrganizations(page, size);
     }
     return new Observable();
   }

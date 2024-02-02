@@ -2,7 +2,7 @@ import { TextFormatterHtmlPipe } from './editable-form/textFormatter/textFormatt
 import { LuceneComponentDirective } from './lucene-query-input/lucene-component-directive';
 import { LuceneComponentInputComponent } from './lucene-query-input/lucene-component-input/lucene-component-input.component';
 /*
- * Copyright (c) 2023 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2024 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,6 +82,7 @@ import { ListViewModule } from './list-view/list-view.module';
     NbSelectModule,
     NbInputModule,
     NbTabsetModule,
+    NbButtonModule,
     ThemeModule,
     Ng2SmartTableModule,
     NbSelectModule,

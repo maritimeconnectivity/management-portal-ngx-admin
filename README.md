@@ -9,7 +9,7 @@ You can experience a live demo from [our public demonstrator environment](https:
 ## Development
 
 ### Requirement
-- The use of NPM version 14.20.1
+- The use of NPM version 14.18.1
 
 ### Installation
 To install ngx-admin you have to use NodeJS version 14.14+ because of [node-sass](https://github.com/sass/node-sass) version utilized in the application.

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2024 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { langs } from './../../util/langs';
+import { langs, languages } from './../../util/langs';
 import { addLangs, changeLang, loadLang } from './../../util/translateHelper';
 import { ProcessDialogComponent } from './../process-dialog/process-dialog.component';
 import { RegisterDialogComponent } from './../register-dialog/register-dialog.component';
@@ -46,8 +46,7 @@ export class LoginComponent implements OnInit {
   footerLink = AppConfig.FOOTER_LINK;
   footerName = AppConfig.FOOTER_NAME;
   currentLang = 'en-GB';
-  selectedCountryCode = 'gb';
-  countryCodes = langs.map(e => e.split('-').pop().toLowerCase());
+  langs = languages;
   /**
    * environment name to show at front
    */
@@ -61,7 +60,6 @@ export class LoginComponent implements OnInit {
   ) {
     addLangs(translate);
     this.currentLang = loadLang(translate);
-    this.selectedCountryCode = this.currentLang.split('-').pop().toLowerCase();
   }
 
   capitalize(s: string) {
@@ -82,7 +80,7 @@ export class LoginComponent implements OnInit {
   }
 
   changeLang(langName: string) {
-    changeLang(this.translate, langs.filter(e => e.includes(langName.toUpperCase())).pop());
+    changeLang(this.translate, langName);
   }
 
   /**

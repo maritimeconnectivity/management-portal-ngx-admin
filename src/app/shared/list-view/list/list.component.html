@@ -16,4 +16,8 @@
       <ng2-smart-table *ngIf="showTables" [settings]="settings" [source]="source" (userRowSelect)="onEdit($event)" (delete)="onDelete($event)">
       </ng2-smart-table>
     </nb-card-body>
+    <!-- generate for loop generating indexes up to totalPages-->
+    <div class="text-center pb-5">
+      <button *ngFor="let i of pageNumbers" class="m-1" nbButton size="tiny" [disabled]="i==currentPageNumber" (click)="fetchValues(i)">{{i+1}}</button>
+    </div>
   </nb-card>

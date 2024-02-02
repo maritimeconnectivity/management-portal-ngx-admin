@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Maritime Connectivity Platform Consortium
+ * Copyright (c) 2024 Maritime Connectivity Platform Consortium
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,13 @@ import { LandingComponent } from './landing.component';
 import { LoginComponent } from './login/login.component';
 import { LandingRoutingModule } from './landing-routing.module';
 import { NgModule } from '@angular/core';
-import { NbLayoutModule, NbCardModule, NbButtonModule, NbStepperModule } from '@nebular/theme';
+import { NbLayoutModule, NbCardModule, NbButtonModule, NbStepperModule, NbSelectModule } from '@nebular/theme';
 import { RouterModule } from '@angular/router';
 import { RegisterDialogComponent } from './register-dialog/register-dialog.component';
 import { ProcessDialogComponent } from './process-dialog/process-dialog.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { httpTranslateLoader } from '../app.module';
 import { HttpClient } from '@angular/common/http';
-import { NgxFlagPickerModule } from 'ngx-flag-picker';
 
 /**
  * a module for landing process
@@ -48,7 +47,7 @@ import { NgxFlagPickerModule } from 'ngx-flag-picker';
     NbButtonModule,
     NbLayoutModule,
     NbStepperModule,
-    NgxFlagPickerModule,
+    NbSelectModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

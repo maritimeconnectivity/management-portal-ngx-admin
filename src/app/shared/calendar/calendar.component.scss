@@ -1,5 +1,4 @@
-@import '~bootstrap/scss/mixins/breakpoints';
-@import '~@nebular/theme/styles/global/breakpoints';
+@import "node_modules/bootstrap/scss/bootstrap";
 @import '../../@theme/styles/themes';
 @include nb-install-component() {
   .calendars {
