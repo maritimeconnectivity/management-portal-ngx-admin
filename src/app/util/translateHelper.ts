@@ -41,7 +41,7 @@ export const addLangs = (translate: TranslateService) => {
 };
 
 export const loadLang = (translate: TranslateService): string => {
-    const locale = localStorage.getItem('locale') !== undefined && localStorage.getItem('locale') !== 'undefined' ? localStorage.getItem('locale') : 'en-GB';
+    const locale = localStorage.getItem('locale') !== undefined && langs.includes(localStorage.getItem('locale')) ? localStorage.getItem('locale') : 'en-GB';
     translate.setDefaultLang(locale);
     translate.use(locale);
     return locale;
