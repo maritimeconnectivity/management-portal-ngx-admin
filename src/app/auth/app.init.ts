@@ -29,6 +29,7 @@ export const initializeKeycloak = (keycloak: KeycloakService): () => Promise<boo
         initOptions: {
           onLoad: 'check-sso',
           flow: 'standard',
+          checkLoginIframe: false,
         },
         enableBearerInterceptor: true,
         bearerPrefix: 'Bearer',
