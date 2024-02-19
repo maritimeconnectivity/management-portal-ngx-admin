@@ -550,8 +550,7 @@ export class EditableFormComponent implements OnInit {
         this.formGroup.get(key).disable();
       }
       if (this.isThisForMCPMRN(this.menuType, key)) {
-        this.shortId = this.mrnHelperService.shortIdFromMrn(data[key]);
-        const mrn = this.mrnHelperService.mrnMask(this.menuType, this.orgShortId) + this.shortId;
+        const mrn = data[key];
         this.formGroup.get(key).setValue(mrn);
       } else {
         if ((menu as any).type === 'string') {
