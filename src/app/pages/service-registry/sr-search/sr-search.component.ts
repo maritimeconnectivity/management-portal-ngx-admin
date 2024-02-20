@@ -100,7 +100,8 @@ export class SrSearchComponent implements OnInit {
   search = (searchParams: SearchParameters, wktString: string, freetext: string) => {
     this.isLoading = true;
     // send a query with given geometry, converted to WKT
-    this.secomSearchController.search({query: searchParams, geometry: wktString, freetext: freetext })
+    const query = wktString && wktString.length ? {query: searchParams, geometry: wktString, freetext: freetext } : {query: searchParams, freetext: freetext }
+    this.secomSearchController.search(query)
     .subscribe(res => {
       this.instances = res.searchServiceResult;
       this.refreshData(this.instances);
