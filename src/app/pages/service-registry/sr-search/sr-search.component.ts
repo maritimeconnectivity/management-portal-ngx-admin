@@ -84,9 +84,8 @@ export class SrSearchComponent implements OnInit {
   onUpdateLuceneQuery = (query: LuceneQueryOutput) => {
     this.queryString = query.queryString ? query.queryString : '';
     this.luceneQueryStringInput.nativeElement.value = this.queryString;
-
-    // get rid of " to convert it to the freetext
-    this.freetext = this.queryString.split('"').join('');
+    // convert /: to : to make it a valid freetext for MRN
+    this.freetext = this.queryString.split('\\:').join(':');
     if (this.queryString.length === 0) {
       this.clearAll();
     }
