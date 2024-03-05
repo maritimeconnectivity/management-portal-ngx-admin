@@ -254,7 +254,6 @@ export const ColumnForResource = {
       title: 'Access type',
       type: 'string',
       description: 'OpenID Connect access type',
-      required: true,
       options: [
         {
           title: 'public',
@@ -289,7 +288,6 @@ export const ColumnForResource = {
       description: 'OpenID Connect client redirect URI',
       visibleFrom: ['detail'],
       notShowOnEdit: true,
-      required: true,
     },
     vessel: {
       title: 'Vessel',

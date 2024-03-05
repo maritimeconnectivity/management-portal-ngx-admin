@@ -406,7 +406,7 @@ export class EditableFormComponent implements OnInit {
 
     Object.keys(unfiltered).forEach(field => {
       if (menuWithOptions.filter(e => e[0] === field).length &&
-      (!unfiltered[field] || unfiltered[field].length === 0)) {
+      (unfiltered[field] == null || unfiltered[field].length === 0)) {
         delete unfiltered[field];
       }
     });
