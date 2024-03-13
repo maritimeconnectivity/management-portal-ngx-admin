@@ -1,6 +1,6 @@
 /**
  * Maritime Connectivity Platform Identity Registry API
- * The MCP Identity Registry API can be used for managing entities in the Maritime Connectivity Platform.<br>Two versions of the API are available - one that requires authentication using OpenID Connect and one that requires authentication using a X.509 client certificate.<br>The OpenAPI descriptions for the two versions are available <a href=\"https://test-api.maritimeconnectivity.net/v3/api-docs/mcp-idreg-oidc\">here</a> and <a href=\"https://test-api-x509.maritimeconnectivity.net/v3/api-docs/mcp-idreg-x509\">here</a>.
+ * The MCP Identity Registry API can be used for managing entities in the Maritime Connectivity Platform.<br>Two versions of the API are available - one that requires authentication using OpenID Connect and one that requires authentication using a X.509 client certificate.<br>The OpenAPI descriptions for the two versions are available <a href=\"https://api.maritimeconnectivity.net/v3/api-docs/mcp-idreg-oidc\">here</a> and <a href=\"https://api-x509.maritimeconnectivity.net/v3/api-docs/mcp-idreg-x509\">here</a>.
  *
  * OpenAPI spec version: 1.2.1
  * Contact: info@maritimeconnectivity.net
@@ -26,7 +26,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class RoleControllerService {
 
-    protected basePath = 'https://test-api.maritimeconnectivity.net';
+    protected basePath = 'https://api.maritimeconnectivity.net';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -63,10 +63,10 @@ export class RoleControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createRole(body: Role, orgMrn: string, observe?: 'body', reportProgress?: boolean): Observable<Role>;
-    public createRole(body: Role, orgMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Role>>;
-    public createRole(body: Role, orgMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Role>>;
-    public createRole(body: Role, orgMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public createRole1(body: Role, orgMrn: string, observe?: 'body', reportProgress?: boolean): Observable<Role>;
+    public createRole1(body: Role, orgMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Role>>;
+    public createRole1(body: Role, orgMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Role>>;
+    public createRole1(body: Role, orgMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling createRole.');
@@ -74,6 +74,58 @@ export class RoleControllerService {
 
         if (orgMrn === null || orgMrn === undefined) {
             throw new Error('Required parameter orgMrn was null or undefined when calling createRole.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<Role>('post',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/role`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * Create a new role mapping
+     * @param body 
+     * @param orgMrn 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public createRole(body: Role, orgMrn: string, observe?: 'body', reportProgress?: boolean): Observable<Role>;
+    public createRole(body: Role, orgMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Role>>;
+    public createRole(body: Role, orgMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Role>>;
+    public createRole(body: Role, orgMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling createRole1.');
+        }
+
+        if (orgMrn === null || orgMrn === undefined) {
+            throw new Error('Required parameter orgMrn was null or undefined when calling createRole1.');
         }
 
         let headers = this.defaultHeaders;
@@ -115,10 +167,10 @@ export class RoleControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteRole(orgMrn: string, roleId: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteRole(orgMrn: string, roleId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteRole(orgMrn: string, roleId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteRole(orgMrn: string, roleId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteRole1(orgMrn: string, roleId: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteRole1(orgMrn: string, roleId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteRole1(orgMrn: string, roleId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteRole1(orgMrn: string, roleId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (orgMrn === null || orgMrn === undefined) {
             throw new Error('Required parameter orgMrn was null or undefined when calling deleteRole.');
@@ -126,6 +178,52 @@ export class RoleControllerService {
 
         if (roleId === null || roleId === undefined) {
             throw new Error('Required parameter roleId was null or undefined when calling deleteRole.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<any>('delete',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/role/${encodeURIComponent(String(roleId))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * Delete a specific role mapping
+     * @param orgMrn 
+     * @param roleId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public deleteRole(orgMrn: string, roleId: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteRole(orgMrn: string, roleId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteRole(orgMrn: string, roleId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteRole(orgMrn: string, roleId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (orgMrn === null || orgMrn === undefined) {
+            throw new Error('Required parameter orgMrn was null or undefined when calling deleteRole1.');
+        }
+
+        if (roleId === null || roleId === undefined) {
+            throw new Error('Required parameter roleId was null or undefined when calling deleteRole1.');
         }
 
         let headers = this.defaultHeaders;
@@ -160,13 +258,54 @@ export class RoleControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
+    public getAvailableRoles1(orgMrn: string, observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
+    public getAvailableRoles1(orgMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
+    public getAvailableRoles1(orgMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
+    public getAvailableRoles1(orgMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (orgMrn === null || orgMrn === undefined) {
+            throw new Error('Required parameter orgMrn was null or undefined when calling getAvailableRoles.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<string>>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/role/available-roles`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * Get the list of available roles
+     * @param orgMrn 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
     public getAvailableRoles(orgMrn: string, observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
     public getAvailableRoles(orgMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
     public getAvailableRoles(orgMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
     public getAvailableRoles(orgMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getAvailableRoles.');
+            throw new Error('Required parameter orgMrn was null or undefined when calling getAvailableRoles1.');
         }
 
         let headers = this.defaultHeaders;
@@ -237,6 +376,93 @@ export class RoleControllerService {
 
     /**
      * 
+     * Get the list of roles of the requesting user
+     * @param orgMrn 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getMyRole1(orgMrn: string, observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
+    public getMyRole1(orgMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
+    public getMyRole1(orgMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
+    public getMyRole1(orgMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (orgMrn === null || orgMrn === undefined) {
+            throw new Error('Required parameter orgMrn was null or undefined when calling getMyRole1.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<string>>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/role/myroles`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * Get a specific role mapping
+     * @param orgMrn 
+     * @param roleId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getRole1(orgMrn: string, roleId: number, observe?: 'body', reportProgress?: boolean): Observable<Role>;
+    public getRole1(orgMrn: string, roleId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Role>>;
+    public getRole1(orgMrn: string, roleId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Role>>;
+    public getRole1(orgMrn: string, roleId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (orgMrn === null || orgMrn === undefined) {
+            throw new Error('Required parameter orgMrn was null or undefined when calling getRole.');
+        }
+
+        if (roleId === null || roleId === undefined) {
+            throw new Error('Required parameter roleId was null or undefined when calling getRole.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Role>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/role/${encodeURIComponent(String(roleId))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
      * Get a specific role mapping
      * @param orgMrn 
      * @param roleId 
@@ -249,11 +475,11 @@ export class RoleControllerService {
     public getRole(orgMrn: string, roleId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getRole.');
+            throw new Error('Required parameter orgMrn was null or undefined when calling getRole1.');
         }
 
         if (roleId === null || roleId === undefined) {
-            throw new Error('Required parameter roleId was null or undefined when calling getRole.');
+            throw new Error('Required parameter roleId was null or undefined when calling getRole1.');
         }
 
         let headers = this.defaultHeaders;
@@ -324,6 +550,104 @@ export class RoleControllerService {
 
     /**
      * 
+     * Get the list of role mappings for the specified organization
+     * @param orgMrn 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getRoles1(orgMrn: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Role>>;
+    public getRoles1(orgMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Role>>>;
+    public getRoles1(orgMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Role>>>;
+    public getRoles1(orgMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (orgMrn === null || orgMrn === undefined) {
+            throw new Error('Required parameter orgMrn was null or undefined when calling getRoles1.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<Role>>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/roles`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * Update a specific role mapping
+     * @param body 
+     * @param orgMrn 
+     * @param roleId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public updateRole1(body: Role, orgMrn: string, roleId: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public updateRole1(body: Role, orgMrn: string, roleId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public updateRole1(body: Role, orgMrn: string, roleId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public updateRole1(body: Role, orgMrn: string, roleId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling updateRole.');
+        }
+
+        if (orgMrn === null || orgMrn === undefined) {
+            throw new Error('Required parameter orgMrn was null or undefined when calling updateRole.');
+        }
+
+        if (roleId === null || roleId === undefined) {
+            throw new Error('Required parameter roleId was null or undefined when calling updateRole.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<any>('put',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/role/${encodeURIComponent(String(roleId))}`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
      * Update a specific role mapping
      * @param body 
      * @param orgMrn 
@@ -337,15 +661,15 @@ export class RoleControllerService {
     public updateRole(body: Role, orgMrn: string, roleId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling updateRole.');
+            throw new Error('Required parameter body was null or undefined when calling updateRole1.');
         }
 
         if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling updateRole.');
+            throw new Error('Required parameter orgMrn was null or undefined when calling updateRole1.');
         }
 
         if (roleId === null || roleId === undefined) {
-            throw new Error('Required parameter roleId was null or undefined when calling updateRole.');
+            throw new Error('Required parameter roleId was null or undefined when calling updateRole1.');
         }
 
         let headers = this.defaultHeaders;

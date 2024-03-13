@@ -1,6 +1,6 @@
 /**
  * Maritime Connectivity Platform Identity Registry API
- * The MCP Identity Registry API can be used for managing entities in the Maritime Connectivity Platform.<br>Two versions of the API are available - one that requires authentication using OpenID Connect and one that requires authentication using a X.509 client certificate.<br>The OpenAPI descriptions for the two versions are available <a href=\"https://test-api.maritimeconnectivity.net/v3/api-docs/mcp-idreg-oidc\">here</a> and <a href=\"https://test-api-x509.maritimeconnectivity.net/v3/api-docs/mcp-idreg-x509\">here</a>.
+ * The MCP Identity Registry API can be used for managing entities in the Maritime Connectivity Platform.<br>Two versions of the API are available - one that requires authentication using OpenID Connect and one that requires authentication using a X.509 client certificate.<br>The OpenAPI descriptions for the two versions are available <a href=\"https://api.maritimeconnectivity.net/v3/api-docs/mcp-idreg-oidc\">here</a> and <a href=\"https://api-x509.maritimeconnectivity.net/v3/api-docs/mcp-idreg-x509\">here</a>.
  *
  * OpenAPI spec version: 1.2.1
  * Contact: info@maritimeconnectivity.net
@@ -29,7 +29,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class OrganizationControllerService {
 
-    protected basePath = 'https://test-api.maritimeconnectivity.net';
+    protected basePath = 'https://api.maritimeconnectivity.net';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -107,6 +107,53 @@ export class OrganizationControllerService {
 
     /**
      * 
+     * Apply for getting your organization registered
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public applyOrganization1(body: Organization, observe?: 'body', reportProgress?: boolean): Observable<Organization>;
+    public applyOrganization1(body: Organization, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Organization>>;
+    public applyOrganization1(body: Organization, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Organization>>;
+    public applyOrganization1(body: Organization, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling applyOrganization1.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<Organization>('post',`${this.basePath}/x509/api/org/apply`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
      * Approve the given applying organization
      * @param orgMrn 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -148,6 +195,88 @@ export class OrganizationControllerService {
 
     /**
      * 
+     * Approve the given applying organization
+     * @param orgMrn 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public approveOrganization1(orgMrn: string, observe?: 'body', reportProgress?: boolean): Observable<Organization>;
+    public approveOrganization1(orgMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Organization>>;
+    public approveOrganization1(orgMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Organization>>;
+    public approveOrganization1(orgMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (orgMrn === null || orgMrn === undefined) {
+            throw new Error('Required parameter orgMrn was null or undefined when calling approveOrganization1.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Organization>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/approve`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * Delete a specific organization
+     * @param orgMrn 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public deleteOrg1(orgMrn: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteOrg1(orgMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteOrg1(orgMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteOrg1(orgMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (orgMrn === null || orgMrn === undefined) {
+            throw new Error('Required parameter orgMrn was null or undefined when calling deleteOrg.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<any>('delete',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
      * Delete a specific organization
      * @param orgMrn 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -159,7 +288,7 @@ export class OrganizationControllerService {
     public deleteOrg(orgMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling deleteOrg.');
+            throw new Error('Required parameter orgMrn was null or undefined when calling deleteOrg1.');
         }
 
         let headers = this.defaultHeaders;
@@ -195,10 +324,10 @@ export class OrganizationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getOrgCert(orgMrn: string, serialNumber: number, observe?: 'body', reportProgress?: boolean): Observable<Certificate>;
-    public getOrgCert(orgMrn: string, serialNumber: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Certificate>>;
-    public getOrgCert(orgMrn: string, serialNumber: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Certificate>>;
-    public getOrgCert(orgMrn: string, serialNumber: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getOrgCert1(orgMrn: string, serialNumber: number, observe?: 'body', reportProgress?: boolean): Observable<Certificate>;
+    public getOrgCert1(orgMrn: string, serialNumber: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Certificate>>;
+    public getOrgCert1(orgMrn: string, serialNumber: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Certificate>>;
+    public getOrgCert1(orgMrn: string, serialNumber: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (orgMrn === null || orgMrn === undefined) {
             throw new Error('Required parameter orgMrn was null or undefined when calling getOrgCert.');
@@ -206,6 +335,52 @@ export class OrganizationControllerService {
 
         if (serialNumber === null || serialNumber === undefined) {
             throw new Error('Required parameter serialNumber was null or undefined when calling getOrgCert.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Certificate>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/certificate/${encodeURIComponent(String(serialNumber))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * Get the organization certificate with the given serial number
+     * @param orgMrn 
+     * @param serialNumber 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getOrgCert(orgMrn: string, serialNumber: number, observe?: 'body', reportProgress?: boolean): Observable<Certificate>;
+    public getOrgCert(orgMrn: string, serialNumber: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Certificate>>;
+    public getOrgCert(orgMrn: string, serialNumber: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Certificate>>;
+    public getOrgCert(orgMrn: string, serialNumber: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (orgMrn === null || orgMrn === undefined) {
+            throw new Error('Required parameter orgMrn was null or undefined when calling getOrgCert1.');
+        }
+
+        if (serialNumber === null || serialNumber === undefined) {
+            throw new Error('Required parameter serialNumber was null or undefined when calling getOrgCert1.');
         }
 
         let headers = this.defaultHeaders;
@@ -242,13 +417,66 @@ export class OrganizationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
+    public getOrganization5(page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<PageOrganization>;
+    public getOrganization5(page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageOrganization>>;
+    public getOrganization5(page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageOrganization>>;
+    public getOrganization5(page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (page !== undefined && page !== null) {
+            queryParameters = queryParameters.set('page', <any>page);
+        }
+        if (size !== undefined && size !== null) {
+            queryParameters = queryParameters.set('size', <any>size);
+        }
+        if (sort) {
+            sort.forEach((element) => {
+                queryParameters = queryParameters.append('sort', <any>element);
+            })
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<PageOrganization>('get',`${this.basePath}/x509/api/orgs`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * Get a page of registered organizations
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
     public getOrganization(page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<PageOrganization>;
     public getOrganization(page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageOrganization>>;
     public getOrganization(page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageOrganization>>;
     public getOrganization(page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-
-
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (page !== undefined && page !== null) {
@@ -296,13 +524,54 @@ export class OrganizationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
+    public getOrganization2(orgMrn: string, observe?: 'body', reportProgress?: boolean): Observable<Organization>;
+    public getOrganization2(orgMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Organization>>;
+    public getOrganization2(orgMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Organization>>;
+    public getOrganization2(orgMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (orgMrn === null || orgMrn === undefined) {
+            throw new Error('Required parameter orgMrn was null or undefined when calling getOrganization2.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Organization>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * Get a specific organization based on MRN
+     * @param orgMrn 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
     public getOrganization1(orgMrn: string, observe?: 'body', reportProgress?: boolean): Observable<Organization>;
     public getOrganization1(orgMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Organization>>;
     public getOrganization1(orgMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Organization>>;
     public getOrganization1(orgMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getOrganization1.');
+            throw new Error('Required parameter orgMrn was null or undefined when calling getOrganization3.');
         }
 
         let headers = this.defaultHeaders;
@@ -337,13 +606,54 @@ export class OrganizationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
+    public getOrganizationById1(orgId: number, observe?: 'body', reportProgress?: boolean): Observable<Organization>;
+    public getOrganizationById1(orgId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Organization>>;
+    public getOrganizationById1(orgId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Organization>>;
+    public getOrganizationById1(orgId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (orgId === null || orgId === undefined) {
+            throw new Error('Required parameter orgId was null or undefined when calling getOrganizationById.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Organization>('get',`${this.basePath}/x509/api/org/id/${encodeURIComponent(String(orgId))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * Get a specific organization based on ID
+     * @param orgId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
     public getOrganizationById(orgId: number, observe?: 'body', reportProgress?: boolean): Observable<Organization>;
     public getOrganizationById(orgId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Organization>>;
     public getOrganizationById(orgId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Organization>>;
     public getOrganizationById(orgId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (orgId === null || orgId === undefined) {
-            throw new Error('Required parameter orgId was null or undefined when calling getOrganizationById.');
+            throw new Error('Required parameter orgId was null or undefined when calling getOrganizationById1.');
         }
 
         let headers = this.defaultHeaders;
@@ -429,6 +739,62 @@ export class OrganizationControllerService {
 
     /**
      * 
+     * Get a page of organizations that have not yet been approved
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getUnapprovedOrganizations1(page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<PageOrganization>;
+    public getUnapprovedOrganizations1(page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageOrganization>>;
+    public getUnapprovedOrganizations1(page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageOrganization>>;
+    public getUnapprovedOrganizations1(page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (page !== undefined && page !== null) {
+            queryParameters = queryParameters.set('page', <any>page);
+        }
+        if (size !== undefined && size !== null) {
+            queryParameters = queryParameters.set('size', <any>size);
+        }
+        if (sort) {
+            sort.forEach((element) => {
+                queryParameters = queryParameters.append('sort', <any>element);
+            })
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<PageOrganization>('get',`${this.basePath}/x509/api/org/unapprovedorgs`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
      * Create a new organization certificate using CSR
      * @param body A PEM encoded PKCS#10 CSR
      * @param orgMrn 
@@ -471,6 +837,60 @@ export class OrganizationControllerService {
         }
 
         return this.httpClient.request<string>('post',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/certificate/issue-new/csr`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * Create a new organization certificate using CSR
+     * @param body A PEM encoded PKCS#10 CSR
+     * @param orgMrn 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public newOrgCertFromCsr1(body: string, orgMrn: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public newOrgCertFromCsr1(body: string, orgMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public newOrgCertFromCsr1(body: string, orgMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public newOrgCertFromCsr1(body: string, orgMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling newOrgCertFromCsr1.');
+        }
+
+        if (orgMrn === null || orgMrn === undefined) {
+            throw new Error('Required parameter orgMrn was null or undefined when calling newOrgCertFromCsr1.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/pem-certificate-chain',
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/x-pem-file',
+            'text/plain'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<string>('post',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/certificate/issue-new/csr`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -540,6 +960,115 @@ export class OrganizationControllerService {
 
     /**
      * 
+     * Revoke the organization certificate with the given serial number
+     * @param body 
+     * @param orgMrn 
+     * @param certId The serial number of the certificate given in decimal
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public revokeOrgCert1(body: CertificateRevocation, orgMrn: string, certId: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public revokeOrgCert1(body: CertificateRevocation, orgMrn: string, certId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public revokeOrgCert1(body: CertificateRevocation, orgMrn: string, certId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public revokeOrgCert1(body: CertificateRevocation, orgMrn: string, certId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling revokeOrgCert1.');
+        }
+
+        if (orgMrn === null || orgMrn === undefined) {
+            throw new Error('Required parameter orgMrn was null or undefined when calling revokeOrgCert1.');
+        }
+
+        if (certId === null || certId === undefined) {
+            throw new Error('Required parameter certId was null or undefined when calling revokeOrgCert1.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<any>('post',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/certificate/${encodeURIComponent(String(certId))}/revoke`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * Update a specific organization
+     * @param body 
+     * @param orgMrn 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public updateOrganization1(body: Organization, orgMrn: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public updateOrganization1(body: Organization, orgMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public updateOrganization1(body: Organization, orgMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public updateOrganization1(body: Organization, orgMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling updateOrganization.');
+        }
+
+        if (orgMrn === null || orgMrn === undefined) {
+            throw new Error('Required parameter orgMrn was null or undefined when calling updateOrganization.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<any>('put',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
      * Update a specific organization
      * @param body 
      * @param orgMrn 
@@ -552,11 +1081,11 @@ export class OrganizationControllerService {
     public updateOrganization(body: Organization, orgMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling updateOrganization.');
+            throw new Error('Required parameter body was null or undefined when calling updateOrganization1.');
         }
 
         if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling updateOrganization.');
+            throw new Error('Required parameter orgMrn was null or undefined when calling updateOrganization1.');
         }
 
         let headers = this.defaultHeaders;

@@ -9,20 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { PageableObject } from './pageableObject';
-import { SortObject } from './sortObject';
-import { Vessel } from './vessel';
 
-export interface PageVessel { 
-    totalPages?: number;
-    totalElements?: number;
-    size?: number;
-    content?: Array<Vessel>;
-    number?: number;
-    sort?: SortObject;
-    pageable?: PageableObject;
-    last?: boolean;
-    first?: boolean;
-    numberOfElements?: number;
-    empty?: boolean;
+export interface VesselMrnVesselImageBody2 { 
+    image: Blob;
 }

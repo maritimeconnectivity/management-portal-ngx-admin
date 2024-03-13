@@ -1,6 +1,6 @@
 /**
  * Maritime Connectivity Platform Identity Registry API
- * The MCP Identity Registry API can be used for managing entities in the Maritime Connectivity Platform.<br>Two versions of the API are available - one that requires authentication using OpenID Connect and one that requires authentication using a X.509 client certificate.<br>The OpenAPI descriptions for the two versions are available <a href=\"https://test-api.maritimeconnectivity.net/v3/api-docs/mcp-idreg-oidc\">here</a> and <a href=\"https://test-api-x509.maritimeconnectivity.net/v3/api-docs/mcp-idreg-x509\">here</a>.
+ * The MCP Identity Registry API can be used for managing entities in the Maritime Connectivity Platform.<br>Two versions of the API are available - one that requires authentication using OpenID Connect and one that requires authentication using a X.509 client certificate.<br>The OpenAPI descriptions for the two versions are available <a href=\"https://api.maritimeconnectivity.net/v3/api-docs/mcp-idreg-oidc\">here</a> and <a href=\"https://api-x509.maritimeconnectivity.net/v3/api-docs/mcp-idreg-x509\">here</a>.
  *
  * OpenAPI spec version: 1.2.1
  * Contact: info@maritimeconnectivity.net
@@ -29,7 +29,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class UserControllerService {
 
-    protected basePath = 'https://test-api.maritimeconnectivity.net';
+    protected basePath = 'https://api.maritimeconnectivity.net';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -72,11 +72,11 @@ export class UserControllerService {
     public createUser(body: User, orgMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling createUser.');
+            throw new Error('Required parameter body was null or undefined when calling createUser1.');
         }
 
         if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling createUser.');
+            throw new Error('Required parameter orgMrn was null or undefined when calling createUser1.');
         }
 
         let headers = this.defaultHeaders;
@@ -108,6 +108,105 @@ export class UserControllerService {
                 reportProgress: reportProgress
             }
         );
+        
+    }
+
+    /**
+     * 
+     * Create a new user identity
+     * @param body 
+     * @param orgMrn 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public createUser1(body: User, orgMrn: string, observe?: 'body', reportProgress?: boolean): Observable<User>;
+    public createUser1(body: User, orgMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<User>>;
+    public createUser1(body: User, orgMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<User>>;
+    public createUser1(body: User, orgMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling createUser.');
+        }
+
+        if (orgMrn === null || orgMrn === undefined) {
+            throw new Error('Required parameter orgMrn was null or undefined when calling createUser.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<User>('post',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/user`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * Delete a specific user identity
+     * @param orgMrn 
+     * @param userMrn 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public deleteUser1(orgMrn: string, userMrn: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteUser1(orgMrn: string, userMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteUser1(orgMrn: string, userMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteUser1(orgMrn: string, userMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (orgMrn === null || orgMrn === undefined) {
+            throw new Error('Required parameter orgMrn was null or undefined when calling deleteUser.');
+        }
+
+        if (userMrn === null || userMrn === undefined) {
+            throw new Error('Required parameter userMrn was null or undefined when calling deleteUser.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<any>('delete',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/user/${encodeURIComponent(String(userMrn))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**
@@ -124,11 +223,11 @@ export class UserControllerService {
     public deleteUser(orgMrn: string, userMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling deleteUser.');
+            throw new Error('Required parameter orgMrn was null or undefined when calling deleteUser1.');
         }
 
         if (userMrn === null || userMrn === undefined) {
-            throw new Error('Required parameter userMrn was null or undefined when calling deleteUser.');
+            throw new Error('Required parameter userMrn was null or undefined when calling deleteUser1.');
         }
 
         let headers = this.defaultHeaders;
@@ -172,7 +271,7 @@ export class UserControllerService {
     public getOrganizationUsers(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getOrganizationUsers.');
+            throw new Error('Required parameter orgMrn was null or undefined when calling getOrganizationUsers1.');
         }
 
 
@@ -219,6 +318,114 @@ export class UserControllerService {
 
     /**
      * 
+     * Get a page of user identities of the specified organization
+     * @param orgMrn 
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getOrganizationUsers1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<PageUser>;
+    public getOrganizationUsers1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageUser>>;
+    public getOrganizationUsers1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageUser>>;
+    public getOrganizationUsers1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        
+        if (orgMrn === null || orgMrn === undefined) {
+            throw new Error('Required parameter orgMrn was null or undefined when calling getOrganizationUsers.');
+        }
+
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (page !== undefined && page !== null) {
+            queryParameters = queryParameters.set('page', <any>page);
+        }
+        if (size !== undefined && size !== null) {
+            queryParameters = queryParameters.set('size', <any>size);
+        }
+        if (sort) {
+            sort.forEach((element) => {
+                queryParameters = queryParameters.append('sort', <any>element);
+            })
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<PageUser>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/users`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * Get a specific user identity
+     * @param orgMrn 
+     * @param userMrn 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getUser1(orgMrn: string, userMrn: string, observe?: 'body', reportProgress?: boolean): Observable<User>;
+    public getUser1(orgMrn: string, userMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<User>>;
+    public getUser1(orgMrn: string, userMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<User>>;
+    public getUser1(orgMrn: string, userMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (orgMrn === null || orgMrn === undefined) {
+            throw new Error('Required parameter orgMrn was null or undefined when calling getUser.');
+        }
+
+        if (userMrn === null || userMrn === undefined) {
+            throw new Error('Required parameter userMrn was null or undefined when calling getUser.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<User>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/user/${encodeURIComponent(String(userMrn))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
      * Get a specific user identity
      * @param orgMrn 
      * @param userMrn 
@@ -231,11 +438,11 @@ export class UserControllerService {
     public getUser(orgMrn: string, userMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getUser.');
+            throw new Error('Required parameter orgMrn was null or undefined when calling getUser1.');
         }
 
         if (userMrn === null || userMrn === undefined) {
-            throw new Error('Required parameter userMrn was null or undefined when calling getUser.');
+            throw new Error('Required parameter userMrn was null or undefined when calling getUser1.');
         }
 
         let headers = this.defaultHeaders;
@@ -316,6 +523,116 @@ export class UserControllerService {
 
     /**
      * 
+     * Get the user identity certificate with the given serial number
+     * @param orgMrn 
+     * @param userMrn 
+     * @param serialNumber 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getUserCert1(orgMrn: string, userMrn: string, serialNumber: number, observe?: 'body', reportProgress?: boolean): Observable<Certificate>;
+    public getUserCert1(orgMrn: string, userMrn: string, serialNumber: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Certificate>>;
+    public getUserCert1(orgMrn: string, userMrn: string, serialNumber: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Certificate>>;
+    public getUserCert1(orgMrn: string, userMrn: string, serialNumber: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (orgMrn === null || orgMrn === undefined) {
+            throw new Error('Required parameter orgMrn was null or undefined when calling getUserCert1.');
+        }
+
+        if (userMrn === null || userMrn === undefined) {
+            throw new Error('Required parameter userMrn was null or undefined when calling getUserCert1.');
+        }
+
+        if (serialNumber === null || serialNumber === undefined) {
+            throw new Error('Required parameter serialNumber was null or undefined when calling getUserCert1.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Certificate>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/user/${encodeURIComponent(String(userMrn))}/certificate/${encodeURIComponent(String(serialNumber))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * Create a new user identity certificate using CSR
+     * @param body A PEM encoded PKCS#10 CSR
+     * @param orgMrn 
+     * @param userMrn 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public newUserCertFromCsr1(body: string, orgMrn: string, userMrn: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public newUserCertFromCsr1(body: string, orgMrn: string, userMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public newUserCertFromCsr1(body: string, orgMrn: string, userMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public newUserCertFromCsr1(body: string, orgMrn: string, userMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling newUserCertFromCsr.');
+        }
+
+        if (orgMrn === null || orgMrn === undefined) {
+            throw new Error('Required parameter orgMrn was null or undefined when calling newUserCertFromCsr.');
+        }
+
+        if (userMrn === null || userMrn === undefined) {
+            throw new Error('Required parameter userMrn was null or undefined when calling newUserCertFromCsr.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/pem-certificate-chain',
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/x-pem-file',
+            'text/plain'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<string>('post',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/user/${encodeURIComponent(String(userMrn))}/certificate/issue-new/csr`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
      * Create a new user identity certificate using CSR
      * @param body A PEM encoded PKCS#10 CSR
      * @param orgMrn 
@@ -329,15 +646,15 @@ export class UserControllerService {
     public newUserCertFromCsr(body: string, orgMrn: string, userMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling newUserCertFromCsr.');
+            throw new Error('Required parameter body was null or undefined when calling newUserCertFromCsr1.');
         }
 
         if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling newUserCertFromCsr.');
+            throw new Error('Required parameter orgMrn was null or undefined when calling newUserCertFromCsr1.');
         }
 
         if (userMrn === null || userMrn === undefined) {
-            throw new Error('Required parameter userMrn was null or undefined when calling newUserCertFromCsr.');
+            throw new Error('Required parameter userMrn was null or undefined when calling newUserCertFromCsr1.');
         }
 
         let headers = this.defaultHeaders;
@@ -383,10 +700,10 @@ export class UserControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public revokeUserCert(body: CertificateRevocation, orgMrn: string, userMrn: string, certId: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public revokeUserCert(body: CertificateRevocation, orgMrn: string, userMrn: string, certId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public revokeUserCert(body: CertificateRevocation, orgMrn: string, userMrn: string, certId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public revokeUserCert(body: CertificateRevocation, orgMrn: string, userMrn: string, certId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public revokeUserCert1(body: CertificateRevocation, orgMrn: string, userMrn: string, certId: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public revokeUserCert1(body: CertificateRevocation, orgMrn: string, userMrn: string, certId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public revokeUserCert1(body: CertificateRevocation, orgMrn: string, userMrn: string, certId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public revokeUserCert1(body: CertificateRevocation, orgMrn: string, userMrn: string, certId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling revokeUserCert.');
@@ -402,6 +719,68 @@ export class UserControllerService {
 
         if (certId === null || certId === undefined) {
             throw new Error('Required parameter certId was null or undefined when calling revokeUserCert.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<any>('post',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/user/${encodeURIComponent(String(userMrn))}/certificate/${encodeURIComponent(String(certId))}/revoke`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * Revoke the service identity certificate with the given serial number
+     * @param body 
+     * @param orgMrn 
+     * @param userMrn 
+     * @param certId The serial number of the certificate given in decimal
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public revokeUserCert(body: CertificateRevocation, orgMrn: string, userMrn: string, certId: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public revokeUserCert(body: CertificateRevocation, orgMrn: string, userMrn: string, certId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public revokeUserCert(body: CertificateRevocation, orgMrn: string, userMrn: string, certId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public revokeUserCert(body: CertificateRevocation, orgMrn: string, userMrn: string, certId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling revokeUserCert1.');
+        }
+
+        if (orgMrn === null || orgMrn === undefined) {
+            throw new Error('Required parameter orgMrn was null or undefined when calling revokeUserCert1.');
+        }
+
+        if (userMrn === null || userMrn === undefined) {
+            throw new Error('Required parameter userMrn was null or undefined when calling revokeUserCert1.');
+        }
+
+        if (certId === null || certId === undefined) {
+            throw new Error('Required parameter certId was null or undefined when calling revokeUserCert1.');
         }
 
         let headers = this.defaultHeaders;
@@ -444,10 +823,10 @@ export class UserControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateUser(body: User, orgMrn: string, userMrn: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public updateUser(body: User, orgMrn: string, userMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public updateUser(body: User, orgMrn: string, userMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public updateUser(body: User, orgMrn: string, userMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public updateUser1(body: User, orgMrn: string, userMrn: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public updateUser1(body: User, orgMrn: string, userMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public updateUser1(body: User, orgMrn: string, userMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public updateUser1(body: User, orgMrn: string, userMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling updateUser.');
@@ -459,6 +838,63 @@ export class UserControllerService {
 
         if (userMrn === null || userMrn === undefined) {
             throw new Error('Required parameter userMrn was null or undefined when calling updateUser.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<any>('put',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/user/${encodeURIComponent(String(userMrn))}`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * Update a specific user identity
+     * @param body 
+     * @param orgMrn 
+     * @param userMrn 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public updateUser(body: User, orgMrn: string, userMrn: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public updateUser(body: User, orgMrn: string, userMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public updateUser(body: User, orgMrn: string, userMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public updateUser(body: User, orgMrn: string, userMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling updateUser1.');
+        }
+
+        if (orgMrn === null || orgMrn === undefined) {
+            throw new Error('Required parameter orgMrn was null or undefined when calling updateUser1.');
+        }
+
+        if (userMrn === null || userMrn === undefined) {
+            throw new Error('Required parameter userMrn was null or undefined when calling updateUser1.');
         }
 
         let headers = this.defaultHeaders;
