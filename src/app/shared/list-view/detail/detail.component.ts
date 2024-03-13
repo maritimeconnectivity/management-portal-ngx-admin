@@ -327,7 +327,7 @@ export class DetailComponent implements OnInit {
     } else if (context === ResourceType.Device) {
       return this.deviceControllerService.createDevice(body as Device, orgMrn);
     } else if (context === ResourceType.Vessel) {
-      return this.vesselControllerService.createVessel(body as Vessel, orgMrn);
+      return this.vesselControllerService.createVessel(formatVesselToUpload(body) as Vessel, orgMrn);
     } else if (context === ResourceType.MMS) {
       return this.mmsControllerService.createMMS(body as MMS, orgMrn);
     } else if (context === ResourceType.Service) {
