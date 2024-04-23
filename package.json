@@ -70,7 +70,7 @@
     "ng2-smart-table": "^1.6.0",
     "ngx-autosize-input": "^15.0.4",
     "ngx-echarts": "^4.2.2",
-    "node-sass": "^4.14.1",
+    "node-sass": "^9.0.0",
     "normalize.css": "6.0.0",
     "pace-js": "1.0.2",
     "pkijs": "^3.0.14",
@@ -86,7 +86,7 @@
     "typeface-exo": "0.0.22",
     "url-parse": "^1.5.10",
     "web-animations-js": "^2.3.2",
-    "web3": "^1.8.2",
+    "web3": "^4.8.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
