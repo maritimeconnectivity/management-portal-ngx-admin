@@ -160,13 +160,15 @@ export class ListComponent implements OnInit {
       if (Object.values(ResourceType).includes(this.menuType)) {
         if(this.menuType === ResourceType.Organization || this.menuType === ResourceType.OrgCandidate){
           this.loadDataContent(this.menuType, pageNumber).subscribe(
-            res => { this.updatePageContentInfo(res); this.refreshData(this.formatResponse(res.content)); this.isLoading = false;},
+            resOrigin => { this.updatePageContentInfo(resOrigin); this.refreshData(this.formatResponse(resOrigin.content)); this.isLoading = false;},
             error => this.notifierService.notify('error', error.message),
           );
         } else if(this.menuType === ResourceType.Role){
           this.loadMyOrganization().subscribe(
-            resOrg => this.loadRoles(resOrg.mrn).subscribe(
-              resData => {this.refreshData(resData); this.isLoading = false;},
+            resMyOrg => this.loadRoles(resMyOrg.mrn).subscribe(
+              res => {
+                this.updatePageContentInfo(res);
+                this.refreshData(res); this.isLoading = false;},
               error => this.notifierService.notify('error', error.message),
             ),
             error => this.notifierService.notify('error', error.message),
@@ -174,6 +176,8 @@ export class ListComponent implements OnInit {
         } else if(this.menuType === ResourceType.Instance || this.menuType === ResourceType.InstanceOfOrg){
           this.loadServiceInstances().subscribe(
             resData => {
+              // TODO: need to update page content info from MSR
+              //this.updatePageContentInfo(resData);
               this.refreshData(
                 this.formatResponseForService(
                   this.isForServiceForOrg ?
@@ -187,10 +191,13 @@ export class ListComponent implements OnInit {
           );
         } else {
           this.loadMyOrganization().subscribe(
-            resOrg => this.loadDataContent(this.menuType, pageNumber, resOrg.mrn).subscribe(
-              res => {this.refreshData(this.formatResponse(res.content)); this.isLoading = false;},
+            resMyOrg => {
+              this.loadDataContent(this.menuType, pageNumber, resMyOrg.mrn).subscribe(
+              res => {
+                this.updatePageContentInfo(res);
+                this.refreshData(this.formatResponse(res.content)); this.isLoading = false;},
               error => this.notifierService.notify('error', error.message),
-            ),
+            )},
             error => this.notifierService.notify('error', error.message),
           );
         }
