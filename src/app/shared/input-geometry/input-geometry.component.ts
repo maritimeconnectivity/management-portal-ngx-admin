@@ -168,22 +168,26 @@ export class InputGeometryComponent implements OnChanges, OnDestroy, AfterViewIn
       this.responseFeatureGroup = new L.FeatureGroup();
     }
 
+    let geomAdded = false;
     this.geometries.forEach( (geometry: any, i: number) =>
     {
-      const geomLayer = L.geoJSON(geometry as geojson.GeoJsonObject);
-      addNonGroupLayers(geomLayer, this.responseFeatureGroup);
-      // assign name plate to the region
-      if (this.geometryNames && this.geometryNames.length > 0 && this.geometryNames[i]) {
-        if (geometry.type === 'Point') {
-          const coordinate = geometry.coordinates;
-          this.setToolTip(this.geometryNames[i], coordinate[1], coordinate[0]);
-        } else {
-          const coordinate = geomLayer.getBounds().getCenter();
-          this.setToolTip(this.geometryNames[i], coordinate.lat, coordinate.lng);
+      if (geometry && geometry.coordinates && geometry.coordinates.length > 0) {
+        const geomLayer = L.geoJSON(geometry as geojson.GeoJsonObject);
+        addNonGroupLayers(geomLayer, this.responseFeatureGroup);
+        // assign name plate to the region
+        if (this.geometryNames && this.geometryNames.length > 0 && this.geometryNames[i]) {
+          if (geometry.type === 'Point') {
+            const coordinate = geometry.coordinates;
+            this.setToolTip(this.geometryNames[i], coordinate[1], coordinate[0]);
+          } else {
+            const coordinate = geomLayer.getBounds().getCenter();
+            this.setToolTip(this.geometryNames[i], coordinate.lat, coordinate.lng);
+          }
         }
+        geomAdded = true;
       }
     });
-    if (this.map) {
+    if (this.map && geomAdded) {
       this.map.fitBounds(this.responseFeatureGroup.getBounds());
     }
   }
