@@ -681,6 +681,7 @@ export const ColumnForResource = {
       title: 'Instance ID',
       type: 'string',
       description: 'MCP MRN as unique identifer',
+      placeholder: 'urn:mrn:',
       visibleFrom: ['detail'],
       required: true,
     },
@@ -947,6 +948,7 @@ export const ColumnForResource = {
       title: 'Technical design ID',
       type: 'string',
       description: 'MCP MRN as unique identifer',
+      placeholder: 'urn:mrn:',
       visibleFrom: ['detail'],
     },
     implementsServiceDesignVersion: {

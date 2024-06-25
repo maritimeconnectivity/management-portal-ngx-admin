@@ -182,7 +182,7 @@ export class EditableFormComponent implements OnInit {
    * @returns whether the resource type requires short ID or not
    */
    hasDefaultValueForMrn = (resourceType: string) => {
-    return resourceType === MrnAttributeInMSR.Instance || resourceType === MrnAttributeInMSR.Design;
+    return resourceType === MrnAttributeInMSR.Instance;
   }
 
   /**
