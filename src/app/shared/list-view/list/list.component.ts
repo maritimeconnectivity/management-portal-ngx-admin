@@ -33,7 +33,7 @@ import { ResourceType, MenuTypeIconNames, EntityTypes } from '../../models/menuT
 import { NbIconLibraries } from '@nebular/theme';
 import { NotifierService } from 'angular-notifier';
 import { InstanceDto } from '../../../backend-api/service-registry';
-import { formatData, formatServiceData } from '../../../util/dataFormatter';
+import { formatData, formatInstanceData } from '../../../util/dataFormatter';
 import { hasAdminPermission } from '../../../util/adminPermissionResolver';
 import { TranslateService } from '@ngx-translate/core';
 import _ from 'lodash';
@@ -82,6 +82,7 @@ export class ListComponent implements OnInit {
   currentPageNumber = 0;
   totalPages = 0;
   totalElements = 0;
+  elementsPerPage = 10;
   pageNumbers = [];
 
   constructor(private router: Router,
@@ -139,10 +140,16 @@ export class ListComponent implements OnInit {
     this.fetchValues(this.currentPageNumber);
   }
 
-  updatePageContentInfo = (res: any) => {
-    this.totalPages = res.totalPages;
-    this.totalElements = res.totalElements;
+  updatePageContentInfo = (totalPages: number, totalElements: number) => {
+    this.totalPages = totalPages;
+    this.totalElements = totalElements;
     this.pageNumbers = Array(this.totalPages).fill(0).map((x,i)=>i);
+  }
+
+  updateContent = (totalPages: number, totalElements: number, content: any) => {
+    this.updatePageContentInfo(totalPages, totalElements);
+    this.refreshData(this.formatResponse(content));
+    this.isLoading = false;
   }
 
   fetchValues(pageNumber: number) {
@@ -160,32 +167,32 @@ export class ListComponent implements OnInit {
       if (Object.values(ResourceType).includes(this.menuType)) {
         if(this.menuType === ResourceType.Organization || this.menuType === ResourceType.OrgCandidate){
           this.loadDataContent(this.menuType, pageNumber).subscribe(
-            resOrigin => { this.updatePageContentInfo(resOrigin); this.refreshData(this.formatResponse(resOrigin.content)); this.isLoading = false;},
+            resOrigin => this.updateContent(resOrigin.totalPages, resOrigin.totalElements, resOrigin.content),
             error => this.notifierService.notify('error', error.message),
           );
         } else if(this.menuType === ResourceType.Role){
           this.loadMyOrganization().subscribe(
             resMyOrg => this.loadRoles(resMyOrg.mrn).subscribe(
               res => {
-                this.updatePageContentInfo(res);
+                // TODO: paging in role
+                //this.updatePageContentInfo(res.totalPages, res.totalElements);
                 this.refreshData(res); this.isLoading = false;},
               error => this.notifierService.notify('error', error.message),
             ),
             error => this.notifierService.notify('error', error.message),
           );
         } else if(this.menuType === ResourceType.Instance || this.menuType === ResourceType.InstanceOfOrg){
-          this.loadServiceInstances().subscribe(
+          this.loadServiceInstances(pageNumber).subscribe(
             resData => {
-              // TODO: need to update page content info from MSR
-              //this.updatePageContentInfo(resData);
-              this.refreshData(
-                this.formatResponseForService(
+              this.instanceControllerService.getInstancesDt().subscribe(response => {
+                this.totalElements = response.recordsTotal;
+                this.totalPages = Math.ceil(this.totalElements / this.elementsPerPage);
+                this.updateContent(this.totalPages, this.totalElements, this.formatResponseForInstance(
                   this.isForServiceForOrg ?
                     resData.filter(i => i.organizationId === this.orgMrn) :
                     resData,
-                ),
-              );
-              this.isLoading = false;
+                ),);
+              });
             },
             error => this.notifierService.notify('error', error.message),
           );
@@ -193,9 +200,8 @@ export class ListComponent implements OnInit {
           this.loadMyOrganization().subscribe(
             resMyOrg => {
               this.loadDataContent(this.menuType, pageNumber, resMyOrg.mrn).subscribe(
-              res => {
-                this.updatePageContentInfo(res);
-                this.refreshData(this.formatResponse(res.content)); this.isLoading = false;},
+              res => 
+                this.updateContent(res.totalPages, res.totalElements, res.content),
               error => this.notifierService.notify('error', error.message),
             )},
             error => this.notifierService.notify('error', error.message),
@@ -224,8 +230,8 @@ export class ListComponent implements OnInit {
     return data.map(d => formatData(d));
   }
 
-  formatResponseForService(data: any[]) {
-    return data.map(d => formatServiceData(d));
+  formatResponseForInstance(data: any[]) {
+    return data.map(d => formatInstanceData(d));
   }
 
   onDelete(event): void {
@@ -316,12 +322,12 @@ export class ListComponent implements OnInit {
     return this.organizationControllerService.getOrganization1(this.authService.authState.orgMrn);
 	}
 
-  loadServiceInstances = (): Observable<InstanceDto[]> => {
-    return this.instanceControllerService.getInstances();
+  loadServiceInstances = (page: number): Observable<InstanceDto[]> => {
+    return this.instanceControllerService.getInstances(page, this.elementsPerPage);
   }
 
   loadDataContent = (context: ResourceType, page: number, orgMrn?: string): Observable<any> => {
-    const size = 10;
+    const size = this.elementsPerPage;
     if (context === ResourceType.User) {
       return this.userControllerService.getOrganizationUsers(orgMrn, page, size);
     } else if (context === ResourceType.Device) {

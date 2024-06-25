@@ -1,0 +1,247 @@
+{
+    "draw": 1,
+    "columns": [
+      {
+        "data": "id",
+        "name": "",
+        "searchable": false,
+        "orderable": true,
+        "search": {
+          "value": "",
+          "regex": false
+        }
+      },
+      {
+        "data": "name",
+        "name": "",
+        "searchable": true,
+        "orderable": true,
+        "search": {
+          "value": "",
+          "regex": false
+        }
+      },
+      {
+        "data": "version",
+        "name": "",
+        "searchable": true,
+        "orderable": true,
+        "search": {
+          "value": "",
+          "regex": false
+        }
+      },
+      {
+        "data": "serviceType",
+        "name": "",
+        "searchable": true,
+        "orderable": true,
+        "search": {
+          "value": "",
+          "regex": false
+        }
+      },
+      {
+        "data": "dataProductType",
+        "name": "",
+        "searchable": true,
+        "orderable": true,
+        "search": {
+          "value": "",
+          "regex": false
+        }
+      },
+      {
+        "data": "status",
+        "name": "",
+        "searchable": true,
+        "orderable": true,
+        "search": {
+          "value": "",
+          "regex": false
+        }
+      },
+      {
+        "data": "endpointUri",
+        "name": "",
+        "searchable": true,
+        "orderable": true,
+        "search": {
+          "value": "",
+          "regex": false
+        }
+      },
+      {
+        "data": "organizationId",
+        "name": "",
+        "searchable": true,
+        "orderable": true,
+        "search": {
+          "value": "",
+          "regex": false
+        }
+      },
+      {
+        "data": "keywords",
+        "name": "",
+        "searchable": true,
+        "orderable": true,
+        "search": {
+          "value": "",
+          "regex": false
+        }
+      },
+      {
+        "data": "instanceId",
+        "name": "",
+        "searchable": true,
+        "orderable": true,
+        "search": {
+          "value": "",
+          "regex": false
+        }
+      },
+      {
+        "data": "lastUpdatedAt",
+        "name": "",
+        "searchable": false,
+        "orderable": true,
+        "search": {
+          "value": "",
+          "regex": false
+        }
+      },
+      {
+        "data": "publishedAt",
+        "name": "",
+        "searchable": false,
+        "orderable": true,
+        "search": {
+          "value": "",
+          "regex": false
+        }
+      },
+      {
+        "data": "comment",
+        "name": "",
+        "searchable": false,
+        "orderable": true,
+        "search": {
+          "value": "",
+          "regex": false
+        }
+      },
+      {
+        "data": "geometry",
+        "name": "",
+        "searchable": false,
+        "orderable": true,
+        "search": {
+          "value": "",
+          "regex": false
+        }
+      },
+      {
+        "data": "unlocode",
+        "name": "",
+        "searchable": false,
+        "orderable": true,
+        "search": {
+          "value": "",
+          "regex": false
+        }
+      },
+      {
+        "data": "mmsi",
+        "name": "",
+        "searchable": false,
+        "orderable": true,
+        "search": {
+          "value": "",
+          "regex": false
+        }
+      },
+      {
+        "data": "imo",
+        "name": "",
+        "searchable": false,
+        "orderable": true,
+        "search": {
+          "value": "",
+          "regex": false
+        }
+      },
+      {
+        "data": "endpointType",
+        "name": "",
+        "searchable": false,
+        "orderable": true,
+        "search": {
+          "value": "",
+          "regex": false
+        }
+      },
+      {
+        "data": "ledgerRequestId",
+        "name": "",
+        "searchable": false,
+        "orderable": true,
+        "search": {
+          "value": "",
+          "regex": false
+        }
+      },
+      {
+        "data": "ledgerRequestStatus",
+        "name": "",
+        "searchable": false,
+        "orderable": true,
+        "search": {
+          "value": "",
+          "regex": false
+        }
+      },
+      {
+        "data": "instanceAsDocId",
+        "name": "",
+        "searchable": false,
+        "orderable": true,
+        "search": {
+          "value": "",
+          "regex": false
+        }
+      },
+      {
+        "data": "implementsServiceDesign",
+        "name": "",
+        "searchable": false,
+        "orderable": true,
+        "search": {
+          "value": "",
+          "regex": false
+        }
+      },
+      {
+        "data": "implementsServiceDesignVersion",
+        "name": "",
+        "searchable": false,
+        "orderable": true,
+        "search": {
+          "value": "",
+          "regex": false
+        }
+      }
+    ],
+    "order": [
+      {
+        "column": 0,
+        "dir": "asc"
+      }
+    ],
+    "start": 0,
+    "length": 10,
+    "search": {
+      "value": "",
+      "regex": false
+    }
+  }

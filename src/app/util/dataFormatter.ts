@@ -39,7 +39,7 @@ export const formatData = (data: object): object => {
   return menuData;
 };
 
-export const formatServiceData = (data: object): object => {
+export const formatInstanceData = (data: object): object => {
   const menuData = {};
   for (const key in data) {
     menuData[key] = data[key];
