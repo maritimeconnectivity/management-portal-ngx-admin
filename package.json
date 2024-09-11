@@ -4,10 +4,10 @@
   "license": "Apache license 2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/maritimeconnectivity/ManagementPortal.git"
+    "url": "git+https://github.com/maritimeconnectivity/management-portal-ngx-admin.git"
   },
   "bugs": {
-    "url": "https://github.com/maritimeconnectivity/ManagementPortal/issues"
+    "url": "https://github.com/maritimeconnectivity/management-portal-ngx-admin/issues"
   },
   "scripts": {
     "ng": "ng",
